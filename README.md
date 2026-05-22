@@ -1,33 +1,47 @@
-# Handout manager
+# TTRPG Handouts Generator
 
-- Dla zalogowanego użytkownika
-- Wybór między rodzajami settingów (high/dark fantasy, sci-fi, grimdark, etc.)
-- Bazowe opcje: tekstowe (list, notatka, książka, etc.), z grafiką na środku (typu list gończy)
-- Kategoryzacja (tagi?) handoutów
-- Share hadnoutów (jako pdf - offline dostęp, lub html - online dostęp)
-- Tylko zalogowany i twórca może generować share link i zarządzać handoutami (usuwać, edytować)
-- Wybór z kilku open source fontów
-- Bazowa lista tła dla handoutu (list, ekran, etc.)
-- Twórca może dodać swoje tło
-- Każdy z linkiem może zobaczyć
-- Możliwość tłumaczenia AI na szybko
+A focused tool for game masters to create, manage, and share handouts for tabletop RPG sessions.
 
+## Problem
 
-Kryterium | Dobry projekt | Zły projekt | Pytanie kontrolne
-Użytkownik | Wiesz, kto używa aplikacji i po co | „Dla wszystkich” | Kto jest adresatem pierwszej akcji?
-Problem | Jeden konkretny ból lub potrzeba | Ogólna platforma do wszystkiego | Jaki konkretny problem rozwiązuje aplikacja?
-MVP | 1-2 kluczowe przepływy | Lista funkcji jak roadmapa produktu | Co powinno zadziałać w pierwszym tygodniu?
-Dane | Dane wynikają z domeny | Sztuczny CRUD doklejony do wymagań | Co użytkownik tworzy lub aktualizuje?
-Logika biznesowa | Aplikacja podejmuje decyzję domenową | Rekordy tylko leżą w bazie | Jaką regułę działania da się opisać jednym zdaniem?
-Stack | Znany, oparty o konwencje, dobrze udokumentowany | Niszowy albo wybrany tylko z ciekawości | Czy agent i ty macie dość kontekstu?
-Test | Da się przetestować główny przepływ | Test nie ma czego sensownie sprawdzić | Co musi przejść, żeby projekt uznać za sprawny?
-CI/CD | Build i testy da się uruchomić automatycznie | Projekt wymaga postawienia całej infrastruktury | Czy repo może samo sprawdzić podstawową jakość?
+Physical TTRPG handouts get lost after distribution. Players rely on incomplete notes, and GMs lose access to handouts they created. This tool provides a permanent source of truth for session handouts.
 
-user - gracze ttrpg
-problem - managing i sharing handoutów
-mvp - generowanie handoutu, export do pliku
-dane - user, markdown tekst?, blob z grafiką tła
-logika biznesowa - 
-stack - react
-test - user generuje handout, handout jest pobrany do pliku
-ci/cd - albo cloudflare albo github pages
+## Features
+
+- **Create handouts**: Write markdown text over themed background images
+- **Instant preview**: See rendered handouts before sharing
+- **Share via link**: Generate permanent read-only links for players (no login required)
+- **Organize**: Tag handouts for easy reference across sessions
+- **Manage**: Edit or delete handouts from your personal library
+
+## Tech Stack
+
+- **Framework**: Astro
+- **Database & Auth**: Supabase
+- **Deployment**: Cloudflare Pages
+- **CI/CD**: GitHub Actions
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
+
+## Project Structure
+
+- `context/foundation/` - Product requirements and architecture decisions
+- `src/` - Application source code
+- `.github/workflows/` - CI/CD pipeline
+
+## MVP Scope
+
+- 3 pre-loaded category backgrounds (grimdark, high fantasy, postapo)
+- Markdown-based handout editing
+- Link-only sharing (no PDF export in v1)
+- Single default font
+- Auth via email/password
+
+---
+
+**Timeline**: 3-week MVP | **Status**: In development
