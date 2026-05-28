@@ -6,7 +6,13 @@ disable-model-invocation: true
 
 # rites-of-creation
 
-Creates one Linear project from the current `context/foundation/` artifacts, then adds one milestone per roadmap stream.
+Creates one Linear project from the current `context/foundation/` artifacts, then adds one milestone per roadmap stream. **Interactive and approval-gated** — read and plan first, mutate only after the user explicitly approves the preview.
+
+## Approval rules
+
+1. **No silent mutations.** Do not call `save_project` or `save_milestone` until the user has approved Step 3's preview.
+2. **Wait for step-specific input.** Accept only explicit user instruction — e.g. "approve", "proceed", "create it", or corrections to the preview. Do not infer approval from the original request to run the skill.
+3. **Apply corrections.** If the user requests changes in the preview, update the planned payloads, show the revised preview, and wait for approval again before writing.
 
 ## Step 1 — Read source files
 
@@ -21,10 +27,31 @@ Call `list_teams` and `list_projects` (with `query: <prd project name>`) in para
 
 - Pick the team that matches the PRD `project:` field, or the only team if there is one.
 - If a project with the same name already exists, **stop and report** the URL — do not duplicate.
+- If `list_teams` returns multiple teams and none matches the PRD `project:` name, ask the user which team to use before building the preview.
 
-## Step 3 — Create the project
+## Step 3 — Preview (await approval)
 
-Call `save_project` with:
+Present a short overview and the exact MCP payloads. **Stop here.** Do not call write MCP tools until the user approves.
+
+### Overview
+
+```
+## Planned creation
+
+| What | Value |
+|------|-------|
+| Team | … |
+| Project | … |
+| Start date | … |
+| Target date | … |
+| Milestones | N (one per roadmap stream) |
+```
+
+One sentence summarizing intent, e.g. "Create project **TTRPG Handouts Generator** on team **Tech Heresy** with 2 stream milestones from the roadmap."
+
+### MCP: `save_project`
+
+Show every field that will be sent:
 
 | Field | Value |
 |---|---|
@@ -37,7 +64,7 @@ Call `save_project` with:
 | `setTeams` | `[<team name or id>]` |
 | `priority` | `2` (High) |
 
-**Description template** (use literal newlines):
+**Description template** (use literal newlines in the actual MCP call):
 
 ```
 ## Vision
@@ -54,20 +81,35 @@ Call `save_project` with:
 <hard_deadline> (after-hours MVP)
 ```
 
-## Step 4 — Create milestones
+Print the resolved `description` body (or a clearly marked excerpt if very long, with "…" only for vision text beyond ~500 chars).
 
-For each row in the roadmap `## Streams` table, call `save_milestone` with:
+### MCP: `save_milestone` (× N)
 
-| Field | Value |
-|---|---|
-| `project` | The project name or ID returned in Step 3 |
-| `name` | Stream Theme (e.g. "Core value proof") |
-| `description` | Chain + Note from the Streams table |
-| `targetDate` | `hard_deadline` for the **last** stream in the chain only; omit for earlier streams (no time estimates in the roadmap) |
+One table row per stream:
+
+| # | `project` | `name` | `description` | `targetDate` |
+|---|-----------|--------|---------------|--------------|
+| 1 | `<project name>` | Stream Theme | Chain + Note | `<hard_deadline>` or omit |
+
+Rules for the preview table:
+
+- `name`: Stream **Theme** (e.g. "Core value proof")
+- `description`: **Chain** + **Note** from the Streams table
+- `targetDate`: `hard_deadline` for the **last** stream in the chain only; omit for earlier streams
+
+End with: **Awaiting your approval to create the project and milestones.** Proceed only after explicit user confirmation.
+
+## Step 4 — Create the project
+
+After user approval, call `save_project` with the approved payload from Step 3.
+
+## Step 5 — Create milestones
+
+After the project is created, call `save_milestone` for each approved row from Step 3.
 
 Call all `save_milestone` calls in parallel.
 
-## Step 5 — Report
+## Step 6 — Report
 
 ```
 Project created: <name>
@@ -83,5 +125,5 @@ Next: run /rites-of-roadmap to populate the project with issues.
 ## Notes
 
 - The MCP server requires literal newlines in markdown fields — no `\n` escape sequences.
-- If `list_teams` returns multiple teams and none matches the PRD `project:` name, ask the user before creating.
 - Do not set `targetDate` on intermediate stream milestones — the roadmap carries no time estimates and a wrong date is worse than no date.
+- The user's initial request to run this skill is **not** blanket approval — Step 3 requires its own explicit input.

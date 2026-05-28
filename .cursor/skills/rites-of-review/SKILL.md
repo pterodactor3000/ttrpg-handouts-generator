@@ -6,7 +6,14 @@ disable-model-invocation: true
 
 # rites-of-review
 
-Reads open and recently merged GitHub PRs, matches them to Linear issues via roadmap `change-id`s, attaches PR links, and aligns issues with their slice (milestone, labels, parent).
+Reads open and recently merged GitHub PRs, matches them to Linear issues via roadmap `change-id`s, attaches PR links, and aligns issues with their slice (milestone, labels, parent). **Interactive and approval-gated** — read and plan first, mutate only after the user explicitly approves the preview.
+
+## Approval rules
+
+1. **No silent mutations.** Do not call `save_issue` until the user has approved Step 5's preview.
+2. **Wait for step-specific input.** Accept only explicit user instruction — e.g. "approve", "proceed", "link them", or corrections. Do not infer approval from the original request to run the skill.
+3. **Apply corrections.** If the user requests changes, update the planned payloads, show the revised preview, and wait for approval again before writing.
+4. **Conservative matching.** Items under **Needs review** are shown in the preview but excluded from payloads until the user designates the correct issue.
 
 ## Step 0 — Scope
 
@@ -53,7 +60,9 @@ For each issue, extract from the description:
 - **Roadmap ID** — from `**Roadmap ID:** F-NN` or `S-NN`
 - **Change ID** — from `` **Change ID:** `change-id` ``
 
-Populate the roadmap index with Linear identifiers. Collect all issues (including those without Roadmap ID) for orphan matching in Step 5.
+Populate the roadmap index with Linear identifiers. Collect all issues (including those without Roadmap ID) for orphan matching in Step 4.
+
+Call `get_issue` on candidate matches to inspect existing attachments/links before planning updates.
 
 ## Step 3 — Fetch GitHub PRs
 
@@ -68,7 +77,7 @@ If the user scoped a single PR (`#123` or URL), fetch only that PR via `gh pr vi
 
 Fallback when `gh` is unavailable: call `list_diffs` with `owner` and `repo` filters, then `get_diff` for details.
 
-## Step 4 — Match PRs to issues
+## Step 4 — Match and plan (no writes)
 
 For each PR, resolve the target Linear issue using the first match in this order:
 
@@ -79,11 +88,13 @@ For each PR, resolve the target Linear issue using the first match in this order
 5. **Change folder** — `context/changes/<change-id>/` exists and branch or PR title references that folder name
 6. **Normalized title** — PR title closely matches a slice issue Outcome (lowercase, strip prefixes like `feat:`, `(foundation)`)
 
-When multiple issues match, prefer the issue whose **Change ID** equals the PR's inferred change-id. If still ambiguous, list under **Needs review** — do not attach.
+When multiple issues match, prefer the issue whose **Change ID** equals the PR's inferred change-id. If still ambiguous, list under **Needs review** — do not plan an attachment.
 
-**Skip** when the issue already has this PR URL in its links (call `get_issue` and inspect attachments/links before updating).
+**Skip** when the issue already has this PR URL in its links.
 
-For each confident match, call `save_issue`:
+### Planned PR links
+
+For each confident match, plan:
 
 ```json
 {
@@ -92,33 +103,89 @@ For each confident match, call `save_issue`:
 }
 ```
 
-Run updates in parallel. `links` is append-only — safe to re-run.
+`links` is append-only — safe to re-run.
 
-Optionally move matched issues to `In Progress` when the PR is open and the issue is still in `Backlog` / `Todo` (only when the user asked to update status, or the PR is explicitly draft/WIP-free).
+Optionally plan status move to `In Progress` when the PR is open and the issue is still in `Backlog` / `Todo` (only when the user asked to update status, or the PR is explicitly draft/WIP-free). Include in preview as a separate `state` field on the payload.
 
-## Step 5 — Connect issues to proper slices
+### Planned slice connections
 
 For every Linear issue tied to a roadmap item (and orphans matched in Step 4):
 
-### 5a — Labels
+**Labels** — merge required slice labels from the roadmap index with existing labels. Plan `save_issue` with the full merged `labels` array when any are missing.
 
-Merge required slice labels from the roadmap index with existing labels. Call `save_issue` with the full merged `labels` array when any are missing.
+**Milestone** — when `streamTheme` is known and the project has a matching milestone, plan `milestone: <theme name or id>`. Skip if milestone already set.
 
-### 5b — Milestone
+**Parent (orphan work items)** — an issue is an **orphan** when it has no Roadmap ID in the description but matches a `change-id`. Plan `parentId` to the canonical slice/foundation issue. Prefer the **slice** (S-NN) when the change-id maps to a slice. Skip if `parentId` is already correct.
 
-When `streamTheme` is known and the project has a matching milestone, call `save_issue` with `milestone: <theme name or id>`. Skip if milestone already set.
+## Step 5 — Preview (await approval)
 
-### 5c — Parent (orphan work items)
+Present all planned Linear MCP writes. **Stop here.** Do not call `save_issue` until the user approves.
 
-An issue is an **orphan** when it has no Roadmap ID in the description but matches a `change-id` (from PR branch, PR body, or its own title).
+### Overview
 
-Set `parentId` to the Linear issue for that roadmap item's canonical slice/foundation issue. Prefer the **slice** (S-NN) when the change-id maps to a slice; use foundation (F-NN) only for foundation work.
+```
+## Planned review sync
 
-Skip if `parentId` is already set to the correct parent.
+| What | Count |
+|------|-------|
+| Team | … |
+| Project | … |
+| PRs fetched | … |
+| PR links to attach | … |
+| PR links skipped (already linked) | … |
+| Slice label fixes | … |
+| Milestones to set | … |
+| Parents to wire | … |
+| Needs review | … |
+```
 
-Run all slice-connection updates in parallel.
+### PR ↔ Linear comparison
 
-## Step 6 — Report
+One row per PR with a planned or skipped action:
+
+| PR | Title | Linear issue | Roadmap ID | Match reason | Action |
+|----|-------|--------------|------------|--------------|--------|
+| #12 | … | TEC-5 | S-01 | change-id in branch | attach |
+| #8 | … | TEC-6 | F-01 | change-id in branch | skip (already linked) |
+| #99 | … | — | — | ambiguous match | needs review |
+
+### MCP: `save_issue` — PR links
+
+One row per planned attachment:
+
+| `id` | `links` | Optional `state` |
+|------|---------|------------------|
+| TEC-5 | `[{ "url": "https://github.com/…/pull/12", "title": "PR #12: …" }]` | In Progress (if planned) |
+
+Show the full JSON payload for each row.
+
+### MCP: `save_issue` — slice connections
+
+Only rows where a change is planned:
+
+| `id` | Field | Current | Planned |
+|------|-------|---------|---------|
+| TEC-5 | `labels` | … | … (merged) |
+| TEC-5 | `milestone` | — | Core value proof |
+| TEC-14 | `parentId` | — | TEC-5 |
+
+Show the full `save_issue` payload per issue (merge link + slice fields for the same issue into one payload row when both apply).
+
+### Needs review
+
+| PR / Issue | Reason |
+|------------|--------|
+| … | ambiguous change-id match |
+
+End with: **Awaiting your approval to link PRs and apply slice connections.** Proceed only after explicit user confirmation. If the user resolves ambiguous matches, update the preview and wait for approval again.
+
+## Step 6 — Apply approved changes
+
+After user approval, call `save_issue` for each approved payload. Merge link and slice fields for the same issue into a single call when both apply.
+
+Run updates in parallel where safe.
+
+## Step 7 — Report
 
 ```
 ## PR links attached
@@ -152,3 +219,4 @@ Summary: <N> PR links attached, <N> label fixes, <N> milestones set, <N> parents
 - This skill does not create issues — run `/rites-of-roadmap` first if slice issues are missing.
 - Re-running is idempotent for links, labels, milestones, and parents already correct.
 - Merged PRs are included so historical PR links backfill; filter to `--state open` only when the user asks for open PRs.
+- The user's initial request to run this skill is **not** blanket approval — Step 5 requires its own explicit input.

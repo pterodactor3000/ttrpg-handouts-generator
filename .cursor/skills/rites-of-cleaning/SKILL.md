@@ -6,7 +6,15 @@ disable-model-invocation: true
 
 # rites-of-cleaning
 
-Runs four backlog-hygiene passes against the current Linear workspace (optionally scoped to one team or project). Read-only discovery first, then apply fixes in parallel where safe.
+Runs four backlog-hygiene passes against the current Linear workspace (optionally scoped to one team or project). **Interactive and approval-gated** — discovery first, then mutate only after the user explicitly approves each step.
+
+## Approval rules (apply to every step)
+
+1. **No silent mutations.** Do not call `save_issue`, `create_issue_label`, or any other write MCP tool until the user has approved that step's proposed changes.
+2. **Show affected tickets.** Before any backlog change, print a markdown table listing every issue (or label) that will be created, updated, or closed. Include enough context for the user to approve or reject (ID, title, current state, proposed action).
+3. **Wait for step-specific input.** After presenting a table, stop and wait. Accept only explicit user instruction — e.g. "approve", "proceed", "skip", "close TEC-3 only", "use TEC-6 as canonical". Do not infer approval from the original request to run the skill.
+4. **Step completion gate.** A step is finished **only** after the user responds to that step (approval to apply, approval to skip, or correction). Do not start the next step until the current step is explicitly closed by user input.
+5. **Ambiguous cases.** When duplicate groups or scope are unclear, list them in the table under a **Needs review** row and wait for the user to pick — never auto-resolve.
 
 ## Step 0 — Scope
 
@@ -14,18 +22,43 @@ Read `context/foundation/roadmap.md` frontmatter for `project:` when present.
 
 Call `list_teams`. Pick the team matching the roadmap `project:` field, or the only team if there is one. If multiple teams and no match, ask the user which team (and optional `project`) to clean.
 
+Present the resolved scope:
+
+| Field | Value |
+|-------|-------|
+| Team | … |
+| Project | … (or "all team issues") |
+| Stale threshold | 14 days |
+
+**Wait for user confirmation** of scope before continuing.
+
 Call `list_issue_statuses` for that team. Note the canceled/duplicate state names (often `Canceled`, `Duplicate`, or `Cancelled`).
+
+**Wait for user confirmation** to proceed to Step 1.
 
 ## Step 1 — Ensure hygiene labels
 
-Call `list_issue_labels`. Create any missing labels in parallel via `create_issue_label`:
+Call `list_issue_labels`. Identify missing labels:
 
 | Label | Color | Description |
 |---|---|---|
 | `needs-owner` | `#EF4444` | Open issue has no assignee |
 | `needs-acceptance-criteria` | `#F97316` | Issue description lacks acceptance criteria |
 
-Do **not** create a label for stale issues — stale items are reported only (see Step 2).
+Do **not** create a label for stale issues — stale items are reported only (see Step 3).
+
+If any labels are missing, show:
+
+| Label | Action |
+|-------|--------|
+| `needs-owner` | Create |
+| `needs-acceptance-criteria` | Create |
+
+**Wait for user approval** to create labels. If none missing, show "No label changes needed" and **wait for user confirmation** to proceed.
+
+Create approved labels in parallel via `create_issue_label`.
+
+**Wait for user confirmation** that Step 1 is complete before Step 2.
 
 ## Step 2 — Fetch open issues
 
@@ -41,9 +74,36 @@ Collect for each issue: `id`, `title`, `description`, `assignee`, `labels`, `sta
 
 **Stale threshold:** 14 days before today (`updatedAt` older than `-P14D`). An issue is **stale** when it is in an active state and `updatedAt` is before that cutoff.
 
+Present a brief inventory (read-only):
+
+| Metric | Count |
+|--------|-------|
+| Open issues fetched | … |
+| Stale (14+ days) | … |
+| Potential duplicate groups | … |
+| Missing assignee | … |
+| Missing acceptance criteria | … |
+
+**Wait for user confirmation** to begin cleaning passes (Steps 3–6).
+
 ## Step 3 — Stale pass (report only)
 
-Build the stale list. Do not change stale issues unless the user explicitly asked to close or tag them in the same request.
+Build the stale list. **Do not change stale issues** unless the user explicitly approves an action in this step.
+
+Show:
+
+```
+## Stale (no update in 14+ days) — report only
+| ID | Title | Last updated | Days stale |
+|----|-------|--------------|------------|
+| …  | …     | …            | …          |
+```
+
+If none: single row `| — | None | — | — |`.
+
+**Wait for user input** — acknowledge, request close/tag actions, or approve proceeding. Apply any user-requested stale actions only after a second approval table listing affected tickets.
+
+**Wait for user confirmation** that Step 3 is complete before Step 4.
 
 ## Step 4 — Duplicate pass
 
@@ -55,22 +115,74 @@ Group open issues that are duplicates using these keys (check in order):
 When a group has 2+ issues:
 
 1. Pick the **canonical** issue: prefer the one already in `In Progress` or `Done`; otherwise the one with the most recent `updatedAt`; tie-break on lowest numeric identifier.
-2. For every non-canonical issue in the group, call `save_issue` with:
+2. For every non-canonical issue in the group, plan closure via `save_issue` with:
    - `id`: duplicate issue identifier
    - `duplicateOf`: canonical issue identifier
    - `state`: the team's duplicate or canceled status (prefer `Duplicate` when available)
 
-Run all duplicate closures in parallel. Skip issues already marked `duplicateOf`.
+Skip issues already marked `duplicateOf`.
+
+**Before any write**, show all proposed closures:
+
+```
+## Proposed duplicate closures — awaiting approval
+| Close (ID) | Title | Canonical (ID) | Match reason |
+|------------|-------|----------------|--------------|
+| …          | …     | …              | change-id / title |
+```
+
+If any group is ambiguous (same priority, no Change ID, titles differ slightly), add a **Needs review** section instead of proposing closures:
+
+| Group | Issues | Reason ambiguous |
+|-------|--------|------------------|
+| …     | …      | …                |
+
+**Wait for user approval** — user must confirm the table or designate canonical issues for ambiguous groups. Do not call `save_issue` until approved.
+
+After approval, run duplicate closures in parallel. Then show results:
+
+```
+## Duplicates closed
+| Closed | Canonical | Match reason |
+|--------|-----------|--------------|
+| …      | …         | change-id / title |
+```
+
+If user declined or skipped: note "No duplicate closures applied."
+
+**Wait for user confirmation** that Step 4 is complete before Step 5.
 
 ## Step 5 — Tag issues without owner
 
-From the open-issue set (post-duplicate closure, re-fetch if needed):
+From the open-issue set (post-duplicate closure, re-fetch if duplicates were closed):
 
 - **Missing owner:** `assignee` is null/empty and state is active.
 
-For each, call `save_issue` with `labels` set to existing labels **plus** `needs-owner` (preserve other labels — pass the full merged list). Skip if `needs-owner` is already present.
+**Before any write**, show all issues that would be tagged:
 
-Run in parallel.
+```
+## Proposed needs-owner tags — awaiting approval
+| ID | Title | Current labels | Action |
+|----|-------|----------------|--------|
+| …  | …     | …              | Add `needs-owner` |
+```
+
+Skip issues that already have `needs-owner` — do not include them. If none: single row `| — | None | — | — |`.
+
+**Wait for user approval** to apply tags.
+
+After approval, call `save_issue` with `labels` set to existing labels **plus** `needs-owner` (preserve other labels — pass the full merged list). Run in parallel.
+
+Show applied tags:
+
+```
+## Tagged needs-owner
+| ID | Title |
+|----|-------|
+| …  | …     |
+```
+
+**Wait for user confirmation** that Step 5 is complete before Step 6.
 
 ## Step 6 — Tag issues without acceptance criteria
 
@@ -81,39 +193,41 @@ An issue **has acceptance criteria** when its description contains any of (case-
 
 Otherwise it is **missing acceptance criteria**.
 
-For each open issue missing AC, call `save_issue` with `labels` set to existing labels **plus** `needs-acceptance-criteria`. Skip if label already present.
-
-Run in parallel.
-
-## Step 7 — Report
-
-Print four sections:
+**Before any write**, show all issues that would be tagged:
 
 ```
-## Stale (no update in 14+ days) — report only
-| ID | Title | Last updated | Days stale |
-|----|-------|--------------|------------|
-| …  | …     | …            | …          |
+## Proposed needs-acceptance-criteria tags — awaiting approval
+| ID | Title | Current labels | Action |
+|----|-------|----------------|--------|
+| …  | …     | …              | Add `needs-acceptance-criteria` |
+```
 
-## Duplicates closed
-| Closed | Canonical | Match reason |
-|--------|-----------|--------------|
-| …      | …         | change-id / title |
+Skip issues that already have the label. If none: single row `| — | None | — | — |`.
 
-## Tagged needs-owner
-| ID | Title |
-|----|-------|
-| …  | …     |
+**Wait for user approval** to apply tags.
 
+After approval, call `save_issue` with `labels` set to existing labels **plus** `needs-acceptance-criteria`. Run in parallel.
+
+Show applied tags:
+
+```
 ## Tagged needs-acceptance-criteria
 | ID | Title |
 |----|-------|
 | …  | …     |
-
-Summary: <N> stale, <N> duplicates closed, <N> tagged needs-owner, <N> tagged needs-acceptance-criteria
 ```
 
-If any duplicate group is ambiguous (same priority, no Change ID, titles differ slightly), list it under **Needs review** and do not close until the user picks the canonical issue.
+**Wait for user confirmation** that Step 6 is complete before Step 7.
+
+## Step 7 — Final summary
+
+Print only after Step 6 is confirmed complete:
+
+```
+Summary: <N> stale (reported), <N> duplicates closed, <N> tagged needs-owner, <N> tagged needs-acceptance-criteria
+```
+
+Include any steps the user skipped. **Wait for user acknowledgment** to close the rite.
 
 ## Notes
 
@@ -122,3 +236,4 @@ If any duplicate group is ambiguous (same priority, no Change ID, titles differ 
 - Duplicate closure is destructive — when in doubt, report instead of closing.
 - Removing labels or assignees is out of scope; this skill only adds hygiene labels and closes confirmed duplicates.
 - Re-running is idempotent: already-tagged and already-closed duplicates are skipped.
+- The user's initial request to run this skill is **not** blanket approval for all steps — each step requires its own explicit input.
