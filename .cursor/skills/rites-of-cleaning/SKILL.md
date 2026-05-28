@@ -1,10 +1,10 @@
 ---
-name: litanies-of-cleaning
-description: Audits and cleans a Linear backlog via MCP — flags stale issues (no update in 2+ weeks), closes duplicate issues, and tags issues missing an assignee or acceptance criteria. Use when the user says "clean Linear backlog", "litanies of cleaning", "find stale tickets", "close duplicate issues", "tag issues without owner", "tag issues without acceptance criteria", or similar.
+name: rites-of-cleaning
+description: Audits and cleans a Linear backlog via MCP — flags stale issues (no update in 2+ weeks), closes duplicate issues, and tags issues missing an assignee or acceptance criteria. Use when the user says "clean Linear backlog", "rites of cleaning", "find stale tickets", "close duplicate issues", "tag issues without owner", "tag issues without acceptance criteria", or similar.
 disable-model-invocation: true
 ---
 
-# litanies-of-cleaning
+# rites-of-cleaning
 
 Runs four backlog-hygiene passes against the current Linear workspace (optionally scoped to one team or project). Read-only discovery first, then apply fixes in parallel where safe.
 

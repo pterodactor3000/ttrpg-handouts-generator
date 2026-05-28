@@ -1,10 +1,10 @@
 ---
-name: litanies-of-review
-description: Syncs GitHub pull requests to Linear via MCP — attaches PR links to matching issues and connects work items to the correct roadmap slice (labels, milestone, parent). Use when the user says "litanies of review", "link PRs to Linear", "update Linear with PR links", "connect issues to slices", or similar.
+name: rites-of-review
+description: Syncs GitHub pull requests to Linear via MCP — attaches PR links to matching issues and connects work items to the correct roadmap slice (labels, milestone, parent). Use when the user says "rites of review", "link PRs to Linear", "update Linear with PR links", "connect issues to slices", or similar.
 disable-model-invocation: true
 ---
 
-# litanies-of-review
+# rites-of-review
 
 Reads open and recently merged GitHub PRs, matches them to Linear issues via roadmap `change-id`s, attaches PR links, and aligns issues with their slice (milestone, labels, parent).
 
@@ -38,7 +38,7 @@ From the roadmap, build:
 
 **Stream → slice mapping** — for each Streams row, parse the Chain column (e.g. `` `F-01` → `S-01` ``). Every roadmap ID in the chain inherits that row's **Theme** as `streamTheme`.
 
-**Labels per roadmap item** (same rules as `/litanies-of-roadmap`):
+**Labels per roadmap item** (same rules as `/rites-of-roadmap`):
 
 - F-NN → `foundation`
 - north-star S-NN → `slice`, `north-star`
@@ -149,6 +149,6 @@ Summary: <N> PR links attached, <N> label fixes, <N> milestones set, <N> parents
 
 - Pass string values to MCP tools without escape sequences — literal newlines in markdown fields.
 - PR → issue matching is conservative; wrong links are worse than missing links.
-- This skill does not create issues — run `/litanies-of-roadmap` first if slice issues are missing.
+- This skill does not create issues — run `/rites-of-roadmap` first if slice issues are missing.
 - Re-running is idempotent for links, labels, milestones, and parents already correct.
 - Merged PRs are included so historical PR links backfill; filter to `--state open` only when the user asks for open PRs.

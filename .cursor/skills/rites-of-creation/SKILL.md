@@ -1,10 +1,10 @@
 ---
-name: litanies-of-creation
-description: Creates a Linear project from context/foundation/prd.md and context/foundation/roadmap.md — maps PRD name/vision/deadline to the project, and roadmap streams to milestones. Use when the user says "litanies of creation", "create a Linear project", "set up the project in Linear", "add project to Linear", or "create Linear project from context".
+name: rites-of-creation
+description: Creates a Linear project from context/foundation/prd.md and context/foundation/roadmap.md — maps PRD name/vision/deadline to the project, and roadmap streams to milestones. Use when the user says "rites of creation", "create a Linear project", "set up the project in Linear", "add project to Linear", or "create Linear project from context".
 disable-model-invocation: true
 ---
 
-# litanies-of-creation
+# rites-of-creation
 
 Creates one Linear project from the current `context/foundation/` artifacts, then adds one milestone per roadmap stream.
 
@@ -77,7 +77,7 @@ Milestones:
   - <Theme> (targetDate: <date or unset>)
   - ...
 
-Next: run /litanies-of-roadmap to populate the project with issues.
+Next: run /rites-of-roadmap to populate the project with issues.
 ```
 
 ## Notes

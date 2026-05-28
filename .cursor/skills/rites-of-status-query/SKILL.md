@@ -1,10 +1,10 @@
 ---
-name: litanies-of-status-query
-description: Produces a short status report from Linear and roadmap context — blocked issues, review-ready issues, out-of-scope items, issues out of radar, and a focus recommendation. Use when the user says "litanies of status query", "project status", "what should we focus on", "what's blocked", "issues out of radar", "status report", or similar.
+name: rites-of-status-query
+description: Produces a short status report from Linear and roadmap context — blocked issues, review-ready issues, out-of-scope items, issues out of radar, and a focus recommendation. Use when the user says "rites of status query", "project status", "what should we focus on", "what's blocked", "issues out of radar", "status report", or similar.
 disable-model-invocation: true
 ---
 
-# litanies-of-status-query
+# rites-of-status-query
 
 Read-only. Gathers Linear issues, GitHub PRs, and foundation docs, then prints a **short** report as markdown tables. Target length: under 50 lines total.
 
@@ -93,7 +93,7 @@ Pick **one** primary recommendation plus up to two alternates. Reason using, in 
 2. Roadmap `main_goal` and `top_blocker` frontmatter — prefer unblocking the top blocker or advancing the north star
 3. **Review-ready** items trump new work — merge/review open PRs first when present
 4. Dependency order — never recommend a slice whose prerequisites aren't done
-5. **Out of radar** — if `Missing in Linear` or `No roadmap link` items exist, suggest `/litanies-of-roadmap` or `/litanies-of-review` in the **Also** row when relevant
+5. **Out of radar** — if `Missing in Linear` or `No roadmap link` items exist, suggest `/rites-of-roadmap` or `/rites-of-review` in the **Also** row when relevant
 
 Fill the Focus now table (Step 6). Omit the **Also** row when there is no alternate.
 

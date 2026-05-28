@@ -1,10 +1,10 @@
 ---
-name: litanies-of-roadmap
-description: Syncs context/foundation/roadmap.md to Linear via MCP — creates one issue per F-NN (foundation) and S-NN (slice) item, with Outcome as the title, PRD refs + prerequisites + risk as the description, and foundation/slice/north-star labels applied. Wires blocking relations to mirror the dependency graph. Use when the user says "litanies of roadmap", "move roadmap to Linear", "sync roadmap to Linear", "create Linear issues from roadmap", "push roadmap to Linear", or similar.
+name: rites-of-roadmap
+description: Syncs context/foundation/roadmap.md to Linear via MCP — creates one issue per F-NN (foundation) and S-NN (slice) item, with Outcome as the title, PRD refs + prerequisites + risk as the description, and foundation/slice/north-star labels applied. Wires blocking relations to mirror the dependency graph. Use when the user says "rites of roadmap", "move roadmap to Linear", "sync roadmap to Linear", "create Linear issues from roadmap", "push roadmap to Linear", or similar.
 disable-model-invocation: true
 ---
 
-# litanies-of-roadmap
+# rites-of-roadmap
 
 Reads `context/foundation/roadmap.md` and creates one Linear issue per roadmap item (F-NN foundations + S-NN slices), then wires the `blocks` dependency graph.
 
