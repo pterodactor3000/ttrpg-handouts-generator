@@ -137,7 +137,7 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 
 ## Parked
 
-- **Custom background upload** — Why parked: PRD §Non-Goals. Three pre-loaded themes (grimdark / high fantasy / postapo) are the MVP constraint.
+- **Custom background upload** — Why parked: PRD §Non-Goals. Three pre-loaded themes (fantasy / horror / scifi) are the MVP constraint.
 - **Collaborative editing** — Why parked: PRD §Non-Goals. Single-GM ownership for v1.
 - **Analytics / tracking** — Why parked: PRD §Non-Goals. Read-only links are anonymous; no analytics infrastructure for MVP.
 - **PDF / PNG file export** — Why parked: PRD §Non-Goals. Link-only sharing for v1.
