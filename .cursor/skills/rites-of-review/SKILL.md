@@ -8,6 +8,39 @@ disable-model-invocation: true
 
 Reads open and recently merged GitHub PRs, matches them to Linear issues via roadmap `change-id`s, attaches PR links, and aligns issues with their slice (milestone, labels, parent). **Interactive and approval-gated** — read and plan first, mutate only after the user explicitly approves the preview.
 
+## Audit comments (after every write)
+
+After **each** successful mutation to a Linear issue, post an audit comment on that issue **and** the identical body on the matching GitHub PR.
+
+### Format
+
+```
+// [<who>] // ::RITES OF REVIEW:: // <when> //
+<what changed; why>
+```
+
+- **`<who>`** — approving user's Linear display name when known, otherwise `cogitator`
+- **`<when>`** — ISO 8601 UTC timestamp, e.g. `2026-05-28T14:30:00Z`
+- Body line — fields changed (old → new when relevant) and reason (e.g. "attached PR #12; set milestone to Core value proof")
+
+### Linear
+
+Immediately after each successful `save_issue`, call `save_comment` with `issueId` set to the mutated issue and `body` set to the audit comment. Batch comment calls in parallel when multiple issues were updated in the same step.
+
+### GitHub
+
+For every PR in the approved payload, post the **same** body via:
+
+```bash
+gh pr comment <number> --repo <owner>/<repo> --body "$(cat <<'EOF'
+// [<who>] // ::RITES OF REVIEW:: // <when> //
+<what changed; why>
+EOF
+)"
+```
+
+When one `save_issue` maps to one PR, use one comment body on both platforms. When an issue update has no PR in scope, skip GitHub for that issue only.
+
 ## Approval rules
 
 1. **No silent mutations.** Do not call `save_issue` until the user has approved Step 5's preview.
@@ -183,7 +216,7 @@ End with: **Awaiting your approval to link PRs and apply slice connections.** Pr
 
 After user approval, call `save_issue` for each approved payload. Merge link and slice fields for the same issue into a single call when both apply.
 
-Run updates in parallel where safe.
+Run updates in parallel where safe. Immediately after each successful write, post the audit comment on the Linear issue and on the matching GitHub PR with identical body.
 
 ## Step 7 — Report
 
@@ -220,3 +253,4 @@ Summary: <N> PR links attached, <N> label fixes, <N> milestones set, <N> parents
 - Re-running is idempotent for links, labels, milestones, and parents already correct.
 - Merged PRs are included so historical PR links backfill; filter to `--state open` only when the user asks for open PRs.
 - The user's initial request to run this skill is **not** blanket approval — Step 5 requires its own explicit input.
+- Every `save_issue` must be followed by an audit comment on Linear and on the matching GitHub PR — see **Audit comments** above.

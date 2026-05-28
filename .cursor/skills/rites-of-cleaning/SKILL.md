@@ -8,6 +8,39 @@ disable-model-invocation: true
 
 Runs four backlog-hygiene passes against the current Linear workspace (optionally scoped to one team or project). **Interactive and approval-gated** — discovery first, then mutate only after the user explicitly approves each step.
 
+## Audit comments (after every write)
+
+After **each** successful mutation to a Linear issue, post an audit comment on that issue **and** the identical body on GitHub when a PR is linked or matched to that issue.
+
+### Format
+
+```
+// [<who>] // ::RITES OF CLEANING:: // <when> //
+<what changed; why>
+```
+
+- **`<who>`** — approving user's Linear display name when known, otherwise `cogitator`
+- **`<when>`** — ISO 8601 UTC timestamp, e.g. `2026-05-28T14:30:00Z`
+- Body line — fields changed (old → new when relevant) and reason (e.g. "approved duplicate closure in Step 4")
+
+### Linear
+
+Immediately after each successful `save_issue`, call `save_comment` with `issueId` set to the mutated issue and `body` set to the audit comment. Batch comment calls in parallel when multiple issues were updated in the same step.
+
+### GitHub
+
+When the issue has a linked PR or a PR matches by change-id / branch, post the **same** body:
+
+```bash
+gh pr comment <number> --repo <owner>/<repo> --body "$(cat <<'EOF'
+// [<who>] // ::RITES OF CLEANING:: // <when> //
+<what changed; why>
+EOF
+)"
+```
+
+Skip GitHub when no PR is associated with that issue.
+
 ## Approval rules (apply to every step)
 
 1. **No silent mutations.** Do not call `save_issue`, `create_issue_label`, or any other write MCP tool until the user has approved that step's proposed changes.
@@ -101,7 +134,7 @@ Show:
 
 If none: single row `| — | None | — | — |`.
 
-**Wait for user input** — acknowledge, request close/tag actions, or approve proceeding. Apply any user-requested stale actions only after a second approval table listing affected tickets.
+**Wait for user input** — acknowledge, request close/tag actions, or approve proceeding. Apply any user-requested stale actions only after a second approval table listing affected tickets. Post an audit comment on each issue changed (and on any linked GitHub PR).
 
 **Wait for user confirmation** that Step 3 is complete before Step 4.
 
@@ -139,7 +172,7 @@ If any group is ambiguous (same priority, no Change ID, titles differ slightly),
 
 **Wait for user approval** — user must confirm the table or designate canonical issues for ambiguous groups. Do not call `save_issue` until approved.
 
-After approval, run duplicate closures in parallel. Then show results:
+After approval, run duplicate closures in parallel. Post an audit comment on each closed issue (and on any linked GitHub PR). Then show results:
 
 ```
 ## Duplicates closed
@@ -171,7 +204,7 @@ Skip issues that already have `needs-owner` — do not include them. If none: si
 
 **Wait for user approval** to apply tags.
 
-After approval, call `save_issue` with `labels` set to existing labels **plus** `needs-owner` (preserve other labels — pass the full merged list). Run in parallel.
+After approval, call `save_issue` with `labels` set to existing labels **plus** `needs-owner` (preserve other labels — pass the full merged list). Run in parallel. Post an audit comment on each tagged issue (and on any linked GitHub PR).
 
 Show applied tags:
 
@@ -206,7 +239,7 @@ Skip issues that already have the label. If none: single row `| — | None | —
 
 **Wait for user approval** to apply tags.
 
-After approval, call `save_issue` with `labels` set to existing labels **plus** `needs-acceptance-criteria`. Run in parallel.
+After approval, call `save_issue` with `labels` set to existing labels **plus** `needs-acceptance-criteria`. Run in parallel. Post an audit comment on each tagged issue (and on any linked GitHub PR).
 
 Show applied tags:
 
@@ -237,3 +270,4 @@ Include any steps the user skipped. **Wait for user acknowledgment** to close th
 - Removing labels or assignees is out of scope; this skill only adds hygiene labels and closes confirmed duplicates.
 - Re-running is idempotent: already-tagged and already-closed duplicates are skipped.
 - The user's initial request to run this skill is **not** blanket approval for all steps — each step requires its own explicit input.
+- Every `save_issue` must be followed by an audit comment on Linear (and GitHub when a PR is linked) — see **Audit comments** above.

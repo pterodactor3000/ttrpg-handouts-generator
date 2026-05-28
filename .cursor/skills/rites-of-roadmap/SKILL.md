@@ -8,6 +8,39 @@ disable-model-invocation: true
 
 Reads `context/foundation/roadmap.md` and creates one Linear issue per roadmap item (F-NN foundations + S-NN slices), then wires the `blocks` dependency graph. **Interactive and approval-gated** — read and plan first, mutate only after the user explicitly approves the preview.
 
+## Audit comments (after every write)
+
+After **each** successful mutation to a Linear issue, post an audit comment on that issue **and** the identical body on GitHub when a PR is linked or matched to that issue.
+
+### Format
+
+```
+// [<who>] // ::RITES OF ROADMAP:: // <when> //
+<what changed; why>
+```
+
+- **`<who>`** — approving user's Linear display name when known, otherwise `cogitator`
+- **`<when>`** — ISO 8601 UTC timestamp, e.g. `2026-05-28T14:30:00Z`
+- Body line — fields changed (old → new when relevant) and reason (e.g. "created from roadmap F-01 on user approval")
+
+### Linear
+
+Immediately after each successful `save_issue`, call `save_comment` with `issueId` set to the mutated issue and `body` set to the audit comment. Batch comment calls in parallel when multiple issues were updated in the same step.
+
+### GitHub
+
+When the issue has a linked PR or a PR matches by change-id / branch, post the **same** body:
+
+```bash
+gh pr comment <number> --repo <owner>/<repo> --body "$(cat <<'EOF'
+// [<who>] // ::RITES OF ROADMAP:: // <when> //
+<what changed; why>
+EOF
+)"
+```
+
+Skip GitHub when no PR is associated with that issue. Label-only creates (`create_issue_label`) do not get audit comments.
+
 ## Approval rules
 
 1. **No silent mutations.** Do not call `create_issue_label` or `save_issue` until the user has approved Step 4's preview.
@@ -163,7 +196,7 @@ After user approval, call `create_issue_label` for any approved labels. Create a
 
 ## Step 6 — Create issues (parallel)
 
-Create all approved F-NN and S-NN issues in a single parallel batch via `save_issue`. Skip items marked `skip` in the preview.
+Create all approved F-NN and S-NN issues in a single parallel batch via `save_issue`. Skip items marked `skip` in the preview. Post an audit comment on each created issue (and on any linked GitHub PR).
 
 Collect every returned `id` (e.g. `TEC-6`) and map it to its roadmap ID (e.g. `F-01`). Merge with existing issue IDs for prerequisite resolution.
 
@@ -171,7 +204,7 @@ Collect every returned `id` (e.g. `TEC-6`) and map it to its roadmap ID (e.g. `F
 
 For each approved blocking relation, call `save_issue` with `blocks: [<downstream-linear-id>, ...]` on the prerequisite issue.
 
-Run all update calls in parallel.
+Run all update calls in parallel. Post an audit comment on each prerequisite issue whose `blocks` were updated (and on any linked GitHub PR).
 
 ## Step 8 — Report
 
@@ -192,3 +225,4 @@ Blocking graph wired: <concise chain, e.g. TEC-6 → TEC-5 → TEC-7 → TEC-8 /
 - The MCP server instruction says: pass string values without escape sequences — use real newlines in markdown content, not `\n`.
 - The user's initial request to run this skill is **not** blanket approval — Step 4 requires its own explicit input.
 - Re-running is safe: existing Change ID / Roadmap ID matches are skipped, not duplicated.
+- Every `save_issue` must be followed by an audit comment on Linear (and GitHub when a PR is linked) — see **Audit comments** above.

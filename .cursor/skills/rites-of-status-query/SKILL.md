@@ -138,7 +138,7 @@ Do not add extra sections or narrative. Do not mutate Linear or GitHub.
 
 ## Notes
 
-- This skill is read-only — no `save_issue`, no label changes.
+- This skill is read-only — no `save_issue`, no label changes, no audit comments. Mutating rites post audit comments after each write; see `/rites-of-cleaning`, `/rites-of-roadmap`, `/rites-of-review`, and `/rites-of-creation`.
 - **Out of scope** = deliberate deferrals and future sequenced work. **Out of radar** = untracked or disconnected work that may need linking or cleanup.
 - When Linear and roadmap disagree on blocked status, report both signals in the **Why blocked** column.
 - Re-run anytime; output should fit on one screen.

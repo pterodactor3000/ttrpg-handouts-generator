@@ -8,6 +8,39 @@ disable-model-invocation: true
 
 Creates one Linear project from the current `context/foundation/` artifacts, then adds one milestone per roadmap stream. **Interactive and approval-gated** — read and plan first, mutate only after the user explicitly approves the preview.
 
+## Audit comments (after every write)
+
+After **each** successful mutation to a Linear project or milestone, post an audit comment on that entity **and** the identical body on GitHub when a PR is linked or matched to work under that project.
+
+### Format
+
+```
+// [<who>] // ::RITES OF CREATION:: // <when> //
+<what changed; why>
+```
+
+- **`<who>`** — approving user's Linear display name when known, otherwise `cogitator`
+- **`<when>`** — ISO 8601 UTC timestamp, e.g. `2026-05-28T14:30:00Z`
+- Body line — fields changed (old → new when relevant) and reason (e.g. "created project from PRD on user approval")
+
+### Linear
+
+Immediately after each successful `save_project` or `save_milestone`, call `save_comment` with `projectId` or `milestoneId` set to the mutated entity and `body` set to the audit comment.
+
+### GitHub
+
+When a PR is in scope for the created project (linked issue or open PR on the repo), post the **same** body:
+
+```bash
+gh pr comment <number> --repo <owner>/<repo> --body "$(cat <<'EOF'
+// [<who>] // ::RITES OF CREATION:: // <when> //
+<what changed; why>
+EOF
+)"
+```
+
+Skip GitHub when no PR is associated. Project and milestone creation typically has no PR yet — Linear comment only in that case.
+
 ## Approval rules
 
 1. **No silent mutations.** Do not call `save_project` or `save_milestone` until the user has approved Step 3's preview.
@@ -101,13 +134,13 @@ End with: **Awaiting your approval to create the project and milestones.** Proce
 
 ## Step 4 — Create the project
 
-After user approval, call `save_project` with the approved payload from Step 3.
+After user approval, call `save_project` with the approved payload from Step 3. Post an audit comment on the created project.
 
 ## Step 5 — Create milestones
 
 After the project is created, call `save_milestone` for each approved row from Step 3.
 
-Call all `save_milestone` calls in parallel.
+Call all `save_milestone` calls in parallel. Post an audit comment on each created milestone.
 
 ## Step 6 — Report
 
@@ -127,3 +160,4 @@ Next: run /rites-of-roadmap to populate the project with issues.
 - The MCP server requires literal newlines in markdown fields — no `\n` escape sequences.
 - Do not set `targetDate` on intermediate stream milestones — the roadmap carries no time estimates and a wrong date is worse than no date.
 - The user's initial request to run this skill is **not** blanket approval — Step 3 requires its own explicit input.
+- Every `save_project` and `save_milestone` must be followed by an audit comment on Linear — see **Audit comments** above.
