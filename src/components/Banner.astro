@@ -1,14 +1,14 @@
 ---
-type Variant = "info" | "warning" | "error";
+type Variant = 'info' | 'warning' | 'error';
 
 interface Props {
   variant?: Variant;
 }
 
-const { variant = "info" } = Astro.props;
+const { variant = 'info' } = Astro.props;
 ---
 
-<div class:list={["banner", `banner--${variant}`]} role={variant === "error" ? "alert" : "status"}>
+<div class:list={['banner', `banner--${variant}`]} role={variant === 'error' ? 'alert' : 'status'}>
   <slot />
 </div>
 
