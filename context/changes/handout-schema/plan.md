@@ -253,16 +253,16 @@ This is the first migration in the project. `supabase/migrations/` must be creat
 
 #### Automated
 
-- [ ] 1.1 Migration file exists: `ls supabase/migrations/20260528200000_create_handouts_table.sql`
-- [ ] 1.2 Migration applies cleanly: `npx supabase db reset` exits 0
-- [ ] 1.3 Lint passes: `npm run lint`
+- [x] 1.1 Migration file exists: `ls supabase/migrations/20260528200000_create_handouts_table.sql`
+- [x] 1.2 Migration applies cleanly: `npx supabase db reset` exits 0
+- [x] 1.3 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 1.4 Supabase Studio shows `handouts` table with all 11 columns and correct nullability
-- [ ] 1.5 RLS enabled on `handouts`; all 4 policies visible under Authentication > Policies
-- [ ] 1.6 Indexes `handouts_gm_id_idx` and `handouts_share_token_idx` exist in Database > Indexes
-- [ ] 1.7 ENUM types `handout_status` and `background_category` visible in Database > Types with correct values
+- [x] 1.4 Supabase Studio shows `handouts` table with all 11 columns and correct nullability
+- [x] 1.5 RLS enabled on `handouts`; all 4 policies visible under Authentication > Policies
+- [x] 1.6 Indexes `handouts_gm_id_idx` and `handouts_share_token_idx` exist in Database > Indexes
+- [x] 1.7 ENUM types `handout_status` and `background_category` visible in Database > Types with correct values
 
 ### Phase 2: TypeScript Entity Types
 
