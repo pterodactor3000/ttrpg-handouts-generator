@@ -253,27 +253,27 @@ This is the first migration in the project. `supabase/migrations/` must be creat
 
 #### Automated
 
-- [x] 1.1 Migration file exists: `ls supabase/migrations/20260528200000_create_handouts_table.sql`
-- [x] 1.2 Migration applies cleanly: `npx supabase db reset` exits 0
-- [x] 1.3 Lint passes: `npm run lint`
+- [x] 1.1 Migration file exists: `ls supabase/migrations/20260528200000_create_handouts_table.sql` — ea50d38
+- [x] 1.2 Migration applies cleanly: `npx supabase db reset` exits 0 — ea50d38
+- [x] 1.3 Lint passes: `npm run lint` — ea50d38
 
 #### Manual
 
-- [x] 1.4 Supabase Studio shows `handouts` table with all 11 columns and correct nullability
-- [x] 1.5 RLS enabled on `handouts`; all 4 policies visible under Authentication > Policies
-- [x] 1.6 Indexes `handouts_gm_id_idx` and `handouts_share_token_idx` exist in Database > Indexes
-- [x] 1.7 ENUM types `handout_status` and `background_category` visible in Database > Types with correct values
+- [x] 1.4 Supabase Studio shows `handouts` table with all 11 columns and correct nullability — ea50d38
+- [x] 1.5 RLS enabled on `handouts`; all 4 policies visible under Authentication > Policies — ea50d38
+- [x] 1.6 Indexes `handouts_gm_id_idx` and `handouts_share_token_idx` exist in Database > Indexes — ea50d38
+- [x] 1.7 ENUM types `handout_status` and `background_category` visible in Database > Types with correct values — ea50d38
 
 ### Phase 2: TypeScript Entity Types
 
 #### Automated
 
-- [ ] 2.1 `src/types.ts` exists: `ls src/types.ts`
-- [ ] 2.2 Build type-checks cleanly: `npm run build`
-- [ ] 2.3 Lint passes: `npm run lint`
+- [x] 2.1 `src/types.ts` exists: `ls src/types.ts`
+- [x] 2.2 Build type-checks cleanly: `npm run build`
+- [x] 2.3 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.4 `import type { Handout } from '@/types'` resolves with no TS errors in any `src/` file
-- [ ] 2.5 `share_token`, `published_at`, `archived_at` are typed `string | null`
-- [ ] 2.6 `status` is `HandoutStatus`; `tags` is `string[]`; `background_category` is `BackgroundCategory`
+- [x] 2.4 `import type { Handout } from '@/types'` resolves with no TS errors in any `src/` file
+- [x] 2.5 `share_token`, `published_at`, `archived_at` are typed `string | null`
+- [x] 2.6 `status` is `HandoutStatus`; `tags` is `string[]`; `background_category` is `BackgroundCategory`
