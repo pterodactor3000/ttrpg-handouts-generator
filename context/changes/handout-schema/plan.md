@@ -268,12 +268,12 @@ This is the first migration in the project. `supabase/migrations/` must be creat
 
 #### Automated
 
-- [x] 2.1 `src/types.ts` exists: `ls src/types.ts`
-- [x] 2.2 Build type-checks cleanly: `npm run build`
-- [x] 2.3 Lint passes: `npm run lint`
+- [x] 2.1 `src/types.ts` exists: `ls src/types.ts` — 6dfd729
+- [x] 2.2 Build type-checks cleanly: `npm run build` — 6dfd729
+- [x] 2.3 Lint passes: `npm run lint` — 6dfd729
 
 #### Manual
 
-- [x] 2.4 `import type { Handout } from '@/types'` resolves with no TS errors in any `src/` file
-- [x] 2.5 `share_token`, `published_at`, `archived_at` are typed `string | null`
-- [x] 2.6 `status` is `HandoutStatus`; `tags` is `string[]`; `background_category` is `BackgroundCategory`
+- [x] 2.4 `import type { Handout } from '@/types'` resolves with no TS errors in any `src/` file — 6dfd729
+- [x] 2.5 `share_token`, `published_at`, `archived_at` are typed `string | null` — 6dfd729
+- [x] 2.6 `status` is `HandoutStatus`; `tags` is `string[]`; `background_category` is `BackgroundCategory` — 6dfd729
