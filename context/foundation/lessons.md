@@ -16,11 +16,11 @@
 - **Rule**: always do exports at the end of the files
 - **Applies to**: all
 
-## Always Use Arrow Functions with Const Declarations
+## Always Use @ Aliases for Project Imports in TypeScript Files
 
-- **Context**: all TypeScript files
-- **Problem**: use constants to declare functions and arrow function declarations, so the code is better understandable
-- **Rule**: always use arrow functions with const declarations for functions, instead of keyword 'function'
+- **Context**: all TypeScript (and TSX) files
+- **Problem**: using relative paths (e.g. `../../types`) instead of the project `@/*` alias makes imports fragile to refactoring and inconsistent across the codebase. It also requires any tooling that resolves modules (e.g. vitest) to be kept in sync with tsconfig paths.
+- **Rule**: always use the `@/` alias when importing from project source (e.g. `import type { Handout } from '@/types'`). Relative imports are only acceptable within the same directory for co-located modules.
 - **Applies to**: all
 
 ## Follow Atomic Design Methodology for UI Components
@@ -28,4 +28,11 @@
 - **Context**: Any phase that adds or modifies UI components (`src/components/`)
 - **Problem**: Without a clear granularity model, components grow monolithic and become hard to test, reuse, and reason about in isolation.
 - **Rule**: When developing new UI components, follow Atomic Design methodology — organize components as atoms, molecules, organisms, templates, and pages.
+- **Applies to**: all
+
+## Freeze unified Processor Singletons
+
+- **Context**: any file that builds a `unified()` pipeline as a module-level constant
+- **Problem**: a shared processor without `.freeze()` can be mutated by later `.use()` calls anywhere that has a reference to it, silently affecting all callers. unified auto-freezes on first run, but an explicit call makes the intent visible and surfaces accidental mutation as an immediate throw rather than a silent side-effect.
+- **Rule**: always call `.freeze()` at the end of a module-level `unified()` chain to signal the pipeline is final and prevent accidental mutation.
 - **Applies to**: all

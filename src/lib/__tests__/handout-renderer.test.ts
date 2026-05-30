@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renderHandoutHtml } from '../handout-renderer';
+import { renderHandoutHtml } from '@/lib/handout-renderer';
 
 describe('renderHandoutHtml', () => {
   describe('standard GFM elements', () => {

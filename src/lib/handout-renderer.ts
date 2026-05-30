@@ -10,7 +10,8 @@ const processor = unified()
   .use(remarkGfm)
   .use(remarkRehype, { allowDangerousHtml: false })
   .use(rehypeSanitize)
-  .use(rehypeStringify);
+  .use(rehypeStringify)
+  .freeze();
 
 const renderHandoutHtml = (markdown: string): string => {
   const result = processor.processSync(markdown);
