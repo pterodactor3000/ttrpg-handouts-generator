@@ -396,18 +396,18 @@ F-01 migration is already applied. No new migrations in this slice.
 
 #### Automated
 
-- [x] 2.1 `npm run build` succeeds with no type errors on Phase 2 files
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 `npm run build` succeeds with no type errors on Phase 2 files — 66aab0a
+- [x] 2.2 `npm run lint` passes — 66aab0a
 
 #### Manual
 
-- [ ] 2.3 `/handouts/new` loads with two-column editor layout while signed in
-- [ ] 2.4 Markdown textarea drives live CSS-overlay preview
-- [ ] 2.5 Background picker switches the gradient in the preview
-- [ ] 2.6 Tags can be added and removed via chip UI
-- [ ] 2.7 Save creates a new draft row in Supabase with correct `gm_id` and `status = 'draft'`
-- [ ] 2.8 Re-saving updates the existing row (no duplicates)
-- [ ] 2.9 Visiting `/handouts/new` signed-out redirects to `/auth/signin`
+- [x] 2.3 `/handouts/new` loads with two-column editor layout while signed in
+- [x] 2.4 Markdown textarea drives live CSS-overlay preview
+- [x] 2.5 Background picker switches the gradient in the preview
+- [x] 2.6 Tags can be added and removed via chip UI
+- [x] 2.7 Save creates a new draft row in Supabase with correct `gm_id` and `status = 'draft'`
+- [x] 2.8 Re-saving updates the existing row (no duplicates)
+- [x] 2.9 Visiting `/handouts/new` signed-out redirects to `/auth/signin`
 
 ### Phase 3: Publish and Share
 

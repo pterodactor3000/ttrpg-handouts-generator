@@ -8,7 +8,7 @@ const handoutInputSchema = z.object({
   title: z.string().max(300),
   markdownContent: z.string().max(50000),
   backgroundCategory: z.enum(['fantasy', 'horror', 'scifi']),
-  tags: z.array(z.string()).max(20),
+  tags: z.array(z.string().max(50)).max(20),
 });
 
 interface HandoutRow {
@@ -61,7 +61,7 @@ export const POST: APIRoute = async (context) => {
     .single()) as HandoutQueryResult;
 
   if (error || !data) {
-    return new Response(JSON.stringify({ error: error?.message ?? 'Insert failed' }), {
+    return new Response(JSON.stringify({ error: 'Failed to save handout' }), {
       status: 500,
     });
   }

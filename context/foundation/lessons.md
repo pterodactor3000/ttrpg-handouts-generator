@@ -36,3 +36,17 @@
 - **Problem**: a shared processor without `.freeze()` can be mutated by later `.use()` calls anywhere that has a reference to it, silently affecting all callers. unified auto-freezes on first run, but an explicit call makes the intent visible and surfaces accidental mutation as an immediate throw rather than a silent side-effect.
 - **Rule**: always call `.freeze()` at the end of a module-level `unified()` chain to signal the pipeline is final and prevent accidental mutation.
 - **Applies to**: all
+
+## Always Assert Row Ownership at the Application Layer
+
+- **Context**: any Supabase API route that updates or deletes a row by id
+- **Problem**: filtering only by `id` (and optionally `status`) relies entirely on RLS for ownership enforcement. If RLS is absent, misconfigured, or bypassed during testing/migration, any authenticated user who knows a UUID can overwrite another user's data.
+- **Rule**: always add `.eq('gm_id', user.id)` (or the relevant owner column) to UPDATE and DELETE queries in API routes, even when RLS enforces the same constraint. Defence in depth requires the application layer to assert ownership independently of the database layer.
+- **Applies to**: all Supabase API routes performing UPDATE or DELETE
+
+## Never Expose Raw Database Error Messages to HTTP Clients
+
+- **Context**: any API route that catches a Supabase / PostgREST error
+- **Problem**: PostgREST error messages routinely contain table names, column names, constraint names, and query fragments. Forwarding them directly to the HTTP response leaks schema information useful to an attacker.
+- **Rule**: always log the raw error server-side (`console.error('DB error:', error)`) and return a generic, user-facing message (e.g. `'Failed to save handout'`) in the HTTP response body.
+- **Applies to**: all API routes

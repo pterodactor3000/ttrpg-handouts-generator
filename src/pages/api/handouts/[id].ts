@@ -8,7 +8,7 @@ const handoutInputSchema = z.object({
   title: z.string().max(300),
   markdownContent: z.string().max(50000),
   backgroundCategory: z.enum(['fantasy', 'horror', 'scifi']),
-  tags: z.array(z.string()).max(20),
+  tags: z.array(z.string().max(50)).max(20),
 });
 
 interface HandoutRow {
@@ -37,6 +37,11 @@ export const PUT: APIRoute = async (context) => {
     return new Response(JSON.stringify({ error: 'Missing handout id' }), { status: 400 });
   }
 
+  const uuidParseResult = z.uuid().safeParse(handoutId);
+  if (!uuidParseResult.success) {
+    return new Response(JSON.stringify({ error: 'Invalid handout id' }), { status: 400 });
+  }
+
   let body: unknown;
   try {
     body = await context.request.json();
@@ -62,12 +67,13 @@ export const PUT: APIRoute = async (context) => {
       tags,
     })
     .eq('id', handoutId)
+    .eq('gm_id', user.id)
     .eq('status', 'draft')
     .select('id')
     .single()) as HandoutQueryResult;
 
   if (error || !data) {
-    return new Response(JSON.stringify({ error: error?.message ?? 'Update failed' }), {
+    return new Response(JSON.stringify({ error: 'Failed to save handout' }), {
       status: 500,
     });
   }

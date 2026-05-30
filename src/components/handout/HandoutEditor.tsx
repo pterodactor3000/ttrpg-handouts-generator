@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { BackgroundCategory } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
@@ -18,7 +18,7 @@ const HandoutEditor = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const renderedPreview = renderHandoutHtml(markdownContent);
+  const renderedPreview = useMemo(() => renderHandoutHtml(markdownContent), [markdownContent]);
 
   const previewBackground = backgroundCategory ? BACKGROUND_CONFIGS[backgroundCategory].cssBackground : '#1a1a2e';
 
