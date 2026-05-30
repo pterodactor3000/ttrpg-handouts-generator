@@ -22,3 +22,10 @@
 - **Problem**: use constants to declare functions and arrow function declarations, so the code is better understandable
 - **Rule**: always use arrow functions with const declarations for functions, instead of keyword 'function'
 - **Applies to**: all
+
+## Follow Atomic Design Methodology for UI Components
+
+- **Context**: Any phase that adds or modifies UI components (`src/components/`)
+- **Problem**: Without a clear granularity model, components grow monolithic and become hard to test, reuse, and reason about in isolation.
+- **Rule**: When developing new UI components, follow Atomic Design methodology — organize components as atoms, molecules, organisms, templates, and pages.
+- **Applies to**: all

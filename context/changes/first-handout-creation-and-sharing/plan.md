@@ -384,9 +384,9 @@ F-01 migration is already applied. No new migrations in this slice.
 
 #### Automated
 
-- [ ] 1.1 `npm test` passes with all render unit tests green
-- [ ] 1.2 `npm run lint` passes on new Phase 1 files
-- [ ] 1.3 `npm run build` succeeds after Phase 1 changes
+- [x] 1.1 `npm test` passes with all render unit tests green
+- [x] 1.2 `npm run lint` passes on new Phase 1 files
+- [x] 1.3 `npm run build` succeeds after Phase 1 changes
 
 #### Manual
 
