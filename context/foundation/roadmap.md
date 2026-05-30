@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-30
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -29,7 +29,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 |---|---|---|---|---|---|
-| F-01 | `handout-schema` | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs | — | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | ready |
+| F-01 | `handout-schema` | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs | — | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | done |
 | S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode | F-01 | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011 | proposed |
 | S-02 | `handout-dashboard` | view a list of their handouts (draft and published) with titles and tags | S-01 | FR-002 | proposed |
 | S-03 | `edit-handout` | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link) | S-02 | FR-007 | proposed |
@@ -69,7 +69,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Sequenced first because every vertical slice depends on the handout table. The RLS policy must cover two access patterns — GM-owned rows (email/password session) and share-token reads (anonymous) — and must correctly prevent archived rows from blocking player access. A mismatch here would violate the link-permanence NFR.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -137,7 +137,7 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 
 ## Parked
 
-- **Custom background upload** — Why parked: PRD §Non-Goals. Three pre-loaded themes (grimdark / high fantasy / postapo) are the MVP constraint.
+- **Custom background upload** — Why parked: PRD §Non-Goals. Three pre-loaded themes (fantasy / horror / scifi) are the MVP constraint.
 - **Collaborative editing** — Why parked: PRD §Non-Goals. Single-GM ownership for v1.
 - **Analytics / tracking** — Why parked: PRD §Non-Goals. Read-only links are anonymous; no analytics infrastructure for MVP.
 - **PDF / PNG file export** — Why parked: PRD §Non-Goals. Link-only sharing for v1.
@@ -149,3 +149,5 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 ## Done
 
 (Empty on first generation. `/10x-archive` appends an entry here — and flips that item's `Status` to `done` — when a change whose `Change ID` matches the item is archived.)
+
+- **F-01: (foundation) Supabase `handouts` table with full state-machine columns (id, gm_id → auth.users, title, markdown_content, background_category, tags, status, share_token/UUID, created_at, published_at) and row-level security policies — GMs see only their own rows; unauthenticated reads are allowed only via share token — is in place and migrated.** — Archived 2026-05-30 → `context/archive/2026-05-28-handout-schema/`. Lesson: —.

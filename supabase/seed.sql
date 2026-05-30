@@ -1,0 +1,3 @@
+-- Seed file for local development.
+-- Intentionally empty: no seed data is defined for the handouts MVP.
+-- Declared by config.toml `sql_paths = ["./seed.sql"]`.
