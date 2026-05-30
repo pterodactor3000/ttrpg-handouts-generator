@@ -396,8 +396,8 @@ F-01 migration is already applied. No new migrations in this slice.
 
 #### Automated
 
-- [ ] 2.1 `npm run build` succeeds with no type errors on Phase 2 files
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 `npm run build` succeeds with no type errors on Phase 2 files
+- [x] 2.2 `npm run lint` passes
 
 #### Manual
 
