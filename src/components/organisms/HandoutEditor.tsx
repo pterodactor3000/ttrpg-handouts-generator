@@ -2,10 +2,10 @@ import { useState, useMemo } from 'react';
 import type { BackgroundCategory } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
-import { BackgroundPicker } from '@/components/handout/BackgroundPicker';
-import { TagsInput } from '@/components/handout/TagsInput';
-import { ShareDialog } from '@/components/handout/ShareDialog';
-import { Button } from '@/components/ui/button';
+import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
+import { TagsInput } from '@/components/molecules/TagsInput';
+import { ShareDialog } from '@/components/organisms/ShareDialog';
+import { Button } from '@/components/atoms/button';
 import { cn } from '@/lib/utils';
 
 type SaveApiResponse = { id: string } | { error: string };

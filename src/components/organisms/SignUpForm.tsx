@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Mail, Lock, UserPlus } from 'lucide-react';
-import { FormField } from '@/components/auth/FormField';
-import { PasswordToggle } from '@/components/auth/PasswordToggle';
-import { SubmitButton } from '@/components/auth/SubmitButton';
-import { ServerError } from '@/components/auth/ServerError';
+import { FormField } from '@/components/molecules/FormField';
+import { PasswordToggle } from '@/components/atoms/PasswordToggle';
+import { SubmitButton } from '@/components/atoms/SubmitButton';
+import { ServerError } from '@/components/atoms/ServerError';
 
 const MIN_PASSWORD_LENGTH = 6;
 
