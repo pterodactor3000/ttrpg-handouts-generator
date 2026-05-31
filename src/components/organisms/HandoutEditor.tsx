@@ -26,9 +26,7 @@ const HandoutEditor = () => {
 
   const renderedPreview = useMemo(() => renderHandoutHtml(markdownContent), [markdownContent]);
 
-  const previewBackground = backgroundCategory
-    ? BACKGROUND_CONFIGS[backgroundCategory].cssBackground
-    : undefined;
+  const previewBackground = backgroundCategory ? BACKGROUND_CONFIGS[backgroundCategory].cssBackground : undefined;
 
   const handleSave = async () => {
     if (!backgroundCategory) {

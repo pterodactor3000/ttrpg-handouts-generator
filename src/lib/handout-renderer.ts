@@ -1,3 +1,4 @@
+import rehypeHighlight from 'rehype-highlight';
 import rehypeSanitize from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
@@ -10,6 +11,7 @@ const processor = unified()
   .use(remarkGfm)
   .use(remarkRehype, { allowDangerousHtml: false })
   .use(rehypeSanitize)
+  .use(rehypeHighlight)
   .use(rehypeStringify)
   .freeze();
 

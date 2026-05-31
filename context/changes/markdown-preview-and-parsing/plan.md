@@ -271,28 +271,28 @@ typography and highlighting automatically with no backfill.
 
 #### Automated
 
-- [x] 1.1 Linting passes: `npm run lint`
-- [x] 1.2 Production build succeeds: `npm run build`
-- [x] 1.3 Existing renderer tests still pass: `npm run test`
+- [x] 1.1 Linting passes: `npm run lint` — ea74957
+- [x] 1.2 Production build succeeds: `npm run build` — ea74957
+- [x] 1.3 Existing renderer tests still pass: `npm run test` — ea74957
 
 #### Manual
 
-- [x] 1.4 Editor preview shows styled prose over each background gradient
-- [x] 1.5 Shared page renders full prose styling with distinct title
-- [x] 1.6 Text legible over blur overlays on both sites
+- [x] 1.4 Editor preview shows styled prose over each background gradient — ea74957
+- [x] 1.5 Shared page renders full prose styling with distinct title — ea74957
+- [x] 1.6 Text legible over blur overlays on both sites — ea74957
 
 ### Phase 2: Add Syntax Highlighting
 
 #### Automated
 
-- [ ] 2.1 New + existing tests pass: `npm run test`
-- [ ] 2.2 XSS test cases still pass unchanged
-- [ ] 2.3 Linting passes: `npm run lint`
-- [ ] 2.4 Production build succeeds: `npm run build`
+- [x] 2.1 New + existing tests pass: `npm run test`
+- [x] 2.2 XSS test cases still pass unchanged
+- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.4 Production build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.5 Language-tagged fenced block shows colored highlighting in preview + shared page
-- [ ] 2.6 Fenced block without language hint renders as readable monospaced block
-- [ ] 2.7 Code-block colors legible over all three themed backgrounds
-- [ ] 2.8 `prose` `pre` and hljs `.hljs` backgrounds do not clash (reset `prose pre` if needed)
+- [x] 2.5 Language-tagged fenced block shows colored highlighting in preview + shared page
+- [x] 2.6 Fenced block without language hint renders as readable monospaced block
+- [x] 2.7 Code-block colors legible over all three themed backgrounds
+- [x] 2.8 `prose` `pre` and hljs `.hljs` backgrounds do not clash (reset `prose pre` if needed)
