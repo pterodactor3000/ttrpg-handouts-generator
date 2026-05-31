@@ -390,7 +390,7 @@ F-01 migration is already applied. No new migrations in this slice.
 
 #### Manual
 
-- [x] 1.4 XSS-payload test cases confirmed present and passing in test output
+- [x] 1.4 XSS-payload test cases confirmed present and passing in test output — 62bcec6
 
 ### Phase 2: Editor Island and Draft API
 
@@ -428,14 +428,14 @@ F-01 migration is already applied. No new migrations in this slice.
 
 #### Automated
 
-- [x] 4.1 `npm run build` succeeds with no type errors
-- [x] 4.2 `npm run lint` passes
+- [x] 4.1 `npm run build` succeeds with no type errors — 62bcec6
+- [x] 4.2 `npm run lint` passes — 62bcec6
 
 #### Manual
 
-- [x] 4.3 Share link opens player page while signed out — correct content rendered
-- [x] 4.4 Player page is readable at 375px viewport (no horizontal scroll)
-- [x] 4.5 Unknown share token returns friendly 404 page (HTTP 404)
-- [x] 4.6 Editor at 375px — form and preview stack vertically, inputs usable
-- [x] 4.7 Draft row's link returns 404 (not the handout content)
-- [x] 4.8 XSS payload `<script>alert(1)</script>` in markdown — no alert on player page
+- [x] 4.3 Share link opens player page while signed out — correct content rendered — 62bcec6
+- [x] 4.4 Player page is readable at 375px viewport (no horizontal scroll) — 62bcec6
+- [x] 4.5 Unknown share token returns friendly 404 page (HTTP 404) — 62bcec6
+- [x] 4.6 Editor at 375px — form and preview stack vertically, inputs usable — 62bcec6
+- [x] 4.7 Draft row's link returns 404 (not the handout content) — 62bcec6
+- [x] 4.8 XSS payload `<script>alert(1)</script>` in markdown — no alert on player page — 62bcec6
