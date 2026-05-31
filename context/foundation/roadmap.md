@@ -4,6 +4,7 @@ version: 1
 status: draft
 created: 2026-05-26
 updated: 2026-05-31
+# 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -34,6 +35,9 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-02 | `handout-dashboard` | view a list of their handouts (draft and published) with titles and tags | S-01 | FR-002 | proposed |
 | S-03 | `edit-handout` | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link) | S-02 | FR-007 | proposed |
 | S-04 | `delete-handout` | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players) | S-02 | FR-008 | proposed |
+| S-05 | `ui-restyle` | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, and color theming, no flow changes | S-01 | FR-012 | ready |
+| S-06 | `new-handout-back-button` | return to the dashboard from the new-handout view via a clear back control, without submitting the form | S-01 | FR-013, FR-002 | ready |
+| S-07 | `per-style-fonts` | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view | S-01 | FR-014, FR-005 | ready |
 
 ## Streams
 
@@ -43,6 +47,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 |---|---|---|---|
 | A | Core value proof | `F-01` → `S-01` | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline. |
 | B | Handout management | `S-02` → `S-03` / `S-04` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; either can be planned independently. |
+| C | Polish & theming | `S-05` / `S-06` / `S-07` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). All three are independent and parallel; each can be planned on its own. |
 
 ## Baseline
 
@@ -121,6 +126,44 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Simplest slice; the critical correctness is in F-01 — the RLS policy must allow share-token reads on archived rows, not just published ones. If F-01 gets that right, this slice is a UI confirmation dialog + a status-update API call.
 - **Status:** proposed
 
+### S-05: UI restyle
+
+- **Outcome:** GM (and players, on the shared read-only page) see a refreshed, visually consistent UI across the existing screens — dashboard, new-handout editor, preview, and shared view. Improvements are limited to typography, spacing, and color theming; no user flows change and no new screens are added.
+- **Change ID:** `ui-restyle`
+- **PRD refs:** FR-012, NFR mobile-responsive, NFR browser-compatibility
+- **Prerequisites:** S-01
+- **Parallel with:** S-06, S-07
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Cross-cutting visual change touching every existing screen; the risk is regression of the already-shipped S-01 flows and the mobile-responsive shared page. Scope is deliberately capped to styling (no markup/flow changes) so the blast radius stays presentational.
+- **Status:** ready
+
+### S-06: Back navigation in new-handout view
+
+- **Outcome:** GM can return from the new-handout creation view to the dashboard via a clear back control, without having to submit or discard through the browser back button.
+- **Change ID:** `new-handout-back-button`
+- **PRD refs:** FR-013, FR-002, FR-003
+- **Prerequisites:** S-01
+- **Parallel with:** S-05, S-07
+- **Blockers:** —
+- **Unknowns:**
+  - Should leaving with unsaved edits warn the user, or navigate away silently? — Owner: user. Block: no.
+- **Risk:** Smallest slice — a single navigation affordance. Main correctness is not silently losing in-progress markdown; the unsaved-edits prompt is the only open decision and does not block planning.
+- **Status:** ready
+
+### S-07: Per-style fonts & colors
+
+- **Outcome:** Each handout style/background category (grimdark / high fantasy / postapo) renders with its own preset font family and font color, applied consistently in both the GM preview and the shared read-only view.
+- **Change ID:** `per-style-fonts`
+- **PRD refs:** FR-014, FR-005, FR-009, FR-011
+- **Prerequisites:** S-01
+- **Parallel with:** S-05, S-06
+- **Blockers:** —
+- **Unknowns:**
+  - Which font families pair with each category, and are they self-hosted or loaded from a web-font CDN? — Owner: user. Block: no.
+- **Risk:** Supersedes the original MVP "single default font" decision (PRD §Success Criteria). The load-bearing risk is web-font loading staying within the < 5 s generation NFR and the mobile-responsive shared page; self-hosting the fonts mitigates both. Fonts are preset per category, so this does not reopen the parked "user font selection" scope.
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID | Suggested issue title | Ready for `/10x-plan` | Notes |
@@ -130,6 +173,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-02 | `handout-dashboard` | Handout dashboard list view | no | Depends on S-01 |
 | S-03 | `edit-handout` | Edit existing handout | no | Depends on S-02; parallel with S-04 |
 | S-04 | `delete-handout` | Delete (soft-archive) handout | no | Depends on S-02; parallel with S-03 |
+| S-05 | `ui-restyle` | Visual UI restyle across existing screens | yes | S-01 done; run `/10x-plan ui-restyle` |
+| S-06 | `new-handout-back-button` | Add back button to new-handout view | yes | S-01 done; run `/10x-plan new-handout-back-button` |
+| S-07 | `per-style-fonts` | Per-style fonts and font colors for handouts | yes | S-01 done; run `/10x-plan per-style-fonts` |
 
 ## Open Roadmap Questions
 

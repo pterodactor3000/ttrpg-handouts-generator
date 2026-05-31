@@ -40,7 +40,7 @@ GM logs in, clicks 'create handout', selects one of three pre-loaded category ba
 
 **MVP scope decisions** (scoped down from initial flow):
 - No PDF export (shareable link only for v1)
-- No font selection (single default font)
+- No font selection (single default font) — _superseded by FR-014 (v1.1): each style category now carries a preset font + color. The GM still does not freely choose fonts; the chosen style determines them._
 - No background upload (3 fixed pre-loaded images)
 - No file export to PNG (link-only sharing)
 
@@ -101,6 +101,16 @@ GM can delete a handout from their list.
 
 - FR-011: Player can view a shared handout via read-only link (no login required). Priority: must-have
   > Socrates: Counter-argument considered: "Read-only HTML page might render poorly on mobile (where players actually use it)." Resolution: kept; mobile-responsive HTML is a must for player experience — this becomes a design constraint.
+
+### Post-MVP Enhancements (v1.1)
+
+Added 2026-05-31. These refine the shipped MVP surface (S-01); none introduce new flows or reopen parked scope.
+
+- FR-012: GM and players see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view). Priority: nice-to-have. Change: modified (styling of existing screens; no flow change).
+
+- FR-013: GM can return to the dashboard from the new-handout view via a back control. Priority: nice-to-have. Change: new.
+
+- FR-014: Each handout style category (grimdark / high fantasy / postapo) renders with its own preset font and font color, in both preview and shared view. Priority: nice-to-have. Change: modified (supersedes the "single default font" MVP scope decision; fonts are preset per style, not user-selected).
 
 ## Non-Functional Requirements
 
