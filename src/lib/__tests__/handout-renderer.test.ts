@@ -42,8 +42,8 @@ describe('renderHandoutHtml', () => {
 
     it('renders fenced code blocks', () => {
       const output = renderHandoutHtml('```\nconst x = 1;\n```');
-      expect(output).toContain('<pre>');
-      expect(output).toContain('<code>');
+      expect(output).toContain('<pre');
+      expect(output).toContain('<code');
       expect(output).toContain('const x = 1;');
     });
 
@@ -58,6 +58,20 @@ describe('renderHandoutHtml', () => {
     it('renders links with valid href', () => {
       const output = renderHandoutHtml('[Visit us](https://example.com)');
       expect(output).toContain('href="https://example.com"');
+    });
+  });
+
+  describe('syntax highlighting', () => {
+    it('adds highlight.js markup to a language-tagged fenced code block', () => {
+      const output = renderHandoutHtml('```js\nconst x = 1;\n```');
+      expect(output).toContain('hljs');
+      expect(output).toMatch(/class="hljs-/);
+    });
+
+    it('does not emit hljs token spans for an un-hinted fenced code block', () => {
+      const output = renderHandoutHtml('```\nconst x = 1;\n```');
+      expect(output).not.toContain('hljs-');
+      expect(output).toContain('const x = 1;');
     });
   });
 

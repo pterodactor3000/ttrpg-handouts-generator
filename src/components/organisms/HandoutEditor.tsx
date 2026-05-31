@@ -26,7 +26,7 @@ const HandoutEditor = () => {
 
   const renderedPreview = useMemo(() => renderHandoutHtml(markdownContent), [markdownContent]);
 
-  const previewBackground = backgroundCategory ? BACKGROUND_CONFIGS[backgroundCategory].cssBackground : '#1a1a2e';
+  const previewBackground = backgroundCategory ? BACKGROUND_CONFIGS[backgroundCategory].cssBackground : undefined;
 
   const handleSave = async () => {
     if (!backgroundCategory) {
@@ -186,7 +186,8 @@ const HandoutEditor = () => {
             <div
               className="min-h-64 rounded-lg"
               style={{
-                background: previewBackground,
+                backgroundColor: '#1a1a2e',
+                backgroundImage: previewBackground,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
