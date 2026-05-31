@@ -157,7 +157,7 @@ const HandoutEditor = () => {
               <Button
                 variant="outline"
                 onClick={() => void handleShare()}
-                disabled={!handoutId || isSaving || isPublishing}
+                disabled={!handoutId || isSaving || isPublishing || !!shareToken}
                 className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
               >
                 {isPublishing ? 'Publishing…' : 'Share'}

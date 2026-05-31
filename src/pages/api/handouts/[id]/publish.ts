@@ -52,6 +52,9 @@ export const POST: APIRoute = async (context) => {
     .single()) as HandoutFetchResult;
 
   if (fetchError || !existingHandout) {
+    if (fetchError) {
+      console.error('DB error fetching handout for publish:', fetchError);
+    }
     return new Response(JSON.stringify({ error: 'Handout not found or not in draft status' }), {
       status: 404,
     });
