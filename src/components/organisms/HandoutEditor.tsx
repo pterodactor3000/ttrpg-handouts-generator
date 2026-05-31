@@ -151,7 +151,7 @@ const HandoutEditor = () => {
             {publishError && <p className="text-sm text-red-400">{publishError}</p>}
 
             <div className="flex gap-3">
-              <Button onClick={() => void handleSave()} disabled={isSaving} className="flex-1">
+              <Button onClick={() => void handleSave()} disabled={isSaving || !!shareToken} className="flex-1">
                 {isSaving ? 'Saving…' : handoutId ? 'Save changes' : 'Save draft'}
               </Button>
               <Button

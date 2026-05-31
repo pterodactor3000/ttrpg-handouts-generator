@@ -73,6 +73,7 @@ export const PUT: APIRoute = async (context) => {
     .single()) as HandoutQueryResult;
 
   if (error || !data) {
+    console.error('DB error updating handout:', error);
     return new Response(JSON.stringify({ error: 'Failed to save handout' }), {
       status: 500,
     });

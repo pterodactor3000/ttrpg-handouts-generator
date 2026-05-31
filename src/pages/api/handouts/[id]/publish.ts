@@ -86,6 +86,7 @@ export const POST: APIRoute = async (context) => {
     })
     .eq('id', handoutId)
     .eq('gm_id', user.id)
+    .eq('status', 'draft')
     .select('share_token')
     .single()) as HandoutUpdateResult;
 

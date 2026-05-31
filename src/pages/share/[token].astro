@@ -27,10 +27,14 @@ if (!supabase) {
     .from('handouts')
     .select('title, markdown_content, background_category')
     .eq('share_token', token)
+    .in('status', ['published', 'archived'])
     .single();
 
   if (error) {
-    console.error('DB error loading shared handout:', error);
+    // PGRST116 = no matching row (expected for unknown/unpublished tokens), not a real error
+    if (error.code !== 'PGRST116') {
+      console.error('DB error loading shared handout:', error);
+    }
   } else {
     handout = data;
   }
