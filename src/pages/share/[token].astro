@@ -1,0 +1,96 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { createClient } from '@/lib/supabase';
+import { renderHandoutHtml } from '@/lib/handout-renderer';
+import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
+import type { BackgroundCategory } from '@/types';
+
+export const prerender = false;
+
+interface SharedHandoutRow {
+  title: string;
+  markdown_content: string;
+  background_category: BackgroundCategory;
+}
+
+const { token } = Astro.params;
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let handout: SharedHandoutRow | null = null;
+let isConfigured = true;
+
+if (!supabase) {
+  isConfigured = false;
+} else if (token) {
+  const { data, error } = await supabase
+    .from('handouts')
+    .select('title, markdown_content, background_category')
+    .eq('share_token', token)
+    .in('status', ['published', 'archived'])
+    .single();
+
+  if (error) {
+    // PGRST116 = no matching row (expected for unknown/unpublished tokens), not a real error
+    if (error.code !== 'PGRST116') {
+      console.error('DB error loading shared handout:', error);
+    }
+  } else {
+    handout = data;
+  }
+}
+
+if (!isConfigured) {
+  Astro.response.status = 500;
+} else if (!handout) {
+  Astro.response.status = 404;
+}
+
+const renderedHtml = handout ? renderHandoutHtml(handout.markdown_content) : '';
+const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category].cssBackground : '';
+---
+
+{
+  handout ? (
+    <Layout title={handout.title}>
+      <main
+        class="flex min-h-screen w-full flex-col items-center px-4 py-8 md:py-12"
+        style={`background: ${pageBackground}; background-size: cover; background-position: center;`}
+      >
+        <article class="mx-auto w-full max-w-2xl rounded-2xl border border-white/10 bg-black/55 p-4 text-white shadow-2xl backdrop-blur-md md:p-8">
+          <h1 class="mb-6 text-3xl font-bold break-words">{handout.title}</h1>
+          <div class="prose prose-invert max-w-none break-words">
+            {/* renderHandoutHtml sanitizes via rehype-sanitize — the XSS boundary (see Phase 1 tests) */}
+            {/* eslint-disable-next-line astro/no-set-html-directive */}
+            <Fragment set:html={renderedHtml} />
+          </div>
+        </article>
+        <footer class="mt-8 text-center text-xs text-white/40">TTRPG Handouts Generator</footer>
+      </main>
+    </Layout>
+  ) : (
+    <Layout title={isConfigured ? 'Handout not found' : 'Sharing unavailable'}>
+      <main class="bg-cosmic flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
+        <div class="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
+          {isConfigured ? (
+            <>
+              <h1 class="mb-3 text-2xl font-bold">Handout not found</h1>
+              <p class="text-sm text-white/70">This link may be invalid or the handout has not been shared yet.</p>
+            </>
+          ) : (
+            <>
+              <h1 class="mb-3 text-2xl font-bold">Sharing unavailable</h1>
+              <p class="text-sm text-white/70">Sharing is temporarily unavailable. Please try again later.</p>
+            </>
+          )}
+          <a
+            href="/"
+            class="mt-6 inline-block rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+          >
+            Back to home
+          </a>
+        </div>
+      </main>
+    </Layout>
+  )
+}

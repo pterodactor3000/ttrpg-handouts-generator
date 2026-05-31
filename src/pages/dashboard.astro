@@ -13,15 +13,23 @@ const { user } = Astro.locals;
       <p class="text-blue-100/80">
         Welcome, <span class="font-semibold text-white">{user?.email}</span>
       </p>
-      <p class="mt-2 text-sm text-blue-100/50">This page is only for authenticated users.</p>
-      <form method="POST" action="/api/auth/signout" class="mt-6">
-        <button
-          type="submit"
-          class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+      <p class="mt-2 text-sm text-blue-100/50">What would you like to create today?</p>
+      <div class="mt-6 flex flex-col items-center gap-3">
+        <a
+          href="/handouts/new"
+          class="w-full max-w-xs rounded-lg border border-purple-400/30 bg-purple-500/20 px-4 py-3 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
         >
-          Sign out
-        </button>
-      </form>
+          + New handout
+        </a>
+        <form method="POST" action="/api/auth/signout" class="w-full max-w-xs">
+          <button
+            type="submit"
+            class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+          >
+            Sign out
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </Layout>

@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-30
+updated: 2026-05-31
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -30,7 +30,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 |---|---|---|---|---|---|
 | F-01 | `handout-schema` | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs | — | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | done |
-| S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode | F-01 | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011 | proposed |
+| S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode | F-01 | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011 | done |
 | S-02 | `handout-dashboard` | view a list of their handouts (draft and published) with titles and tags | S-01 | FR-002 | proposed |
 | S-03 | `edit-handout` | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link) | S-02 | FR-007 | proposed |
 | S-04 | `delete-handout` | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players) | S-02 | FR-008 | proposed |
@@ -83,7 +83,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** The rendering approach (markdown + CSS overlay vs. server-side HTML generation) will determine whether the < 5 s generation NFR is easy or hard to meet. A client-side CSS solution is lower-risk than a server-side image pipeline. This is `/10x-plan`'s call, but sequenced first because if the rendering path is harder than expected it must surface in week 1, not week 3.
-- **Status:** proposed
+- **Status:** done
 
 ### S-02: Handout dashboard
 
@@ -151,3 +151,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 (Empty on first generation. `/10x-archive` appends an entry here — and flips that item's `Status` to `done` — when a change whose `Change ID` matches the item is archived.)
 
 - **F-01: (foundation) Supabase `handouts` table with full state-machine columns (id, gm_id → auth.users, title, markdown_content, background_category, tags, status, share_token/UUID, created_at, published_at) and row-level security policies — GMs see only their own rows; unauthenticated reads are allowed only via share token — is in place and migrated.** — Archived 2026-05-30 → `context/archive/2026-05-28-handout-schema/`. Lesson: —.
+- **S-01: GM can create a new handout (markdown text + background category + tags), see a rendered preview composited over the chosen background image, and share it via a permanent link that players can open on any device in read-only mode without logging in.** — Archived 2026-05-31 → `context/archive/2026-05-30-first-handout-creation-and-sharing/`. Lesson: —.
