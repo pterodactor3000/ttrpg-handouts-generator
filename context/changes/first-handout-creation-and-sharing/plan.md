@@ -413,16 +413,16 @@ F-01 migration is already applied. No new migrations in this slice.
 
 #### Automated
 
-- [ ] 3.1 `npm run build` succeeds
-- [ ] 3.2 `npm run lint` passes
+- [x] 3.1 `npm run build` succeeds
+- [x] 3.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 3.3 "New handout" button on dashboard navigates to `/handouts/new`
-- [ ] 3.4 Share button is disabled before first Save
-- [ ] 3.5 Share with valid content opens ShareDialog with a `/share/<uuid>` URL
-- [ ] 3.6 Copy link button in dialog writes the URL to clipboard
-- [ ] 3.7 Publish with empty title or empty markdown returns 422
+- [x] 3.3 "New handout" button on dashboard navigates to `/handouts/new`
+- [x] 3.4 Share button is disabled before first Save
+- [x] 3.5 Share with valid content opens ShareDialog with a `/share/<uuid>` URL
+- [x] 3.6 Copy link button in dialog writes the URL to clipboard
+- [x] 3.7 Publish with empty title or empty markdown returns 422
 
 ### Phase 4: Player Page and Mobile Polish
 

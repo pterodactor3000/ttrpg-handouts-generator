@@ -4,10 +4,12 @@ import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import { BackgroundPicker } from '@/components/handout/BackgroundPicker';
 import { TagsInput } from '@/components/handout/TagsInput';
+import { ShareDialog } from '@/components/handout/ShareDialog';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 type SaveApiResponse = { id: string } | { error: string };
+type PublishApiResponse = { shareToken: string } | { error: string };
 
 const HandoutEditor = () => {
   const [title, setTitle] = useState('');
@@ -17,6 +19,10 @@ const HandoutEditor = () => {
   const [handoutId, setHandoutId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishError, setPublishError] = useState<string | null>(null);
+  const [shareToken, setShareToken] = useState<string | null>(null);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   const renderedPreview = useMemo(() => renderHandoutHtml(markdownContent), [markdownContent]);
 
@@ -60,10 +66,34 @@ const HandoutEditor = () => {
     }
   };
 
-  // Publish and ShareDialog wired in Phase 3
-  const handleShare = () => {
-    return;
+  const handleShare = async () => {
+    if (!handoutId) return;
+
+    setIsPublishing(true);
+    setPublishError(null);
+
+    try {
+      const response = await fetch(`/api/handouts/${handoutId}/publish`, { method: 'POST' });
+      const responseJson: unknown = await response.json();
+      const responseData = responseJson as PublishApiResponse;
+
+      if (!response.ok) {
+        setPublishError('error' in responseData ? responseData.error : 'Failed to publish handout.');
+        return;
+      }
+
+      if ('shareToken' in responseData) {
+        setShareToken(responseData.shareToken);
+        setShareDialogOpen(true);
+      }
+    } catch {
+      setPublishError('Network error. Please try again.');
+    } finally {
+      setIsPublishing(false);
+    }
   };
+
+  const shareUrl = shareToken ? `${window.location.origin}/share/${shareToken}` : '';
 
   return (
     <div className="min-h-screen bg-gray-950 p-4 md:p-8">
@@ -118,22 +148,36 @@ const HandoutEditor = () => {
             </div>
 
             {saveError && <p className="text-sm text-red-400">{saveError}</p>}
+            {publishError && <p className="text-sm text-red-400">{publishError}</p>}
 
             <div className="flex gap-3">
-              <Button onClick={handleSave} disabled={isSaving} className="flex-1">
+              <Button onClick={() => void handleSave()} disabled={isSaving} className="flex-1">
                 {isSaving ? 'Saving…' : handoutId ? 'Save changes' : 'Save draft'}
               </Button>
               <Button
                 variant="outline"
-                onClick={handleShare}
-                disabled={!handoutId || isSaving}
+                onClick={() => void handleShare()}
+                disabled={!handoutId || isSaving || isPublishing}
                 className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
               >
-                Share
+                {isPublishing ? 'Publishing…' : 'Share'}
               </Button>
             </div>
 
-            {handoutId && <p className="text-xs text-white/40">Draft saved — click Share to publish.</p>}
+            {handoutId && !shareToken && <p className="text-xs text-white/40">Draft saved — click Share to publish.</p>}
+            {shareToken && (
+              <p className="text-xs text-green-400/70">
+                Published —{' '}
+                <button
+                  className="underline hover:text-green-300"
+                  onClick={() => {
+                    setShareDialogOpen(true);
+                  }}
+                >
+                  view share link
+                </button>
+              </p>
+            )}
           </div>
 
           {/* Preview column */}
@@ -161,6 +205,14 @@ const HandoutEditor = () => {
           </div>
         </div>
       </div>
+
+      <ShareDialog
+        open={shareDialogOpen}
+        onClose={() => {
+          setShareDialogOpen(false);
+        }}
+        shareUrl={shareUrl}
+      />
     </div>
   );
 };
