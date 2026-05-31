@@ -111,6 +111,7 @@ Added 2026-05-31. These refine the shipped MVP surface (S-01); none introduce ne
 - FR-013: GM can return to the dashboard from the new-handout view via a back control. Priority: nice-to-have. Change: new.
 
 - FR-014: Each handout style category (grimdark / high fantasy / postapo) renders with its own preset font and font color, in both preview and shared view. Priority: nice-to-have. Change: modified (supersedes the "single default font" MVP scope decision; fonts are preset per style, not user-selected).
+- FR-015: Visitor sees the app name on the landing page and a clear entry point to start the login flow. Priority: nice-to-have. Change: new.
 
 ## Non-Functional Requirements
 
