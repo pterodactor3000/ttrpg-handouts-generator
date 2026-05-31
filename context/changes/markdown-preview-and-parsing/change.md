@@ -1,7 +1,7 @@
 ---
 change_id: markdown-preview-and-parsing
 title: Markdown preview and parsing libraries
-status: implemented
+status: impl_reviewed
 created: 2026-05-31
 updated: 2026-05-31
 ---

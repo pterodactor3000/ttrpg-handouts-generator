@@ -253,6 +253,14 @@ realistically use) rather than the full common set.
 No data migration. HTML is rendered at read time from stored markdown, so existing handouts gain
 typography and highlighting automatically with no backfill.
 
+## Implementation Addenda
+
+- **Phase 1 (ea74957)** also fixed an unplanned, user-reported React warning in the editor preview:
+  `src/components/organisms/HandoutEditor.tsx` mixed the `background` shorthand with
+  `backgroundSize`/`backgroundPosition` longhands, causing a re-render styling conflict. Replaced with
+  `backgroundColor` + `backgroundImage` longhands (fallback color preserved). Out of the original plan
+  scope but landed alongside the typography work since the same file/area was in play.
+
 ## References
 
 - Related research: `context/changes/markdown-preview-and-parsing/research.md`
