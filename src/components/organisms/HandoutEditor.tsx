@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import type { BackgroundCategory } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
@@ -6,10 +7,31 @@ import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
 import { TagsInput } from '@/components/molecules/TagsInput';
 import { ShareDialog } from '@/components/organisms/ShareDialog';
 import { Button } from '@/components/atoms/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/atoms/dialog';
 import { cn } from '@/lib/utils';
 
 type SaveApiResponse = { id: string } | { error: string };
 type PublishApiResponse = { shareToken: string } | { error: string };
+
+const serializeFormState = (
+  titleValue: string,
+  markdownValue: string,
+  backgroundValue: BackgroundCategory | null,
+  tagsValue: string[],
+) =>
+  JSON.stringify({
+    title: titleValue,
+    markdownContent: markdownValue,
+    backgroundCategory: backgroundValue,
+    tags: [...tagsValue].sort(),
+  });
 
 const HandoutEditor = () => {
   const [title, setTitle] = useState('');
@@ -23,6 +45,25 @@ const HandoutEditor = () => {
   const [publishError, setPublishError] = useState<string | null>(null);
   const [shareToken, setShareToken] = useState<string | null>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [confirmBackOpen, setConfirmBackOpen] = useState(false);
+  const [savedSnapshot, setSavedSnapshot] = useState(() => serializeFormState('', '', null, []));
+
+  const isDirty = useMemo(
+    () => serializeFormState(title, markdownContent, backgroundCategory, tags) !== savedSnapshot,
+    [title, markdownContent, backgroundCategory, tags, savedSnapshot],
+  );
+
+  const navigateToDashboard = () => {
+    window.location.href = '/dashboard';
+  };
+
+  const handleBackClick = () => {
+    if (isDirty) {
+      setConfirmBackOpen(true);
+      return;
+    }
+    navigateToDashboard();
+  };
 
   const renderedPreview = useMemo(() => renderHandoutHtml(markdownContent), [markdownContent]);
 
@@ -59,6 +100,8 @@ const HandoutEditor = () => {
       if ('id' in responseData) {
         setHandoutId(responseData.id);
       }
+
+      setSavedSnapshot(serializeFormState(title, markdownContent, backgroundCategory, tags));
     } catch {
       setSaveError('Network error. Please try again.');
     } finally {
@@ -98,6 +141,14 @@ const HandoutEditor = () => {
   return (
     <div className="min-h-screen bg-gray-950 p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
+        <Button
+          variant="ghost"
+          onClick={handleBackClick}
+          className="mb-4 -ml-2 text-white/70 hover:bg-white/10 hover:text-white"
+        >
+          <ArrowLeft />
+          Back to dashboard
+        </Button>
         <h1 className="mb-6 text-2xl font-bold text-white">New Handout</h1>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -214,6 +265,31 @@ const HandoutEditor = () => {
         }}
         shareUrl={shareUrl}
       />
+
+      <Dialog open={confirmBackOpen} onOpenChange={setConfirmBackOpen}>
+        <DialogContent className="border-white/10 bg-gray-900 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">Discard unsaved changes?</DialogTitle>
+            <DialogDescription className="text-white/60">
+              You have unsaved edits. If you leave now, your changes will be lost.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="gap-3 sm:justify-end">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setConfirmBackOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={navigateToDashboard}>
+              Discard
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
