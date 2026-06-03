@@ -443,8 +443,8 @@ started with `npx supabase start` (which runs `npx supabase db reset` internally
 
 #### Automated
 
-- [x] 2.1 `npm test -- --project integration` passes with all ownership tests green
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 `npm test -- --project integration` passes with all ownership tests green — 1adc2ee
+- [x] 2.2 `npm run lint` passes — 1adc2ee
 
 #### Manual
 

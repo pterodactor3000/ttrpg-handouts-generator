@@ -2,15 +2,18 @@ import { vi } from 'vitest';
 
 interface ContextStubOptions {
   body?: unknown;
+  rawBody?: string;
   params?: Record<string, string>;
   method?: string;
 }
 
 export function makeContext(options: ContextStubOptions = {}) {
-  const { body, params = {}, method = 'POST' } = options;
+  const { body, rawBody, params = {}, method = 'POST' } = options;
 
   const requestInit: RequestInit = { method };
-  if (body !== undefined) {
+  if (rawBody !== undefined) {
+    requestInit.body = rawBody;
+  } else if (body !== undefined) {
     requestInit.body = JSON.stringify(body);
     requestInit.headers = { 'Content-Type': 'application/json' };
   }
