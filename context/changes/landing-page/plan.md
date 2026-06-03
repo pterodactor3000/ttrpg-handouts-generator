@@ -174,11 +174,11 @@ None — no data or schema changes.
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 Production build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint` — 39b2e5c
+- [x] 2.2 Production build succeeds: `npm run build` — 39b2e5c
 
 #### Manual
 
-- [x] 2.3 `/` while signed in redirects to `/dashboard`
-- [x] 2.4 `/` while signed out still shows landing page (no redirect loop)
-- [x] 2.5 Protected routes still redirect unauthenticated users to `/auth/signin`
+- [x] 2.3 `/` while signed in redirects to `/dashboard` — 39b2e5c
+- [x] 2.4 `/` while signed out still shows landing page (no redirect loop) — 39b2e5c
+- [x] 2.5 Protected routes still redirect unauthenticated users to `/auth/signin` — 39b2e5c
