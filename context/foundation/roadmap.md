@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-31
+updated: 2026-06-03
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 prd_version: 1
 main_goal: speed
@@ -36,7 +36,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-03 | `edit-handout` | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link) | S-02 | FR-007 | proposed |
 | S-04 | `delete-handout` | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players) | S-02 | FR-008 | proposed |
 | S-05 | `ui-restyle` | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, and color theming, no flow changes | S-01 | FR-012 | ready |
-| S-06 | `new-handout-back-button` | return to the dashboard from the new-handout view via a clear back control, without submitting the form | S-01 | FR-013, FR-002 | ready |
+| S-06 | `new-handout-back-button` | return to the dashboard from the new-handout view via a clear back control, without submitting the form | S-01 | FR-013, FR-002 | done |
 | S-07 | `per-style-fonts` | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view | S-01 | FR-014, FR-005 | ready |
 | S-08 | `landing-page` | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page) | — | FR-015, FR-001 | ready |
 
@@ -151,7 +151,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Should leaving with unsaved edits warn the user, or navigate away silently? — Owner: user. Block: no.
 - **Risk:** Smallest slice — a single navigation affordance. Main correctness is not silently losing in-progress markdown; the unsaved-edits prompt is the only open decision and does not block planning.
-- **Status:** ready
+- **Status:** done
 
 ### S-07: Per-style fonts & colors
 
@@ -213,3 +213,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 
 - **F-01: (foundation) Supabase `handouts` table with full state-machine columns (id, gm_id → auth.users, title, markdown_content, background_category, tags, status, share_token/UUID, created_at, published_at) and row-level security policies — GMs see only their own rows; unauthenticated reads are allowed only via share token — is in place and migrated.** — Archived 2026-05-30 → `context/archive/2026-05-28-handout-schema/`. Lesson: —.
 - **S-01: GM can create a new handout (markdown text + background category + tags), see a rendered preview composited over the chosen background image, and share it via a permanent link that players can open on any device in read-only mode without logging in.** — Archived 2026-05-31 → `context/archive/2026-05-30-first-handout-creation-and-sharing/`. Lesson: —.
+- **S-06: GM can return from the new-handout creation view to the dashboard via a clear back control, without having to submit or discard through the browser back button.** — Archived 2026-06-03 → `context/archive/2026-06-03-new-handout-back-button/`. Lesson: —.
