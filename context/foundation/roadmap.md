@@ -5,6 +5,7 @@ status: draft
 created: 2026-05-26
 updated: 2026-06-03
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
+# 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -35,7 +36,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-02 | `handout-dashboard` | view a list of their handouts (draft and published) with titles and tags | S-01 | FR-002 | proposed |
 | S-03 | `edit-handout` | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link) | S-02 | FR-007 | proposed |
 | S-04 | `delete-handout` | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players) | S-02 | FR-008 | proposed |
-| S-05 | `ui-restyle` | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, and color theming, no flow changes | S-01 | FR-012 | ready |
+| S-05 | `ui-restyle` | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01 | FR-012 | ready |
 | S-06 | `new-handout-back-button` | return to the dashboard from the new-handout view via a clear back control, without submitting the form | S-01 | FR-013, FR-002 | done |
 | S-07 | `per-style-fonts` | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view | S-01 | FR-014, FR-005 | ready |
 | S-08 | `landing-page` | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page) | — | FR-015, FR-001 | done |
@@ -130,7 +131,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ### S-05: UI restyle
 
-- **Outcome:** GM (and players, on the shared read-only page) see a refreshed, visually consistent UI across the existing screens — dashboard, new-handout editor, preview, and shared view. Improvements are limited to typography, spacing, and color theming; no user flows change and no new screens are added.
+- **Outcome:** GM (and players, on the shared read-only page) see a refreshed, visually consistent UI across the existing screens — dashboard, new-handout editor, preview, and shared view. Improvements are limited to typography, spacing, color theming, and a shared loading animation; no user flows change and no new screens are added.
 - **Change ID:** `ui-restyle`
 - **PRD refs:** FR-012, NFR mobile-responsive, NFR browser-compatibility
 - **Prerequisites:** S-01
@@ -143,9 +144,38 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - `#C6AC8F` — neutral (warm)
   - `#F7F7F7` — light font
   - `#333333` — dark font
+- **Loading animation:** Reuse this single CSS-only loader across all async/loading states (e.g. preview generation, dashboard fetch). The `#C02942` accent in the gradient should be reconciled with the color scheme above during `/10x-plan` (prefer the `#B2675E` accent for consistency). Markup: `<div class="loader"></div>`.
+
+```css
+.loader {
+  height: 80px;
+  aspect-ratio: 1;
+  padding: 10px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  position: relative;
+  mask:
+    conic-gradient(#000 0 0) content-box exclude,
+    conic-gradient(#000 0 0);
+  filter: blur(12px);
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(#0000 0 5%, #c02942, #0000 20% 50%);
+  animation: l3 1.5s linear infinite;
+}
+@keyframes l3 {
+  to {
+    rotate: 1turn;
+  }
+}
+```
+
 - **Blockers:** —
 - **Unknowns:** —
-- **Risk:** Cross-cutting visual change touching every existing screen; the risk is regression of the already-shipped S-01 flows and the mobile-responsive shared page. Scope is deliberately capped to styling (no markup/flow changes) so the blast radius stays presentational.
+- **Risk:** Cross-cutting visual change touching every existing screen; the risk is regression of the already-shipped S-01 flows and the mobile-responsive shared page. Scope is deliberately capped to styling (no markup/flow changes) so the blast radius stays presentational. The loader uses CSS `mask` + `rotate`; verify browser-compatibility (NFR) on target browsers and provide a graceful fallback where `mask` is unsupported.
 - **Status:** ready
 
 ### S-06: Back navigation in new-handout view
