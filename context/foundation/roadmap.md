@@ -38,7 +38,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-05 | `ui-restyle` | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, and color theming, no flow changes | S-01 | FR-012 | ready |
 | S-06 | `new-handout-back-button` | return to the dashboard from the new-handout view via a clear back control, without submitting the form | S-01 | FR-013, FR-002 | done |
 | S-07 | `per-style-fonts` | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view | S-01 | FR-014, FR-005 | ready |
-| S-08 | `landing-page` | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page) | — | FR-015, FR-001 | ready |
+| S-08 | `landing-page` | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page) | — | FR-015, FR-001 | done |
 
 ## Streams
 
@@ -176,7 +176,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Standalone and independent; no data layer or auth flow change required — the CTA links to the existing sign-in page. Only risk is replacing the current placeholder `Welcome` component without breaking the Layout wrapper or the middleware redirect (authenticated users hitting `/` should still land on the dashboard).
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -214,3 +214,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **F-01: (foundation) Supabase `handouts` table with full state-machine columns (id, gm_id → auth.users, title, markdown_content, background_category, tags, status, share_token/UUID, created_at, published_at) and row-level security policies — GMs see only their own rows; unauthenticated reads are allowed only via share token — is in place and migrated.** — Archived 2026-05-30 → `context/archive/2026-05-28-handout-schema/`. Lesson: —.
 - **S-01: GM can create a new handout (markdown text + background category + tags), see a rendered preview composited over the chosen background image, and share it via a permanent link that players can open on any device in read-only mode without logging in.** — Archived 2026-05-31 → `context/archive/2026-05-30-first-handout-creation-and-sharing/`. Lesson: —.
 - **S-06: GM can return from the new-handout creation view to the dashboard via a clear back control, without having to submit or discard through the browser back button.** — Archived 2026-06-03 → `context/archive/2026-06-03-new-handout-back-button/`. Lesson: —.
+- **S-08: Visitor (unauthenticated) sees the app name on the landing page and a clear call-to-action that starts the login flow; no login is required to view the page itself.** — Archived 2026-06-03 → `context/archive/2026-06-03-landing-page/`. Lesson: —.
