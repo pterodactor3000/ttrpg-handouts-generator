@@ -455,11 +455,11 @@ started with `npx supabase start` (which runs `npx supabase db reset` internally
 
 #### Automated
 
-- [x] 3.1 `npm test -- --project integration` passes with all validation tests green
-- [x] 3.2 `npm run lint` passes
+- [x] 3.1 `npm test -- --project integration` passes with all validation tests green — ab19dc1
+- [x] 3.2 `npm run lint` passes — ab19dc1
 
 #### Manual
 
-- [x] 3.3 Empty-title POST `201` test is labelled with a comment marking the known gap
-- [x] 3.4 `assertNoSchemaLeakage` called on every non-2xx response in both Phase 2 and Phase 3 files
-- [x] 3.5 `src/integration/smoke.test.ts` deleted; `npm test -- --project integration` still passes
+- [x] 3.3 Empty-title POST `201` test is labelled with a comment marking the known gap — ab19dc1
+- [x] 3.4 `assertNoSchemaLeakage` called on every non-2xx response in both Phase 2 and Phase 3 files — ab19dc1
+- [x] 3.5 `src/integration/smoke.test.ts` deleted; `npm test -- --project integration` still passes — ab19dc1
