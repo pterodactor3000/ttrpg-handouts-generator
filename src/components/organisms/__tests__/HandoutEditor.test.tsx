@@ -8,6 +8,9 @@ import HandoutEditor from '@/components/organisms/HandoutEditor';
 // Ensure a clean DOM between tests — RTL does not auto-cleanup in all vitest setups.
 afterEach(cleanup);
 
+// Prevent unhandled fetch rejections if any side effect accidentally fires.
+vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, json: () => Promise.resolve({}) }));
+
 // jsdom does not perform real navigation; stub window.location so href
 // assignments can be asserted without triggering an actual page load.
 beforeEach(() => {
@@ -17,9 +20,6 @@ beforeEach(() => {
     value: { href: '', origin: 'http://localhost' },
   });
 });
-
-// Prevent unhandled fetch rejections if any side effect accidentally fires.
-vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, json: () => Promise.resolve({}) }));
 
 describe('HandoutEditor — back button', () => {
   it('navigates to /dashboard immediately when the form is clean', async () => {
