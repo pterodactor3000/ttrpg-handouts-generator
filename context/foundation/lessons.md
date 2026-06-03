@@ -44,6 +44,13 @@
 - **Rule**: always add `.eq('gm_id', user.id)` (or the relevant owner column) to UPDATE and DELETE queries in API routes, even when RLS enforces the same constraint. Defence in depth requires the application layer to assert ownership independently of the database layer.
 - **Applies to**: all Supabase API routes performing UPDATE or DELETE
 
+## TSX Test Files Require the React Plugin in vitest.config.ts
+
+- **Context**: adding React component tests (.test.tsx) to a vitest project
+- **Problem**: vitest.config.ts had `environment: 'node'` and no plugins. A new .test.tsx file caused a transform error because vitest cannot compile JSX without the React plugin, even though @vitejs/plugin-react was already in node_modules (pulled in by @astrojs/react).
+- **Rule**: when adding the first .test.tsx file, add `import react from '@vitejs/plugin-react'` and `plugins: [react()]` to vitest.config.ts. The plugin is available as a transitive dep of @astrojs/react and does not need to be installed separately.
+- **Applies to**: all phases that introduce React component test files
+
 ## Never Expose Raw Database Error Messages to HTTP Clients
 
 - **Context**: any API route that catches a Supabase / PostgREST error
