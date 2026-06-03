@@ -160,25 +160,25 @@ None — no data or schema changes.
 
 #### Automated
 
-- [x] 1.1 Linting passes: `npm run lint`
-- [x] 1.2 Production build succeeds: `npm run build`
+- [x] 1.1 Linting passes: `npm run lint` — 431ea77
+- [x] 1.2 Production build succeeds: `npm run build` — 431ea77
 
 #### Manual
 
-- [x] 1.3 `/` logged out shows "Handouts Generatorium" in hero and browser tab
-- [x] 1.4 Product tagline shown; three starter feature cards removed
-- [x] 1.5 "Sign in" → `/auth/signin`; "Sign up" → `/auth/signup`
-- [x] 1.6 Background + Topbar render correctly; responsive on mobile viewport
+- [x] 1.3 `/` logged out shows "Handouts Generatorium" in hero and browser tab — 431ea77
+- [x] 1.4 Product tagline shown; three starter feature cards removed — 431ea77
+- [x] 1.5 "Sign in" → `/auth/signin`; "Sign up" → `/auth/signup` — 431ea77
+- [x] 1.6 Background + Topbar render correctly; responsive on mobile viewport — 431ea77
 
 ### Phase 2: Authenticated-visitor redirect
 
 #### Automated
 
-- [ ] 2.1 Linting passes: `npm run lint`
-- [ ] 2.2 Production build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint`
+- [x] 2.2 Production build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.3 `/` while signed in redirects to `/dashboard`
-- [ ] 2.4 `/` while signed out still shows landing page (no redirect loop)
-- [ ] 2.5 Protected routes still redirect unauthenticated users to `/auth/signin`
+- [x] 2.3 `/` while signed in redirects to `/dashboard`
+- [x] 2.4 `/` while signed out still shows landing page (no redirect loop)
+- [x] 2.5 Protected routes still redirect unauthenticated users to `/auth/signin`
