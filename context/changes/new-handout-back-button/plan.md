@@ -193,26 +193,26 @@ None — no data, schema, or API changes.
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx astro check`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Production build succeeds: `npm run build`
+- [x] 1.1 Type checking passes: `npx astro check` — 95c6df2
+- [x] 1.2 Linting passes: `npm run lint` — 95c6df2
+- [x] 1.3 Production build succeeds: `npm run build` — 95c6df2
 
 #### Manual
 
-- [x] 1.4 Clean form: back navigates to `/dashboard` with no prompt
-- [x] 1.5 Dirty form: back opens dialog; Cancel preserves content; Discard navigates
-- [x] 1.6 Saved-then-untouched form: back navigates with no prompt
-- [x] 1.7 Control is keyboard-focusable, labeled, and visible above the title
+- [x] 1.4 Clean form: back navigates to `/dashboard` with no prompt — 95c6df2
+- [x] 1.5 Dirty form: back opens dialog; Cancel preserves content; Discard navigates — 95c6df2
+- [x] 1.6 Saved-then-untouched form: back navigates with no prompt — 95c6df2
+- [x] 1.7 Control is keyboard-focusable, labeled, and visible above the title — 95c6df2
 
 ### Phase 2: Unit tests (jsdom + React Testing Library)
 
 #### Automated
 
-- [ ] 2.1 New and existing tests pass: `npm run test`
-- [ ] 2.2 Existing `handout-renderer.test.ts` still passes under node env
-- [ ] 2.3 Linting passes: `npm run lint`
-- [ ] 2.4 Type checking passes: `npx astro check`
+- [x] 2.1 New and existing tests pass: `npm run test`
+- [x] 2.2 Existing `handout-renderer.test.ts` still passes under node env
+- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.4 Type checking passes: `npx astro check`
 
 #### Manual
 
-- [ ] 2.5 Test names clearly describe clean / dirty / cancel / confirm scenarios
+- [x] 2.5 Test names clearly describe clean / dirty / cancel / confirm scenarios
