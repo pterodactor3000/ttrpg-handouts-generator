@@ -428,16 +428,16 @@ started with `npx supabase start` (which runs `npx supabase db reset` internally
 
 #### Automated
 
-- [x] 1.1 `npm test -- --project integration` passes with smoke test green
-- [x] 1.2 `npm test -- --project unit` passes (existing tests unaffected)
-- [x] 1.3 `npm run lint` passes on all new files
-- [x] 1.4 `npm run build` succeeds
+- [x] 1.1 `npm test -- --project integration` passes with smoke test green — 4d829e1
+- [x] 1.2 `npm test -- --project unit` passes (existing tests unaffected) — 4d829e1
+- [x] 1.3 `npm run lint` passes on all new files — 4d829e1
+- [x] 1.4 `npm run build` succeeds — 4d829e1
 
 #### Manual
 
-- [x] 1.5 `npx supabase start` running; `.env.test` populated from `npx supabase status`
-- [x] 1.6 `.env.test` does not appear in `git status` (gitignored)
-- [x] 1.7 Smoke test is green in terminal output
+- [x] 1.5 `npx supabase start` running; `.env.test` populated from `npx supabase status` — 4d829e1
+- [x] 1.6 `.env.test` does not appear in `git status` (gitignored) — 4d829e1
+- [x] 1.7 Smoke test is green in terminal output — 4d829e1
 
 ### Phase 2: Ownership Tests (Risk #4)
 
