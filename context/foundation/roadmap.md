@@ -135,6 +135,14 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **PRD refs:** FR-012, NFR mobile-responsive, NFR browser-compatibility
 - **Prerequisites:** S-01
 - **Parallel with:** S-06, S-07
+- **Color scheme:** Apply this palette consistently across all restyled screens.
+  - `#5E5E5E` — primary
+  - `#B2675E` — accent
+  - `#E3B5A4` — accent (light)
+  - `#E3D5CA` — neutral (light)
+  - `#C6AC8F` — neutral (warm)
+  - `#F7F7F7` — light font
+  - `#333333` — dark font
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Cross-cutting visual change touching every existing screen; the risk is regression of the already-shipped S-01 flows and the mobile-responsive shared page. Scope is deliberately capped to styling (no markup/flow changes) so the blast radius stays presentational.
