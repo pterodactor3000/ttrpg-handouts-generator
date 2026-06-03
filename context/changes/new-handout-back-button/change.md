@@ -1,7 +1,7 @@
 ---
 change_id: new-handout-back-button
 title: Add back button to new-handout view
-status: implementing
+status: implemented
 created: 2026-06-03
 updated: 2026-06-03
 ---

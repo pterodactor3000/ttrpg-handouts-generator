@@ -208,11 +208,11 @@ None — no data, schema, or API changes.
 
 #### Automated
 
-- [x] 2.1 New and existing tests pass: `npm run test`
-- [x] 2.2 Existing `handout-renderer.test.ts` still passes under node env
-- [x] 2.3 Linting passes: `npm run lint`
-- [x] 2.4 Type checking passes: `npx astro check`
+- [x] 2.1 New and existing tests pass: `npm run test` — ed08450
+- [x] 2.2 Existing `handout-renderer.test.ts` still passes under node env — ed08450
+- [x] 2.3 Linting passes: `npm run lint` — ed08450
+- [x] 2.4 Type checking passes: `npx astro check` — ed08450
 
 #### Manual
 
-- [x] 2.5 Test names clearly describe clean / dirty / cancel / confirm scenarios
+- [x] 2.5 Test names clearly describe clean / dirty / cancel / confirm scenarios — ed08450
