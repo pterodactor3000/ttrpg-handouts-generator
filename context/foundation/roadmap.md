@@ -29,28 +29,28 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 
 ## At a glance
 
-| ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
-|---|---|---|---|---|---|
-| F-01 | `handout-schema` | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs | — | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | done |
-| S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode | F-01 | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011 | done |
-| S-02 | `handout-dashboard` | view a list of their handouts (draft and published) with titles and tags | S-01 | FR-002 | proposed |
-| S-03 | `edit-handout` | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link) | S-02 | FR-007 | proposed |
-| S-04 | `delete-handout` | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players) | S-02 | FR-008 | proposed |
-| S-05 | `ui-restyle` | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01 | FR-012 | ready |
-| S-06 | `new-handout-back-button` | return to the dashboard from the new-handout view via a clear back control, without submitting the form | S-01 | FR-013, FR-002 | done |
-| S-07 | `per-style-fonts` | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view | S-01 | FR-014, FR-005 | ready |
-| S-08 | `landing-page` | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page) | — | FR-015, FR-001 | done |
+| ID   | Change ID                            | Outcome (user can …)                                                                                                                                                                                          | Prerequisites | PRD refs                                                       | Status   |
+| ---- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------- | -------- |
+| F-01 | `handout-schema`                     | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs                                                                                        | —             | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | done     |
+| S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode                                                        | F-01          | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011  | done     |
+| S-02 | `handout-dashboard`                  | view a list of their handouts (draft and published) with titles and tags                                                                                                                                      | S-01          | FR-002                                                         | proposed |
+| S-03 | `edit-handout`                       | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link)                                                        | S-02          | FR-007                                                         | proposed |
+| S-04 | `delete-handout`                     | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players)                                                                                                   | S-02          | FR-008                                                         | proposed |
+| S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | ready    |
+| S-06 | `new-handout-back-button`            | return to the dashboard from the new-handout view via a clear back control, without submitting the form                                                                                                       | S-01          | FR-013, FR-002                                                 | done     |
+| S-07 | `per-style-fonts`                    | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view                                       | S-01          | FR-014, FR-005                                                 | ready    |
+| S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
 
 ## Streams
 
 Navigation aid — groups items that share a Prerequisites chain. Canonical ordering still lives in the dependency graph below; this table is the proposed reading order across parallel tracks.
 
-| Stream | Theme | Chain | Note |
-|---|---|---|---|
-| A | Core value proof | `F-01` → `S-01` | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline. |
-| B | Handout management | `S-02` → `S-03` / `S-04` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; either can be planned independently. |
-| C | Polish & theming | `S-05` / `S-06` / `S-07` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). All three are independent and parallel; each can be planned on its own. |
-| D | Entry & discovery | `S-08` | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow. |
+| Stream | Theme              | Chain                    | Note                                                                                                                                                  |
+| ------ | ------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A      | Core value proof   | `F-01` → `S-01`          | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline.                                                              |
+| B      | Handout management | `S-02` → `S-03` / `S-04` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; either can be planned independently.                                         |
+| C      | Polish & theming   | `S-05` / `S-06` / `S-07` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). All three are independent and parallel; each can be planned on its own. |
+| D      | Entry & discovery  | `S-08`                   | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow.           |
 
 ## Baseline
 
@@ -160,7 +160,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   filter: blur(12px);
 }
 .loader:before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background: repeating-conic-gradient(#0000 0 5%, #c02942, #0000 20% 50%);
@@ -218,17 +218,17 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID | Suggested issue title | Ready for `/10x-plan` | Notes |
-|---|---|---|---|---|
-| F-01 | `handout-schema` | Add handouts table with state-machine schema and RLS | yes | Run `/10x-plan handout-schema` |
-| S-01 | `first-handout-creation-and-sharing` | First handout creation, preview, and link sharing | no | Depends on F-01; run `/10x-plan first-handout-creation-and-sharing` after F-01 is done |
-| S-02 | `handout-dashboard` | Handout dashboard list view | no | Depends on S-01 |
-| S-03 | `edit-handout` | Edit existing handout | no | Depends on S-02; parallel with S-04 |
-| S-04 | `delete-handout` | Delete (soft-archive) handout | no | Depends on S-02; parallel with S-03 |
-| S-05 | `ui-restyle` | Visual UI restyle across existing screens | yes | S-01 done; run `/10x-plan ui-restyle` |
-| S-06 | `new-handout-back-button` | Add back button to new-handout view | yes | S-01 done; run `/10x-plan new-handout-back-button` |
-| S-07 | `per-style-fonts` | Per-style fonts and font colors for handouts | yes | S-01 done; run `/10x-plan per-style-fonts` |
-| S-08 | `landing-page` | Landing page with app name and login entry point | yes | No prerequisites; run `/10x-plan landing-page` |
+| Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
+| ---------- | ------------------------------------ | ---------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------- |
+| F-01       | `handout-schema`                     | Add handouts table with state-machine schema and RLS | yes                   | Run `/10x-plan handout-schema`                                                         |
+| S-01       | `first-handout-creation-and-sharing` | First handout creation, preview, and link sharing    | no                    | Depends on F-01; run `/10x-plan first-handout-creation-and-sharing` after F-01 is done |
+| S-02       | `handout-dashboard`                  | Handout dashboard list view                          | no                    | Depends on S-01                                                                        |
+| S-03       | `edit-handout`                       | Edit existing handout                                | no                    | Depends on S-02; parallel with S-04                                                    |
+| S-04       | `delete-handout`                     | Delete (soft-archive) handout                        | no                    | Depends on S-02; parallel with S-03                                                    |
+| S-05       | `ui-restyle`                         | Visual UI restyle across existing screens            | yes                   | S-01 done; run `/10x-plan ui-restyle`                                                  |
+| S-06       | `new-handout-back-button`            | Add back button to new-handout view                  | yes                   | S-01 done; run `/10x-plan new-handout-back-button`                                     |
+| S-07       | `per-style-fonts`                    | Per-style fonts and font colors for handouts         | yes                   | S-01 done; run `/10x-plan per-style-fonts`                                             |
+| S-08       | `landing-page`                       | Landing page with app name and login entry point     | yes                   | No prerequisites; run `/10x-plan landing-page`                                         |
 
 ## Open Roadmap Questions
 

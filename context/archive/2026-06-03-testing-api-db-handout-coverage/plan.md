@@ -33,6 +33,7 @@ security depends on the app filtering by token.
 
 `npm test` runs the full suite including integration tests. A test file under
 `src/integration/handouts/` proves:
+
 - a GM cannot mutate another GM's handout via PUT or publish (assertions on both HTTP
   status and DB state);
 - every input-boundary violation on POST and PUT is rejected with a clean 400/422;
@@ -119,7 +120,7 @@ end-to-end harness chain works before any route tests are written.
 
 #### 1. Environment file
 
-**File**: `.env.test` *(create, gitignored)*
+**File**: `.env.test` _(create, gitignored)_
 
 **Intent**: Provide the three env vars integration tests need. This file must never be
 committed — it holds the local Supabase service-role key.
@@ -156,7 +157,7 @@ and the same `@` alias. Both projects share the `plugins` array.
 
 #### 4. Admin client helper
 
-**File**: `src/integration/helpers/admin-client.ts` *(create)*
+**File**: `src/integration/helpers/admin-client.ts` _(create)_
 
 **Intent**: Export a function that creates a service-role Supabase client for test
 fixture setup and teardown (bypasses RLS — only for before/afterAll use).
@@ -168,13 +169,14 @@ environments fail fast.
 
 #### 5. Test-user fixture factory
 
-**File**: `src/integration/helpers/test-users.ts` *(create)*
+**File**: `src/integration/helpers/test-users.ts` _(create)_
 
 **Intent**: Provide `createTestUser` and `deleteTestUser` helpers used in `beforeAll`/`afterAll`
 to manage the two test GMs. Also provides `signInAsUser`, which returns a pre-authenticated
 anon Supabase client suitable for injection into the mocked `createClient`.
 
 **Contract**:
+
 - `createTestUser(adminClient, email, password): Promise<{ id: string }>` — calls
   `adminClient.auth.admin.createUser({ email, password, email_confirm: true })`.
 - `deleteTestUser(adminClient, userId): Promise<void>` — calls
@@ -184,7 +186,7 @@ anon Supabase client suitable for injection into the mocked `createClient`.
 
 #### 6. Astro context stub helper
 
-**File**: `src/integration/helpers/context-stub.ts` *(create)*
+**File**: `src/integration/helpers/context-stub.ts` _(create)_
 
 **Intent**: Build the minimal `APIContext`-shaped object that route handlers receive.
 Handlers under test use `context.request` (for body and headers fed to `createClient`),
@@ -198,7 +200,7 @@ Cast to `unknown as APIContext` to satisfy typing without importing Astro's full
 
 #### 7. Smoke test
 
-**File**: `src/integration/smoke.test.ts` *(create)*
+**File**: `src/integration/smoke.test.ts` _(create)_
 
 **Intent**: Confirm the harness chain is working — local Supabase is reachable, the
 service-role client can create and delete a user — before any route tests are written.
@@ -240,7 +242,7 @@ also tests the 401-unauthenticated path on all three routes as a baseline.
 
 #### 1. Ownership integration test file
 
-**File**: `src/integration/handouts/handout-ownership.integration.test.ts` *(create)*
+**File**: `src/integration/handouts/handout-ownership.integration.test.ts` _(create)_
 
 **Intent**: Prove that cross-owner mutations are blocked at both the app-layer and RLS
 layers, and that unauthenticated requests are rejected cleanly.
@@ -260,24 +262,28 @@ whichever client `vi.fn().mockReturnValue(...)` is set to before each test.
 
 **Test cases to include:**
 
-*Unauthenticated baseline (all three routes):*
+_Unauthenticated baseline (all three routes):_
+
 - `POST /api/handouts` with no session → `401 { error: 'Unauthorized' }`. Assert response body contains only `error` key with value `'Unauthorized'` and no schema artefacts.
 - `PUT /api/handouts/[id]` with no session → `401`.
 - `POST /api/handouts/[id]/publish` with no session → `401`.
 
-*Cross-owner PUT (Risk #4, core case):*
+_Cross-owner PUT (Risk #4, core case):_
+
 - Set mock to return GM-B's client. Call `PUT /api/handouts/[id]` with GM-A's handout ID and valid body.
 - Assert response status is `500`.
 - Assert response body is exactly `{ error: 'Failed to save handout' }` — no other keys, no schema artefacts.
 - Assert via admin client that the DB row's `title` and `markdown_content` are unchanged from the fixture values.
 
-*Cross-owner publish (Risk #4, secondary case):*
+_Cross-owner publish (Risk #4, secondary case):_
+
 - Set mock to return GM-B's client. Call `POST /api/handouts/[id]/publish` with GM-A's handout ID.
 - Assert response status is `404`.
 - Assert response body is exactly `{ error: 'Handout not found or not in draft status' }`.
 - Assert via admin client that the DB row's `status` is still `'draft'` and `share_token` is `null`.
 
-*Own-row happy path (baseline for contrast):*
+_Own-row happy path (baseline for contrast):_
+
 - GM-A publishes their own draft → `200 { shareToken: <uuid> }`.
 - Assert via admin client that `status = 'published'`, `share_token` is a non-null UUID,
   and `published_at` is a non-null ISO timestamp.
@@ -315,7 +321,7 @@ helper applied across all error responses rather than a standalone test file.
 
 #### 1. Schema-leakage assertion helper
 
-**File**: `src/integration/helpers/assert-no-schema-leakage.ts` *(create)*
+**File**: `src/integration/helpers/assert-no-schema-leakage.ts` _(create)_
 
 **Intent**: Provide a single reusable assertion that any error response body does not
 contain known schema artefacts. Called on every non-2xx response throughout the integration suite.
@@ -328,7 +334,7 @@ each term. Callers pass `JSON.stringify(responseBody)`.
 
 #### 2. Validation integration test file
 
-**File**: `src/integration/handouts/handout-validation.integration.test.ts` *(create)*
+**File**: `src/integration/handouts/handout-validation.integration.test.ts` _(create)_
 
 **Intent**: Exercise the input-validation boundary on POST and PUT: each invalid input
 produces a clean 400 with no schema artefacts in the response.
@@ -388,6 +394,7 @@ one final time to confirm the smoke test deletion leaves no hanging references.
 ### Integration Tests
 
 Each Phase 2 and 3 test file uses the per-suite lifecycle:
+
 - `beforeAll`: create test users via admin client, sign in to obtain authenticated clients.
 - `afterEach`: delete all handout rows owned by test user IDs (admin client, no filter on status).
 - `afterAll`: delete test users via admin client.

@@ -1,4 +1,5 @@
 <!-- IMPL-REVIEW-REPORT -->
+
 # Implementation Review: API + DB Integration Harness & Handout-Route Coverage
 
 - **Plan**: context/changes/testing-api-db-handout-coverage/plan.md
@@ -9,14 +10,14 @@
 
 ## Verdicts
 
-| Dimension | Verdict |
-|-----------|---------|
-| Plan Adherence | WARNING ⚠️ |
-| Scope Discipline | PASS ✅ |
-| Safety & Quality | WARNING ⚠️ |
-| Architecture | PASS ✅ |
+| Dimension           | Verdict    |
+| ------------------- | ---------- |
+| Plan Adherence      | WARNING ⚠️ |
+| Scope Discipline    | PASS ✅    |
+| Safety & Quality    | WARNING ⚠️ |
+| Architecture        | PASS ✅    |
 | Pattern Consistency | WARNING ⚠️ |
-| Success Criteria | WARNING ⚠️ |
+| Success Criteria    | WARNING ⚠️ |
 
 ## Findings
 
@@ -61,7 +62,7 @@
 - **Location**: src/integration/handouts/handout-ownership.integration.test.ts (e.g. lines 84–98); src/integration/handouts/handout-validation.integration.test.ts (e.g. lines 35–36)
 - **Detail**: Variables `gmAId`, `gmBId`, `gmAClient`, `gmBClient` abbreviate “game master” contrary to `lessons.md` (“Never Abbreviate Variable or Function Names”).
 - **Fix**: Rename to explicit names (e.g. `ownerUserId`, `otherOwnerUserId`, `ownerAuthenticatedClient`, `otherOwnerAuthenticatedClient`) in both integration test files.
-- **Decision**: FIXED — renamed to ownerUserId / otherOwnerUserId / *AuthenticatedClient
+- **Decision**: FIXED — renamed to ownerUserId / otherOwnerUserId / \*AuthenticatedClient
 
 ### F4 — Plan env contract drift (`envFile` vs `setup-env`)
 
@@ -105,11 +106,11 @@
 
 ## Automated verification (re-run 2026-06-04)
 
-| Command | Result |
-|---------|--------|
-| `npm test -- --project integration` | PASS — 21 tests, 2 files |
-| `npm test -- --project unit` | PASS — 24 tests, 2 files |
-| `npm run lint -- src/integration/` | PASS — 0 errors (5 pre-existing `no-console` warnings in API routes) |
+| Command                             | Result                                                               |
+| ----------------------------------- | -------------------------------------------------------------------- |
+| `npm test -- --project integration` | PASS — 21 tests, 2 files                                             |
+| `npm test -- --project unit`        | PASS — 24 tests, 2 files                                             |
+| `npm run lint -- src/integration/`  | PASS — 0 errors (5 pre-existing `no-console` warnings in API routes) |
 
 ## Plan vs git diff summary
 

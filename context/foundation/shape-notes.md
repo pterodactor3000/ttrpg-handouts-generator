@@ -28,6 +28,7 @@ This product provides a focused handout manager: GMs create handouts with markdo
 **Primary persona**: Game master (yourself)
 
 The GM creates handouts during pre-session prep or mid-session. They need:
+
 - Fast handout creation (markdown text over background image)
 - Instant preview before sharing
 - Export to file or shareable link for distribution
@@ -49,6 +50,7 @@ Secondary persona (read-only consumer): Players who receive handout links and ne
 GM logs in, clicks 'create handout', selects one of three pre-loaded category backgrounds (grimdark / high fantasy / postapo), types markdown text into textbox, adds tags, clicks generate, sees rendered handout preview (markdown composited over background with default font), clicks 'share' to receive a permanent read-only link. The link opens an HTML page showing the handout in read-only mode.
 
 **MVP scope decisions** (scoped down from initial flow):
+
 - No PDF export (shareable link only for v1)
 - No font selection (single default font)
 - No background upload (3 fixed pre-loaded images)
@@ -66,36 +68,47 @@ GM can delete a handout from their list.
 ## Functional Requirements
 
 ### Authentication & Access
+
 - FR-001: GM can log in with email/password or OAuth. Priority: must-have
+
   > Socrates: Counter-argument considered: "OAuth adds integration complexity; email/password alone would ship faster." Resolution: kept for v1, but OAuth may be deferred to v2 if it blocks the 3-week timeline.
 
 - FR-002: GM can view a list of their created handouts. Priority: must-have
   > Socrates: Counter-argument considered: "If handouts are few, a list view is overhead; go straight to create." Resolution: kept; list is needed for multi-handout management even if initial count is low.
 
 ### Handout Creation & Editing
+
 - FR-003: GM can create a new handout. Priority: must-have
+
   > Socrates: No counter-argument; it stands as written.
 
 - FR-004: GM can enter markdown text into the handout editor. Priority: must-have
+
   > Socrates: Counter-argument considered: "Raw markdown is unfriendly; WYSIWYG editor would be easier for non-technical GMs." Resolution: kept; markdown is simpler to implement for MVP and target persona (yourself) is comfortable with it.
 
 - FR-005: GM can select a category background (grimdark / high fantasy / postapo). Priority: must-have
+
   > Socrates: Counter-argument considered: "Three categories are too limiting; users will want more themes." Resolution: kept as MVP constraint; custom upload deferred to v2.
 
 - FR-006: GM can add tags to categorize a handout. Priority: must-have
+
   > Socrates: Counter-argument considered: "Folders/campaigns would organize better than flat tags." Resolution: kept; tags are simpler for v1, folder hierarchy is a v2 consideration.
 
 - FR-007: GM can edit an existing handout. Priority: must-have
+
   > Socrates: Counter-argument considered: "Edit without version history could destroy a good handout by accident." Resolution: kept; version history deferred to v2, GM is sole user so accidental overwrites are recoverable.
 
 - FR-008: GM can delete a handout. Priority: must-have
   > Socrates: Counter-argument considered: "Delete is must-have, not nice-to-have — without it handouts pile up forever." Resolution: promoted from nice-to-have to must-have.
 
 ### Preview & Sharing
+
 - FR-009: GM can generate a rendered preview of the handout. Priority: must-have
+
   > Socrates: Counter-argument considered: "If generation is expensive (backend render), preview-on-every-keystroke kills performance." Resolution: kept; preview is on-demand (generate button), not live/realtime, to manage cost.
 
 - FR-010: GM can share a handout via a permanent read-only link. Priority: must-have
+
   > Socrates: Counter-argument considered: "Permanent public links are a security risk; need expiration or access codes." Resolution: kept as permanent for v1; links are unguessable UUIDs. Expiration/access codes deferred to v2 if abuse occurs.
 
 - FR-011: Player can view a shared handout via read-only link (no login required). Priority: must-have
@@ -140,6 +153,7 @@ After 365 days from publication, or when the GM clicks "delete", the handout mov
 ## Scale Insight
 
 At 100x scale (hundreds of GMs instead of a handful):
+
 - Hosting infrastructure would need to support high traffic (concurrent handout generation, link views)
 - Security posture would need hardening (password storage, rate limiting, protection against credential leaks)
 - Default 365-day link life might need to be configurable or shorter to manage storage costs

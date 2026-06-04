@@ -26,15 +26,15 @@ artefacts. The pattern established here is the reference for Phase 2 of the test
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-|---|---|---|---|
-| Supabase strategy | Real local (`npx supabase start`) | RLS must execute for Risk #4 to be genuinely tested; a mocked DB cannot catch policy regressions | Plan |
-| Route-handler test seam | `vi.mock('@/lib/supabase')` + direct handler import | All three routes import only `createClient`; mocking one module injects any authenticated client without a running HTTP server | Research |
-| Test file location | `src/integration/` top-level directory | Keeps integration tests visually separate from unit tests and matches a separate vitest project config | Plan |
-| Fixture isolation | Per-suite (beforeAll / afterEach / afterAll) | Faster than per-test user creation while preventing cross-test state leakage | Plan |
-| Env setup | `.env.test` (gitignored) + vitest `envFile` | Keeps local Supabase secrets out of git; clean per-project config | Plan |
-| Wrong-owner PUT assertion | Assert `500` + "no mutation persisted" | Route currently returns 500 (not 403) for cross-owner attempts; assert both status and DB-state truth | Research / Plan |
-| Risk #5 (archive link-permanence) | Deferred entirely | Archive route (S-04) not implemented; no stubs added | Plan |
+| Decision                          | Choice                                              | Why (1 sentence)                                                                                                               | Source          |
+| --------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| Supabase strategy                 | Real local (`npx supabase start`)                   | RLS must execute for Risk #4 to be genuinely tested; a mocked DB cannot catch policy regressions                               | Plan            |
+| Route-handler test seam           | `vi.mock('@/lib/supabase')` + direct handler import | All three routes import only `createClient`; mocking one module injects any authenticated client without a running HTTP server | Research        |
+| Test file location                | `src/integration/` top-level directory              | Keeps integration tests visually separate from unit tests and matches a separate vitest project config                         | Plan            |
+| Fixture isolation                 | Per-suite (beforeAll / afterEach / afterAll)        | Faster than per-test user creation while preventing cross-test state leakage                                                   | Plan            |
+| Env setup                         | `.env.test` (gitignored) + vitest `envFile`         | Keeps local Supabase secrets out of git; clean per-project config                                                              | Plan            |
+| Wrong-owner PUT assertion         | Assert `500` + "no mutation persisted"              | Route currently returns 500 (not 403) for cross-owner attempts; assert both status and DB-state truth                          | Research / Plan |
+| Risk #5 (archive link-permanence) | Deferred entirely                                   | Archive route (S-04) not implemented; no stubs added                                                                           | Plan            |
 
 ## Scope
 
@@ -56,11 +56,11 @@ server needed.
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|---|---|---|
-| 1. Integration harness bootstrap | vitest integration project, `.env.test`, admin client, test-user factory, context stub, smoke test | vitest projects config may need adjustment if it conflicts with existing unit test setup |
-| 2. Ownership tests (Risk #4) | Two-user cross-owner tests + unauthenticated 401 baseline; own-row happy path | Regression-probe step (remove ownership filter) needed to confirm test isn't vacuously passing |
-| 3. Validation + error hygiene (Risks #6 + #7) | Boundary-input tests on POST/PUT/publish + `assertNoSchemaLeakage` helper applied to all error responses | Empty-title POST returning 201 must be documented as a known gap, not a test bug |
+| Phase                                         | What it delivers                                                                                         | Key risk                                                                                       |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1. Integration harness bootstrap              | vitest integration project, `.env.test`, admin client, test-user factory, context stub, smoke test       | vitest projects config may need adjustment if it conflicts with existing unit test setup       |
+| 2. Ownership tests (Risk #4)                  | Two-user cross-owner tests + unauthenticated 401 baseline; own-row happy path                            | Regression-probe step (remove ownership filter) needed to confirm test isn't vacuously passing |
+| 3. Validation + error hygiene (Risks #6 + #7) | Boundary-input tests on POST/PUT/publish + `assertNoSchemaLeakage` helper applied to all error responses | Empty-title POST returning 201 must be documented as a known gap, not a test bug               |
 
 **Prerequisites:** `npx supabase start` must be running; local Supabase service-role and anon keys in `.env.test`.
 **Estimated effort:** ~2–3 sessions across 3 phases.

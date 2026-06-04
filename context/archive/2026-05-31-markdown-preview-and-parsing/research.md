@@ -4,7 +4,7 @@ researcher: pterodactorius
 git_commit: 93fc35de9c83ccad4c37cc8a8781b050655e8a6c
 branch: feature/lesson-9
 repository: ttrpg-handouts-generator
-topic: "Markdown preview and parsing libraries"
+topic: 'Markdown preview and parsing libraries'
 tags: [research, codebase, markdown, unified, remark, rehype, sanitization, preview, editor]
 status: complete
 last_updated: 2026-05-31
@@ -93,8 +93,8 @@ Both consumers call the same `renderHandoutHtml` and inject the result as raw HT
                   />
 ```
 
-  `useMemo` (`HandoutEditor.tsx:27`) ensures the pipeline only re-runs when `markdownContent`
-  changes, not on title/tags edits — documented as "Option A" in `docs/PotentialScalability.md:18-29`.
+`useMemo` (`HandoutEditor.tsx:27`) ensures the pipeline only re-runs when `markdownContent`
+changes, not on title/tags edits — documented as "Option A" in `docs/PotentialScalability.md:18-29`.
 
 - **Shared player page** — `src/pages/share/[token].astro:49` renders server-side (workerd) and
   injects via Astro `set:html`:
@@ -107,9 +107,9 @@ Both consumers call the same `renderHandoutHtml` and inject the result as raw HT
           </div>
 ```
 
-  Note: HTML is **never stored** in the DB — only `markdown_content` is persisted (see
-  `publish.ts` and the share query at `share/[token].astro:26-31`); HTML is always rendered at
-  read time. This keeps the sanitize boundary authoritative.
+Note: HTML is **never stored** in the DB — only `markdown_content` is persisted (see
+`publish.ts` and the share query at `share/[token].astro:26-31`); HTML is always rendered at
+read time. This keeps the sanitize boundary authoritative.
 
 ### Sanitization / XSS boundary
 
@@ -131,7 +131,7 @@ Both consumers call the same `renderHandoutHtml` and inject the result as raw HT
 - **`@tailwindcss/typography` is NOT installed.** `package.json` has Tailwind 4
   (`tailwindcss@4`, `@tailwindcss/vite@4`) but no typography plugin, and `src/styles/global.css`
   only has `@import "tailwindcss";` + `@import "tw-animate-css";` with no `@plugin
-  "@tailwindcss/typography"`. **Therefore `prose`, `prose-invert`, `prose-sm` currently do
+"@tailwindcss/typography"`. **Therefore `prose`, `prose-invert`, `prose-sm` currently do
   nothing** — markdown elements get browser defaults + inherited color. This is the single most
   impactful, lowest-effort fix available.
 - **Themed backgrounds** (`src/lib/backgrounds.ts:3-21`): three categories — `fantasy`
@@ -140,7 +140,7 @@ Both consumers call the same `renderHandoutHtml` and inject the result as raw HT
   real background art is parked (see Historical Context).
 - **Readability overlay**: editor preview uses `bg-black/40 backdrop-blur-sm`
   (`HandoutEditor.tsx:194`); the share page uses a stronger frosted card `bg-black/55
-  backdrop-blur-md text-white` (`share/[token].astro:60`). Only the share page sets explicit
+backdrop-blur-md text-white` (`share/[token].astro:60`). Only the share page sets explicit
   `text-white` on the content container; the editor preview relies on inheritance.
 - **No custom prose CSS** (`--tw-prose-*` vars, `.prose` overrides) exists in `global.css`.
 
@@ -164,8 +164,8 @@ makes them live:
 
 ```css
 /* src/styles/global.css */
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 ```
 
 Effort: ~1 line + install. Impact: immediate, correct heading/list/table/blockquote/code styling
@@ -173,11 +173,11 @@ on both preview and shared page. **Recommended first step.**
 
 ### 2. Syntax highlighting for fenced code — `rehype-highlight` (NOT `shiki`)
 
-| Option | Engine | Workers-compatible? | Notes |
-|---|---|---|---|
-| **`rehype-highlight`** | highlight.js (lowlight) | ✅ Yes | Pure JS, ~1 MB, drop-in `.use(rehypeHighlight)` before `rehypeStringify`. Real-world report: deployed cleanly on Workers. **Recommended.** |
-| `@shikijs/rehype` (shiki) | Oniguruma WASM / JS engine | ⚠️ Problematic | Default WASM load fails on workerd; JS-engine + fine-grained bundle still hits bundle-size and CPU-time limits per multiple field reports. Async-only (would break `processSync`). |
-| `starry-night` | TextMate + WASM | ⚠️ WASM | Same WASM-on-Workers class of problems. |
+| Option                    | Engine                     | Workers-compatible? | Notes                                                                                                                                                                              |
+| ------------------------- | -------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`rehype-highlight`**    | highlight.js (lowlight)    | ✅ Yes              | Pure JS, ~1 MB, drop-in `.use(rehypeHighlight)` before `rehypeStringify`. Real-world report: deployed cleanly on Workers. **Recommended.**                                         |
+| `@shikijs/rehype` (shiki) | Oniguruma WASM / JS engine | ⚠️ Problematic      | Default WASM load fails on workerd; JS-engine + fine-grained bundle still hits bundle-size and CPU-time limits per multiple field reports. Async-only (would break `processSync`). |
+| `starry-night`            | TextMate + WASM            | ⚠️ WASM             | Same WASM-on-Workers class of problems.                                                                                                                                            |
 
 Caveat: `rehype-highlight` runs synchronously and integrates with `processSync`. It also requires
 the sanitize schema to permit highlight.js class names — `rehype-sanitize`'s default GitHub schema

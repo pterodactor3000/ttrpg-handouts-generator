@@ -4,7 +4,7 @@ researcher: AI agent
 git_commit: 1595a837d2389127458f2db546c4bd5daa38c192
 branch: feature/lesson-11
 repository: pterodactor3000/ttrpg-handouts-generator
-topic: "API + DB integration harness & handout-route coverage — ground Risks #4, #5, #6, #7"
+topic: 'API + DB integration harness & handout-route coverage — ground Risks #4, #5, #6, #7'
 tags: [research, integration-testing, api-routes, supabase, rls, idor, state-machine, validation, error-handling]
 status: complete
 last_updated: 2026-06-03
@@ -35,11 +35,11 @@ All three handout API routes are implemented and mostly well-guarded. The cleane
 
 Three files handle all handout mutations:
 
-| Route | File | Methods |
-|-------|------|---------|
-| `/api/handouts` | `src/pages/api/handouts/index.ts:1` | POST |
-| `/api/handouts/[id]` | `src/pages/api/handouts/[id].ts:1` | PUT |
-| `/api/handouts/[id]/publish` | `src/pages/api/handouts/[id]/publish.ts:1` | POST |
+| Route                        | File                                       | Methods |
+| ---------------------------- | ------------------------------------------ | ------- |
+| `/api/handouts`              | `src/pages/api/handouts/index.ts:1`        | POST    |
+| `/api/handouts/[id]`         | `src/pages/api/handouts/[id].ts:1`         | PUT     |
+| `/api/handouts/[id]/publish` | `src/pages/api/handouts/[id]/publish.ts:1` | POST    |
 
 There is **no GET-by-id, no DELETE, and no archive/soft-delete route** in the codebase today. S-04 (delete-handout) is `proposed` in the roadmap but unimplemented.
 
@@ -72,6 +72,7 @@ All three routes: call `createClient(context.request.headers, context.cookies)`,
 **`archived` transitions not implemented yet.** No archive/delete route exists. S-04 is `proposed`. The `archived_at` column is in the schema and types but never written by any API route today. The `anon_select_shared` RLS policy (`supabase/migrations/...sql:49-52`) already covers `status IN ('published', 'archived')` — so the DB is ready, but the app layer code is not.
 
 **Consequence for Phase 1 plan:** Risk #5 tests can verify:
+
 - publish mints a valid `share_token` and sets `status = 'published'`
 - double-publish of the same (now-published) row is rejected (status gate blocks it)
 
@@ -80,6 +81,7 @@ But the "archive hides from GM list but keeps link live" half of Risk #5 cannot 
 ### 4. Risk #6 — Server-side validation
 
 **Zod schema** (identical in both `index.ts:7-12` and `[id].ts:7-12`):
+
 ```
 title: z.string().max(300)           — no min(), empty string PASSES
 markdownContent: z.string().max(50000) — no min(), empty string PASSES
@@ -101,12 +103,12 @@ tags: z.array(z.string().max(50)).max(20)
 
 All three routes catch DB errors and return generic messages:
 
-| Route | DB error message returned |
-|-------|--------------------------|
-| POST `/api/handouts` | `'Failed to save handout'` |
-| PUT `/api/handouts/[id]` | `'Failed to save handout'` |
-| POST `/api/handouts/[id]/publish` (fetch) | `'Handout not found or not in draft status'` |
-| POST `/api/handouts/[id]/publish` (update) | `'Failed to publish handout'` |
+| Route                                      | DB error message returned                    |
+| ------------------------------------------ | -------------------------------------------- |
+| POST `/api/handouts`                       | `'Failed to save handout'`                   |
+| PUT `/api/handouts/[id]`                   | `'Failed to save handout'`                   |
+| POST `/api/handouts/[id]/publish` (fetch)  | `'Handout not found or not in draft status'` |
+| POST `/api/handouts/[id]/publish` (update) | `'Failed to publish handout'`                |
 
 All raw errors are logged via `console.error(...)` server-side. **No raw PostgREST messages are forwarded to the client.** This risk is mostly already mitigated. The test should verify the pattern holds under a forced failure — primarily valuable as a regression guard.
 
@@ -127,9 +129,9 @@ All raw errors are logged via `console.error(...)` server-side. **No raw PostgRE
 
 ### 7. Existing Test Infrastructure
 
-| File | Type | Pattern |
-|------|------|---------|
-| `src/lib/__tests__/handout-renderer.test.ts` | unit | pure function, no mocks, `toContain` on HTML strings |
+| File                                                        | Type      | Pattern                                                                  |
+| ----------------------------------------------------------- | --------- | ------------------------------------------------------------------------ |
+| `src/lib/__tests__/handout-renderer.test.ts`                | unit      | pure function, no mocks, `toContain` on HTML strings                     |
 | `src/components/organisms/__tests__/HandoutEditor.test.tsx` | component | jsdom override, RTL + userEvent, global fetch stub, window.location stub |
 
 `vitest.config.ts` has `environment: 'node'`, `@vitejs/plugin-react`, `@` alias. No `setupFiles`, no global test helpers. The integration tests will fit in `node` environment (no DOM needed for API route tests).
@@ -138,13 +140,13 @@ No `@testing-library/jest-dom` setup file — the organism test imports it per-f
 
 ### 8. Schema / RLS Summary for Test Fixtures
 
-| Policy | Role | Operation | Condition |
-|--------|------|-----------|-----------|
-| `gm_select_own` | authenticated | SELECT | `gm_id = auth.uid()` |
-| `gm_insert_own` | authenticated | INSERT | `gm_id = auth.uid()` |
-| `gm_update_non_archived` | authenticated | UPDATE | `gm_id = auth.uid() AND status <> 'archived'` |
-| `anon_select_shared` | anon | SELECT | `status IN ('published','archived') AND share_token IS NOT NULL` |
-| (none) | — | DELETE | No delete policy — soft-delete only via S-04 (not yet implemented) |
+| Policy                   | Role          | Operation | Condition                                                          |
+| ------------------------ | ------------- | --------- | ------------------------------------------------------------------ |
+| `gm_select_own`          | authenticated | SELECT    | `gm_id = auth.uid()`                                               |
+| `gm_insert_own`          | authenticated | INSERT    | `gm_id = auth.uid()`                                               |
+| `gm_update_non_archived` | authenticated | UPDATE    | `gm_id = auth.uid() AND status <> 'archived'`                      |
+| `anon_select_shared`     | anon          | SELECT    | `status IN ('published','archived') AND share_token IS NOT NULL`   |
+| (none)                   | —             | DELETE    | No delete policy — soft-delete only via S-04 (not yet implemented) |
 
 Test fixtures need: (a) a service-role Supabase client for direct INSERT/DELETE in setup/teardown, bypassing RLS; (b) two distinct test users (GM A and GM B) to test cross-owner cases; (c) a cleanup strategy (delete all rows created by test user IDs after each test/suite).
 

@@ -13,15 +13,12 @@ This document records architectural decisions made during implementation where a
 
 The `HandoutEditor` component renders a live preview of the GM's markdown content using `renderHandoutHtml` — a synchronous pipeline that runs remark → rehype → rehype-sanitize → stringify on every render.
 
-React re-renders the component on every state change. Without memoization, the full pipeline fires on every keystroke in *any* field (title, tags), not just the markdown textarea.
+React re-renders the component on every state change. Without memoization, the full pipeline fires on every keystroke in _any_ field (title, tags), not just the markdown textarea.
 
 ### Decision — Option A: `useMemo`
 
 ```tsx
-const renderedPreview = useMemo(
-  () => renderHandoutHtml(markdownContent),
-  [markdownContent]
-);
+const renderedPreview = useMemo(() => renderHandoutHtml(markdownContent), [markdownContent]);
 ```
 
 The pipeline only re-runs when `markdownContent` changes. This eliminates unnecessary pipeline executions triggered by title/tags edits while keeping the preview synchronous and immediate on markdown input.
@@ -57,9 +54,9 @@ Move the `renderHandoutHtml` call into a dedicated Web Worker, communicating via
 
 ## Future Considerations
 
-| Area | Current state | Potential concern | Threshold to act |
-|---|---|---|---|
-| Markdown preview pipeline | `useMemo` | CPU spike at 50k chars | Profile at > 10k chars; add debounce if > 16 ms/frame |
-| Handout list (S-02) | Not built | Full table scan for GMs with many handouts | Add cursor-based pagination when GM handout count exceeds 100 |
-| Share link resolution | Single `.eq('share_token', token)` query | Index already in place | No action needed until query time > 100 ms at scale |
-| Tag search/filtering | Not built | Full array-containment scan | Add GIN index on `tags` column when filter feature is added (S-02+) |
+| Area                      | Current state                            | Potential concern                          | Threshold to act                                                    |
+| ------------------------- | ---------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
+| Markdown preview pipeline | `useMemo`                                | CPU spike at 50k chars                     | Profile at > 10k chars; add debounce if > 16 ms/frame               |
+| Handout list (S-02)       | Not built                                | Full table scan for GMs with many handouts | Add cursor-based pagination when GM handout count exceeds 100       |
+| Share link resolution     | Single `.eq('share_token', token)` query | Index already in place                     | No action needed until query time > 100 ms at scale                 |
+| Tag search/filtering      | Not built                                | Full array-containment scan                | Add GIN index on `tags` column when filter feature is added (S-02+) |

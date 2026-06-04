@@ -112,11 +112,11 @@ S-03 / S-04 type siblings (same Prerequisites, parallel-with each other) both ge
 
 For any of `foundation`, `slice`, `north-star` that don't exist, plan `create_issue_label`:
 
-| Label | Color | Description |
-|---|---|---|
+| Label        | Color     | Description                                                                                        |
+| ------------ | --------- | -------------------------------------------------------------------------------------------------- |
 | `foundation` | `#6366F1` | Cross-cutting prerequisite that unlocks vertical slices but has no user-visible outcome on its own |
-| `slice` | `#26A69A` | Vertical, end-to-end user-visible capability from the roadmap |
-| `north-star` | `#F59E0B` | The north-star slice — smallest end-to-end flow that proves the core product hypothesis |
+| `slice`      | `#26A69A` | Vertical, end-to-end user-visible capability from the roadmap                                      |
+| `north-star` | `#F59E0B` | The north-star slice — smallest end-to-end flow that proves the core product hypothesis            |
 
 ## Step 4 — Preview (await approval)
 
@@ -143,11 +143,11 @@ One sentence summarizing intent, e.g. "Create 5 issues from roadmap F-01–S-04 
 
 One row per roadmap item:
 
-| Roadmap ID | Change ID | Outcome (title) | Existing Linear | Action |
-|------------|-----------|-----------------|-----------------|--------|
-| F-01 | `handout-schema` | … | TEC-6 or — | create / skip |
-| S-01 | `first-handout-…` | … | — | create |
-| … | … | … | … | … |
+| Roadmap ID | Change ID         | Outcome (title) | Existing Linear | Action        |
+| ---------- | ----------------- | --------------- | --------------- | ------------- |
+| F-01       | `handout-schema`  | …               | TEC-6 or —      | create / skip |
+| S-01       | `first-handout-…` | …               | —               | create        |
+| …          | …                 | …               | …               | …             |
 
 - **Existing Linear**: matched issue ID + state, or `—` if none
 - **Action**: `create` for new issues; `skip` when a matching Change ID or Roadmap ID already exists (report "already exists" — do not duplicate)
@@ -155,8 +155,8 @@ One row per roadmap item:
 ### MCP: `create_issue_label` (if any)
 
 | Label | Color | Description |
-|-------|-------|-------------|
-| … | … | … |
+| ----- | ----- | ----------- |
+| …     | …     | …           |
 
 Omit this section if all three labels already exist.
 
@@ -164,27 +164,27 @@ Omit this section if all three labels already exist.
 
 One subsection per issue to create. Show every field:
 
-| Field | Value |
-|-------|-------|
-| `title` | … |
-| `team` | … |
-| `labels` | … |
+| Field         | Value                                                     |
+| ------------- | --------------------------------------------------------- |
+| `title`       | …                                                         |
+| `team`        | …                                                         |
+| `labels`      | …                                                         |
 | `description` | (resolved body — excerpt OK if >500 chars, mark with `…`) |
 
 Or use a compact table when payloads are uniform:
 
-| Roadmap ID | `title` | `team` | `labels` |
-|------------|---------|--------|----------|
-| F-01 | … | … | `["foundation"]` |
+| Roadmap ID | `title` | `team` | `labels`         |
+| ---------- | ------- | ------ | ---------------- |
+| F-01       | …       | …      | `["foundation"]` |
 
 Always show the full `description` for at least the north-star issue; others may use excerpt + "see template".
 
 ### MCP: `save_issue` — blocking relations
 
 | Prerequisite issue | `blocks` | Roadmap edge |
-|--------------------|----------|--------------|
-| TEC-6 (F-01) | [TEC-5] | F-01 → S-01 |
-| … | … | … |
+| ------------------ | -------- | ------------ |
+| TEC-6 (F-01)       | [TEC-5]  | F-01 → S-01  |
+| …                  | …        | …            |
 
 Use planned Linear IDs returned from creation order only in the execution step — in preview, reference roadmap IDs in the edge column and note "Linear IDs assigned on create".
 

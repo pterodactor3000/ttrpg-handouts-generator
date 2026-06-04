@@ -64,16 +64,16 @@ npm run dev
 
 ```md
 .
-├── context/foundation/     # Product requirements and architecture decisions
+├── context/foundation/ # Product requirements and architecture decisions
 ├── src/
-│   ├── layouts/           # Astro layouts
-│   ├── pages/             # Astro pages
-│   │   └── api/           # API endpoints
-│   ├── components/        # UI components (Astro & React)
-│   └── assets/            # Static assets
-├── public/                # Public assets
-├── .github/workflows/     # CI/CD pipeline
-└── wrangler.jsonc         # Cloudflare Workers config
+│ ├── layouts/ # Astro layouts
+│ ├── pages/ # Astro pages
+│ │ └── api/ # API endpoints
+│ ├── components/ # UI components (Astro & React)
+│ └── assets/ # Static assets
+├── public/ # Public assets
+├── .github/workflows/ # CI/CD pipeline
+└── wrangler.jsonc # Cloudflare Workers config
 ```
 
 ## Supabase Configuration

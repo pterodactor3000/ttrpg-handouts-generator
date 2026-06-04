@@ -7,7 +7,7 @@ Replace the starter boilerplate landing page with a real, product-branded landin
 ## Current State Analysis
 
 - `src/pages/index.astro` is a thin route that renders the `Welcome.astro` organism inside `Layout.astro`.
-- `src/components/organisms/Welcome.astro` is unchanged starter boilerplate: hero heading "10x Astro Starter", a generic starter blurb, **two** CTAs (`/auth/signin`, `/auth/signup`), and three "feature cards" (Authentication Ready / Modern Stack / Developer Experience) that describe the *starter template*, not the product. It also renders the shared `Topbar.astro` and owns the cosmic background markup (orbs + star field).
+- `src/components/organisms/Welcome.astro` is unchanged starter boilerplate: hero heading "10x Astro Starter", a generic starter blurb, **two** CTAs (`/auth/signin`, `/auth/signup`), and three "feature cards" (Authentication Ready / Modern Stack / Developer Experience) that describe the _starter template_, not the product. It also renders the shared `Topbar.astro` and owns the cosmic background markup (orbs + star field).
 - `src/layouts/Layout.astro` sets a default `<title>` of `"10x Astro Starter"` (line 10), so the browser tab still shows the starter name on `/`.
 - `src/middleware.ts` resolves `context.locals.user` on every request and redirects unauthenticated users away from `PROTECTED_ROUTES` (`/dashboard`, `/handouts`). It does **not** currently redirect authenticated users away from `/` — that behavior does not exist yet and must be added.
 - Visual language to match: cosmic dark theme (`bg-cosmic`, gradient clip-text headings, glassmorphism `border-white/10 bg-white/5 backdrop-blur-xl`), atomic-design layout (`atoms`/`molecules`/`organisms`), `cn()` for class merging.

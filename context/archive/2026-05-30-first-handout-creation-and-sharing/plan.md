@@ -109,6 +109,7 @@ Install the remark/rehype pipeline and vitest. Build and unit-test `renderHandou
 **Intent**: Verify that `renderHandoutHtml` produces correct markdown output and strips all known XSS payloads. These tests are the automated proof of the PRD's XSS-safety guardrail.
 
 **Contract**: Test cases must include:
+
 - Headings, bold/italic, lists, blockquotes, code blocks, and GFM tables render to expected HTML elements.
 - `<script>alert(1)</script>` in input → no `<script>` tag in output.
 - `<img src=x onerror=alert(1)>` inline HTML → event attribute stripped.

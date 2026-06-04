@@ -25,24 +25,26 @@ highlighted by a dark highlight.js theme — and the XSS boundary unchanged.
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-| --- | --- | --- | --- |
-| Render library | Keep existing unified/remark/rehype | Pure-ESM, DOM-free, workerd-safe; already the XSS boundary | Research |
-| Syntax highlighter | `rehype-highlight` (not shiki) | Only Workers-safe + synchronous option; shiki fails on WASM/bundle/CPU | Research |
-| Highlight vs sanitize order | Highlight **after** sanitize | Keeps sanitizer authoritative; no schema edits; hljs spans pass through | Plan |
-| Token colors | Import a dark hljs theme CSS (github-dark) | Battle-tested colors via one import; reads on dark gradients | Plan |
-| Prose legibility | Rely on `prose-invert` + existing blur overlays | Zero custom CSS; consistent with current overlay design | Plan |
-| Test coverage | Highlight output + re-assert XSS tests | Locks new behavior and guards the security boundary | Plan |
+| Decision                    | Choice                                          | Why (1 sentence)                                                        | Source   |
+| --------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------- | -------- |
+| Render library              | Keep existing unified/remark/rehype             | Pure-ESM, DOM-free, workerd-safe; already the XSS boundary              | Research |
+| Syntax highlighter          | `rehype-highlight` (not shiki)                  | Only Workers-safe + synchronous option; shiki fails on WASM/bundle/CPU  | Research |
+| Highlight vs sanitize order | Highlight **after** sanitize                    | Keeps sanitizer authoritative; no schema edits; hljs spans pass through | Plan     |
+| Token colors                | Import a dark hljs theme CSS (github-dark)      | Battle-tested colors via one import; reads on dark gradients            | Plan     |
+| Prose legibility            | Rely on `prose-invert` + existing blur overlays | Zero custom CSS; consistent with current overlay design                 | Plan     |
+| Test coverage               | Highlight output + re-assert XSS tests          | Locks new behavior and guards the security boundary                     | Plan     |
 
 ## Scope
 
 **In scope:**
+
 - Install + register `@tailwindcss/typography` via `@plugin` in `global.css`
 - Append `rehype-highlight` after `rehype-sanitize` in the pipeline (keep `.freeze()`)
 - Import a dark highlight.js theme stylesheet
 - Extend renderer tests (highlight output + XSS re-assertion)
 
 **Out of scope:**
+
 - WYSIWYG / richer editor (PRD Non-Goal)
 - Custom sanitize schema or any weakening of the XSS boundary
 - LaTeX/math, live-preview perf changes, per-theme prose tuning, real background art
@@ -57,10 +59,10 @@ CSS entrypoint (`global.css`, loaded via `Layout.astro`, applied to both render 
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Typography plugin | `prose` actually styles rendered markdown | Plugin not loading in Tailwind 4 CSS-first config |
-| 2. Syntax highlighting | Highlighted fenced code + theme colors | hljs theme CSS bundling through `@astrojs/cloudflare` |
+| Phase                  | What it delivers                          | Key risk                                              |
+| ---------------------- | ----------------------------------------- | ----------------------------------------------------- |
+| 1. Typography plugin   | `prose` actually styles rendered markdown | Plugin not loading in Tailwind 4 CSS-first config     |
+| 2. Syntax highlighting | Highlighted fenced code + theme colors    | hljs theme CSS bundling through `@astrojs/cloudflare` |
 
 **Prerequisites:** None — builds on the shipped S-01 pipeline.
 **Estimated effort:** ~1 session, 2 phases.

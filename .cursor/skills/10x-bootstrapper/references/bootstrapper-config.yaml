@@ -43,12 +43,12 @@ starters:
     cwd_strategy: native-cwd
 
 audit_commands:
-  js: "npm audit --json"
-  python: "pip-audit"
-  ruby: "bundle audit check"
-  rust: "cargo audit"
-  go: "govulncheck ./..."
-  dotnet: "dotnet list package --vulnerable"
+  js: 'npm audit --json'
+  python: 'pip-audit'
+  ruby: 'bundle audit check'
+  rust: 'cargo audit'
+  go: 'govulncheck ./...'
+  dotnet: 'dotnet list package --vulnerable'
   java: null
   php: null
   dart: null

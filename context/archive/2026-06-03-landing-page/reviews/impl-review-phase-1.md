@@ -1,4 +1,5 @@
 <!-- IMPL-REVIEW-REPORT -->
+
 # Implementation Review: Landing Page (S-08)
 
 - **Plan**: context/changes/landing-page/plan.md
@@ -9,14 +10,14 @@
 
 ## Verdicts
 
-| Dimension | Verdict |
-|-----------|---------|
-| Plan Adherence | PASS |
-| Scope Discipline | PASS |
-| Safety & Quality | PASS |
-| Architecture | PASS |
-| Pattern Consistency | PASS |
-| Success Criteria | PASS |
+| Dimension           | Verdict |
+| ------------------- | ------- |
+| Plan Adherence      | PASS    |
+| Scope Discipline    | PASS    |
+| Safety & Quality    | PASS    |
+| Architecture        | PASS    |
+| Pattern Consistency | PASS    |
+| Success Criteria    | PASS    |
 
 ## Findings
 
@@ -26,7 +27,7 @@
 - **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
 - **Dimension**: Scope Discipline
 - **Location**: package.json, package-lock.json
-- **Detail**: Commit 431ea77 bundles Astro-family patch/minor bumps (@astrojs/*, astro 6.3.1→6.4.3) that `npm install` resolved on a fresh checkout. Not part of the plan's scope, but the user explicitly chose "Stage all" during the commit ritual — an intentional, recorded decision, not silent scope creep.
+- **Detail**: Commit 431ea77 bundles Astro-family patch/minor bumps (@astrojs/\*, astro 6.3.1→6.4.3) that `npm install` resolved on a fresh checkout. Not part of the plan's scope, but the user explicitly chose "Stage all" during the commit ritual — an intentional, recorded decision, not silent scope creep.
 - **Fix**: None needed. Revisit only if a bump causes a regression.
 - **Decision**: ACCEPTED — user chose to stage dependency bumps during commit ritual.
 
