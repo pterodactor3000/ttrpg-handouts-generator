@@ -152,6 +152,8 @@ project (`unit`) keeps the current settings (`environment: 'node'`, react plugin
 `envFile: '.env.test'`, `environment: 'node'`, `include: ['src/integration/**/*.test.ts']`,
 and the same `@` alias. Both projects share the `plugins` array.
 
+**Implementation note (2026-06-04)**: Vitest 4 `test.projects` does not load per-project `envFile` reliably. Integration env is loaded exclusively from `.env.test` via `src/integration/setup-env.ts` (`setupFiles` in `vitest.config.ts`).
+
 #### 4. Admin client helper
 
 **File**: `src/integration/helpers/admin-client.ts` *(create)*
@@ -448,8 +450,8 @@ started with `npx supabase start` (which runs `npx supabase db reset` internally
 
 #### Manual
 
-- [ ] 2.3 Cross-owner PUT: DB row title unchanged (verified via Supabase Studio or SQL)
-- [ ] 2.4 Ownership filter removed → cross-owner PUT test fails (regression-probes the test itself); filter restored
+- [x] 2.3 Cross-owner PUT: DB row title unchanged (verified via Supabase Studio or SQL)
+- [x] 2.4 Ownership filter removed → cross-owner PUT test fails (regression-probes the test itself); filter restored
 
 ### Phase 3: Validation and Error Hygiene Tests (Risks #6 + #7)
 
