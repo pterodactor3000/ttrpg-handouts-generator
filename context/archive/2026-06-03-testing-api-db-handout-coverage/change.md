@@ -1,10 +1,10 @@
 ---
 change_id: testing-api-db-handout-coverage
 title: API and DB integration harness with handout-route coverage
-status: implemented
+status: archived
 created: 2026-06-03
 updated: 2026-06-04
-archived_at: null
+archived_at: 2026-06-04T11:19:27Z
 ---
 
 ## Notes
