@@ -202,12 +202,12 @@ No new tests. Sanity-run existing suite to ensure the working tree was not accid
 
 #### Automated
 
-- [x] 1.1 Stale strings absent (`change opened`, harness TBD, §6 Phase 1 TBD)
-- [x] 1.2 `npm test -- --project integration` passes
-- [x] 1.3 `npm test -- --project unit` passes
+- [x] 1.1 Stale strings absent (`change opened`, harness TBD, §6 Phase 1 TBD) — 86c1106
+- [x] 1.2 `npm test -- --project integration` passes — 86c1106
+- [x] 1.3 `npm test -- --project unit` passes — 86c1106
 
 #### Manual
 
-- [x] 1.4 §6.2 is actionable for a new integration test
-- [x] 1.5 §3 Phase 1 shows `complete` with archive path
-- [x] 1.6 §2 Risk #4 wording matches PUT 500 / publish 404 behavior
+- [x] 1.4 §6.2 is actionable for a new integration test — 86c1106
+- [x] 1.5 §3 Phase 1 shows `complete` with archive path — 86c1106
+- [x] 1.6 §2 Risk #4 wording matches PUT 500 / publish 404 behavior — 86c1106
