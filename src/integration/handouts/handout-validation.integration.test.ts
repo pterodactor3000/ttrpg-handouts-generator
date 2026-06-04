@@ -7,6 +7,8 @@ import { POST as createHandout } from '@/pages/api/handouts/index';
 import { PUT as updateHandout } from '@/pages/api/handouts/[id]';
 import { POST as publishHandout } from '@/pages/api/handouts/[id]/publish';
 
+// vi.mock replaces createClient so handlers use bearer-injected Supabase clients;
+// the real cookie-based SSR path in @/lib/supabase is intentionally not exercised here.
 vi.mock('@/lib/supabase', () => ({
   createClient: vi.fn(),
 }));
@@ -32,8 +34,8 @@ interface HandoutIdRow {
 }
 
 let adminClient: ReturnType<typeof createAdminClient>;
-let gmAClient: Awaited<ReturnType<typeof signInAsUser>>;
-let gmAId: string;
+let ownerAuthenticatedClient: Awaited<ReturnType<typeof signInAsUser>>;
+let ownerUserId: string;
 let draftHandoutId: string;
 
 async function insertDraftHandout(
@@ -45,7 +47,7 @@ async function insertDraftHandout(
   const { data, error } = await adminClient
     .from('handouts')
     .insert({
-      gm_id: gmAId,
+      gm_id: ownerUserId,
       title: overrides.title ?? 'Draft title',
       markdown_content: overrides.markdown_content ?? 'Draft markdown content.',
       background_category: 'fantasy',
@@ -62,8 +64,8 @@ async function insertDraftHandout(
   return data.id;
 }
 
-async function deleteGmAHandouts(): Promise<void> {
-  const { error } = await adminClient.from('handouts').delete().eq('gm_id', gmAId);
+async function deleteOwnerHandouts(): Promise<void> {
+  const { error } = await adminClient.from('handouts').delete().eq('gm_id', ownerUserId);
   if (error) {
     throw error;
   }
@@ -81,19 +83,19 @@ describe('handout validation (integration)', () => {
     const password = 'integration-test-password';
     const email = `gm-validation-${crypto.randomUUID()}@integration.test`;
     const user = await createTestUser(adminClient, email, password);
-    gmAId = user.id;
-    gmAClient = await signInAsUser(email, password);
-    vi.mocked(createAppSupabaseClient).mockReturnValue(gmAClient);
+    ownerUserId = user.id;
+    ownerAuthenticatedClient = await signInAsUser(email, password);
+    vi.mocked(createAppSupabaseClient).mockReturnValue(ownerAuthenticatedClient);
   });
 
   beforeEach(async () => {
-    await deleteGmAHandouts();
+    await deleteOwnerHandouts();
     draftHandoutId = await insertDraftHandout();
   });
 
   afterAll(async () => {
-    await deleteGmAHandouts();
-    await deleteTestUser(adminClient, gmAId);
+    await deleteOwnerHandouts();
+    await deleteTestUser(adminClient, ownerUserId);
   });
 
   describe('POST /api/handouts', () => {
@@ -289,7 +291,7 @@ describe('handout validation (integration)', () => {
 
   describe('POST /api/handouts/[id]/publish', () => {
     it('rejects publish when title is empty with 422', async () => {
-      await deleteGmAHandouts();
+      await deleteOwnerHandouts();
       const emptyTitleHandoutId = await insertDraftHandout({
         title: '',
         markdown_content: 'Content ready to publish.',
@@ -306,7 +308,7 @@ describe('handout validation (integration)', () => {
     });
 
     it('rejects publish when markdown_content is empty with 422', async () => {
-      await deleteGmAHandouts();
+      await deleteOwnerHandouts();
       const emptyContentHandoutId = await insertDraftHandout({
         title: 'Title ready to publish',
         markdown_content: '',

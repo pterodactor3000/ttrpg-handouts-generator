@@ -8,6 +8,8 @@ import { POST as createHandout } from '@/pages/api/handouts/index';
 import { PUT as updateHandout } from '@/pages/api/handouts/[id]';
 import { POST as publishHandout } from '@/pages/api/handouts/[id]/publish';
 
+// vi.mock replaces createClient so handlers use bearer-injected Supabase clients;
+// the real cookie-based SSR path in @/lib/supabase is intentionally not exercised here.
 vi.mock('@/lib/supabase', () => ({
   createClient: vi.fn(),
 }));
@@ -50,7 +52,7 @@ async function insertGmADraftHandout(): Promise<string> {
   const { data, error } = await adminClient
     .from('handouts')
     .insert({
-      gm_id: gmAId,
+      gm_id: ownerUserId,
       title: fixtureTitle,
       markdown_content: fixtureMarkdown,
       background_category: fixtureBackground,
@@ -75,7 +77,7 @@ async function expectErrorBody(response: Response, status: number, expected: unk
 }
 
 async function deleteAllTestHandouts(): Promise<void> {
-  const { error } = await adminClient.from('handouts').delete().in('gm_id', [gmAId, gmBId]);
+  const { error } = await adminClient.from('handouts').delete().in('gm_id', [ownerUserId, otherOwnerUserId]);
   if (error) {
     throw error;
   }
@@ -83,10 +85,10 @@ async function deleteAllTestHandouts(): Promise<void> {
 
 let adminClient: ReturnType<typeof createAdminClient>;
 let unauthenticatedClient: ReturnType<typeof createClient>;
-let gmAClient: Awaited<ReturnType<typeof signInAsUser>>;
-let gmBClient: Awaited<ReturnType<typeof signInAsUser>>;
-let gmAId: string;
-let gmBId: string;
+let ownerAuthenticatedClient: Awaited<ReturnType<typeof signInAsUser>>;
+let otherOwnerAuthenticatedClient: Awaited<ReturnType<typeof signInAsUser>>;
+let ownerUserId: string;
+let otherOwnerUserId: string;
 let handoutId: string;
 
 describe('handout ownership (integration)', () => {
@@ -94,17 +96,17 @@ describe('handout ownership (integration)', () => {
     adminClient = createAdminClient();
     const password = 'integration-test-password';
 
-    const gmAEmail = `gm-a-${crypto.randomUUID()}@integration.test`;
-    const gmBEmail = `gm-b-${crypto.randomUUID()}@integration.test`;
+    const ownerEmail = `owner-${crypto.randomUUID()}@integration.test`;
+    const otherOwnerEmail = `other-owner-${crypto.randomUUID()}@integration.test`;
 
-    const gmAUser = await createTestUser(adminClient, gmAEmail, password);
-    const gmBUser = await createTestUser(adminClient, gmBEmail, password);
+    const ownerUser = await createTestUser(adminClient, ownerEmail, password);
+    const otherOwnerUser = await createTestUser(adminClient, otherOwnerEmail, password);
 
-    gmAId = gmAUser.id;
-    gmBId = gmBUser.id;
+    ownerUserId = ownerUser.id;
+    otherOwnerUserId = otherOwnerUser.id;
 
-    gmAClient = await signInAsUser(gmAEmail, password);
-    gmBClient = await signInAsUser(gmBEmail, password);
+    ownerAuthenticatedClient = await signInAsUser(ownerEmail, password);
+    otherOwnerAuthenticatedClient = await signInAsUser(otherOwnerEmail, password);
 
     const supabaseUrl = requireEnv('SUPABASE_URL');
     const anonKey = requireEnv('SUPABASE_ANON_KEY');
@@ -122,8 +124,8 @@ describe('handout ownership (integration)', () => {
 
   afterAll(async () => {
     await deleteAllTestHandouts();
-    await deleteTestUser(adminClient, gmAId);
-    await deleteTestUser(adminClient, gmBId);
+    await deleteTestUser(adminClient, ownerUserId);
+    await deleteTestUser(adminClient, otherOwnerUserId);
   });
 
   describe('unauthenticated baseline', () => {
@@ -171,7 +173,7 @@ describe('handout ownership (integration)', () => {
 
   describe('cross-owner mutations (Risk #4)', () => {
     it('PUT by another GM returns 500 and does not mutate the row', async () => {
-      vi.mocked(createAppSupabaseClient).mockReturnValue(gmBClient);
+      vi.mocked(createAppSupabaseClient).mockReturnValue(otherOwnerAuthenticatedClient);
 
       const response = await updateHandout(
         makeContext({
@@ -197,7 +199,7 @@ describe('handout ownership (integration)', () => {
     });
 
     it('publish by another GM returns 404 and leaves draft unchanged', async () => {
-      vi.mocked(createAppSupabaseClient).mockReturnValue(gmBClient);
+      vi.mocked(createAppSupabaseClient).mockReturnValue(otherOwnerAuthenticatedClient);
 
       const response = await publishHandout(
         makeContext({
@@ -225,7 +227,7 @@ describe('handout ownership (integration)', () => {
 
   describe('own-row happy path', () => {
     it('GM-A can publish their own draft', async () => {
-      vi.mocked(createAppSupabaseClient).mockReturnValue(gmAClient);
+      vi.mocked(createAppSupabaseClient).mockReturnValue(ownerAuthenticatedClient);
 
       const response = await publishHandout(
         makeContext({
