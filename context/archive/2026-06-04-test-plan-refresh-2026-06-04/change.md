@@ -1,10 +1,10 @@
 ---
 change_id: test-plan-refresh-2026-06-04
 title: Refresh test-plan.md after Phase 1 harness shipped
-status: implemented
+status: archived
 created: 2026-06-04
 updated: 2026-06-04
-archived_at: null
+archived_at: 2026-06-04T11:30:29Z
 ---
 
 ## Notes
