@@ -71,10 +71,10 @@ Call `list_milestones` for that project. Map stream **Theme** names to milestone
 
 From the roadmap, build:
 
-| Key | Value |
-|---|---|
-| `change-id` (kebab-case) | `{ roadmapId, type: foundation\|slice, outcome, streamTheme?, labels[] }` |
-| `roadmapId` (F-NN / S-NN) | Linear issue id (filled in Step 2) |
+| Key                       | Value                                                                     |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `change-id` (kebab-case)  | `{ roadmapId, type: foundation\|slice, outcome, streamTheme?, labels[] }` |
+| `roadmapId` (F-NN / S-NN) | Linear issue id (filled in Step 2)                                        |
 
 **Stream → slice mapping** — for each Streams row, parse the Chain column (e.g. `` `F-01` → `S-01` ``). Every roadmap ID in the chain inherits that row's **Theme** as `streamTheme`.
 
@@ -176,18 +176,18 @@ Present all planned Linear MCP writes. **Stop here.** Do not call `save_issue` u
 
 One row per PR with a planned or skipped action:
 
-| PR | Title | Linear issue | Roadmap ID | Match reason | Action |
-|----|-------|--------------|------------|--------------|--------|
-| #12 | … | TEC-5 | S-01 | change-id in branch | attach |
-| #8 | … | TEC-6 | F-01 | change-id in branch | skip (already linked) |
-| #99 | … | — | — | ambiguous match | needs review |
+| PR  | Title | Linear issue | Roadmap ID | Match reason        | Action                |
+| --- | ----- | ------------ | ---------- | ------------------- | --------------------- |
+| #12 | …     | TEC-5        | S-01       | change-id in branch | attach                |
+| #8  | …     | TEC-6        | F-01       | change-id in branch | skip (already linked) |
+| #99 | …     | —            | —          | ambiguous match     | needs review          |
 
 ### MCP: `save_issue` — PR links
 
 One row per planned attachment:
 
-| `id` | `links` | Optional `state` |
-|------|---------|------------------|
+| `id`  | `links`                                                             | Optional `state`         |
+| ----- | ------------------------------------------------------------------- | ------------------------ |
 | TEC-5 | `[{ "url": "https://github.com/…/pull/12", "title": "PR #12: …" }]` | In Progress (if planned) |
 
 Show the full JSON payload for each row.
@@ -196,19 +196,19 @@ Show the full JSON payload for each row.
 
 Only rows where a change is planned:
 
-| `id` | Field | Current | Planned |
-|------|-------|---------|---------|
-| TEC-5 | `labels` | … | … (merged) |
-| TEC-5 | `milestone` | — | Core value proof |
-| TEC-14 | `parentId` | — | TEC-5 |
+| `id`   | Field       | Current | Planned          |
+| ------ | ----------- | ------- | ---------------- |
+| TEC-5  | `labels`    | …       | … (merged)       |
+| TEC-5  | `milestone` | —       | Core value proof |
+| TEC-14 | `parentId`  | —       | TEC-5            |
 
 Show the full `save_issue` payload per issue (merge link + slice fields for the same issue into one payload row when both apply).
 
 ### Needs review
 
-| PR / Issue | Reason |
-|------------|--------|
-| … | ambiguous change-id match |
+| PR / Issue | Reason                    |
+| ---------- | ------------------------- |
+| …          | ambiguous change-id match |
 
 End with: **Awaiting your approval to link PRs and apply slice connections.** Proceed only after explicit user confirmation. If the user resolves ambiguous matches, update the preview and wait for approval again.
 

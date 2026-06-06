@@ -11,7 +11,7 @@ This is roadmap slice **S-06** (`new-handout-back-button`), satisfying FR-013, s
 - `src/pages/handouts/new.astro` is a thin shell that wraps `<HandoutEditor client:load />` in `Layout` and renders **no** navigation affordance (`src/pages/handouts/new.astro:6-8`).
 - `src/components/organisms/HandoutEditor.tsx` is a React island holding all form state — `title`, `markdownContent`, `backgroundCategory`, `tags`, plus persistence flags `handoutId`, `shareToken` (`HandoutEditor.tsx:14-25`). Because all editable values live in React state, "unsaved edits" is fully knowable inside this component without prop plumbing.
 - The editor renders an `<h1>New Handout</h1>` heading as the top element of its layout (`HandoutEditor.tsx:101`) — the natural anchor for a back control.
-- The dashboard navigates *into* the editor with a plain `<a href="/handouts/new">` (`dashboard.astro:18-23`); `/dashboard` is the destination for "back".
+- The dashboard navigates _into_ the editor with a plain `<a href="/handouts/new">` (`dashboard.astro:18-23`); `/dashboard` is the destination for "back".
 - An existing Radix dialog atom (`src/components/atoms/dialog.tsx`) is already used by `ShareDialog.tsx` via the controlled `open` / `onOpenChange` pattern (`ShareDialog.tsx:44-80`) — the same primitive fits the unsaved-edits confirmation.
 - The `Button` atom (`src/components/atoms/button.tsx`) provides `ghost` / `link` / `outline` variants and merges classes through `cn()`.
 - Tests: only `src/lib/__tests__/handout-renderer.test.ts` exists; vitest runs in a **`node`** environment (`vitest.config.ts:10-12`) and there is **no** React Testing Library, jsdom, or Playwright in `package.json`.

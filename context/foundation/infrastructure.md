@@ -20,16 +20,17 @@ This platform scores 5/5 on agent-friendly criteria, costs $0 at MVP scale (100k
 
 ### Scoring Matrix
 
-| Platform | CLI-first | Managed/Serverless | Agent Docs | Stable Deploy | MCP | Cost (100k/mo) | Total |
-|----------|-----------|-------------------|------------|---------------|-----|----------------|-------|
-| **Cloudflare** | Pass | Pass | Pass | Pass | Pass (GA) | $0 | 5/5 |
-| **Netlify** | Partial¹ | Pass | Pass | Pass | Pass (GA) | $0 | 4.5/5 |
-| **Vercel** | Pass | Pass | Pass | Pass | Partial² | $0 | 4.5/5 |
-| **Render** | Partial³ | Pass | Pass | Pass | Pass (GA) | $0⁴ | 4.5/5 |
-| **Railway** | Partial⁵ | Pass | Pass | Pass | Pass (GA) | ~$10 | 4.5/5 |
-| **Fly.io** | Partial⁶ | Pass | Fail⁷ | Pass | Partial⁸ | ~$5 | 3/5 |
+| Platform       | CLI-first | Managed/Serverless | Agent Docs | Stable Deploy | MCP       | Cost (100k/mo) | Total |
+| -------------- | --------- | ------------------ | ---------- | ------------- | --------- | -------------- | ----- |
+| **Cloudflare** | Pass      | Pass               | Pass       | Pass          | Pass (GA) | $0             | 5/5   |
+| **Netlify**    | Partial¹  | Pass               | Pass       | Pass          | Pass (GA) | $0             | 4.5/5 |
+| **Vercel**     | Pass      | Pass               | Pass       | Pass          | Partial²  | $0             | 4.5/5 |
+| **Render**     | Partial³  | Pass               | Pass       | Pass          | Pass (GA) | $0⁴            | 4.5/5 |
+| **Railway**    | Partial⁵  | Pass               | Pass       | Pass          | Pass (GA) | ~$10           | 4.5/5 |
+| **Fly.io**     | Partial⁶  | Pass               | Fail⁷      | Pass          | Partial⁸  | ~$5            | 3/5   |
 
 **Notes:**
+
 1. Netlify: rollback is UI-only (not CLI)
 2. Vercel: MCP server in Public Beta, read-only tools only
 3. Render: rollback via API, not dedicated CLI command
@@ -46,6 +47,7 @@ This platform scores 5/5 on agent-friendly criteria, costs $0 at MVP scale (100k
 **Why it won**: Perfect agent-friendly score (5/5), zero cost at MVP scale, native MCP integration (GA), and you're already familiar with the platform. The `@astrojs/cloudflare` adapter is installed and production-ready. Free tier provides 100k requests/day (resets midnight UTC), which comfortably covers small-scale MVP traffic. Full CLI tooling (`wrangler deploy`, `wrangler rollback`, `wrangler tail`) enables autonomous deployment workflows. Documentation available as `llms.txt` and markdown via GitHub. Co-located services (R2 for storage, D1 for caching, Workers KV) are GA and free-tier-friendly. Static assets are free and unlimited.
 
 **Key strengths**:
+
 - Zero vendor switching cost (already in tech-stack.md)
 - Cloudflare's edge network provides global CDN out of the box (even though single-region deployment is fine per your interview answer, free global distribution is a bonus)
 - Workerd runtime in local dev (`wrangler dev`) provides production parity, reducing "works on my machine" issues
@@ -116,19 +118,19 @@ How Cloudflare Workers + Pages actually operates day to day:
 
 ## Risk Register
 
-| Risk | Source | Likelihood | Impact | Mitigation |
-|------|--------|------------|--------|------------|
-| **Workerd prerendering breaks Node-native modules** | Devil's advocate | Medium | Medium | Set `prerenderEnvironment: 'node'` in `@astrojs/cloudflare` config if prerendering pages with `sharp`, `satori`, or `node:fs`. Upgrade to Astro 6.3.2+ to avoid HTTP 500 errors with catch-all routes + actions. |
-| **Environment variable complexity** | Devil's advocate | Medium | Low | Document the `CLOUDFLARE_ENV` build-time requirement in README. If multiple environments needed, set up separate CI jobs per environment with explicit `CLOUDFLARE_ENV` values. Avoid `wrangler deploy --env` (doesn't work as expected with Astro). |
-| **Vendor lock-in to workerd runtime** | Devil's advocate | Low | High | Minimize use of Cloudflare-specific APIs (D1, Durable Objects) during MVP. Stick to portable abstractions (Supabase for DB, R2 for storage with S3-compatible clients). If migration becomes necessary, swap Astro adapter and refactor Cloudflare-specific code. |
-| **Daily request limit (100k/day)** | Devil's advocate | Low | Medium | Monitor daily request count via Cloudflare Dashboard. If traffic approaches 100k/day, either upgrade to paid plan ($5/month for 10M/month) or optimize static asset serving (move images to R2 with custom domain to bypass Workers request count). |
-| **Global outage risk** | Unknown unknowns | Very Low | High | Accept as inherent platform risk for MVP. Cloudflare outages are rare but global (no regional fallback). Post-MVP, consider multi-CDN strategy or keep a Netlify/Vercel deployment as a hot standby (requires DNS failover setup). |
-| **Wrangler version mismatch with Astro adapter** | Unknown unknowns | Medium | Low | Pin `wrangler` version in `package.json` (e.g., `"wrangler": "^3.104.0"`). Test `wrangler` upgrades in a feature branch before merging. Subscribe to Astro's `@astrojs/cloudflare` release notes to catch adapter updates. |
-| **Static assets count toward request limit** | Unknown unknowns | Medium | Medium | Serve handout background images from Cloudflare R2 with a custom domain (e.g., `cdn.ttrpg-handouts.com`) to bypass Workers request counting. Use `<img src="https://cdn.ttrpg-handouts.com/backgrounds/grimdark.jpg">` instead of `/_astro/grimdark.*.jpg`. |
-| **Supabase + Cloudflare TCP limitation** | Unknown unknowns | Low | Low | Continue using `@supabase/ssr` (HTTP-based). If you need raw Postgres queries for performance, use Supabase's Supavisor connection pooler (HTTP mode) or a third-party proxy like PgBouncer deployed on Fly.io. |
-| **Astro adapter lags behind Cloudflare features** | Unknown unknowns | Low | Low | Accept as trade-off for using a framework adapter. If cutting-edge Cloudflare features are needed (e.g., new Durable Objects APIs), wait for Astro adapter update or eject to custom Workers script (loses Astro DX). |
-| **Code deploys restart Durable Objects** | Devil's advocate | N/A | N/A | Not applicable to MVP (no Durable Objects in scope per PRD). If WebSockets or persistent state added post-MVP, implement graceful reconnection logic in client code (exponential backoff, session resumption). |
-| **Cloudflare Environments deployment complexity** | Pre-mortem | Medium | Medium | For MVP, use a single environment (production). If staging needed, create a separate Cloudflare Pages project (`ttrpg-handouts-staging`) with separate GitHub branch (`staging`) and separate Supabase project. Avoid `wrangler.jsonc` env sections (they don't merge as expected). |
+| Risk                                                | Source           | Likelihood | Impact | Mitigation                                                                                                                                                                                                                                                                          |
+| --------------------------------------------------- | ---------------- | ---------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Workerd prerendering breaks Node-native modules** | Devil's advocate | Medium     | Medium | Set `prerenderEnvironment: 'node'` in `@astrojs/cloudflare` config if prerendering pages with `sharp`, `satori`, or `node:fs`. Upgrade to Astro 6.3.2+ to avoid HTTP 500 errors with catch-all routes + actions.                                                                    |
+| **Environment variable complexity**                 | Devil's advocate | Medium     | Low    | Document the `CLOUDFLARE_ENV` build-time requirement in README. If multiple environments needed, set up separate CI jobs per environment with explicit `CLOUDFLARE_ENV` values. Avoid `wrangler deploy --env` (doesn't work as expected with Astro).                                |
+| **Vendor lock-in to workerd runtime**               | Devil's advocate | Low        | High   | Minimize use of Cloudflare-specific APIs (D1, Durable Objects) during MVP. Stick to portable abstractions (Supabase for DB, R2 for storage with S3-compatible clients). If migration becomes necessary, swap Astro adapter and refactor Cloudflare-specific code.                   |
+| **Daily request limit (100k/day)**                  | Devil's advocate | Low        | Medium | Monitor daily request count via Cloudflare Dashboard. If traffic approaches 100k/day, either upgrade to paid plan ($5/month for 10M/month) or optimize static asset serving (move images to R2 with custom domain to bypass Workers request count).                                 |
+| **Global outage risk**                              | Unknown unknowns | Very Low   | High   | Accept as inherent platform risk for MVP. Cloudflare outages are rare but global (no regional fallback). Post-MVP, consider multi-CDN strategy or keep a Netlify/Vercel deployment as a hot standby (requires DNS failover setup).                                                  |
+| **Wrangler version mismatch with Astro adapter**    | Unknown unknowns | Medium     | Low    | Pin `wrangler` version in `package.json` (e.g., `"wrangler": "^3.104.0"`). Test `wrangler` upgrades in a feature branch before merging. Subscribe to Astro's `@astrojs/cloudflare` release notes to catch adapter updates.                                                          |
+| **Static assets count toward request limit**        | Unknown unknowns | Medium     | Medium | Serve handout background images from Cloudflare R2 with a custom domain (e.g., `cdn.ttrpg-handouts.com`) to bypass Workers request counting. Use `<img src="https://cdn.ttrpg-handouts.com/backgrounds/grimdark.jpg">` instead of `/_astro/grimdark.*.jpg`.                         |
+| **Supabase + Cloudflare TCP limitation**            | Unknown unknowns | Low        | Low    | Continue using `@supabase/ssr` (HTTP-based). If you need raw Postgres queries for performance, use Supabase's Supavisor connection pooler (HTTP mode) or a third-party proxy like PgBouncer deployed on Fly.io.                                                                     |
+| **Astro adapter lags behind Cloudflare features**   | Unknown unknowns | Low        | Low    | Accept as trade-off for using a framework adapter. If cutting-edge Cloudflare features are needed (e.g., new Durable Objects APIs), wait for Astro adapter update or eject to custom Workers script (loses Astro DX).                                                               |
+| **Code deploys restart Durable Objects**            | Devil's advocate | N/A        | N/A    | Not applicable to MVP (no Durable Objects in scope per PRD). If WebSockets or persistent state added post-MVP, implement graceful reconnection logic in client code (exponential backoff, session resumption).                                                                      |
+| **Cloudflare Environments deployment complexity**   | Pre-mortem       | Medium     | Medium | For MVP, use a single environment (production). If staging needed, create a separate Cloudflare Pages project (`ttrpg-handouts-staging`) with separate GitHub branch (`staging`) and separate Supabase project. Avoid `wrangler.jsonc` env sections (they don't merge as expected). |
 
 ## Getting Started
 

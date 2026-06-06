@@ -42,10 +42,10 @@ A solo learner shipping a TTRPG handouts generator MVP in 3 weeks (after-hours o
 
 ## Pre-scaffold verification
 
-| Signal             | Value                              | Severity | Notes                              |
-| ------------------ | ---------------------------------- | -------- | ---------------------------------- |
-| npm package        | not run                            | n/a      | starter uses git clone, not npm create |
-| GitHub repo        | not available                      | n/a      | GitHub API call failed or repo not accessible |
+| Signal      | Value         | Severity | Notes                                         |
+| ----------- | ------------- | -------- | --------------------------------------------- |
+| npm package | not run       | n/a      | starter uses git clone, not npm create        |
+| GitHub repo | not available | n/a      | GitHub API call failed or repo not accessible |
 
 ## Scaffold log
 
@@ -130,27 +130,28 @@ A solo learner shipping a TTRPG handouts generator MVP in 3 weeks (after-hours o
 
 The following hints were read from the hand-off and logged here for future reference, but bootstrapper v1 does not act on them. A future skill (M1L4: Memory Architecture) will consume these to generate `AGENTS.md` / `CLAUDE.md` and configure CI/CD.
 
-| Hint                       | Value                              |
-| -------------------------- | ---------------------------------- |
-| bootstrapper_confidence    | first-class                        |
-| quality_override           | false                              |
-| path_taken                 | standard                           |
-| self_check_answers         | null                               |
-| team_size                  | solo                               |
-| deployment_target          | cloudflare-pages                   |
-| ci_provider                | github-actions                     |
-| ci_default_flow            | auto-deploy-on-merge               |
-| has_auth                   | true                               |
-| has_payments               | false                              |
-| has_realtime               | false                              |
-| has_ai                     | false                              |
-| has_background_jobs        | false                              |
+| Hint                    | Value                |
+| ----------------------- | -------------------- |
+| bootstrapper_confidence | first-class          |
+| quality_override        | false                |
+| path_taken              | standard             |
+| self_check_answers      | null                 |
+| team_size               | solo                 |
+| deployment_target       | cloudflare-pages     |
+| ci_provider             | github-actions       |
+| ci_default_flow         | auto-deploy-on-merge |
+| has_auth                | true                 |
+| has_payments            | false                |
+| has_realtime            | false                |
+| has_ai                  | false                |
+| has_background_jobs     | false                |
 
 ## Next steps
 
 Next: a future skill will set up agent context (CLAUDE.md, AGENTS.md). For now, your project is scaffolded and verified — happy hacking.
 
 Useful manual steps in the meantime:
+
 - `git init` (if you have not already) to start your own repo history.
 - Review `README.md.scaffold` (the starter's README) against your existing `README.md` and merge any setup instructions you want to keep.
 - Address audit findings per your project's risk tolerance:

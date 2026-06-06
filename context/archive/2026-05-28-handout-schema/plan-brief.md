@@ -16,16 +16,16 @@ The Supabase SSR client and auth pipeline are fully wired but no public-schema t
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-|---|---|---|---|
-| `status` / `background_category` column types | Postgres ENUM (`fantasy`, `horror`, `scifi`) | DB-enforced valid values; integrates cleanly with supabase-gen types | Plan |
-| `tags` storage | `text[]` | Native Postgres array; GIN-indexable; PostgREST-compatible out of the box | Plan |
-| `share_token` assignment | NULL on create, UUID set on publish | The share link is created by the act of publishing — not before (aligns with PRD FR-010) | Plan |
-| Anonymous RLS scope | `status IN ('published', 'archived')` | Player links must survive soft-delete; satisfies the link-permanence NFR | Plan |
-| GM UPDATE blocked on archived rows | `USING (status <> 'archived')` in RLS | Enforces PRD "archived = read-only for GM" at the DB layer regardless of app bugs | Plan |
-| GM account deletion | `ON DELETE CASCADE` | No orphaned rows; GDPR-friendly; consistent with single-owner model | Plan |
-| State transition enforcement | Application-level only | MVP simplicity; single developer makes direct-SQL bypass an acceptable risk | Plan |
-| TypeScript types scope | Included in this change | Types derive directly from the schema; S-01's implementer needs them immediately | Plan |
+| Decision                                      | Choice                                       | Why (1 sentence)                                                                         | Source |
+| --------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------- | ------ |
+| `status` / `background_category` column types | Postgres ENUM (`fantasy`, `horror`, `scifi`) | DB-enforced valid values; integrates cleanly with supabase-gen types                     | Plan   |
+| `tags` storage                                | `text[]`                                     | Native Postgres array; GIN-indexable; PostgREST-compatible out of the box                | Plan   |
+| `share_token` assignment                      | NULL on create, UUID set on publish          | The share link is created by the act of publishing — not before (aligns with PRD FR-010) | Plan   |
+| Anonymous RLS scope                           | `status IN ('published', 'archived')`        | Player links must survive soft-delete; satisfies the link-permanence NFR                 | Plan   |
+| GM UPDATE blocked on archived rows            | `USING (status <> 'archived')` in RLS        | Enforces PRD "archived = read-only for GM" at the DB layer regardless of app bugs        | Plan   |
+| GM account deletion                           | `ON DELETE CASCADE`                          | No orphaned rows; GDPR-friendly; consistent with single-owner model                      | Plan   |
+| State transition enforcement                  | Application-level only                       | MVP simplicity; single developer makes direct-SQL bypass an acceptable risk              | Plan   |
+| TypeScript types scope                        | Included in this change                      | Types derive directly from the schema; S-01's implementer needs them immediately         | Plan   |
 
 ## Scope
 
@@ -39,10 +39,10 @@ Single SQL migration file creates two ENUM types, the `handouts` table (11 colum
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|---|---|---|
-| 1. Database migration | ENUM types, `handouts` table, indexes, 4 RLS policies, empty seed.sql | RLS policy mismatch could violate link-permanence NFR (archived rows must remain readable by `anon`) |
-| 2. TypeScript entity types | `src/types.ts` with `Handout`, `HandoutStatus`, `BackgroundCategory` | Nullability mismatch between SQL and TS causes silent runtime type errors |
+| Phase                      | What it delivers                                                      | Key risk                                                                                             |
+| -------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 1. Database migration      | ENUM types, `handouts` table, indexes, 4 RLS policies, empty seed.sql | RLS policy mismatch could violate link-permanence NFR (archived rows must remain readable by `anon`) |
+| 2. TypeScript entity types | `src/types.ts` with `Handout`, `HandoutStatus`, `BackgroundCategory`  | Nullability mismatch between SQL and TS causes silent runtime type errors                            |
 
 **Prerequisites:** Local Supabase stack running (`npx supabase start`, requires Docker) for migration verification.
 **Estimated effort:** ~1 session across 2 phases.

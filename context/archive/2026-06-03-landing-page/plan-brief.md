@@ -16,22 +16,24 @@ Logged-out visitors at `/` see "Handouts Generatorium", a one-line product tagli
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-| --- | --- | --- | --- |
-| App/brand name | "Handouts Generatorium" | No name existed; user chose it during planning. | Plan |
-| Signed-in visitor at `/` | Redirect to `/dashboard` | Matches roadmap risk note; marketing page is for logged-out users only. | Plan |
-| CTAs | Sign in (primary) + Sign up (secondary) | Keeps the existing two-path entry into auth. | Plan |
-| Starter feature cards | Removed (not replaced) | They describe the template, not the product; keeps the page focused. | Plan |
-| Tests | None (lint + build + manual) | Pure presentational + middleware config; matches `src/AGENTS.md` guidance. | Plan |
+| Decision                 | Choice                                  | Why (1 sentence)                                                           | Source |
+| ------------------------ | --------------------------------------- | -------------------------------------------------------------------------- | ------ |
+| App/brand name           | "Handouts Generatorium"                 | No name existed; user chose it during planning.                            | Plan   |
+| Signed-in visitor at `/` | Redirect to `/dashboard`                | Matches roadmap risk note; marketing page is for logged-out users only.    | Plan   |
+| CTAs                     | Sign in (primary) + Sign up (secondary) | Keeps the existing two-path entry into auth.                               | Plan   |
+| Starter feature cards    | Removed (not replaced)                  | They describe the template, not the product; keeps the page focused.       | Plan   |
+| Tests                    | None (lint + build + manual)            | Pure presentational + middleware config; matches `src/AGENTS.md` guidance. | Plan   |
 
 ## Scope
 
 **In scope:**
+
 - Rewrite `Welcome.astro` into a branded product hero (name + tagline + 2 CTAs, cards removed).
 - Update the app title in `Layout.astro` and the landing route.
 - Add a middleware redirect for authenticated visitors at `/`.
 
 **Out of scope:**
+
 - Auth form/flow changes (CTAs link to existing `/auth/*`).
 - Global restyle of other screens (that's S-05 `ui-restyle`).
 - New routes, APIs, data model, logo/favicon assets.
@@ -42,10 +44,10 @@ Two small changes. Presentational rewrite of one organism + a title fix (`Welcom
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
+| Phase                              | What it delivers                                    | Key risk                                      |
+| ---------------------------------- | --------------------------------------------------- | --------------------------------------------- |
 | 1. Landing page content & branding | Branded hero + correct title, feature cards removed | Breaking the shared background/Topbar wrapper |
-| 2. Authenticated-visitor redirect | Signed-in users at `/` → `/dashboard` | Over-broad path match or redirect loop |
+| 2. Authenticated-visitor redirect  | Signed-in users at `/` → `/dashboard`               | Over-broad path match or redirect loop        |
 
 **Prerequisites:** None — standalone slice; CTAs use the already-shipped `/auth/signin` and `/auth/signup`.
 **Estimated effort:** ~1 short session across 2 phases.

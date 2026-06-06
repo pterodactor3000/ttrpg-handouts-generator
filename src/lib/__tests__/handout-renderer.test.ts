@@ -106,6 +106,46 @@ describe('renderHandoutHtml', () => {
       const output = renderHandoutHtml('[click](data:text/html,<script>alert(1)</script>)');
       expect(output).not.toContain('data:');
     });
+
+    it('strips uppercase JAVASCRIPT: protocol', () => {
+      const output = renderHandoutHtml('[click](JAVASCRIPT:alert(1))');
+      expect(output).not.toContain('javascript:');
+      expect(output).not.toContain('JAVASCRIPT:');
+    });
+
+    it('strips mixed-case Javascript: protocol', () => {
+      const output = renderHandoutHtml('[click](Javascript:alert(1))');
+      expect(output).not.toContain('javascript:');
+      expect(output).not.toContain('Javascript:');
+    });
+
+    it('strips leading-space protocol in link', () => {
+      const output = renderHandoutHtml('[click]( javascript:alert(1))');
+      expect(output).not.toContain('javascript:');
+    });
+
+    it('strips SVG with event handler', () => {
+      const output = renderHandoutHtml('<svg onload=alert(1)>');
+      expect(output).not.toContain('onload');
+      expect(output).not.toContain('<svg');
+    });
+
+    it('GFM bare javascript: string is not converted to a link', () => {
+      const output = renderHandoutHtml('javascript:alert(1)');
+      expect(output).not.toContain('href="javascript:');
+    });
+
+    it('strips javascript: src on img', () => {
+      const output = renderHandoutHtml('<img src="javascript:alert(1)">');
+      expect(output).not.toContain('javascript:');
+    });
+
+    it('rehypeHighlight output does not reintroduce dangerous attributes', () => {
+      const output = renderHandoutHtml('```js\n<script>alert(1)</script>\n```');
+      expect(output).toContain('hljs');
+      expect(output).not.toContain('<script>');
+      expect(output).not.toContain('alert(1)'); // hljs splits across spans; contiguous string absent by tokenization
+    });
   });
 
   describe('edge cases', () => {

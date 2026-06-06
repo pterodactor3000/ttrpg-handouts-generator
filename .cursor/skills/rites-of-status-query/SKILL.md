@@ -105,31 +105,36 @@ Use this exact structure. Keep each data table to ≤6 rows; if truncated, add a
 # Status — <project name>
 
 ## Blocked
-| ID | Title | Why blocked |
-|----|-------|-------------|
-| … | … | … |
+
+| ID  | Title | Why blocked |
+| --- | ----- | ----------- |
+| …   | …     | …           |
 
 ## Review ready
-| ID | Title | PR |
-|----|-------|-----|
-| … | … | #N (url) |
+
+| ID  | Title | PR       |
+| --- | ----- | -------- |
+| …   | …     | #N (url) |
 
 ## Out of scope
-| Item | Source | Note |
-|------|--------|------|
-| … | Parked / Non-Goal / Future | … |
+
+| Item | Source                     | Note |
+| ---- | -------------------------- | ---- |
+| …    | Parked / Non-Goal / Future | …    |
 
 ## Out of radar
-| ID | Title | Reason |
-|----|-------|--------|
-| … | … | No roadmap link / Outside project / Stale / PR unmatched / Missing in Linear |
+
+| ID  | Title | Reason                                                                       |
+| --- | ----- | ---------------------------------------------------------------------------- |
+| …   | …     | No roadmap link / Outside project / Stale / PR unmatched / Missing in Linear |
 
 ## Focus now
-| Field | Recommendation |
-|-------|----------------|
-| Focus | … |
-| Because | … |
-| Also | … |
+
+| Field   | Recommendation |
+| ------- | -------------- |
+| Focus   | …              |
+| Because | …              |
+| Also    | …              |
 ```
 
 Omit the **Also** row when there is no alternate. Do not use an empty header row.

@@ -19,6 +19,16 @@ A TTRPG handouts generator built with Astro 6 (SSR), React 19, TypeScript 5, Tai
 - `npm run preview` — preview production build locally
 - `npx supabase start` — start local Supabase stack (requires Docker)
 
+### Running tests
+
+Vitest runs two projects: `unit` (no external deps) and `integration` (requires local Supabase).
+
+- `npm test -- --project unit` — unit tests only
+- `npm test -- --project integration` — integration tests only (requires Supabase running)
+- `npm test` — both projects
+
+For integration tests locally: copy `.env.test.example` to `.env.test`, run `npx supabase start`, then populate `.env.test` from `npx supabase status -o env` (keys: `SUPABASE_URL` from `API_URL`, `SUPABASE_ANON_KEY` from `ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` from `SERVICE_ROLE_KEY`).
+
 Pre-commit hooks (husky + lint-staged) run `eslint --fix` on `*.{ts,tsx,astro}` and `prettier --write` on `*.{json,css,md}`.
 
 ## Project Structure
@@ -46,8 +56,7 @@ Path alias: `@/*` maps to `./src/*` (tsconfig).
 
 - **Issue/PR title prefix**: GitHub issues, Linear issues, and PR titles MUST start with `// [<Roadmap ID>]::[<change id>] //` (e.g. `// [S-01]::[first-handout-creation-and-sharing] // feat: ...`). Roadmap ID and change id come from `context/foundation/roadmap.md`.
 - **Commit style**: Conventional Commits (`chore:`, `feature:`, `refactor:`, `fix:`)
-- **CI gate** (`.github/workflows/ci.yml`): runs `npm run lint` + `npm run build` on push/PR to `master`
-- **CI secrets required**: `SUPABASE_URL`, `SUPABASE_KEY` (set in GitHub repo secrets)
+- **CI gate** (`.github/workflows/ci.yml`): runs `npm run lint`, unit tests, and integration tests (with local Supabase) on push/PR to `main`; Cloudflare Pages handles build/deploy separately
 
 ## Environment
 

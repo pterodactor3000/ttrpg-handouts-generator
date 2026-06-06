@@ -17,7 +17,7 @@ single shared render module without touching the data model, API, or auth.
   (workerd SSR).
 - `@tailwindcss/typography` is **not installed**. `src/styles/global.css:1-2` loads only
   `@import "tailwindcss";` and `@import "tw-animate-css";`. Therefore the `prose prose-invert
-  prose-sm` classes at `src/components/organisms/HandoutEditor.tsx:197` and the `prose prose-invert`
+prose-sm` classes at `src/components/organisms/HandoutEditor.tsx:197` and the `prose prose-invert`
   classes at `src/pages/share/[token].astro:62` currently style nothing — markdown gets browser
   defaults plus inherited color.
 - `global.css` is imported once via `src/layouts/Layout.astro:2`; both the share page and the editor
@@ -33,7 +33,7 @@ single shared render module without touching the data model, API, or auth.
 - Rendered markdown on both the editor preview and the shared player page shows full typographic
   styling (headings, lists, tables, blockquotes, inline/fenced code) via the typography plugin's
   dark (`prose-invert`) variant, legible over the themed gradient backgrounds.
-- Fenced code blocks with a language hint (e.g. ```` ```js ````) render highlight.js token markup
+- Fenced code blocks with a language hint (e.g. ` ```js `) render highlight.js token markup
   styled by an imported dark hljs theme.
 - The XSS boundary is unchanged in strength — all existing security tests still pass.
 - `npm run lint`, `npm run build`, and `npm run test` all pass.
@@ -181,7 +181,7 @@ choice is the implementer's call among hljs dark themes; default to `github-dark
 **Intent**: Lock the new highlight behavior and re-assert the security boundary survived the pipeline
 reorder.
 
-**Contract**: Add a case asserting a fenced code block with a language hint (e.g. a ```` ```js ````
+**Contract**: Add a case asserting a fenced code block with a language hint (e.g. a ` ```js `
 block) produces highlight.js markup (`class="hljs..."` / `hljs-` span classes) in the output; keep
 all existing XSS assertions green. **Loosen the existing `renders fenced code blocks` assertion**
 (`src/lib/__tests__/handout-renderer.test.ts:43-48`) to substring-safe checks — `rehype-highlight`
@@ -202,7 +202,7 @@ as a readable block, matching manual check 2.6). Existing XSS test names are unc
 
 #### Manual Verification:
 
-- A fenced code block with a language (e.g. ```` ```js ````) shows colored token highlighting in both
+- A fenced code block with a language (e.g. ` ```js `) shows colored token highlighting in both
   the editor preview and the shared page.
 - A fenced code block without a language hint still renders as a readable monospaced block (no error).
 - Code-block colors are legible over all three themed backgrounds.
@@ -230,7 +230,7 @@ as a readable block, matching manual check 2.6). Existing XSS test names are unc
 ### Manual Testing Steps:
 
 1. Open the handout editor; type a sample with headings, a list, a table, a blockquote, inline code,
-   and a ```` ```js ```` fenced block; confirm prose + highlighting render over each background.
+   and a ` ```js ` fenced block; confirm prose + highlighting render over each background.
 2. Save + publish; open `/share/<token>`; confirm identical rendering on the player page.
 3. Paste a known XSS attempt (`<script>alert(1)</script>`, `<img src=x onerror=alert(1)>`) and confirm
    it is stripped in both preview and shared output.

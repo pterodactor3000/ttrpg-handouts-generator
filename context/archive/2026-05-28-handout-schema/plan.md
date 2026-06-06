@@ -11,6 +11,7 @@ No migrations exist; `supabase/migrations/` is absent. The Supabase SSR client a
 ## Desired End State
 
 After this change:
+
 - `supabase/migrations/20260528200000_create_handouts_table.sql` applies cleanly via `npx supabase db reset` (locally) and `npx supabase db push` (remote).
 - The `handouts` table exists in the `public` schema with RLS enabled and four policies in place.
 - `src/types.ts` exports `HandoutStatus`, `BackgroundCategory`, and `Handout` — importable via `@/types` in any application file.
@@ -53,7 +54,7 @@ Create `supabase/migrations/` and write the single SQL migration file that defin
 
 #### 1. Create migrations directory
 
-**File**: `supabase/migrations/` *(directory)*
+**File**: `supabase/migrations/` _(directory)_
 
 **Intent**: The Supabase CLI requires this directory to exist before any migration file can be applied. `npx supabase db reset` and `npx supabase migration new` both expect it.
 
@@ -177,10 +178,10 @@ export interface Handout {
   background_category: BackgroundCategory;
   tags: string[];
   status: HandoutStatus;
-  share_token: string | null;   // null until published
-  created_at: string;           // ISO 8601 timestamp from Supabase
-  published_at: string | null;  // null while draft
-  archived_at: string | null;   // null until archived
+  share_token: string | null; // null until published
+  created_at: string; // ISO 8601 timestamp from Supabase
+  published_at: string | null; // null while draft
+  archived_at: string | null; // null until archived
 }
 ```
 
@@ -229,6 +230,7 @@ No application unit tests are added in this change — the migration SQL is the 
 ## Performance Considerations
 
 Query patterns covered by indexes:
+
 - GM dashboard (S-02): `WHERE gm_id = $1` → `handouts_gm_id_idx`
 - Player share link (S-01): `WHERE share_token = $1` → `handouts_share_token_idx`
 

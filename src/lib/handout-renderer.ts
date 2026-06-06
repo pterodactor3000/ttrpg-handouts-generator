@@ -11,6 +11,7 @@ const processor = unified()
   .use(remarkGfm)
   .use(remarkRehype, { allowDangerousHtml: false })
   .use(rehypeSanitize)
+  // rehypeHighlight must stay after rehypeSanitize; plugins after this point bypass sanitization
   .use(rehypeHighlight)
   .use(rehypeStringify)
   .freeze();

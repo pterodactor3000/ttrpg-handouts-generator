@@ -86,16 +86,16 @@ One sentence summarizing intent, e.g. "Create project **TTRPG Handouts Generator
 
 Show every field that will be sent:
 
-| Field | Value |
-|---|---|
-| `name` | PRD `project:` frontmatter |
-| `summary` | First sentence of `## Vision & Problem Statement` (max 255 chars) |
-| `description` | See template below |
-| `startDate` | PRD `created:` date (ISO YYYY-MM-DD) |
-| `targetDate` | PRD `timeline_budget.hard_deadline` (ISO YYYY-MM-DD) |
-| `targetDateResolution` | `"month"` |
-| `setTeams` | `[<team name or id>]` |
-| `priority` | `2` (High) |
+| Field                  | Value                                                             |
+| ---------------------- | ----------------------------------------------------------------- |
+| `name`                 | PRD `project:` frontmatter                                        |
+| `summary`              | First sentence of `## Vision & Problem Statement` (max 255 chars) |
+| `description`          | See template below                                                |
+| `startDate`            | PRD `created:` date (ISO YYYY-MM-DD)                              |
+| `targetDate`           | PRD `timeline_budget.hard_deadline` (ISO YYYY-MM-DD)              |
+| `targetDateResolution` | `"month"`                                                         |
+| `setTeams`             | `[<team name or id>]`                                             |
+| `priority`             | `2` (High)                                                        |
 
 **Description template** (use literal newlines in the actual MCP call):
 
@@ -120,9 +120,9 @@ Print the resolved `description` body (or a clearly marked excerpt if very long,
 
 One table row per stream:
 
-| # | `project` | `name` | `description` | `targetDate` |
-|---|-----------|--------|---------------|--------------|
-| 1 | `<project name>` | Stream Theme | Chain + Note | `<hard_deadline>` or omit |
+| #   | `project`        | `name`       | `description` | `targetDate`              |
+| --- | ---------------- | ------------ | ------------- | ------------------------- |
+| 1   | `<project name>` | Stream Theme | Chain + Note  | `<hard_deadline>` or omit |
 
 Rules for the preview table:
 

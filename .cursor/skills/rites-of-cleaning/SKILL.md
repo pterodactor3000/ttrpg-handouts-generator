@@ -57,11 +57,11 @@ Call `list_teams`. Pick the team matching the roadmap `project:` field, or the o
 
 Present the resolved scope:
 
-| Field | Value |
-|-------|-------|
-| Team | … |
-| Project | … (or "all team issues") |
-| Stale threshold | 14 days |
+| Field           | Value                    |
+| --------------- | ------------------------ |
+| Team            | …                        |
+| Project         | … (or "all team issues") |
+| Stale threshold | 14 days                  |
 
 **Wait for user confirmation** of scope before continuing.
 
@@ -73,18 +73,18 @@ Call `list_issue_statuses` for that team. Note the canceled/duplicate state name
 
 Call `list_issue_labels`. Identify missing labels:
 
-| Label | Color | Description |
-|---|---|---|
-| `needs-owner` | `#EF4444` | Open issue has no assignee |
+| Label                       | Color     | Description                                 |
+| --------------------------- | --------- | ------------------------------------------- |
+| `needs-owner`               | `#EF4444` | Open issue has no assignee                  |
 | `needs-acceptance-criteria` | `#F97316` | Issue description lacks acceptance criteria |
 
 Do **not** create a label for stale issues — stale items are reported only (see Step 3).
 
 If any labels are missing, show:
 
-| Label | Action |
-|-------|--------|
-| `needs-owner` | Create |
+| Label                       | Action |
+| --------------------------- | ------ |
+| `needs-owner`               | Create |
 | `needs-acceptance-criteria` | Create |
 
 **Wait for user approval** to create labels. If none missing, show "No label changes needed" and **wait for user confirmation** to proceed.
@@ -109,13 +109,13 @@ Collect for each issue: `id`, `title`, `description`, `assignee`, `labels`, `sta
 
 Present a brief inventory (read-only):
 
-| Metric | Count |
-|--------|-------|
-| Open issues fetched | … |
-| Stale (14+ days) | … |
-| Potential duplicate groups | … |
-| Missing assignee | … |
-| Missing acceptance criteria | … |
+| Metric                      | Count |
+| --------------------------- | ----- |
+| Open issues fetched         | …     |
+| Stale (14+ days)            | …     |
+| Potential duplicate groups  | …     |
+| Missing assignee            | …     |
+| Missing acceptance criteria | …     |
 
 **Wait for user confirmation** to begin cleaning passes (Steps 3–6).
 
@@ -167,7 +167,7 @@ Skip issues already marked `duplicateOf`.
 If any group is ambiguous (same priority, no Change ID, titles differ slightly), add a **Needs review** section instead of proposing closures:
 
 | Group | Issues | Reason ambiguous |
-|-------|--------|------------------|
+| ----- | ------ | ---------------- |
 | …     | …      | …                |
 
 **Wait for user approval** — user must confirm the table or designate canonical issues for ambiguous groups. Do not call `save_issue` until approved.

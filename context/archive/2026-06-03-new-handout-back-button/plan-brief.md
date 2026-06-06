@@ -16,13 +16,13 @@ A "← Back to dashboard" control sits above the title field. It navigates to `/
 
 ## Key Decisions Made
 
-| Decision                | Choice                                                        | Why (1 sentence)                                                                 | Source |
-| ----------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------- | ------ |
-| Unsaved-edits behavior  | Confirm only when dirty                                      | Protects in-progress markdown without nagging on an empty or already-saved form. | Plan   |
-| Placement               | Inside `HandoutEditor`, near the title heading              | The island owns the dirty state, so the flow stays in one component.            | Plan   |
-| Dirty definition        | Current fields differ from last persisted state             | Matches user intuition — warns only when real work would be lost.               | Plan   |
-| Affordance              | Ghost button: arrow + "Back to dashboard"                   | Reuses the `Button` atom and `lucide-react`; clearly labeled, not a bare icon.  | Plan   |
-| Testing                 | RTL unit tests now; e2e harness split to its own change     | Keeps this a LOW slice; e2e infra is cross-cutting and serves all slices.       | Plan   |
+| Decision               | Choice                                                  | Why (1 sentence)                                                                 | Source |
+| ---------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
+| Unsaved-edits behavior | Confirm only when dirty                                 | Protects in-progress markdown without nagging on an empty or already-saved form. | Plan   |
+| Placement              | Inside `HandoutEditor`, near the title heading          | The island owns the dirty state, so the flow stays in one component.             | Plan   |
+| Dirty definition       | Current fields differ from last persisted state         | Matches user intuition — warns only when real work would be lost.                | Plan   |
+| Affordance             | Ghost button: arrow + "Back to dashboard"               | Reuses the `Button` atom and `lucide-react`; clearly labeled, not a bare icon.   | Plan   |
+| Testing                | RTL unit tests now; e2e harness split to its own change | Keeps this a LOW slice; e2e infra is cross-cutting and serves all slices.        | Plan   |
 
 ## Scope
 
@@ -36,10 +36,10 @@ Everything stays inside the `HandoutEditor` island. A `savedSnapshot` baseline o
 
 ## Phases at a Glance
 
-| Phase                                   | What it delivers                                           | Key risk                                                          |
-| --------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| 1. Back control + confirm-on-dirty      | The labeled control + dirty-gated confirmation dialog     | Saved-then-untouched form must read as clean (baseline refresh).  |
-| 2. Unit tests (jsdom + RTL)             | Automated clean/dirty/cancel/confirm coverage             | Introducing jsdom without breaking the existing node-env test.    |
+| Phase                              | What it delivers                                      | Key risk                                                         |
+| ---------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------- |
+| 1. Back control + confirm-on-dirty | The labeled control + dirty-gated confirmation dialog | Saved-then-untouched form must read as clean (baseline refresh). |
+| 2. Unit tests (jsdom + RTL)        | Automated clean/dirty/cancel/confirm coverage         | Introducing jsdom without breaking the existing node-env test.   |
 
 **Prerequisites:** S-01 (`first-handout-creation-and-sharing`) is done; no other dependency.
 **Estimated effort:** ~1 session across 2 phases.

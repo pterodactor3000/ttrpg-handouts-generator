@@ -64,16 +64,16 @@ npm run dev
 
 ```md
 .
-├── context/foundation/     # Product requirements and architecture decisions
+├── context/foundation/ # Product requirements and architecture decisions
 ├── src/
-│   ├── layouts/           # Astro layouts
-│   ├── pages/             # Astro pages
-│   │   └── api/           # API endpoints
-│   ├── components/        # UI components (Astro & React)
-│   └── assets/            # Static assets
-├── public/                # Public assets
-├── .github/workflows/     # CI/CD pipeline
-└── wrangler.jsonc         # Cloudflare Workers config
+│ ├── layouts/ # Astro layouts
+│ ├── pages/ # Astro pages
+│ │ └── api/ # API endpoints
+│ ├── components/ # UI components (Astro & React)
+│ └── assets/ # Static assets
+├── public/ # Public assets
+├── .github/workflows/ # CI/CD pipeline
+└── wrangler.jsonc # Cloudflare Workers config
 ```
 
 ## Supabase Configuration
@@ -178,7 +178,7 @@ npx wrangler deploy
 
 Set `SUPABASE_URL` and `SUPABASE_KEY` as secrets in your Cloudflare dashboard or via `npx wrangler secret put`.
 
-GitHub Actions runs lint + build on every push and PR to `master`. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets in GitHub for the build step.
+GitHub Actions runs lint, unit tests, and integration tests (with local Supabase) on every push and PR to `main`. Cloudflare Pages handles build/deploy separately.
 
 ---
 

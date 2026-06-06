@@ -16,26 +16,27 @@ A signed-in GM reaches `/handouts/new` via a button on the dashboard, fills in a
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-|---|---|---|---|
-| Preview timing | Live (updates on every keystroke) | Fastest feedback; `unified.processSync()` is synchronous and fast enough at handout lengths | Plan |
-| Render + sanitize library | `unified` remark/rehype pipeline + `rehype-sanitize` | Only viable DOM-free, pure-ESM option that runs identically in the browser and on the Cloudflare workerd server | Plan (research) |
-| Background compositing | CSS overlay (gradient background + readable panel) | Zero render cost, meets <5 s NFR trivially, mobile-responsive by default, no image-export requirement in scope | Plan |
-| Background assets | CSS-gradient placeholders now | Unblocks the pipeline immediately; real art drops in by filename later | Plan |
-| Editor entry point | "New handout" button → `/handouts/new` | Clean dedicated route, no collision with S-02 dashboard list | Plan |
-| Save / publish model | Save draft (any time) + Share to publish | Matches PRD Business Logic state machine exactly | Plan |
-| Validation on publish | Title + background + non-empty markdown all required | Prevents blank or unviewable share links | Plan |
-| Sanitization scope | Standard GFM elements + safe-protocol links/images; raw HTML stripped | Closes all XSS vectors without a DOM; matches PRD XSS-safety guardrail | Plan |
-| Player route | `/share/[token]` | Uses the F-01 unguessable UUID as designed; decouples public URL from internal `id` | Plan |
-| Player content | Title + rendered markdown over background + app footer | Tags are a GM organization tool; players don't need them | Plan |
-| Post-publish UX | Share dialog with permanent link + copy button | Delivers the "share moment" cleanly; defines a clean boundary with S-03 | Plan |
-| Player 404 | Friendly "Handout not found" page (HTTP 404) | Clear to players, correct semantics, no info leak | Plan |
-| Testing | Manual E2E + vitest unit tests for `renderHandoutHtml` | Tests the one security-critical pure function without a full E2E rig | Plan |
-| Responsive scope | Both editor and player mobile-responsive | Player NFR is explicit; editor usable on mobile as a bonus | Plan |
+| Decision                  | Choice                                                                | Why (1 sentence)                                                                                                | Source          |
+| ------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
+| Preview timing            | Live (updates on every keystroke)                                     | Fastest feedback; `unified.processSync()` is synchronous and fast enough at handout lengths                     | Plan            |
+| Render + sanitize library | `unified` remark/rehype pipeline + `rehype-sanitize`                  | Only viable DOM-free, pure-ESM option that runs identically in the browser and on the Cloudflare workerd server | Plan (research) |
+| Background compositing    | CSS overlay (gradient background + readable panel)                    | Zero render cost, meets <5 s NFR trivially, mobile-responsive by default, no image-export requirement in scope  | Plan            |
+| Background assets         | CSS-gradient placeholders now                                         | Unblocks the pipeline immediately; real art drops in by filename later                                          | Plan            |
+| Editor entry point        | "New handout" button → `/handouts/new`                                | Clean dedicated route, no collision with S-02 dashboard list                                                    | Plan            |
+| Save / publish model      | Save draft (any time) + Share to publish                              | Matches PRD Business Logic state machine exactly                                                                | Plan            |
+| Validation on publish     | Title + background + non-empty markdown all required                  | Prevents blank or unviewable share links                                                                        | Plan            |
+| Sanitization scope        | Standard GFM elements + safe-protocol links/images; raw HTML stripped | Closes all XSS vectors without a DOM; matches PRD XSS-safety guardrail                                          | Plan            |
+| Player route              | `/share/[token]`                                                      | Uses the F-01 unguessable UUID as designed; decouples public URL from internal `id`                             | Plan            |
+| Player content            | Title + rendered markdown over background + app footer                | Tags are a GM organization tool; players don't need them                                                        | Plan            |
+| Post-publish UX           | Share dialog with permanent link + copy button                        | Delivers the "share moment" cleanly; defines a clean boundary with S-03                                         | Plan            |
+| Player 404                | Friendly "Handout not found" page (HTTP 404)                          | Clear to players, correct semantics, no info leak                                                               | Plan            |
+| Testing                   | Manual E2E + vitest unit tests for `renderHandoutHtml`                | Tests the one security-critical pure function without a full E2E rig                                            | Plan            |
+| Responsive scope          | Both editor and player mobile-responsive                              | Player NFR is explicit; editor usable on mobile as a bonus                                                      | Plan            |
 
 ## Scope
 
 **In scope:**
+
 - Shared `renderHandoutHtml` module (remark/rehype, unit-tested)
 - Background config map + CSS-gradient placeholders
 - `/handouts/new` page + `HandoutEditor` React island with live preview
@@ -48,6 +49,7 @@ A signed-in GM reaches `/handouts/new` via a button on the dashboard, fills in a
 - Mobile-responsive layout for both editor and player
 
 **Out of scope:**
+
 - Handout list / dashboard rebuild (S-02)
 - Editing published handouts (S-03)
 - Delete / archive (S-04)
@@ -61,12 +63,12 @@ API routes follow the existing pattern (`createClient` + zod validation + redire
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|---|---|---|
-| 1. Render core + assets | Tested, XSS-safe `renderHandoutHtml`; background config map; vitest wired | Remark/rehype packages must bundle cleanly with the Astro/Vite build |
-| 2. Editor island + draft API | Live-preview editor at `/handouts/new`; draft save to DB | Two-column layout on mobile needs care from the start |
-| 3. Publish + share | Publish API; ShareDialog; "New handout" entry on dashboard | UUID minting via `crypto.randomUUID()` (available on workerd) |
-| 4. Player page + polish | Public `/share/[token]` page; friendly 404; mobile verification | `<Fragment set:html>` usage in Astro (not `dangerouslySetInnerHTML`) |
+| Phase                        | What it delivers                                                          | Key risk                                                             |
+| ---------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 1. Render core + assets      | Tested, XSS-safe `renderHandoutHtml`; background config map; vitest wired | Remark/rehype packages must bundle cleanly with the Astro/Vite build |
+| 2. Editor island + draft API | Live-preview editor at `/handouts/new`; draft save to DB                  | Two-column layout on mobile needs care from the start                |
+| 3. Publish + share           | Publish API; ShareDialog; "New handout" entry on dashboard                | UUID minting via `crypto.randomUUID()` (available on workerd)        |
+| 4. Player page + polish      | Public `/share/[token]` page; friendly 404; mobile verification           | `<Fragment set:html>` usage in Astro (not `dangerouslySetInnerHTML`) |
 
 **Prerequisites:** F-01 schema migrated (done), local Supabase running (`npx supabase start`), `.dev.vars` with `SUPABASE_URL` and `SUPABASE_KEY`.
 **Estimated effort:** ~3–4 after-hours sessions across 4 phases.
