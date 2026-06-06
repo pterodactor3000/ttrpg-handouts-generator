@@ -81,7 +81,17 @@ Create a new helper that builds the middleware context shape, then write an inte
 - `redirect: (path: string) => Response` — returns `new Response(null, { status: 302, headers: { Location: path } })`
 - `next: vi.fn()` pre-resolved to `new Response(null, { status: 200 })`
 
-#### 2. New auth-gate integration suite
+#### 2. Vitest `astro:middleware` alias + stub (discovered during implementation)
+
+**Files**: `src/integration/helpers/astro-middleware-stub.ts`, `vitest.config.ts`
+
+**Intent**: `@/middleware` imports `defineMiddleware` from `astro:middleware`, which Vitest/Node cannot resolve natively. A minimal identity stub plus a one-line alias in `vitest.config.ts` unblocks direct `onRequest` invocation in the integration project. `defineMiddleware` is a compile-time type helper in Astro — the stub returns the handler unchanged.
+
+**Contract**:
+- `astro-middleware-stub.ts` exports `defineMiddleware(handler) => handler`
+- `vitest.config.ts` adds `'astro:middleware': resolve(__dirname, './src/integration/helpers/astro-middleware-stub.ts')` to `srcAlias`
+
+#### 3. New auth-gate integration suite
 
 **File**: `src/integration/middleware/auth-gate.integration.test.ts`
 
@@ -228,23 +238,23 @@ Run only Phase 2 (this change): `npm test -- --project integration src/integrati
 
 #### Automated
 
-- [x] 1.1 All auth-gate integration tests pass: `npm test -- --project integration`
-- [x] 1.2 All existing Phase 1 integration tests still pass (no regressions)
-- [x] 1.3 Lint clean: `npm run lint`
+- [x] 1.1 All auth-gate integration tests pass: `npm test -- --project integration` — 667739d
+- [x] 1.2 All existing Phase 1 integration tests still pass (no regressions) — 667739d
+- [x] 1.3 Lint clean: `npm run lint` — 667739d
 
 #### Manual
 
-- [x] 1.4 New test file appears under `src/integration/middleware/` and is picked up by the integration project
-- [x] 1.5 `locals.user` assertion confirms real `User` shape (non-null `id` and `email`)
+- [x] 1.4 New test file appears under `src/integration/middleware/` and is picked up by the integration project — 667739d
+- [x] 1.5 `locals.user` assertion confirms real `User` shape (non-null `id` and `email`) — 667739d
 
 ### Phase 2: Share-token DB-layer integration tests
 
 #### Automated
 
-- [ ] 2.1 All share-token integration tests pass: `npm test -- --project integration`
-- [ ] 2.2 All Phase 1 and existing integration tests still pass
-- [ ] 2.3 Lint clean: `npm run lint`
+- [x] 2.1 All share-token integration tests pass: `npm test -- --project integration`
+- [x] 2.2 All Phase 1 and existing integration tests still pass
+- [x] 2.3 Lint clean: `npm run lint`
 
 #### Manual
 
-- [ ] 2.4 Archived-link-permanence test comment explicitly states the fixture is admin-inserted (no app-level archive endpoint)
+- [x] 2.4 Archived-link-permanence test comment explicitly states the fixture is admin-inserted (no app-level archive endpoint)

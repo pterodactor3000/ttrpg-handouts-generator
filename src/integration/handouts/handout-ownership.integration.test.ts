@@ -3,6 +3,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import { assertNoSchemaLeakage } from '@/integration/helpers/assert-no-schema-leakage';
 import { createAdminClient } from '@/integration/helpers/admin-client';
 import { makeContext } from '@/integration/helpers/context-stub';
+import { requireEnv } from '@/integration/helpers/env';
 import { createTestUser, deleteTestUser, signInAsUser } from '@/integration/helpers/test-users';
 import { POST as createHandout } from '@/pages/api/handouts/index';
 import { PUT as updateHandout } from '@/pages/api/handouts/[id]';
@@ -29,14 +30,6 @@ const validUpdateBody = {
   backgroundCategory: 'horror' as const,
   tags: ['attacker'],
 };
-
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing ${name} for integration tests.`);
-  }
-  return value;
-}
 
 interface HandoutIdRow {
   id: string;

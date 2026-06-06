@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createAdminClient } from '@/integration/helpers/admin-client';
+import { requireEnv } from '@/integration/helpers/env';
 import { makeMiddlewareContext } from '@/integration/helpers/middleware-context-stub';
 import { createTestUser, deleteTestUser, signInAsUser } from '@/integration/helpers/test-users';
 
@@ -13,18 +14,10 @@ vi.mock('@/lib/supabase', () => ({
 import { createClient as createAppSupabaseClient } from '@/lib/supabase';
 import { onRequest } from '@/middleware';
 
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing ${name} for integration tests.`);
-  }
-  return value;
-}
-
 let adminClient: ReturnType<typeof createAdminClient>;
 let unauthenticatedClient: ReturnType<typeof createClient>;
 let authenticatedClient: Awaited<ReturnType<typeof signInAsUser>>;
-let testUserId: string;
+let testUserId: string | undefined;
 let testUserEmail: string;
 
 describe('auth gate middleware (integration)', () => {
@@ -44,7 +37,9 @@ describe('auth gate middleware (integration)', () => {
   });
 
   afterAll(async () => {
-    await deleteTestUser(adminClient, testUserId);
+    if (testUserId) {
+      await deleteTestUser(adminClient, testUserId);
+    }
   });
 
   describe('anonymous access to protected routes', () => {
@@ -56,6 +51,7 @@ describe('auth gate middleware (integration)', () => {
       const context = makeMiddlewareContext({ pathname: '/dashboard' });
       const response: Response = await onRequest(context, context.next);
 
+      expect(createAppSupabaseClient).toHaveBeenCalledWith(context.request.headers, context.cookies);
       expect(response.status).toBe(302);
       expect(response.headers.get('Location')).toBe('/auth/signin');
       expect(context.next).not.toHaveBeenCalled();
@@ -125,6 +121,7 @@ describe('auth gate middleware (integration)', () => {
       const context = makeMiddlewareContext({ pathname: '/dashboard' });
       const response = await onRequest(context, context.next);
 
+      expect(createAppSupabaseClient).toHaveBeenCalledWith(context.request.headers, context.cookies);
       expect(context.next).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(context.locals.user).not.toBeNull();
@@ -141,6 +138,31 @@ describe('auth gate middleware (integration)', () => {
       expect(context.locals.user).not.toBeNull();
       expect(context.locals.user?.id).toBe(testUserId);
       expect(context.locals.user?.email).toBe(testUserEmail);
+    });
+  });
+
+  describe('missing Supabase configuration', () => {
+    beforeEach(() => {
+      vi.mocked(createAppSupabaseClient).mockReturnValue(null);
+    });
+
+    it('GET /dashboard redirects to sign-in when createClient returns null', async () => {
+      const context = makeMiddlewareContext({ pathname: '/dashboard' });
+      const response: Response = await onRequest(context, context.next);
+
+      expect(response.status).toBe(302);
+      expect(response.headers.get('Location')).toBe('/auth/signin');
+      expect(context.next).not.toHaveBeenCalled();
+      expect(context.locals.user).toBeNull();
+    });
+
+    it('GET / passes through when createClient returns null', async () => {
+      const context = makeMiddlewareContext({ pathname: '/' });
+      const response = await onRequest(context, context.next);
+
+      expect(context.next).toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(context.locals.user).toBeNull();
     });
   });
 
