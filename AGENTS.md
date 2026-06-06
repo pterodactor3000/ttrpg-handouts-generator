@@ -46,8 +46,7 @@ Path alias: `@/*` maps to `./src/*` (tsconfig).
 
 - **Issue/PR title prefix**: GitHub issues, Linear issues, and PR titles MUST start with `// [<Roadmap ID>]::[<change id>] //` (e.g. `// [S-01]::[first-handout-creation-and-sharing] // feat: ...`). Roadmap ID and change id come from `context/foundation/roadmap.md`.
 - **Commit style**: Conventional Commits (`chore:`, `feature:`, `refactor:`, `fix:`)
-- **CI gate** (`.github/workflows/ci.yml`): runs `npm run lint` + `npm run build` on push/PR to `master`
-- **CI secrets required**: `SUPABASE_URL`, `SUPABASE_KEY` (set in GitHub repo secrets)
+- **CI gate** (`.github/workflows/ci.yml`): runs `npm run lint`, unit tests, and integration tests (with local Supabase) on push/PR to `main`; Cloudflare Pages handles build/deploy separately
 
 ## Environment
 

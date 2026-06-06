@@ -3,7 +3,7 @@
 ## Overview
 
 Create a GitHub Actions workflow from scratch that runs lint and the full
-Vitest suite (unit then integration) on every push and PR to `master`. The
+Vitest suite (unit then integration) on every push and PR to `main`. The
 integration project requires a running Supabase instance, which is started
 inside the CI job using the `supabase/setup-cli` action — no new GitHub
 repository secrets are needed. Stale CI documentation in `AGENTS.md` and
@@ -35,7 +35,7 @@ is intentionally empty. Only the three env vars below are required:
 
 ## Desired End State
 
-Every push and PR to `master` triggers a GitHub Actions job that:
+Every push and PR to `main` triggers a GitHub Actions job that:
 1. Runs `npm run lint` (with `npx astro sync` to generate required type declarations).
 2. Runs all unit tests (`npm test -- --project unit`).
 3. Starts a local Supabase instance, writes `.env.test`, and runs all integration
@@ -143,7 +143,7 @@ directory)
 pipeline described in the Implementation Approach section.
 
 **Contract**: The workflow triggers on `push` and `pull_request` targeting
-`master`. It runs a single job named `ci` on `ubuntu-latest`. The `supabase
+`main`. It runs a single job named `ci` on `ubuntu-latest`. The `supabase
 status` output is captured once into a shell variable, then the three required
 keys are extracted with `grep` / `cut` and written to `.env.test` with the names
 `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. The
@@ -156,9 +156,9 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   ci:
@@ -215,7 +215,7 @@ jobs:
 
 #### Manual Verification
 
-- Push a branch and open a PR to `master`; the `CI` check appears and turns
+- Push a branch and open a PR to `main`; the `CI` check appears and turns
   green within ~3–5 minutes
 - In the Actions run, confirm: `Run unit tests` step is green, `Start local
   Supabase` step shows Supabase startup output, `Run integration tests` step
@@ -250,7 +250,7 @@ required for tests).
 
 **Contract**: Find the line starting `**CI gate**` (or `## Commit & CI` section)
 and update the description. New description should state: runs `npm run lint`,
-unit tests, and integration tests (with local Supabase) on push/PR to `master`;
+unit tests, and integration tests (with local Supabase) on push/PR to `main`;
 Cloudflare Pages handles build/deploy separately.
 
 #### 2. CLAUDE.md
@@ -286,7 +286,7 @@ The validation is the CI run itself.
 ### Manual Testing Steps
 
 1. Push Phase 1 changes to a feature branch.
-2. Open a PR targeting `master`.
+2. Open a PR targeting `main`.
 3. Confirm the `CI` check appears in the PR status bar.
 4. Wait for the run to complete; all steps should be green.
 5. Inspect the "Run integration tests" step log — confirm multiple integration
@@ -321,7 +321,7 @@ The validation is the CI run itself.
 
 #### Manual
 
-- [ ] 1.4 Push a PR to `master`; the `CI` check appears and turns green
+- [ ] 1.4 Push a PR to `main`; the `CI` check appears and turns green
 - [ ] 1.5 Actions log shows integration suites running against Supabase
 - [ ] 1.6 Deliberate lint failure causes the job to fail at the lint step (before Supabase starts)
 
