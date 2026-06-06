@@ -19,6 +19,16 @@ A TTRPG handouts generator built with Astro 6 (SSR), React 19, TypeScript 5, Tai
 - `npm run preview` — preview production build locally
 - `npx supabase start` — start local Supabase stack (requires Docker)
 
+### Running tests
+
+Vitest runs two projects: `unit` (no external deps) and `integration` (requires local Supabase).
+
+- `npm test -- --project unit` — unit tests only
+- `npm test -- --project integration` — integration tests only (requires Supabase running)
+- `npm test` — both projects
+
+For integration tests locally: copy `.env.test.example` to `.env.test`, run `npx supabase start`, then populate `.env.test` from `npx supabase status -o env` (keys: `SUPABASE_URL` from `API_URL`, `SUPABASE_ANON_KEY` from `ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` from `SERVICE_ROLE_KEY`).
+
 Pre-commit hooks (husky + lint-staged) run `eslint --fix` on `*.{ts,tsx,astro}` and `prettier --write` on `*.{json,css,md}`.
 
 ## Project Structure

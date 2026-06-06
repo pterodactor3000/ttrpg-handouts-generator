@@ -40,6 +40,8 @@ jobs:
           SUPABASE_URL=$(echo "$STATUS" | grep '^API_URL=' | cut -d'"' -f2)
           ANON_KEY=$(echo "$STATUS" | grep '^ANON_KEY=' | cut -d'"' -f2)
           SERVICE_ROLE_KEY=$(echo "$STATUS" | grep '^SERVICE_ROLE_KEY=' | cut -d'"' -f2)
+          test -n "$SUPABASE_URL" -a -n "$ANON_KEY" -a -n "$SERVICE_ROLE_KEY" \
+            || { echo "Missing Supabase env vars from supabase status"; exit 1; }
           printf 'SUPABASE_URL=%s\nSUPABASE_ANON_KEY=%s\nSUPABASE_SERVICE_ROLE_KEY=%s\n' \
             "$SUPABASE_URL" "$ANON_KEY" "$SERVICE_ROLE_KEY" > .env.test
 
