@@ -189,10 +189,10 @@ the reference pattern.
 
 #### Automated
 
-- [x] 1.1 All unit tests pass (new + existing): `npm test -- --project unit`
-- [x] 1.2 Lint clean: `npm run lint`
+- [x] 1.1 All unit tests pass (new + existing): `npm test -- --project unit` — 8a27a13
+- [x] 1.2 Lint clean: `npm run lint` — 8a27a13
 
 #### Manual
 
-- [x] 1.3 7 new test names appear in Vitest output under `XSS payload stripping`
-- [x] 1.4 No existing test case titles renamed or removed
+- [x] 1.3 7 new test names appear in Vitest output under `XSS payload stripping` — 8a27a13
+- [x] 1.4 No existing test case titles renamed or removed — 8a27a13
