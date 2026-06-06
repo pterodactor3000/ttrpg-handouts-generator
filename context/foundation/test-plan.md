@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-06-06 (Phase 4 opened)
+> Last updated: 2026-06-06 (Phase 4 complete)
 
 ## 1. Strategy
 
@@ -86,7 +86,7 @@ orchestrator updates Status as artifacts appear on disk.
 | 1   | API + DB integration harness & handout-route coverage | Establish the reusable Supabase API test pattern and lock ownership, state-machine, validation, and error-leakage on `/api/handouts` | #4, #5 (#5 partial: publish happy path only), #6, #7 | integration | complete    | `context/archive/2026-06-03-testing-api-db-handout-coverage/` |
 | 2   | Access-control critical path                          | Prove protected-route gating / authed routing and that a player loads a published-or-archived handout via a valid token              | #1, #2                                               | integration | complete    | `context/changes/testing-access-control-critical-path/`       |
 | 3   | Markdown rendering safety                             | Prove malicious markdown is neutralized in both preview and shared output                                                            | #3                                                   | unit        | complete      | `context/changes/testing-markdown-rendering-safety/`        |
-| 4   | Quality-gate wiring                                   | Run the test suite in CI so dev/prod-parity regressions are caught before merge                                                      | cross-cutting                                        | gates       | change opened | `context/changes/testing-quality-gate-wiring/`                |
+| 4   | Quality-gate wiring                                   | Run the test suite in CI so dev/prod-parity regressions are caught before merge                                                      | cross-cutting                                        | gates       | complete    | `context/archive/2026-06-06-testing-quality-gate-wiring/`     |
 
 **Status vocabulary** (fixed): `not started` → `opened` (change folder
 created) → `researched` → `planned` → `implementing` → `complete`.
@@ -109,7 +109,7 @@ The classic test base for this project. AI-native tools (if any) carry a
 - Docs: Context7 MCP — available; use for current Astro 6 SSR endpoint testing, `@supabase/ssr` test setup, and Vitest config; checked: 2026-06-04
 - Search: none (no Exa.ai / web-search MCP) — recommendations rely on local manifests/configs; checked: 2026-06-04
 - Runtime/browser: cursor-ide-browser MCP — available; possible e2e/visual layer for the shared read-only page, to be used only if cheaper deterministic integration tests cannot catch the regression; checked: 2026-06-04
-- Provider/platform: Linear MCP + `gh` CLI — available; relevant to §3 Phase 4 CI-gate wiring (GitHub Actions runs lint+build today); checked: 2026-06-04
+- Provider/platform: Linear MCP + `gh` CLI — available; GitHub Actions CI (`.github/workflows/ci.yml`) runs lint, unit tests, and Supabase-backed integration tests on push/PR to `main`; checked: 2026-06-06
 
 Use docs MCPs for current framework/library APIs and setup details. Do not
 use MCP docs/search to infer code failure anchors; those belong in
@@ -123,8 +123,8 @@ phase lands; before that, the gate is `planned`.
 
 | Gate                 | Where                | Required?                                                               | Catches                                         |
 | -------------------- | -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------- |
-| lint + typecheck     | local + CI           | required (already wired)                                                | syntactic / type drift                          |
-| unit + integration   | local + CI           | required after §3 Phase 4                                               | logic regressions, API/DB contract breaks       |
+| lint + typecheck     | local + CI           | required (`.github/workflows/ci.yml` on push/PR to `main`)              | syntactic / type drift                          |
+| unit + integration   | local + CI           | required (CI starts local Supabase for integration project)             | logic regressions, API/DB contract breaks       |
 | markdown-safety unit | local + CI           | required after §3 Phase 3                                               | sanitization regressions (XSS)                  |
 | pre-prod smoke       | between merge + prod | optional                                                                | environment-specific (dev/prod parity) failures |
 | e2e on share path    | CI on PR             | optional — only if §3 Phase 2 cannot prove Risk #2 at integration layer | broken player read path                         |
@@ -244,6 +244,8 @@ here capturing anything surprising the rollout phase taught.)
 
 **Phase 3 (Markdown rendering safety).** All XSS cases live in one `renderHandoutHtml` unit suite — preview and shared pages share the same function, so component tests add no signal. Pipeline-order comment documents that `rehypeSanitize` must stay before `rehypeHighlight`. The hljs tokenization test documents that `alert(1)` may disappear via span splitting, not sanitizer removal — `<script>` absence is the security oracle.
 
+**Phase 4 (Quality-gate wiring).** `.github/workflows/ci.yml` runs lint → unit → `supabase start` → integration on push/PR to `main` (not `master`). Map `API_URL` from `supabase status -o env` to `SUPABASE_URL` in `.env.test`; values are quoted — strip with `cut -d'"' -f2`. Fail the write step if any extracted var is empty. Cloudflare Pages handles build/deploy separately.
+
 ## 7. What We Deliberately Don't Test
 
 Exclusions agreed during the rollout (Phase 2 interview, Q5). Future
@@ -255,8 +257,8 @@ contributors should respect these unless the underlying assumption changes.
 
 ## 8. Freshness Ledger
 
-- Strategy (§1–§5) last reviewed: 2026-06-04
-- Stack versions last verified: 2026-06-04
+- Strategy (§1–§5) last reviewed: 2026-06-06
+- Stack versions last verified: 2026-06-06
 - AI-native tool references last verified: 2026-06-04
 
 Refresh (`/10x-test-plan --refresh`) when:
