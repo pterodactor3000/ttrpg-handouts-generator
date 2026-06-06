@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 
 const srcAlias = {
   '@': resolve(__dirname, './src'),
+  'astro:middleware': resolve(__dirname, './src/integration/helpers/astro-middleware-stub.ts'),
 };
 
 const sharedConfig = {

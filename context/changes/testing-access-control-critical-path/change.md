@@ -1,9 +1,9 @@
 ---
 change_id: testing-access-control-critical-path
 title: Access-control critical path test coverage
-status: new
+status: implementing
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-06
 archived_at: null
 ---
 
