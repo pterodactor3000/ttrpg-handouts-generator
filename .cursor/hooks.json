@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "command": ".cursor/hooks/lint-on-edit.sh",
+        "matcher": "Write|StrReplace|TabWrite"
+      },
+      {
+        "command": "AI_AGENT=1 bash -c 'FILE=$(jq -r .tool_input.path) && npx vitest related \"$FILE\" --run'",
+        "matcher": "Write|StrReplace|TabWrite"
+      }
+    ]
+  }
+}

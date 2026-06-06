@@ -1,1 +1,11 @@
-npx lint-staged
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{ts,tsx,js,jsx}'
+      run: npx eslint --fix {staged_files} && git add {staged_files}
+    typecheck:
+      run: npx tsc --noEmit
+    test:
+      glob: '*.{ts,tsx}'
+      run: npx vitest related {staged_files} --run
