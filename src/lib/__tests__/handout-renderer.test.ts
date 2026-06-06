@@ -144,7 +144,7 @@ describe('renderHandoutHtml', () => {
       const output = renderHandoutHtml('```js\n<script>alert(1)</script>\n```');
       expect(output).toContain('hljs');
       expect(output).not.toContain('<script>');
-      expect(output).not.toContain('alert(1)');
+      expect(output).not.toContain('alert(1)'); // hljs splits across spans; contiguous string absent by tokenization
     });
   });
 

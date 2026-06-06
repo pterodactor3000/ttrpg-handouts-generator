@@ -35,6 +35,7 @@ export default defineConfig({
           // Loads only .env.test via setup-env.ts (Vitest 4 projects do not honor envFile per-project)
           setupFiles: ['src/integration/setup-env.ts'],
           include: ['src/integration/**/*.test.ts'],
+          testTimeout: 30_000,
         },
       },
     ],

@@ -175,6 +175,8 @@ describe('share token read (integration)', () => {
 
     const { data, error } = await querySharedHandout(queryToken);
 
+    // PGRST116: anon_select_shared policy requires share_token IS NOT NULL;
+    // also unreachable via SQL = NULL semantics (= NULL never matches).
     expect(error?.code).toBe('PGRST116');
     expect(data).toBeNull();
   });

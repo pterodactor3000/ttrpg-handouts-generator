@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx astro sync
+
+      - run: npm run lint
+
+      - name: Run unit tests
+        run: npm test -- --project unit
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.104.0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start local Supabase
+        run: npx supabase start
+
+      - name: Write .env.test
+        run: |
+          STATUS=$(npx supabase status -o env)
+          SUPABASE_URL=$(echo "$STATUS" | grep '^SUPABASE_URL=' | cut -d= -f2-)
+          ANON_KEY=$(echo "$STATUS" | grep '^ANON_KEY=' | cut -d= -f2-)
+          SERVICE_ROLE_KEY=$(echo "$STATUS" | grep '^SERVICE_ROLE_KEY=' | cut -d= -f2-)
+          printf 'SUPABASE_URL=%s\nSUPABASE_ANON_KEY=%s\nSUPABASE_SERVICE_ROLE_KEY=%s\n' \
+            "$SUPABASE_URL" "$ANON_KEY" "$SERVICE_ROLE_KEY" > .env.test
+
+      - name: Run integration tests
+        run: npm test -- --project integration
+
+      - name: Stop Supabase
+        if: always()
+        run: npx supabase stop

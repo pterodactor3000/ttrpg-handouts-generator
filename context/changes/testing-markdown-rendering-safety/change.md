@@ -1,7 +1,7 @@
 ---
 change_id: testing-markdown-rendering-safety
 title: Markdown rendering safety tests (test-plan Phase 3)
-status: implemented
+status: impl_reviewed
 created: 2026-06-06
 updated: 2026-06-06
 archived_at: null

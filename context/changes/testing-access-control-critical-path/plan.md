@@ -153,6 +153,8 @@ Add an integration suite that proves the anonymous share-token read contract: pu
 
 ### Changes Required
 
+> Note: `src/integration/helpers/env.ts` (shared `requireEnv`) was introduced as a Phase 1 impl-review triage fix and is used by this suite. See Phase 1 Changes Required §2 addendum.
+
 #### 1. New share-token read integration suite
 
 **File**: `src/integration/share/share-token-read.integration.test.ts`
