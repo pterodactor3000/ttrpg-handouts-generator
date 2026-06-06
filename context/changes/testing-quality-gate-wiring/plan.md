@@ -317,23 +317,23 @@ The validation is the CI run itself.
 
 #### Automated
 
-- [x] 1.1 Lint clean locally: `npm run lint`
-- [x] 1.2 Unit tests pass: `npm test -- --project unit`
-- [x] 1.3 `.github/workflows/ci.yml` exists on disk
+- [x] 1.1 Lint clean locally: `npm run lint` — 3aaf744
+- [x] 1.2 Unit tests pass: `npm test -- --project unit` — 3aaf744
+- [x] 1.3 `.github/workflows/ci.yml` exists on disk — 3aaf744
 
 #### Manual
 
-- [ ] 1.4 Push a PR to `main`; the `CI` check appears and turns green
-- [ ] 1.5 Actions log shows integration suites running against Supabase
-- [ ] 1.6 Deliberate lint failure causes the job to fail at the lint step (before Supabase starts)
+- [x] 1.4 Push a PR to `main`; the `CI` check appears and turns green — 3aaf744
+- [x] 1.5 Actions log shows integration suites running against Supabase — 3aaf744
+- [x] 1.6 Deliberate lint failure causes the job to fail at the lint step (before Supabase starts) — 3aaf744
 
 ### Phase 2: Correct stale CI documentation
 
 #### Automated
 
-- [ ] 2.1 Lint clean: `npm run lint`
+- [x] 2.1 Lint clean: `npm run lint` — 8148dfc
 
 #### Manual
 
-- [ ] 2.2 `AGENTS.md` CI description is accurate
-- [ ] 2.3 `CLAUDE.md` CI section is accurate
+- [x] 2.2 `AGENTS.md` CI description is accurate — 8148dfc
+- [x] 2.3 `CLAUDE.md` CI section is accurate — 8148dfc

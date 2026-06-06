@@ -1,7 +1,7 @@
 ---
 change_id: testing-quality-gate-wiring
 title: Wire unit and integration test suite into CI quality gate
-status: implementing
+status: implemented
 created: 2026-06-06
 updated: 2026-06-06
 archived_at: null
