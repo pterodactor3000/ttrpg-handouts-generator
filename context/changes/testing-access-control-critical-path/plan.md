@@ -251,10 +251,10 @@ Run only Phase 2 (this change): `npm test -- --project integration src/integrati
 
 #### Automated
 
-- [x] 2.1 All share-token integration tests pass: `npm test -- --project integration`
-- [x] 2.2 All Phase 1 and existing integration tests still pass
-- [x] 2.3 Lint clean: `npm run lint`
+- [x] 2.1 All share-token integration tests pass: `npm test -- --project integration` — b3505cd
+- [x] 2.2 All Phase 1 and existing integration tests still pass — b3505cd
+- [x] 2.3 Lint clean: `npm run lint` — b3505cd
 
 #### Manual
 
-- [x] 2.4 Archived-link-permanence test comment explicitly states the fixture is admin-inserted (no app-level archive endpoint)
+- [x] 2.4 Archived-link-permanence test comment explicitly states the fixture is admin-inserted (no app-level archive endpoint) — b3505cd
