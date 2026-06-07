@@ -1,5 +1,6 @@
 ---
 import StatusBadge from '@/components/atoms/StatusBadge.astro';
+import CopyLinkButton from '@/components/atoms/CopyLinkButton';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import type { HandoutListItem } from '@/lib/handout-list';
 
@@ -38,10 +39,17 @@ const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
     <p class="mb-3 text-xs text-white/50">{backgroundConfig.label}</p>
     {
       handout.tags.length > 0 && (
-        <div class="flex flex-wrap gap-2">
+        <div class="mb-3 flex flex-wrap gap-2">
           {handout.tags.map((tag) => (
             <span class="rounded-full bg-white/10 px-3 py-1 text-sm text-white">{tag}</span>
           ))}
+        </div>
+      )
+    }
+    {
+      handout.share_token && (
+        <div class="flex justify-end border-t border-white/10 pt-3">
+          <CopyLinkButton shareToken={handout.share_token} client:idle />
         </div>
       )
     }

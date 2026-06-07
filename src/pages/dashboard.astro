@@ -11,6 +11,7 @@ const supabase = createClient(Astro.request.headers, Astro.cookies);
 let isConfigured = true;
 let hasLoadError = false;
 let activeHandouts: HandoutListItem[] = [];
+let archivedHandouts: HandoutListItem[] = [];
 
 if (!supabase) {
   isConfigured = false;
@@ -25,8 +26,9 @@ if (!supabase) {
     hasLoadError = true;
   } else {
     const handouts = data as HandoutListItem[];
-    const { active } = partitionHandouts(handouts);
+    const { active, archived } = partitionHandouts(handouts);
     activeHandouts = active;
+    archivedHandouts = archived;
   }
 }
 ---
@@ -89,6 +91,8 @@ if (!supabase) {
                 </a>
               </div>
             </HandoutList>
+
+            {archivedHandouts.length > 0 && <HandoutList heading="Archived" handouts={archivedHandouts} />}
           </>
         )
       }
