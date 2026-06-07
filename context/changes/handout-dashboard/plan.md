@@ -286,17 +286,17 @@ None. No schema, RLS, or migration changes — F-01 and S-01 already provide eve
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes on all new/changed files
-- [x] 1.2 `npm run build` succeeds with no type errors
-- [x] 1.3 `npx prettier --check .` passes (no formatting drift)
+- [x] 1.1 `npm run lint` passes on all new/changed files — e251dfa
+- [x] 1.2 `npm run build` succeeds with no type errors — e251dfa
+- [x] 1.3 `npx prettier --check .` passes (no formatting drift) — e251dfa
 
 #### Manual
 
-- [x] 1.4 Active section shows draft + published handouts, newest first
-- [x] 1.5 Published title links to `/share/[token]`; draft title is plain text
-- [x] 1.6 Card shows correct gradient swatch, status badge, and tag chips (no tag row when empty)
-- [x] 1.7 Empty active list shows "Create your first handout" CTA → `/handouts/new`
-- [x] 1.8 Signed-out `/dashboard` redirects to `/auth/signin`
+- [x] 1.4 Active section shows draft + published handouts, newest first — e251dfa
+- [x] 1.5 Published title links to `/share/[token]`; draft title is plain text — e251dfa
+- [x] 1.6 Card shows correct gradient swatch, status badge, and tag chips (no tag row when empty) — e251dfa
+- [x] 1.7 Empty active list shows "Create your first handout" CTA → `/handouts/new` — e251dfa
+- [x] 1.8 Signed-out `/dashboard` redirects to `/auth/signin` — e251dfa
 
 ### Phase 2: Archived Section & Copy-Link Island
 
