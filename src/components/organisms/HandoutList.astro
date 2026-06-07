@@ -1,0 +1,26 @@
+---
+import HandoutCard from '@/components/molecules/HandoutCard.astro';
+import type { HandoutListItem } from '@/lib/handout-list';
+
+interface Props {
+  heading: string;
+  handouts: HandoutListItem[];
+}
+
+const { heading, handouts } = Astro.props;
+---
+
+<section class="mt-8">
+  <h2 class="mb-4 text-xl font-semibold text-white">{heading}</h2>
+  {
+    handouts.length > 0 ? (
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {handouts.map((handout) => (
+          <HandoutCard handout={handout} />
+        ))}
+      </div>
+    ) : (
+      <slot />
+    )
+  }
+</section>

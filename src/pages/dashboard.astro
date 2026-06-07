@@ -1,35 +1,97 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import HandoutList from '@/components/organisms/HandoutList.astro';
+import { createClient } from '@/lib/supabase';
+import { partitionHandouts, type HandoutListItem } from '@/lib/handout-list';
 
 const { user } = Astro.locals;
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let isConfigured = true;
+let hasLoadError = false;
+let activeHandouts: HandoutListItem[] = [];
+
+if (!supabase) {
+  isConfigured = false;
+} else {
+  const { data, error } = await supabase
+    .from('handouts')
+    .select('id, title, tags, status, background_category, share_token, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('DB error loading handouts:', error);
+    hasLoadError = true;
+  } else {
+    const handouts = data as HandoutListItem[];
+    const { active } = partitionHandouts(handouts);
+    activeHandouts = active;
+  }
+}
 ---
 
 <Layout title="Dashboard">
-  <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
-    <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
-      <h1 class="mb-4 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
-        Dashboard
-      </h1>
-      <p class="text-blue-100/80">
-        Welcome, <span class="font-semibold text-white">{user?.email}</span>
-      </p>
-      <p class="mt-2 text-sm text-blue-100/50">What would you like to create today?</p>
-      <div class="mt-6 flex flex-col items-center gap-3">
-        <a
-          href="/handouts/new"
-          class="w-full max-w-xs rounded-lg border border-purple-400/30 bg-purple-500/20 px-4 py-3 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
-        >
-          + New handout
-        </a>
-        <form method="POST" action="/api/auth/signout" class="w-full max-w-xs">
-          <button
-            type="submit"
-            class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
-          >
-            Sign out
-          </button>
-        </form>
-      </div>
+  <div class="bg-cosmic min-h-screen p-4 md:p-8">
+    <div class="mx-auto w-full max-w-6xl">
+      {
+        !isConfigured ? (
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
+            <h1 class="mb-3 text-2xl font-bold">Dashboard temporarily unavailable</h1>
+            <p class="text-sm text-white/70">Please try again later.</p>
+          </div>
+        ) : hasLoadError ? (
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
+            <h1 class="mb-3 text-2xl font-bold">Could not load handouts</h1>
+            <p class="text-sm text-white/70">
+              Something went wrong while loading your handouts. Please try again later.
+            </p>
+          </div>
+        ) : (
+          <>
+            <header class="rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 class="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
+                    Dashboard
+                  </h1>
+                  <p class="mt-1 text-blue-100/80">
+                    Welcome, <span class="font-semibold text-white">{user?.email}</span>
+                  </p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <a
+                    href="/handouts/new"
+                    class="rounded-lg border border-purple-400/30 bg-purple-500/20 px-4 py-2 text-center text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
+                  >
+                    + New handout
+                  </a>
+                  <form method="POST" action="/api/auth/signout">
+                    <button
+                      type="submit"
+                      class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20 sm:w-auto"
+                    >
+                      Sign out
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </header>
+
+            <HandoutList heading="Your handouts" handouts={activeHandouts}>
+              <div class="rounded-2xl border border-dashed border-white/20 bg-white/5 p-8 text-center text-white">
+                <p class="text-blue-100/80">You have not created any handouts yet.</p>
+                <a
+                  href="/handouts/new"
+                  class="mt-4 inline-block rounded-lg border border-purple-400/30 bg-purple-500/20 px-6 py-3 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
+                >
+                  Create your first handout
+                </a>
+              </div>
+            </HandoutList>
+          </>
+        )
+      }
     </div>
   </div>
 </Layout>

@@ -1,0 +1,49 @@
+---
+import StatusBadge from '@/components/atoms/StatusBadge.astro';
+import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
+import type { HandoutListItem } from '@/lib/handout-list';
+
+interface Props {
+  handout: HandoutListItem;
+}
+
+const { handout } = Astro.props;
+const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
+---
+
+<article class="overflow-hidden rounded-xl border border-white/10 bg-white/10 backdrop-blur-xl">
+  <div
+    class="h-12 w-full"
+    style={`background: ${backgroundConfig.cssBackground}`}
+    title={backgroundConfig.label}
+    aria-hidden="true"
+  >
+  </div>
+  <div class="p-4">
+    <div class="mb-2 flex items-start justify-between gap-2">
+      {
+        handout.share_token ? (
+          <a
+            href={`/share/${handout.share_token}`}
+            class="text-lg font-semibold text-white transition-colors hover:text-purple-200"
+          >
+            {handout.title}
+          </a>
+        ) : (
+          <h3 class="text-lg font-semibold text-white">{handout.title}</h3>
+        )
+      }
+      <StatusBadge status={handout.status} />
+    </div>
+    <p class="mb-3 text-xs text-white/50">{backgroundConfig.label}</p>
+    {
+      handout.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {handout.tags.map((tag) => (
+            <span class="rounded-full bg-white/10 px-3 py-1 text-sm text-white">{tag}</span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</article>
