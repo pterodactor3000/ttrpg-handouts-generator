@@ -96,7 +96,7 @@ Fetch the GM's handouts in `dashboard.astro`, add the pure partition/sort helper
 
 **Intent**: A small presentational pill conveying a handout's status, used inside cards. No logic beyond mapping status → label + color classes.
 
-**Contract**: `Astro.props` = `{ status: HandoutStatus }`. Renders a span with `cn()`-merged classes: draft → amber tones, published → green tones, archived → muted/gray tones, each with a human label ("Draft" / "Published" / "Archived"). Keep palette consistent with the existing dark glass dashboard aesthetic.
+**Contract**: `Astro.props` = `{ status: HandoutStatus }`. Renders a span with merged status classes: draft → amber tones, published → green tones, archived → muted/gray tones, each with a human label ("Draft" / "Published" / "Archived"). Keep palette consistent with the existing dark glass dashboard aesthetic. In `.astro` files, `class:list` is acceptable instead of `cn()`.
 
 #### 3. Handout card molecule
 
