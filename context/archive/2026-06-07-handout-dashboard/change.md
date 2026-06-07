@@ -1,9 +1,10 @@
 ---
 change_id: handout-dashboard
 title: Handout dashboard list view
-status: impl_reviewed
+status: archived
 created: 2026-06-07
 updated: 2026-06-07
+archived_at: 2026-06-07T16:52:45Z
 ---
 
 ## Notes
