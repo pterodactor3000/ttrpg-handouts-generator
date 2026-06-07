@@ -317,13 +317,13 @@ None. No schema, RLS, or migration changes — F-01 and S-01 already provide eve
 
 #### Automated
 
-- [x] 3.1 `npm test -- --project unit` passes including the two new test files
-- [x] 3.2 `npm run lint` passes
-- [x] 3.3 `npm run build` succeeds
-- [x] 3.4 `npx prettier --check .` passes (no formatting drift)
+- [x] 3.1 `npm test -- --project unit` passes including the two new test files — 5aa8201
+- [x] 3.2 `npm run lint` passes — 5aa8201
+- [x] 3.3 `npm run build` succeeds — 5aa8201
+- [x] 3.4 `npx prettier --check .` passes (no formatting drift) — 5aa8201
 
 #### Manual
 
-- [x] 3.5 At 375px the dashboard is single-column with no horizontal scroll; cards/chips wrap
-- [x] 3.6 At desktop width the grid shows multiple aligned columns
-- [x] 3.7 Full flow re-checked: draft → Active (Draft, non-clickable); publish → Published, clickable, copy works
+- [x] 3.5 At 375px the dashboard is single-column with no horizontal scroll; cards/chips wrap — 5aa8201
+- [x] 3.6 At desktop width the grid shows multiple aligned columns — 5aa8201
+- [x] 3.7 Full flow re-checked: draft → Active (Draft, non-clickable); publish → Published, clickable, copy works — 5aa8201
