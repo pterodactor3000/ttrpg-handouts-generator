@@ -12,7 +12,7 @@ const { handout } = Astro.props;
 const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
 ---
 
-<article class="overflow-hidden rounded-xl border border-white/10 bg-white/10 backdrop-blur-xl">
+<article class="w-full min-w-0 overflow-hidden rounded-xl border border-white/10 bg-white/10 backdrop-blur-xl">
   <div
     class="h-12 w-full"
     style={`background: ${backgroundConfig.cssBackground}`}
@@ -26,12 +26,12 @@ const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
         handout.share_token ? (
           <a
             href={`/share/${handout.share_token}`}
-            class="text-lg font-semibold text-white transition-colors hover:text-purple-200"
+            class="min-w-0 flex-1 text-lg font-semibold break-words text-white transition-colors hover:text-purple-200"
           >
             {handout.title}
           </a>
         ) : (
-          <h3 class="text-lg font-semibold text-white">{handout.title}</h3>
+          <h3 class="min-w-0 flex-1 text-lg font-semibold break-words text-white">{handout.title}</h3>
         )
       }
       <StatusBadge status={handout.status} />
