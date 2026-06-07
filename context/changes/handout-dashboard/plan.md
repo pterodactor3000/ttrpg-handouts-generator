@@ -302,16 +302,16 @@ None. No schema, RLS, or migration changes — F-01 and S-01 already provide eve
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes
-- [x] 2.2 `npm run build` succeeds with no type errors
+- [x] 2.1 `npm run lint` passes — ba2171e
+- [x] 2.2 `npm run build` succeeds with no type errors — ba2171e
 
 #### Manual
 
-- [x] 2.3 Published card copy button copies `/share/<token>` and toggles "Copied!"
-- [x] 2.4 Draft card shows no copy button
-- [x] 2.5 Archived section is not rendered when there are no archived rows
-- [x] 2.6 A manually-archived row appears in Archived with badge, share link, and working copy button
-- [x] 2.7 Card-title navigation still works (no nested-anchor breakage)
+- [x] 2.3 Published card copy button copies `/share/<token>` and toggles "Copied!" — ba2171e
+- [x] 2.4 Draft card shows no copy button — ba2171e
+- [x] 2.5 Archived section is not rendered when there are no archived rows — ba2171e
+- [x] 2.6 A manually-archived row appears in Archived with badge, share link, and working copy button — ba2171e
+- [x] 2.7 Card-title navigation still works (no nested-anchor breakage) — ba2171e
 
 ### Phase 3: Responsive Polish & Tests
 
