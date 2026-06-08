@@ -24,5 +24,6 @@
       "sideBar.border": "#102a44",
       "sideBar.foreground": "#8BADC1"
     }
-  }
+  },
+  "editor.tabSize": 2
 }

@@ -203,7 +203,7 @@ const HandoutEditor = () => {
 
             <div className="flex gap-3">
               <Button onClick={() => void handleSave()} disabled={isSaving || !!shareToken} className="flex-1">
-                {isSaving ? 'Saving…' : handoutId ? 'Save changes' : 'Save draft'}
+                {isSaving ? 'Saving…' : handoutId ? 'Save changes' : 'Save handout'}
               </Button>
               <Button
                 variant="outline"
