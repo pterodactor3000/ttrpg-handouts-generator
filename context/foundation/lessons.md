@@ -57,3 +57,10 @@
 - **Problem**: PostgREST error messages routinely contain table names, column names, constraint names, and query fragments. Forwarding them directly to the HTTP response leaks schema information useful to an attacker.
 - **Rule**: always log the raw error server-side (`console.error('DB error:', error)`) and return a generic, user-facing message (e.g. `'Failed to save handout'`) in the HTTP response body.
 - **Applies to**: all API routes
+
+## Astro Atoms May Use class:list Instead of cn()
+
+- **Context**: src/components/atoms/*.astro
+- **Problem**: Plans or reviews may flag Astro atoms for not using `cn()` when `class:list` is the idiomatic Astro directive for conditional/merged classes.
+- **Rule**: In `.astro` components, prefer `class:list` for conditional classes; reserve `cn()` from `@/lib/utils` for TSX/React components.
+- **Applies to**: all Astro components

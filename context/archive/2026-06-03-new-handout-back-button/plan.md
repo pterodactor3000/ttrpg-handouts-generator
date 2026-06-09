@@ -87,7 +87,7 @@ Add the back-to-dashboard control and the unsaved-edits confirmation flow inside
 
 - On a fresh `/handouts/new`, clicking "Back to dashboard" navigates straight to `/dashboard` with no prompt.
 - After typing a title and/or markdown, clicking back opens the confirmation dialog; Cancel keeps the page with all entered text intact; Discard lands on `/dashboard`.
-- After clicking "Save draft" and making no further edits, clicking back navigates with no prompt.
+- After clicking "Save handout" and making no further edits, clicking back navigates with no prompt.
 - The control is keyboard-focusable, clearly labeled, and visible above the title field.
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause for manual confirmation that the manual testing succeeded before proceeding to Phase 2.
@@ -161,7 +161,7 @@ Add automated coverage for the back control's clean/dirty/cancel/confirm interac
 
 1. From `/dashboard`, click "+ New handout", then immediately click "Back to dashboard" — expect to land on `/dashboard` with no prompt.
 2. Click "+ New handout", type a title and some markdown, click back — expect the confirmation dialog; click Cancel and verify text is intact; click back again and Discard, verify you land on `/dashboard`.
-3. Click "+ New handout", type content, click "Save draft", then click back — expect no prompt (form is clean relative to the saved state).
+3. Click "+ New handout", type content, click "Save handout", then click back — expect no prompt (form is clean relative to the saved state).
 4. Tab to the back control with the keyboard and activate it with Enter/Space.
 
 ## Performance Considerations

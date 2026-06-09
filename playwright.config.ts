@@ -14,6 +14,7 @@ export default defineConfig({
   },
 
   projects: [
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
     {
       name: 'chromium',
       use: {
@@ -21,15 +22,9 @@ export default defineConfig({
         launchOptions: {
           executablePath: '/usr/bin/chromium',
         },
+        storageState: 'e2e/auth.json',
       },
-    },
-    {
-      name: 'vivaldi',
-      use: {
-        launchOptions: {
-          executablePath: '/usr/bin/vivaldi-stable',
-        },
-      },
+      dependencies: ['setup'],
     },
   ],
 

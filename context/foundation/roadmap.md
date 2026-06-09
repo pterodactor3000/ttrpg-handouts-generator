@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-03
+updated: 2026-06-07
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 prd_version: 1
@@ -33,7 +33,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | ---- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------- | -------- |
 | F-01 | `handout-schema`                     | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs                                                                                        | —             | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | done     |
 | S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode                                                        | F-01          | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011  | done     |
-| S-02 | `handout-dashboard`                  | view a list of their handouts (draft and published) with titles and tags                                                                                                                                      | S-01          | FR-002                                                         | proposed |
+| S-02 | `handout-dashboard`                  | view a list of their handouts (draft and published) with titles and tags                                                                                                                                      | S-01          | FR-002                                                         | done     |
 | S-03 | `edit-handout`                       | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link)                                                        | S-02          | FR-007                                                         | proposed |
 | S-04 | `delete-handout`                     | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players)                                                                                                   | S-02          | FR-008                                                         | proposed |
 | S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | ready    |
@@ -103,7 +103,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Straightforward list view; the main sequencing reason is that S-03 (edit) and S-04 (delete) both need a navigation surface into existing handouts.
-- **Status:** proposed
+- **Status:** done
 
 ### S-03: Edit handout
 
@@ -253,3 +253,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-01: GM can create a new handout (markdown text + background category + tags), see a rendered preview composited over the chosen background image, and share it via a permanent link that players can open on any device in read-only mode without logging in.** — Archived 2026-05-31 → `context/archive/2026-05-30-first-handout-creation-and-sharing/`. Lesson: —.
 - **S-06: GM can return from the new-handout creation view to the dashboard via a clear back control, without having to submit or discard through the browser back button.** — Archived 2026-06-03 → `context/archive/2026-06-03-new-handout-back-button/`. Lesson: —.
 - **S-08: Visitor (unauthenticated) sees the app name on the landing page and a clear call-to-action that starts the login flow; no login is required to view the page itself.** — Archived 2026-06-03 → `context/archive/2026-06-03-landing-page/`. Lesson: —.
+- **S-02: GM can view a list of all their handouts (draft and published) with titles and tags, and navigate to create a new handout or open an existing one.** — Archived 2026-06-07 → `context/archive/2026-06-07-handout-dashboard/`. Lesson: —.
