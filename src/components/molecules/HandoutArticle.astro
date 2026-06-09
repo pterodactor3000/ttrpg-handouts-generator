@@ -1,0 +1,18 @@
+---
+interface Props {
+  title: string;
+  html: string;
+  class?: string;
+}
+
+const { title, html, class: className } = Astro.props;
+---
+
+<article class:list={['handout-article mx-auto w-full max-w-2xl p-4 md:p-8', className]}>
+  <h1 class="mb-6 text-3xl font-bold break-words">{title}</h1>
+  <div class="prose prose-invert max-w-none break-words">
+    {/* renderHandoutHtml sanitizes via rehype-sanitize — the XSS boundary (see Phase 1 tests) */}
+    {/* eslint-disable-next-line astro/no-set-html-directive */}
+    <Fragment set:html={html} />
+  </div>
+</article>

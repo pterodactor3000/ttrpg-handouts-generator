@@ -378,29 +378,29 @@ No data or schema changes. `bg-cosmic` is redefined in place (not removed), so a
 
 #### Automated
 
-- [x] 1.1 Linting passes: `npm run lint`
-- [x] 1.2 Unit tests pass: `npm test -- --project unit`
-- [x] 1.3 Build succeeds: `npm run build`
+- [x] 1.1 Linting passes: `npm run lint` — 8204595
+- [x] 1.2 Unit tests pass: `npm test -- --project unit` — 8204595
+- [x] 1.3 Build succeeds: `npm run build` — 8204595
 
 #### Manual
 
-- [x] 1.4 `bg-cosmic` pages render warm-dark, not navy
-- [x] 1.5 Standalone `.loader` renders masked version + fallback when mask disabled
-- [x] 1.6 shadcn Button/Dialog defaults pick up the new palette
+- [x] 1.4 `bg-cosmic` pages render warm-dark, not navy — 8204595
+- [x] 1.5 Standalone `.loader` renders masked version + fallback when mask disabled — 8204595
+- [x] 1.6 shadcn Button/Dialog defaults pick up the new palette — 8204595
 
 ### Phase 2: Shared content component & prose parity
 
 #### Automated
 
-- [ ] 2.1 Linting passes: `npm run lint`
-- [ ] 2.2 Unit tests pass: `npm test -- --project unit`
-- [ ] 2.3 Build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint`
+- [x] 2.2 Unit tests pass: `npm test -- --project unit`
+- [x] 2.3 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.4 Shared link renders identically to editor preview for same content
-- [ ] 2.5 Markdown elements render with warm accents, legible over each background
-- [ ] 2.6 No XSS regression — rendered HTML still sanitized
+- [x] 2.4 Shared link renders identically to editor preview for same content
+- [x] 2.5 Markdown elements render with warm accents, legible over each background
+- [x] 2.6 No XSS regression — rendered HTML still sanitized
 
 ### Phase 3: Dashboard restyle
 

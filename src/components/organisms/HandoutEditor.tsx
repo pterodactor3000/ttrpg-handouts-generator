@@ -235,24 +235,24 @@ const HandoutEditor = () => {
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-white/80">Preview</span>
             <div
-              className="min-h-64 rounded-lg"
+              className="flex min-h-64 justify-center rounded-lg p-4"
               style={{
-                backgroundColor: '#1a1a2e',
+                backgroundColor: 'var(--palette-preview-fallback)',
                 backgroundImage: previewBackground,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
-              <div className="rounded-lg bg-black/40 p-4 backdrop-blur-sm">
+              <article className={cn('handout-article w-full max-w-2xl p-4 md:p-8')}>
                 {markdownContent ? (
                   <div
-                    className="prose prose-invert prose-sm max-w-none"
+                    className="prose prose-invert max-w-none break-words"
                     dangerouslySetInnerHTML={{ __html: renderedPreview }}
                   />
                 ) : (
                   <p className="text-sm text-white/30 italic">Your rendered markdown will appear here…</p>
                 )}
-              </div>
+              </article>
             </div>
           </div>
         </div>
