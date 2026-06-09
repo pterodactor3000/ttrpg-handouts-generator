@@ -406,29 +406,29 @@ No data or schema changes. `bg-cosmic` is redefined in place (not removed), so a
 
 #### Automated
 
-- [x] 3.1 Linting passes: `npm run lint`
-- [x] 3.2 Unit tests pass: `npm test -- --project unit`
-- [x] 3.3 Build succeeds: `npm run build`
+- [x] 3.1 Linting passes: `npm run lint` — 409b398
+- [x] 3.2 Unit tests pass: `npm test -- --project unit` — 409b398
+- [x] 3.3 Build succeeds: `npm run build` — 409b398
 
 #### Manual
 
-- [x] 3.4 Dashboard (populated/empty/error) fully on-palette
-- [x] 3.5 Status badges remain distinguishable
-- [x] 3.6 Layout holds at mobile and desktop widths
+- [x] 3.4 Dashboard (populated/empty/error) fully on-palette — 409b398
+- [x] 3.5 Status badges remain distinguishable — 409b398
+- [x] 3.6 Layout holds at mobile and desktop widths — 409b398
 
 ### Phase 4: Editor restyle
 
 #### Automated
 
-- [ ] 4.1 Linting passes: `npm run lint`
-- [ ] 4.2 Unit tests pass: `npm test -- --project unit`
-- [ ] 4.3 Build succeeds: `npm run build`
+- [x] 4.1 Linting passes: `npm run lint`
+- [x] 4.2 Unit tests pass: `npm test -- --project unit`
+- [x] 4.3 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 4.4 Editor shell matches dashboard background
-- [ ] 4.5 Picker, chips, inputs, and both dialogs on-palette and legible
-- [ ] 4.6 Inputs show a visible palette focus ring
+- [x] 4.4 Editor shell matches dashboard background
+- [x] 4.5 Picker, chips, inputs, and both dialogs on-palette and legible
+- [x] 4.6 Inputs show a visible palette focus ring
 
 ### Phase 5: Loader wiring & cross-screen QA
 

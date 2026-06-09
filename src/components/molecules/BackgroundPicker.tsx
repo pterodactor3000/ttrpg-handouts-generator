@@ -20,8 +20,8 @@ const BackgroundPicker = ({ value, onChange }: BackgroundPickerProps) => {
           className={cn(
             'flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-lg border-2 p-3 transition-all',
             value === option
-              ? 'border-white ring-2 ring-white ring-offset-2 ring-offset-gray-950'
-              : 'border-white/20 hover:border-white/50',
+              ? 'border-brand-accent-light ring-brand-accent-light ring-offset-background ring-2 ring-offset-2'
+              : 'border-surface hover:border-brand-accent-light/50',
           )}
           style={{ background: BACKGROUND_CONFIGS[option].cssBackground }}
         >

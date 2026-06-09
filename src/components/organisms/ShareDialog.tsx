@@ -42,12 +42,10 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton className="border-white/10 bg-gray-900 text-white sm:max-w-md">
+      <DialogContent showCloseButton className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle id="share-dialog-title" className="text-white">
-            Handout published!
-          </DialogTitle>
-          <DialogDescription className="text-white/60">
+          <DialogTitle id="share-dialog-title">Handout published!</DialogTitle>
+          <DialogDescription>
             Share this link with your players. Anyone with the link can view the handout.
           </DialogDescription>
         </DialogHeader>
@@ -56,7 +54,7 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
           type="text"
           readOnly
           value={shareUrl}
-          className="w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/80 outline-none"
+          className="border-surface bg-surface text-muted-foreground w-full rounded-md border px-3 py-2 text-sm outline-none"
           onFocus={(event) => {
             event.target.select();
           }}
@@ -67,7 +65,8 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
             onClick={() => void handleCopyLink()}
             className={cn(
               'flex-1 transition-colors',
-              copyButtonLabel === 'Copied!' && 'border-green-500/50 bg-green-700/40 text-green-200',
+              copyButtonLabel === 'Copied!' &&
+                'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
             )}
           >
             {copyButtonLabel}
