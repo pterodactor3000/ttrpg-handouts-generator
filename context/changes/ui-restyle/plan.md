@@ -420,28 +420,28 @@ No data or schema changes. `bg-cosmic` is redefined in place (not removed), so a
 
 #### Automated
 
-- [x] 4.1 Linting passes: `npm run lint`
-- [x] 4.2 Unit tests pass: `npm test -- --project unit`
-- [x] 4.3 Build succeeds: `npm run build`
+- [x] 4.1 Linting passes: `npm run lint` — 2433d5f
+- [x] 4.2 Unit tests pass: `npm test -- --project unit` — 2433d5f
+- [x] 4.3 Build succeeds: `npm run build` — 2433d5f
 
 #### Manual
 
-- [x] 4.4 Editor shell matches dashboard background
-- [x] 4.5 Picker, chips, inputs, and both dialogs on-palette and legible
-- [x] 4.6 Inputs show a visible palette focus ring
+- [x] 4.4 Editor shell matches dashboard background — 2433d5f
+- [x] 4.5 Picker, chips, inputs, and both dialogs on-palette and legible — 2433d5f
+- [x] 4.6 Inputs show a visible palette focus ring — 2433d5f
 
 ### Phase 5: Loader wiring & cross-screen QA
 
 #### Automated
 
-- [ ] 5.1 Linting passes: `npm run lint`
-- [ ] 5.2 Unit tests pass: `npm test -- --project unit`
-- [ ] 5.3 Integration tests pass: `npm test -- --project integration`
-- [ ] 5.4 Build succeeds: `npm run build`
+- [x] 5.1 Linting passes: `npm run lint`
+- [x] 5.2 Unit tests pass: `npm test -- --project unit`
+- [x] 5.3 Integration tests pass: `npm test -- --project integration`
+- [x] 5.4 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 5.5 Same loader on editor save/publish, auth submit, and clipboard copy
-- [ ] 5.6 Loader masked version + fallback both verified
-- [ ] 5.7 All four screens consistent and on-palette at mobile and desktop
-- [ ] 5.8 No regression in S-01 create→preview→share flow
+- [x] 5.5 Same loader on editor save/publish, auth submit, and clipboard copy
+- [x] 5.6 Loader masked version + fallback both verified
+- [x] 5.7 All four screens consistent and on-palette at mobile and desktop
+- [x] 5.8 No regression in S-01 create→preview→share flow

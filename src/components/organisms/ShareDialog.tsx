@@ -18,8 +18,10 @@ interface ShareDialogProps {
 
 const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy link');
+  const [isCopying, setIsCopying] = useState(false);
 
   const handleCopyLink = async () => {
+    setIsCopying(true);
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopyButtonLabel('Copied!');
@@ -31,6 +33,8 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
       setTimeout(() => {
         setCopyButtonLabel('Copy link');
       }, 2000);
+    } finally {
+      setIsCopying(false);
     }
   };
 
@@ -63,13 +67,14 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
         <DialogFooter className="gap-3 sm:justify-stretch">
           <Button
             onClick={() => void handleCopyLink()}
+            disabled={isCopying}
             className={cn(
               'flex-1 transition-colors',
               copyButtonLabel === 'Copied!' &&
                 'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
             )}
           >
-            {copyButtonLabel}
+            {isCopying ? <span className="loader loader-sm" aria-hidden="true" /> : copyButtonLabel}
           </Button>
           <Button variant="outline" onClick={onClose} className="flex-1">
             Close

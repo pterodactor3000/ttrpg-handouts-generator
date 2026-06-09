@@ -207,7 +207,16 @@ const HandoutEditor = () => {
 
             <div className="flex gap-3">
               <Button onClick={() => void handleSave()} disabled={isSaving || !!shareToken} className="flex-1">
-                {isSaving ? 'Saving…' : handoutId ? 'Save changes' : 'Save handout'}
+                {isSaving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="loader loader-sm" aria-hidden="true" />
+                    Saving…
+                  </span>
+                ) : handoutId ? (
+                  'Save changes'
+                ) : (
+                  'Save handout'
+                )}
               </Button>
               <Button
                 variant="outline"
@@ -215,7 +224,14 @@ const HandoutEditor = () => {
                 disabled={!handoutId || isSaving || isPublishing || !!shareToken}
                 className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
               >
-                {isPublishing ? 'Publishing…' : 'Share'}
+                {isPublishing ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="loader loader-sm" aria-hidden="true" />
+                    Publishing…
+                  </span>
+                ) : (
+                  'Share'
+                )}
               </Button>
             </div>
 
