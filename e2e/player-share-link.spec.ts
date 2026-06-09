@@ -30,7 +30,7 @@ test.describe('Risk #2 — valid share link serves published handout to anonymou
       },
     });
     expect(createResponse.status()).toBe(201);
-    const { id: handoutId } = await createResponse.json();
+    const { id: handoutId } = (await createResponse.json()) as { id: string };
 
     // Publish the handout to mint a share token.
     // data: {} is required — Playwright only sets Content-Type: application/json when a
@@ -38,7 +38,7 @@ test.describe('Risk #2 — valid share link serves published handout to anonymou
     // form submissions (CSRF guard).
     const publishResponse = await page.request.post(`/api/handouts/${handoutId}/publish`, { data: {} });
     expect(publishResponse.status()).toBe(200);
-    const { shareToken } = await publishResponse.json();
+    const { shareToken } = (await publishResponse.json()) as { shareToken: string };
 
     // Anonymous player: new context with no session cookies
     const anonymousContext = await browser.newContext();

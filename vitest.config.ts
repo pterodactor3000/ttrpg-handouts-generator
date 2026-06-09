@@ -3,8 +3,8 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 const srcAlias = {
-  '@': resolve(__dirname, './src'),
   '@/integration': resolve(__dirname, './__tests__/integration'),
+  '@': resolve(__dirname, './src'),
   'astro:middleware': resolve(__dirname, './__tests__/integration/helpers/astro-middleware-stub.ts'),
 };
 
