@@ -33,8 +33,9 @@ const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
       variant="outline"
       onClick={() => void handleCopyLink()}
       className={cn(
-        'border-white/20 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white',
-        copyButtonLabel === 'Copied!' && 'border-green-500/50 bg-green-700/40 text-green-200',
+        'border-surface bg-surface text-muted-foreground hover:bg-accent hover:text-foreground',
+        copyButtonLabel === 'Copied!' &&
+          'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
       )}
     >
       {copyButtonLabel}

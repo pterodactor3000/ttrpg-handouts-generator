@@ -392,29 +392,29 @@ No data or schema changes. `bg-cosmic` is redefined in place (not removed), so a
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 Unit tests pass: `npm test -- --project unit`
-- [x] 2.3 Build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint` — 5831a32
+- [x] 2.2 Unit tests pass: `npm test -- --project unit` — 5831a32
+- [x] 2.3 Build succeeds: `npm run build` — 5831a32
 
 #### Manual
 
-- [x] 2.4 Shared link renders identically to editor preview for same content
-- [x] 2.5 Markdown elements render with warm accents, legible over each background
-- [x] 2.6 No XSS regression — rendered HTML still sanitized
+- [x] 2.4 Shared link renders identically to editor preview for same content — 5831a32
+- [x] 2.5 Markdown elements render with warm accents, legible over each background — 5831a32
+- [x] 2.6 No XSS regression — rendered HTML still sanitized — 5831a32
 
 ### Phase 3: Dashboard restyle
 
 #### Automated
 
-- [ ] 3.1 Linting passes: `npm run lint`
-- [ ] 3.2 Unit tests pass: `npm test -- --project unit`
-- [ ] 3.3 Build succeeds: `npm run build`
+- [x] 3.1 Linting passes: `npm run lint`
+- [x] 3.2 Unit tests pass: `npm test -- --project unit`
+- [x] 3.3 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 3.4 Dashboard (populated/empty/error) fully on-palette
-- [ ] 3.5 Status badges remain distinguishable
-- [ ] 3.6 Layout holds at mobile and desktop widths
+- [x] 3.4 Dashboard (populated/empty/error) fully on-palette
+- [x] 3.5 Status badges remain distinguishable
+- [x] 3.6 Layout holds at mobile and desktop widths
 
 ### Phase 4: Editor restyle
 
