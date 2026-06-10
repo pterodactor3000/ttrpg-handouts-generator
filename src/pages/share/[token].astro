@@ -65,21 +65,23 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
   ) : (
     <Layout title={isConfigured ? 'Handout not found' : 'Sharing unavailable'}>
       <main class="bg-cosmic flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
-        <div class="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
+        <div class="border-surface bg-surface text-foreground mx-auto w-full max-w-md rounded-2xl border p-8 backdrop-blur-xl">
           {isConfigured ? (
             <>
               <h1 class="mb-3 text-2xl font-bold">Handout not found</h1>
-              <p class="text-sm text-white/70">This link may be invalid or the handout has not been shared yet.</p>
+              <p class="text-muted-foreground text-sm">
+                This link may be invalid or the handout has not been shared yet.
+              </p>
             </>
           ) : (
             <>
               <h1 class="mb-3 text-2xl font-bold">Sharing unavailable</h1>
-              <p class="text-sm text-white/70">Sharing is temporarily unavailable. Please try again later.</p>
+              <p class="text-muted-foreground text-sm">Sharing is temporarily unavailable. Please try again later.</p>
             </>
           )}
           <a
             href="/"
-            class="mt-6 inline-block rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+            class="border-surface bg-surface text-foreground hover:bg-accent mt-6 inline-block rounded-lg border px-4 py-2 text-sm transition-colors"
           >
             Back to home
           </a>

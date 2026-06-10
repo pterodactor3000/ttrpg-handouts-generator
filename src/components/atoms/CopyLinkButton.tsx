@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/atoms/button';
 
@@ -9,6 +9,24 @@ interface CopyLinkButtonProps {
 const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy link');
   const [isCopying, setIsCopying] = useState(false);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current !== null) {
+        clearTimeout(resetTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleReset = () => {
+    if (resetTimeoutRef.current !== null) {
+      clearTimeout(resetTimeoutRef.current);
+    }
+    resetTimeoutRef.current = setTimeout(() => {
+      setCopyButtonLabel('Copy link');
+    }, 2000);
+  };
 
   const handleCopyLink = async () => {
     const shareUrl = `${window.location.origin}/share/${shareToken}`;
@@ -17,14 +35,10 @@ const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopyButtonLabel('Copied!');
-      setTimeout(() => {
-        setCopyButtonLabel('Copy link');
-      }, 2000);
+      scheduleReset();
     } catch {
       setCopyButtonLabel('Copy failed');
-      setTimeout(() => {
-        setCopyButtonLabel('Copy link');
-      }, 2000);
+      scheduleReset();
     } finally {
       setIsCopying(false);
     }

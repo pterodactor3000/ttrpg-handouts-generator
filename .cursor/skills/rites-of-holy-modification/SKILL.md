@@ -118,7 +118,24 @@ Plan a comment line: `# <YYYY-MM-DD>: <S-NN> <change-id> — <short reason>`. Bu
 
 ## Step 3 — Plan Linear payload
 
-Reuse the issue template from `/rites-of-roadmap`:
+### Issue title
+
+Use this template:
+
+```
+// [S-NN]::[<change-id>] // feat: <brief one-sentence explanation>
+```
+
+- **`S-NN`** — the new slice's roadmap ID
+- **`<change-id>`** — the slice's Change ID (e.g. `retheme-backgrounds`)
+- **`feat:`** — always `feat` for slices
+- **`<brief one-sentence explanation>`** — condense the Outcome to ≤ ~10 words; human-readable at a glance
+
+Example: `// [S-07]::[per-style-fonts] // feat: per-style fonts and font colors for handouts`
+
+### Description
+
+Reuse the issue description template from `/rites-of-roadmap`:
 
 ```
 **Roadmap ID:** S-NN | **Change ID:** `<change-id>`
@@ -185,7 +202,7 @@ Present the draft. **Stop here.** Do not edit files or call Linear write tools u
 ### Linear
 | Action | Title | Labels | Prerequisite blocks |
 |--------|-------|--------|---------------------|
-| create / skip | … | slice | F-01 → S-NN, … |
+| create / skip | `// [S-NN]::[<change-id>] // feat: <brief explanation>` | slice | F-01 → S-NN, … |
 ```
 
 End with: **Awaiting your approval to write the roadmap and create the Linear issue.** Proceed only after explicit user confirmation.
@@ -207,7 +224,7 @@ Preserve existing formatting, table alignment, and comment style. Do not reorder
 After the roadmap write:
 
 1. Create missing labels if planned (`create_issue_label` for `slice` if needed)
-2. `save_issue` — new slice issue with title = Outcome, team, labels, description
+2. `save_issue` — new slice issue with title = `// [S-NN]::[<change-id>] // feat: <brief explanation>` (from Step 3), team, labels, description
 3. Post audit comment on the created issue
 4. For each direct prerequisite, `save_issue` with `blocks: [<new-linear-id>]`; audit comment each updated prerequisite
 5. If duplicate was detected, skip create and note which existing issue matches

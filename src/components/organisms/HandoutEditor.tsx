@@ -266,6 +266,7 @@ const HandoutEditor = () => {
               }}
             >
               <article className={cn('handout-article w-full max-w-2xl p-4 md:p-8')}>
+                <h1 className="mb-6 text-3xl font-bold break-words">{title || 'Untitled'}</h1>
                 {markdownContent ? (
                   <div
                     className="prose prose-invert max-w-none break-words"
