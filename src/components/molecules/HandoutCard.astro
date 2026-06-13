@@ -12,7 +12,7 @@ const { handout } = Astro.props;
 const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
 ---
 
-<article class="w-full min-w-0 overflow-hidden rounded-xl border border-white/10 bg-white/10 backdrop-blur-xl">
+<article class="border-surface bg-surface w-full min-w-0 overflow-hidden rounded-xl border backdrop-blur-xl">
   <div
     class="h-12 w-full"
     style={`background: ${backgroundConfig.cssBackground}`}
@@ -26,29 +26,29 @@ const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
         handout.share_token ? (
           <a
             href={`/share/${handout.share_token}`}
-            class="min-w-0 flex-1 text-lg font-semibold break-words text-white transition-colors hover:text-purple-200"
+            class="hover:text-brand-accent-light text-foreground min-w-0 flex-1 text-lg font-semibold break-words transition-colors"
           >
             {handout.title}
           </a>
         ) : (
-          <h3 class="min-w-0 flex-1 text-lg font-semibold break-words text-white">{handout.title}</h3>
+          <h3 class="text-foreground min-w-0 flex-1 text-lg font-semibold break-words">{handout.title}</h3>
         )
       }
       <StatusBadge status={handout.status} />
     </div>
-    <p class="mb-3 text-xs text-white/50">{backgroundConfig.label}</p>
+    <p class="text-muted-foreground mb-3 text-xs">{backgroundConfig.label}</p>
     {
       handout.tags.length > 0 && (
         <div class="mb-3 flex flex-wrap gap-2">
           {handout.tags.map((tag) => (
-            <span class="rounded-full bg-white/10 px-3 py-1 text-sm text-white">{tag}</span>
+            <span class="border-surface bg-surface text-foreground rounded-full border px-3 py-1 text-sm">{tag}</span>
           ))}
         </div>
       )
     }
     {
       handout.share_token && (
-        <div class="flex justify-end border-t border-white/10 pt-3">
+        <div class="border-surface flex justify-end border-t pt-3">
           <CopyLinkButton shareToken={handout.share_token} client:idle />
         </div>
       )

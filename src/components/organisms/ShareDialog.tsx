@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/atoms/button';
 import {
@@ -18,36 +18,58 @@ interface ShareDialogProps {
 
 const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy link');
+  const [isCopying, setIsCopying] = useState(false);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current !== null) {
+        clearTimeout(resetTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleReset = () => {
+    if (resetTimeoutRef.current !== null) {
+      clearTimeout(resetTimeoutRef.current);
+    }
+    resetTimeoutRef.current = setTimeout(() => {
+      setCopyButtonLabel('Copy link');
+    }, 2000);
+  };
 
   const handleCopyLink = async () => {
+    setIsCopying(true);
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopyButtonLabel('Copied!');
-      setTimeout(() => {
-        setCopyButtonLabel('Copy link');
-      }, 2000);
+      scheduleReset();
     } catch {
       setCopyButtonLabel('Copy failed');
-      setTimeout(() => {
-        setCopyButtonLabel('Copy link');
-      }, 2000);
+      scheduleReset();
+    } finally {
+      setIsCopying(false);
     }
   };
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
+      if (resetTimeoutRef.current !== null) {
+        clearTimeout(resetTimeoutRef.current);
+        resetTimeoutRef.current = null;
+      }
+      setCopyButtonLabel('Copy link');
+      setIsCopying(false);
       onClose();
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton className="border-white/10 bg-gray-900 text-white sm:max-w-md">
+      <DialogContent showCloseButton className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle id="share-dialog-title" className="text-white">
-            Handout published!
-          </DialogTitle>
-          <DialogDescription className="text-white/60">
+          <DialogTitle id="share-dialog-title">Handout published!</DialogTitle>
+          <DialogDescription>
             Share this link with your players. Anyone with the link can view the handout.
           </DialogDescription>
         </DialogHeader>
@@ -56,7 +78,7 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
           type="text"
           readOnly
           value={shareUrl}
-          className="w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/80 outline-none"
+          className="border-surface bg-surface text-muted-foreground w-full rounded-md border px-3 py-2 text-sm outline-none"
           onFocus={(event) => {
             event.target.select();
           }}
@@ -65,12 +87,14 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
         <DialogFooter className="gap-3 sm:justify-stretch">
           <Button
             onClick={() => void handleCopyLink()}
+            disabled={isCopying}
             className={cn(
               'flex-1 transition-colors',
-              copyButtonLabel === 'Copied!' && 'border-green-500/50 bg-green-700/40 text-green-200',
+              copyButtonLabel === 'Copied!' &&
+                'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
             )}
           >
-            {copyButtonLabel}
+            {isCopying ? <span className="loader loader-sm" aria-hidden="true" /> : copyButtonLabel}
           </Button>
           <Button variant="outline" onClick={onClose} className="flex-1">
             Close

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/atoms/button';
 
@@ -8,21 +8,39 @@ interface CopyLinkButtonProps {
 
 const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy link');
+  const [isCopying, setIsCopying] = useState(false);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current !== null) {
+        clearTimeout(resetTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleReset = () => {
+    if (resetTimeoutRef.current !== null) {
+      clearTimeout(resetTimeoutRef.current);
+    }
+    resetTimeoutRef.current = setTimeout(() => {
+      setCopyButtonLabel('Copy link');
+    }, 2000);
+  };
 
   const handleCopyLink = async () => {
     const shareUrl = `${window.location.origin}/share/${shareToken}`;
 
+    setIsCopying(true);
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopyButtonLabel('Copied!');
-      setTimeout(() => {
-        setCopyButtonLabel('Copy link');
-      }, 2000);
+      scheduleReset();
     } catch {
       setCopyButtonLabel('Copy failed');
-      setTimeout(() => {
-        setCopyButtonLabel('Copy link');
-      }, 2000);
+      scheduleReset();
+    } finally {
+      setIsCopying(false);
     }
   };
 
@@ -32,12 +50,14 @@ const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
       size="sm"
       variant="outline"
       onClick={() => void handleCopyLink()}
+      disabled={isCopying}
       className={cn(
-        'border-white/20 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white',
-        copyButtonLabel === 'Copied!' && 'border-green-500/50 bg-green-700/40 text-green-200',
+        'border-surface bg-surface text-muted-foreground hover:bg-accent hover:text-foreground',
+        copyButtonLabel === 'Copied!' &&
+          'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
       )}
     >
-      {copyButtonLabel}
+      {isCopying ? <span className="loader loader-sm" aria-hidden="true" /> : copyButtonLabel}
     </Button>
   );
 };

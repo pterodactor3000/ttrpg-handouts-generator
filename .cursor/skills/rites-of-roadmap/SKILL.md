@@ -70,7 +70,18 @@ Build the full create plan without calling write MCP tools.
 
 ### Issue title
 
-The `Outcome` field verbatim (including the `(foundation)` prefix for F-NN items).
+Use this template:
+
+```
+// [<F-NN or S-NN>]::[<change-id>] // <type>: <brief one-sentence explanation>
+```
+
+- **`<F-NN or S-NN>`** — roadmap ID (e.g. `S-07`, `F-01`)
+- **`<change-id>`** — the item's Change ID (e.g. `per-style-fonts`)
+- **`<type>`** — `feat` for S-NN slices; `chore` for F-NN foundations
+- **`<brief one-sentence explanation>`** — condense the Outcome to ≤ ~10 words; must be human-readable at a glance
+
+Example: `// [S-07]::[per-style-fonts] // feat: per-style fonts and font colors for handouts`
 
 ### Issue labels
 

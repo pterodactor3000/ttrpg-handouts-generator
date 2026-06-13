@@ -4,6 +4,7 @@ import type { BackgroundCategory } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
+import { HandoutArticle } from '@/components/molecules/HandoutArticle';
 import { TagsInput } from '@/components/molecules/TagsInput';
 import { ShareDialog } from '@/components/organisms/ShareDialog';
 import { Button } from '@/components/atoms/button';
@@ -32,6 +33,10 @@ const serializeFormState = (
     backgroundCategory: backgroundValue,
     tags: [...tagsValue].sort(),
   });
+
+const fieldInputClass = cn(
+  'border-surface bg-surface text-foreground placeholder:text-muted-foreground w-full rounded-md border px-3 py-2 outline-none focus:border-ring focus:ring-2 focus:ring-ring/50',
+);
 
 const HandoutEditor = () => {
   const [title, setTitle] = useState('');
@@ -139,23 +144,23 @@ const HandoutEditor = () => {
   const shareUrl = shareToken ? `${window.location.origin}/share/${shareToken}` : '';
 
   return (
-    <div className="min-h-screen bg-gray-950 p-4 md:p-8">
+    <div className="bg-cosmic min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
         <Button
           variant="ghost"
           onClick={handleBackClick}
-          className="mb-4 -ml-2 text-white/70 hover:bg-white/10 hover:text-white"
+          className="text-muted-foreground hover:bg-accent hover:text-foreground mb-4 -ml-2"
         >
           <ArrowLeft />
           Back to dashboard
         </Button>
-        <h1 className="mb-6 text-2xl font-bold text-white">New Handout</h1>
+        <h1 className="text-brand-accent-light mb-6 text-2xl font-bold tracking-tight">New Handout</h1>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Form column */}
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="handout-title" className="text-sm font-medium text-white/80">
+              <label htmlFor="handout-title" className="text-muted-foreground text-sm font-medium">
                 Title
               </label>
               <input
@@ -167,17 +172,17 @@ const HandoutEditor = () => {
                 }}
                 placeholder="Handout title…"
                 maxLength={300}
-                className="w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/30 outline-none focus:border-white/50"
+                className={fieldInputClass}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-white/80">Background</span>
+              <span className="text-muted-foreground text-sm font-medium">Background</span>
               <BackgroundPicker value={backgroundCategory} onChange={setBackgroundCategory} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="handout-markdown" className="text-sm font-medium text-white/80">
+              <label htmlFor="handout-markdown" className="text-muted-foreground text-sm font-medium">
                 Content (Markdown)
               </label>
               <textarea
@@ -189,21 +194,30 @@ const HandoutEditor = () => {
                 placeholder="# My Handout&#10;&#10;Write your content here…"
                 rows={16}
                 maxLength={50000}
-                className="w-full resize-y rounded-md border border-white/20 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder-white/30 outline-none focus:border-white/50"
+                className={cn(fieldInputClass, 'resize-y font-mono text-sm')}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-white/80">Tags</span>
+              <span className="text-muted-foreground text-sm font-medium">Tags</span>
               <TagsInput tags={tags} onChange={setTags} />
             </div>
 
-            {saveError && <p className="text-sm text-red-400">{saveError}</p>}
-            {publishError && <p className="text-sm text-red-400">{publishError}</p>}
+            {saveError && <p className="text-destructive text-sm">{saveError}</p>}
+            {publishError && <p className="text-destructive text-sm">{publishError}</p>}
 
             <div className="flex gap-3">
               <Button onClick={() => void handleSave()} disabled={isSaving || !!shareToken} className="flex-1">
-                {isSaving ? 'Saving…' : handoutId ? 'Save changes' : 'Save handout'}
+                {isSaving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="loader loader-sm" aria-hidden="true" />
+                    Saving…
+                  </span>
+                ) : handoutId ? (
+                  'Save changes'
+                ) : (
+                  'Save handout'
+                )}
               </Button>
               <Button
                 variant="outline"
@@ -211,16 +225,25 @@ const HandoutEditor = () => {
                 disabled={!handoutId || isSaving || isPublishing || !!shareToken}
                 className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
               >
-                {isPublishing ? 'Publishing…' : 'Share'}
+                {isPublishing ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="loader loader-sm" aria-hidden="true" />
+                    Publishing…
+                  </span>
+                ) : (
+                  'Share'
+                )}
               </Button>
             </div>
 
-            {handoutId && !shareToken && <p className="text-xs text-white/40">Draft saved — click Share to publish.</p>}
+            {handoutId && !shareToken && (
+              <p className="text-muted-foreground text-xs">Draft saved — click Share to publish.</p>
+            )}
             {shareToken && (
-              <p className="text-xs text-green-400/70">
+              <p className="text-brand-accent-light text-xs">
                 Published —{' '}
                 <button
-                  className="underline hover:text-green-300"
+                  className="hover:text-brand-accent underline"
                   onClick={() => {
                     setShareDialogOpen(true);
                   }}
@@ -233,26 +256,24 @@ const HandoutEditor = () => {
 
           {/* Preview column */}
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-white/80">Preview</span>
+            <span className="text-muted-foreground text-sm font-medium">Preview</span>
             <div
-              className="min-h-64 rounded-lg"
+              className="flex min-h-64 justify-center rounded-lg p-4"
               style={{
-                backgroundColor: '#1a1a2e',
+                backgroundColor: 'var(--palette-preview-fallback)',
                 backgroundImage: previewBackground,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
-              <div className="rounded-lg bg-black/40 p-4 backdrop-blur-sm">
-                {markdownContent ? (
-                  <div
-                    className="prose prose-invert prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: renderedPreview }}
-                  />
-                ) : (
-                  <p className="text-sm text-white/30 italic">Your rendered markdown will appear here…</p>
-                )}
-              </div>
+              <HandoutArticle
+                title={title || 'Untitled'}
+                html={markdownContent ? renderedPreview : ''}
+                className="w-full max-w-2xl"
+                emptyPlaceholder={
+                  <p className="text-muted-foreground text-sm italic">Your rendered markdown will appear here…</p>
+                }
+              />
             </div>
           </div>
         </div>
@@ -267,12 +288,10 @@ const HandoutEditor = () => {
       />
 
       <Dialog open={confirmBackOpen} onOpenChange={setConfirmBackOpen}>
-        <DialogContent className="border-white/10 bg-gray-900 text-white sm:max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-white">Discard unsaved changes?</DialogTitle>
-            <DialogDescription className="text-white/60">
-              You have unsaved edits. If you leave now, your changes will be lost.
-            </DialogDescription>
+            <DialogTitle>Discard unsaved changes?</DialogTitle>
+            <DialogDescription>You have unsaved edits. If you leave now, your changes will be lost.</DialogDescription>
           </DialogHeader>
 
           <DialogFooter className="gap-3 sm:justify-end">

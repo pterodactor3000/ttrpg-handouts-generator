@@ -38,40 +38,38 @@ if (!supabase) {
     <div class="mx-auto w-full max-w-6xl">
       {
         !isConfigured ? (
-          <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
+          <div class="border-surface bg-surface text-foreground rounded-2xl border p-8 text-center backdrop-blur-xl">
             <h1 class="mb-3 text-2xl font-bold">Dashboard temporarily unavailable</h1>
-            <p class="text-sm text-white/70">Please try again later.</p>
+            <p class="text-muted-foreground text-sm">Please try again later.</p>
           </div>
         ) : hasLoadError ? (
-          <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
+          <div class="border-surface bg-surface text-foreground rounded-2xl border p-8 text-center backdrop-blur-xl">
             <h1 class="mb-3 text-2xl font-bold">Could not load handouts</h1>
-            <p class="text-sm text-white/70">
+            <p class="text-muted-foreground text-sm">
               Something went wrong while loading your handouts. Please try again later.
             </p>
           </div>
         ) : (
           <>
-            <header class="rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl">
+            <header class="border-surface bg-surface text-foreground rounded-2xl border p-6 backdrop-blur-xl">
               <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h1 class="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
-                    Dashboard
-                  </h1>
-                  <p class="mt-1 text-blue-100/80">
-                    Welcome, <span class="font-semibold text-white">{user?.email}</span>
+                  <h1 class="text-brand-accent-light text-3xl font-bold tracking-tight">Dashboard</h1>
+                  <p class="text-muted-foreground mt-1">
+                    Welcome, <span class="text-foreground font-semibold">{user?.email}</span>
                   </p>
                 </div>
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <a
                     href="/handouts/new"
-                    class="rounded-lg border border-purple-400/30 bg-purple-500/20 px-4 py-2 text-center text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
+                    class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted rounded-lg border px-4 py-2 text-center text-sm font-medium transition-colors hover:brightness-110"
                   >
                     + New handout
                   </a>
                   <form method="POST" action="/api/auth/signout">
                     <button
                       type="submit"
-                      class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20 sm:w-auto"
+                      class="border-surface bg-surface hover:bg-accent w-full rounded-lg border px-4 py-2 text-sm transition-colors sm:w-auto"
                     >
                       Sign out
                     </button>
@@ -81,11 +79,11 @@ if (!supabase) {
             </header>
 
             <HandoutList heading="Your handouts" handouts={activeHandouts}>
-              <div class="rounded-2xl border border-dashed border-white/20 bg-white/5 p-8 text-center text-white">
-                <p class="text-blue-100/80">You have not created any handouts yet.</p>
+              <div class="border-surface bg-surface text-foreground rounded-2xl border border-dashed p-8 text-center">
+                <p class="text-muted-foreground">You have not created any handouts yet.</p>
                 <a
                   href="/handouts/new"
-                  class="mt-4 inline-block rounded-lg border border-purple-400/30 bg-purple-500/20 px-6 py-3 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
+                  class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted mt-4 inline-block rounded-lg border px-6 py-3 text-sm font-medium transition-colors hover:brightness-110"
                 >
                   Create your first handout
                 </a>

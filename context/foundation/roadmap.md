@@ -3,9 +3,10 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-07
+updated: 2026-06-13
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
+# 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -36,10 +37,11 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-02 | `handout-dashboard`                  | view a list of their handouts (draft and published) with titles and tags                                                                                                                                      | S-01          | FR-002                                                         | done     |
 | S-03 | `edit-handout`                       | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link)                                                        | S-02          | FR-007                                                         | proposed |
 | S-04 | `delete-handout`                     | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players)                                                                                                   | S-02          | FR-008                                                         | proposed |
-| S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | ready    |
+| S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | done     |
 | S-06 | `new-handout-back-button`            | return to the dashboard from the new-handout view via a clear back control, without submitting the form                                                                                                       | S-01          | FR-013, FR-002                                                 | done     |
 | S-07 | `per-style-fonts`                    | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view                                       | S-01          | FR-014, FR-005                                                 | ready    |
 | S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
+| S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                     | S-01, S-07    | FR-005, FR-009, FR-011                                         | proposed |
 
 ## Streams
 
@@ -49,7 +51,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | ------ | ------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | A      | Core value proof   | `F-01` → `S-01`          | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline.                                                              |
 | B      | Handout management | `S-02` → `S-03` / `S-04` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; either can be planned independently.                                         |
-| C      | Polish & theming   | `S-05` / `S-06` / `S-07` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). All three are independent and parallel; each can be planned on its own. |
+| C      | Polish & theming   | `S-05` / `S-06` / `S-07` → `S-09` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-05, S-06, S-07 are independent and parallel; S-09 follows S-07. |
 | D      | Entry & discovery  | `S-08`                   | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow.           |
 
 ## Baseline
@@ -176,7 +178,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Cross-cutting visual change touching every existing screen; the risk is regression of the already-shipped S-01 flows and the mobile-responsive shared page. Scope is deliberately capped to styling (no markup/flow changes) so the blast radius stays presentational. The loader uses CSS `mask` + `rotate`; verify browser-compatibility (NFR) on target browsers and provide a graceful fallback where `mask` is unsupported.
-- **Status:** ready
+- **Status:** done
 
 ### S-06: Back navigation in new-handout view
 
@@ -216,6 +218,19 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Standalone and independent; no data layer or auth flow change required — the CTA links to the existing sign-in page. Only risk is replacing the current placeholder `Welcome` component without breaking the Layout wrapper or the middleware redirect (authenticated users hitting `/` should still land on the dashboard).
 - **Status:** done
 
+### S-09: Retheme category backgrounds
+
+- **Outcome:** GM (and players on the shared read-only view) see each of the three style categories rendered over a new, themed pre-loaded background image: old paper texture for high fantasy, green-tinted CRT display for grimdark, and newspaper print for postapo — in both the GM preview and the shared player view.
+- **Change ID:** `retheme-backgrounds`
+- **PRD refs:** FR-005, FR-009, FR-011
+- **Prerequisites:** S-01 (done), S-07 (`per-style-fonts`, ready — not yet done)
+- **Parallel with:** —
+- **Blockers:** —
+- **Unknowns:**
+  - Are these CSS-only effects (gradient + overlay for CRT, CSS paper texture for fantasy, CSS newspaper grid for postapo) or raster image assets? — Owner: user. Block: no.
+- **Risk:** The three new images must remain visually compatible with the per-style fonts and colors introduced by S-07 — this is why S-07 is a prerequisite. The primary risk is readability: if a new background (especially the CRT scanline effect or the newspaper texture) is too busy or high-contrast, the text overlay could become unreadable. Since these are pre-loaded static assets (no user upload path), blast radius is limited to visual presentation only. The mobile-responsive NFR requires verification on the shared read-only page, where screen density can exaggerate texture contrast. CSS-only backgrounds (color-gradient CRT, CSS paper texture) are lower-risk than raster images from a load-time perspective (NFR < 5 s generation).
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
@@ -229,6 +244,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-06       | `new-handout-back-button`            | Add back button to new-handout view                  | yes                   | S-01 done; run `/10x-plan new-handout-back-button`                                     |
 | S-07       | `per-style-fonts`                    | Per-style fonts and font colors for handouts         | yes                   | S-01 done; run `/10x-plan per-style-fonts`                                             |
 | S-08       | `landing-page`                       | Landing page with app name and login entry point     | yes                   | No prerequisites; run `/10x-plan landing-page`                                         |
+| S-09       | `retheme-backgrounds`                | Replace themed background images per style category  | no                    | Depends on S-07; run `/10x-plan retheme-backgrounds` after S-07 is done                |
 
 ## Open Roadmap Questions
 
@@ -254,3 +270,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-06: GM can return from the new-handout creation view to the dashboard via a clear back control, without having to submit or discard through the browser back button.** — Archived 2026-06-03 → `context/archive/2026-06-03-new-handout-back-button/`. Lesson: —.
 - **S-08: Visitor (unauthenticated) sees the app name on the landing page and a clear call-to-action that starts the login flow; no login is required to view the page itself.** — Archived 2026-06-03 → `context/archive/2026-06-03-landing-page/`. Lesson: —.
 - **S-02: GM can view a list of all their handouts (draft and published) with titles and tags, and navigate to create a new handout or open an existing one.** — Archived 2026-06-07 → `context/archive/2026-06-07-handout-dashboard/`. Lesson: —.
+- **S-05: GM (and players, on the shared read-only page) see a refreshed, visually consistent UI across the existing screens — dashboard, new-handout editor, preview, and shared view. Improvements are limited to typography, spacing, color theming, and a shared loading animation; no user flows change and no new screens are added.** — Archived 2026-06-13 → `context/archive/2026-06-09-ui-restyle/`. Lesson: —.
