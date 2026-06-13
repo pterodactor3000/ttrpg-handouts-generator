@@ -3,7 +3,7 @@ change_id: ui-restyle
 title: Ui restyle
 status: impl_reviewed
 created: 2026-06-09
-updated: 2026-06-09
+updated: 2026-06-13
 archived_at: null
 ---
 

@@ -54,6 +54,12 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
+      if (resetTimeoutRef.current !== null) {
+        clearTimeout(resetTimeoutRef.current);
+        resetTimeoutRef.current = null;
+      }
+      setCopyButtonLabel('Copy link');
+      setIsCopying(false);
       onClose();
     }
   };

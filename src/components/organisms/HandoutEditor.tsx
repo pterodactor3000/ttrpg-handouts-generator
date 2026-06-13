@@ -4,6 +4,7 @@ import type { BackgroundCategory } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
+import { HandoutArticle } from '@/components/molecules/HandoutArticle';
 import { TagsInput } from '@/components/molecules/TagsInput';
 import { ShareDialog } from '@/components/organisms/ShareDialog';
 import { Button } from '@/components/atoms/button';
@@ -265,17 +266,14 @@ const HandoutEditor = () => {
                 backgroundPosition: 'center',
               }}
             >
-              <article className={cn('handout-article w-full max-w-2xl p-4 md:p-8')}>
-                <h1 className="mb-6 text-3xl font-bold break-words">{title || 'Untitled'}</h1>
-                {markdownContent ? (
-                  <div
-                    className="prose prose-invert max-w-none break-words"
-                    dangerouslySetInnerHTML={{ __html: renderedPreview }}
-                  />
-                ) : (
+              <HandoutArticle
+                title={title || 'Untitled'}
+                html={markdownContent ? renderedPreview : ''}
+                className="w-full max-w-2xl"
+                emptyPlaceholder={
                   <p className="text-muted-foreground text-sm italic">Your rendered markdown will appear here…</p>
-                )}
-              </article>
+                }
+              />
             </div>
           </div>
         </div>

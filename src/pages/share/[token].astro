@@ -59,7 +59,7 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
         style={`background: ${pageBackground}; background-size: cover; background-position: center;`}
       >
         <HandoutArticle title={handout.title} html={renderedHtml} />
-        <footer class="mt-8 text-center text-xs text-white/40">TTRPG Handouts Generator</footer>
+        <footer class="text-muted-foreground mt-8 text-center text-xs">TTRPG Handouts Generator</footer>
       </main>
     </Layout>
   ) : (
