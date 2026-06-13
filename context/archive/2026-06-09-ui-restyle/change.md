@@ -1,10 +1,10 @@
 ---
 change_id: ui-restyle
 title: Ui restyle
-status: impl_reviewed
+status: archived
 created: 2026-06-09
 updated: 2026-06-13
-archived_at: null
+archived_at: 2026-06-13T10:32:41Z
 ---
 
 ## Notes

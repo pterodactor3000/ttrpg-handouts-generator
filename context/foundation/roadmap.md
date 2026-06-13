@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-09
+updated: 2026-06-13
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
@@ -37,7 +37,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-02 | `handout-dashboard`                  | view a list of their handouts (draft and published) with titles and tags                                                                                                                                      | S-01          | FR-002                                                         | done     |
 | S-03 | `edit-handout`                       | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link)                                                        | S-02          | FR-007                                                         | proposed |
 | S-04 | `delete-handout`                     | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players)                                                                                                   | S-02          | FR-008                                                         | proposed |
-| S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | ready    |
+| S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | done     |
 | S-06 | `new-handout-back-button`            | return to the dashboard from the new-handout view via a clear back control, without submitting the form                                                                                                       | S-01          | FR-013, FR-002                                                 | done     |
 | S-07 | `per-style-fonts`                    | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view                                       | S-01          | FR-014, FR-005                                                 | ready    |
 | S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
@@ -178,7 +178,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Cross-cutting visual change touching every existing screen; the risk is regression of the already-shipped S-01 flows and the mobile-responsive shared page. Scope is deliberately capped to styling (no markup/flow changes) so the blast radius stays presentational. The loader uses CSS `mask` + `rotate`; verify browser-compatibility (NFR) on target browsers and provide a graceful fallback where `mask` is unsupported.
-- **Status:** ready
+- **Status:** done
 
 ### S-06: Back navigation in new-handout view
 
@@ -270,3 +270,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-06: GM can return from the new-handout creation view to the dashboard via a clear back control, without having to submit or discard through the browser back button.** — Archived 2026-06-03 → `context/archive/2026-06-03-new-handout-back-button/`. Lesson: —.
 - **S-08: Visitor (unauthenticated) sees the app name on the landing page and a clear call-to-action that starts the login flow; no login is required to view the page itself.** — Archived 2026-06-03 → `context/archive/2026-06-03-landing-page/`. Lesson: —.
 - **S-02: GM can view a list of all their handouts (draft and published) with titles and tags, and navigate to create a new handout or open an existing one.** — Archived 2026-06-07 → `context/archive/2026-06-07-handout-dashboard/`. Lesson: —.
+- **S-05: GM (and players, on the shared read-only page) see a refreshed, visually consistent UI across the existing screens — dashboard, new-handout editor, preview, and shared view. Improvements are limited to typography, spacing, color theming, and a shared loading animation; no user flows change and no new screens are added.** — Archived 2026-06-13 → `context/archive/2026-06-09-ui-restyle/`. Lesson: —.
