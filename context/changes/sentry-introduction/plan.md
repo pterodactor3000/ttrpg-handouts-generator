@@ -338,7 +338,7 @@ No database migrations. No existing data to migrate. Sentry will only capture ev
 #### Manual
 
 - [x] 1.4 Smoke test error appears in Sentry dashboard — 03bde7f
-- [x] 1.5 Source-mapped stack trace shows original `.ts` file and line after local build with auth token
+- [x] 1.5 Source-mapped stack trace shows original `.ts` file and line after local build with auth token — 044c028
 - [x] 1.6 Test error route deleted after verification — 03bde7f
 
 ### Phase 2: Error Capture Depth
@@ -359,10 +359,10 @@ No database migrations. No existing data to migrate. Sentry will only capture ev
 #### Automated
 
 - [x] 3.1 `npm run lint` passes (ci.yml valid) — 7e41527
-- [x] 3.2 CI build job completes and Vite plugin reports source map upload
+- [x] 3.2 CI build job completes and Vite plugin reports source map upload — 044c028
 
 #### Manual
 
-- [x] 3.3 Post-CI error stack trace shows original source file + line
-- [x] 3.4 Cursor MCP `find_organizations` returns the Sentry org
-- [x] 3.5 Sentry MCP `analyze_issue_with_seer` returns root-cause analysis for a captured issue
+- [x] 3.3 Post-CI error stack trace shows original source file + line — 044c028
+- [x] 3.4 Cursor MCP `find_organizations` returns the Sentry org — 044c028
+- [x] 3.5 Sentry MCP `analyze_issue_with_seer` returns root-cause analysis for a captured issue — 044c028
