@@ -331,28 +331,28 @@ No database migrations. No existing data to migrate. Sentry will only capture ev
 
 #### Automated
 
-- [x] 1.1 `npm run build` completes without errors
-- [x] 1.2 `npm run lint` passes
-- [x] 1.3 `npm run typecheck` passes
+- [x] 1.1 `npm run build` completes without errors — 03bde7f
+- [x] 1.2 `npm run lint` passes — 03bde7f
+- [x] 1.3 `npm run typecheck` passes — 03bde7f
 
 #### Manual
 
-- [x] 1.4 Smoke test error appears in Sentry dashboard
+- [x] 1.4 Smoke test error appears in Sentry dashboard — 03bde7f
 - [ ] 1.5 Source-mapped stack trace shows original `.ts` file and line after local build with auth token
-- [x] 1.6 Test error route deleted after verification
+- [x] 1.6 Test error route deleted after verification — 03bde7f
 
 ### Phase 2: Error Capture Depth
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes across all modified files
-- [ ] 2.2 `npm run typecheck` passes
+- [x] 2.1 `npm run lint` passes across all modified files
+- [x] 2.2 `npm run typecheck` passes
 
 #### Manual
 
-- [ ] 2.3 DB error (stopped Supabase) produces Sentry issue with correct location
-- [ ] 2.4 Invalid sign-in produces Sentry event for auth failure
-- [ ] 2.5 Happy-path flows (create, publish, share) show no regressions
+- [x] 2.3 DB error (stopped Supabase) produces Sentry issue with correct location
+- [x] 2.4 Invalid sign-in produces Sentry event for auth failure
+- [x] 2.5 Happy-path flows (create, publish, share) show no regressions
 
 ### Phase 3: Source Maps CI + MCP Server
 

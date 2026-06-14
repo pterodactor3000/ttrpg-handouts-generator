@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import * as Sentry from '@sentry/astro';
 import { ArrowLeft } from 'lucide-react';
 import type { BackgroundCategory } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
@@ -107,7 +108,8 @@ const HandoutEditor = () => {
       }
 
       setSavedSnapshot(serializeFormState(title, markdownContent, backgroundCategory, tags));
-    } catch {
+    } catch (error) {
+      Sentry.captureException(error);
       setSaveError('Network error. Please try again.');
     } finally {
       setIsSaving(false);
@@ -134,7 +136,8 @@ const HandoutEditor = () => {
         setShareToken(responseData.shareToken);
         setShareDialogOpen(true);
       }
-    } catch {
+    } catch (error) {
+      Sentry.captureException(error);
       setPublishError('Network error. Please try again.');
     } finally {
       setIsPublishing(false);

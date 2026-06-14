@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import * as Sentry from '@sentry/cloudflare';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase';
 
@@ -54,6 +55,7 @@ export const POST: APIRoute = async (context) => {
   if (fetchError || !existingHandout) {
     if (fetchError) {
       console.error('DB error fetching handout for publish:', fetchError);
+      Sentry.captureException(fetchError);
     }
     return new Response(JSON.stringify({ error: 'Handout not found or not in draft status' }), {
       status: 404,
@@ -92,6 +94,7 @@ export const POST: APIRoute = async (context) => {
 
   if (updateError || !updatedHandout) {
     console.error('DB error publishing handout:', updateError);
+    Sentry.captureException(updateError);
     return new Response(JSON.stringify({ error: 'Failed to publish handout' }), { status: 500 });
   }
 

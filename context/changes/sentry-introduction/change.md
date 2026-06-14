@@ -3,7 +3,7 @@ change_id: sentry-introduction
 title: Introduce Sentry for error monitoring with MCP connection
 status: implementing
 created: 2026-06-13
-updated: 2026-06-13
+updated: 2026-06-14
 archived_at: null
 ---
 

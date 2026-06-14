@@ -1,4 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
+import * as Sentry from '@sentry/cloudflare';
 import { createClient } from '@/lib/supabase';
 
 // All /handouts/* routes require authentication.
@@ -10,10 +11,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = createClient(context.request.headers, context.cookies);
 
   if (supabase) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    context.locals.user = user ?? null;
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      context.locals.user = user ?? null;
+    } catch (error) {
+      Sentry.captureException(error);
+      context.locals.user = null;
+    }
   } else {
     context.locals.user = null;
   }
