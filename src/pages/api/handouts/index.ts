@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import * as Sentry from '@sentry/cloudflare';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase';
 
@@ -62,6 +63,7 @@ export const POST: APIRoute = async (context) => {
 
   if (error || !data) {
     console.error('DB error inserting handout:', error);
+    Sentry.captureException(error);
     return new Response(JSON.stringify({ error: 'Failed to save handout' }), {
       status: 500,
     });

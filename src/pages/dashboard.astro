@@ -1,4 +1,5 @@
 ---
+import * as Sentry from '@sentry/cloudflare';
 import Layout from '@/layouts/Layout.astro';
 import HandoutList from '@/components/organisms/HandoutList.astro';
 import { createClient } from '@/lib/supabase';
@@ -23,6 +24,7 @@ if (!supabase) {
 
   if (error) {
     console.error('DB error loading handouts:', error);
+    Sentry.captureException(error);
     hasLoadError = true;
   } else {
     const handouts = data as HandoutListItem[];

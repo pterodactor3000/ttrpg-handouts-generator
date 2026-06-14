@@ -1,2 +1,6 @@
+# Copy to .dev.vars for Cloudflare local dev (wrangler / astro dev worker bindings).
+# SENTRY_DSN is required for server-side error capture; use the same DSN as PUBLIC_SENTRY_DSN.
 SUPABASE_URL=###
 SUPABASE_KEY=###
+SENTRY_DSN=https://xxx@oXXX.ingest.sentry.io/YYYY
+PUBLIC_SENTRY_DSN=https://xxx@oXXX.ingest.sentry.io/YYYY

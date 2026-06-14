@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import * as Sentry from '@sentry/cloudflare';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase';
 
@@ -12,12 +13,12 @@ interface HandoutPublishRow {
 
 interface HandoutFetchResult {
   data: HandoutPublishRow | null;
-  error: { message: string } | null;
+  error: { message: string; code?: string } | null;
 }
 
 interface HandoutUpdateResult {
   data: { share_token: string } | null;
-  error: { message: string } | null;
+  error: { message: string; code?: string } | null;
 }
 
 export const POST: APIRoute = async (context) => {
@@ -52,8 +53,9 @@ export const POST: APIRoute = async (context) => {
     .single()) as HandoutFetchResult;
 
   if (fetchError || !existingHandout) {
-    if (fetchError) {
+    if (fetchError && fetchError.code !== 'PGRST116') {
       console.error('DB error fetching handout for publish:', fetchError);
+      Sentry.captureException(fetchError);
     }
     return new Response(JSON.stringify({ error: 'Handout not found or not in draft status' }), {
       status: 404,
@@ -91,7 +93,10 @@ export const POST: APIRoute = async (context) => {
     .single()) as HandoutUpdateResult;
 
   if (updateError || !updatedHandout) {
-    console.error('DB error publishing handout:', updateError);
+    if (updateError && updateError.code !== 'PGRST116') {
+      console.error('DB error publishing handout:', updateError);
+      Sentry.captureException(updateError);
+    }
     return new Response(JSON.stringify({ error: 'Failed to publish handout' }), { status: 500 });
   }
 

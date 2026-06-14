@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import * as Sentry from '@sentry/cloudflare';
 import { createClient } from '@/lib/supabase';
 
 export const POST: APIRoute = async (context) => {
@@ -13,6 +14,11 @@ export const POST: APIRoute = async (context) => {
   const { error } = await supabase.auth.signUp({ email, password });
 
   if (error) {
+    const isExpectedAuthFailure = error.status !== undefined && error.status < 500;
+    if (!isExpectedAuthFailure) {
+      console.error('Auth signup error:', error);
+      Sentry.captureException(error);
+    }
     return context.redirect(`/auth/signup?error=${encodeURIComponent(error.message)}`);
   }
 

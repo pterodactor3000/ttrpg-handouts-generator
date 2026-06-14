@@ -48,6 +48,16 @@ jobs:
       - name: Run integration tests
         run: npm test -- --project integration
 
+      # PREREQUISITE: Add GitHub repository secrets before this step runs:
+      #   SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT
+      - name: Build with Sentry source map upload
+        run: npm run build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          PUBLIC_SENTRY_DSN: ''
+
       - name: Stop Supabase
         if: always()
         run: npx supabase stop
