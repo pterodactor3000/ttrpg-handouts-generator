@@ -14,7 +14,11 @@ export const POST: APIRoute = async (context) => {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    Sentry.captureException(error);
+    const isExpectedAuthFailure = error.status !== undefined && error.status < 500;
+    if (!isExpectedAuthFailure) {
+      console.error('Auth sign-in error:', error);
+      Sentry.captureException(error);
+    }
     return context.redirect(`/auth/signin?error=${encodeURIComponent(error.message)}`);
   }
 

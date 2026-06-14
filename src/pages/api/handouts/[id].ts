@@ -17,7 +17,7 @@ interface HandoutRow {
 }
 interface HandoutQueryResult {
   data: HandoutRow | null;
-  error: { message: string } | null;
+  error: { message: string; code?: string } | null;
 }
 
 export const PUT: APIRoute = async (context) => {
@@ -74,8 +74,10 @@ export const PUT: APIRoute = async (context) => {
     .single()) as HandoutQueryResult;
 
   if (error || !data) {
-    console.error('DB error updating handout:', error);
-    Sentry.captureException(error);
+    if (error && error.code !== 'PGRST116') {
+      console.error('DB error updating handout:', error);
+      Sentry.captureException(error);
+    }
     return new Response(JSON.stringify({ error: 'Failed to save handout' }), {
       status: 500,
     });
