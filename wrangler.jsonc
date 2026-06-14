@@ -4,6 +4,8 @@
   "main": "./sentry.server.config.ts",
   "compatibility_date": "2026-05-08",
   "compatibility_flags": ["nodejs_compat"],
+  // SENTRY_AUTH_TOKEN must be set as a Cloudflare Pages environment variable
+  // (not a Worker secret) for upload_source_maps to work in production deploys.
   "upload_source_maps": true,
   "assets": {
     "binding": "ASSETS",

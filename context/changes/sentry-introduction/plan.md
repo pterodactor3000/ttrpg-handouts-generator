@@ -345,20 +345,20 @@ No database migrations. No existing data to migrate. Sentry will only capture ev
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes across all modified files
-- [x] 2.2 `npm run typecheck` passes
+- [x] 2.1 `npm run lint` passes across all modified files — 554acb3
+- [x] 2.2 `npm run typecheck` passes — 554acb3
 
 #### Manual
 
-- [x] 2.3 DB error (stopped Supabase) produces Sentry issue with correct location
-- [x] 2.4 Invalid sign-in produces Sentry event for auth failure
-- [x] 2.5 Happy-path flows (create, publish, share) show no regressions
+- [x] 2.3 DB error (stopped Supabase) produces Sentry issue with correct location — 554acb3
+- [x] 2.4 Invalid sign-in produces Sentry event for auth failure — 554acb3
+- [x] 2.5 Happy-path flows (create, publish, share) show no regressions — 554acb3
 
 ### Phase 3: Source Maps CI + MCP Server
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes (ci.yml valid)
+- [x] 3.1 `npm run lint` passes (ci.yml valid)
 - [ ] 3.2 CI build job completes and Vite plugin reports source map upload
 
 #### Manual
