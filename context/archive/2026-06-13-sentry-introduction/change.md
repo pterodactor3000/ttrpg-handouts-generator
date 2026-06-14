@@ -1,10 +1,10 @@
 ---
 change_id: sentry-introduction
 title: Introduce Sentry for error monitoring with MCP connection
-status: impl_reviewed
+status: archived
 created: 2026-06-13
 updated: 2026-06-14
-archived_at: null
+archived_at: 2026-06-14T17:09:49Z
 ---
 
 ## Notes
