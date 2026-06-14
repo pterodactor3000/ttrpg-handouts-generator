@@ -331,15 +331,15 @@ No database migrations. No existing data to migrate. Sentry will only capture ev
 
 #### Automated
 
-- [ ] 1.1 `npm run build` completes without errors
-- [ ] 1.2 `npm run lint` passes
-- [ ] 1.3 `npm run typecheck` passes
+- [x] 1.1 `npm run build` completes without errors
+- [x] 1.2 `npm run lint` passes
+- [x] 1.3 `npm run typecheck` passes
 
 #### Manual
 
-- [ ] 1.4 Smoke test error appears in Sentry dashboard
+- [x] 1.4 Smoke test error appears in Sentry dashboard
 - [ ] 1.5 Source-mapped stack trace shows original `.ts` file and line after local build with auth token
-- [ ] 1.6 Test error route deleted after verification
+- [x] 1.6 Test error route deleted after verification
 
 ### Phase 2: Error Capture Depth
 

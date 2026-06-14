@@ -1,9 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ttrpg-handouts-generator",
-  "main": "@astrojs/cloudflare/entrypoints/server",
+  "main": "./sentry.server.config.ts",
   "compatibility_date": "2026-05-08",
   "compatibility_flags": ["nodejs_compat"],
+  "upload_source_maps": true,
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist",
