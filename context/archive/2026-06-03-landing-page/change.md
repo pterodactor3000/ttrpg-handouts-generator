@@ -11,4 +11,4 @@ archived_at: 2026-06-03T10:02:05Z
 
 Slice S-08 from @context/foundation/roadmap.md. Standalone — no foundation or slice prerequisite (CTA links to the existing `/auth/signin`). Implements FR-015 (app name + clear entry point to the login flow on an unauthenticated landing page) and supports FR-001.
 
-App/brand name decided during planning: **Handouts Generatorium**.
+App/brand name decided during planning: **Handouts Scriptorium**.

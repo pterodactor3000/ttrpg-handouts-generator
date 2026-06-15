@@ -4,7 +4,7 @@
 
 ## What & Why
 
-Replace the starter boilerplate landing page with a real, product-branded landing page for **Handouts Generatorium**. A logged-out visitor needs to see what the app is and how to get in; today they see generic starter-template copy ("10x Astro Starter"). This delivers FR-015 — app name + a clear entry point to the login flow on a no-auth page.
+Replace the starter boilerplate landing page with a real, product-branded landing page for **Handouts Scriptorium**. A logged-out visitor needs to see what the app is and how to get in; today they see generic starter-template copy ("10x Astro Starter"). This delivers FR-015 — app name + a clear entry point to the login flow on a no-auth page.
 
 ## Starting Point
 
@@ -12,13 +12,13 @@ Replace the starter boilerplate landing page with a real, product-branded landin
 
 ## Desired End State
 
-Logged-out visitors at `/` see "Handouts Generatorium", a one-line product tagline, and Sign in (primary) + Sign up (secondary) CTAs — no feature cards. The browser tab reads the product name. Signed-in GMs hitting `/` are redirected to `/dashboard`.
+Logged-out visitors at `/` see "Handouts Scriptorium", a one-line product tagline, and Sign in (primary) + Sign up (secondary) CTAs — no feature cards. The browser tab reads the product name. Signed-in GMs hitting `/` are redirected to `/dashboard`.
 
 ## Key Decisions Made
 
 | Decision                 | Choice                                  | Why (1 sentence)                                                           | Source |
 | ------------------------ | --------------------------------------- | -------------------------------------------------------------------------- | ------ |
-| App/brand name           | "Handouts Generatorium"                 | No name existed; user chose it during planning.                            | Plan   |
+| App/brand name           | "Handouts Scriptorium"                  | No name existed; user chose it during planning.                            | Plan   |
 | Signed-in visitor at `/` | Redirect to `/dashboard`                | Matches roadmap risk note; marketing page is for logged-out users only.    | Plan   |
 | CTAs                     | Sign in (primary) + Sign up (secondary) | Keeps the existing two-path entry into auth.                               | Plan   |
 | Starter feature cards    | Removed (not replaced)                  | They describe the template, not the product; keeps the page focused.       | Plan   |
@@ -55,10 +55,10 @@ Two small changes. Presentational rewrite of one organism + a title fix (`Welcom
 ## Open Risks & Assumptions
 
 - Redirect must use exact-path equality (`=== '/'`), not `startsWith`, to avoid catching other routes.
-- Assumes "Handouts Generatorium" is the final display name; trivial to change later if not.
+- Assumes "Handouts Scriptorium" is the final display name; trivial to change later if not.
 
 ## Success Criteria (Summary)
 
 - Logged-out `/` shows the app name + tagline + working Sign in / Sign up CTAs, no starter cards.
-- Browser tab shows "Handouts Generatorium".
+- Browser tab shows "Handouts Scriptorium".
 - Signed-in `/` redirects to `/dashboard`; logged-out `/` does not loop, and protected routes still gate correctly.

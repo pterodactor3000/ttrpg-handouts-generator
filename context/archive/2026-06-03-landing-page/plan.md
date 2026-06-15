@@ -2,7 +2,7 @@
 
 ## Overview
 
-Replace the starter boilerplate landing page with a real, product-branded landing page for **Handouts Generatorium**. An unauthenticated visitor sees the app name, a short product-oriented tagline, and clear calls-to-action into the login flow (Sign in + Sign up). An already-signed-in GM who hits `/` is redirected straight to `/dashboard` rather than seeing the marketing page. This delivers FR-015 (app name + clear entry point to the login flow on a no-auth-required page) and supports FR-001.
+Replace the starter boilerplate landing page with a real, product-branded landing page for **Handouts Scriptorium**. An unauthenticated visitor sees the app name, a short product-oriented tagline, and clear calls-to-action into the login flow (Sign in + Sign up). An already-signed-in GM who hits `/` is redirected straight to `/dashboard` rather than seeing the marketing page. This delivers FR-015 (app name + clear entry point to the login flow on a no-auth-required page) and supports FR-001.
 
 ## Current State Analysis
 
@@ -21,8 +21,8 @@ Replace the starter boilerplate landing page with a real, product-branded landin
 
 ## Desired End State
 
-- Visiting `/` while logged out shows a branded hero: "Handouts Generatorium", a one-line product tagline describing the TTRPG-handout value, and two CTAs — primary "Sign in" → `/auth/signin`, secondary "Sign up" → `/auth/signup`. No starter feature cards.
-- The browser tab on `/` reads "Handouts Generatorium" (not "10x Astro Starter"), and the app-wide default title fallback is also updated.
+- Visiting `/` while logged out shows a branded hero: "Handouts Scriptorium", a one-line product tagline describing the TTRPG-handout value, and two CTAs — primary "Sign in" → `/auth/signin`, secondary "Sign up" → `/auth/signup`. No starter feature cards.
+- The browser tab on `/` reads "Handouts Scriptorium" (not "10x Astro Starter"), and the app-wide default title fallback is also updated.
 - Visiting `/` while authenticated redirects to `/dashboard`.
 - Verify: `npm run lint` and `npm run build` pass; manual check of `/` logged-out (branded page) and logged-in (redirect to dashboard).
 
@@ -42,7 +42,7 @@ Two small, independent changes. Phase 1 is purely presentational: rewrite the ex
 
 ### Overview
 
-Turn the boilerplate `Welcome.astro` into the Handouts Generatorium landing hero and fix the page title. Preserve the cosmic background wrapper and `Topbar`.
+Turn the boilerplate `Welcome.astro` into the Handouts Scriptorium landing hero and fix the page title. Preserve the cosmic background wrapper and `Topbar`.
 
 ### Changes Required:
 
@@ -50,7 +50,7 @@ Turn the boilerplate `Welcome.astro` into the Handouts Generatorium landing hero
 
 **File**: `src/components/organisms/Welcome.astro`
 
-**Intent**: Replace the starter hero copy with product branding — heading "Handouts Generatorium" and a one-line tagline conveying the value (compose themed TTRPG handouts and share them via a permanent link). Keep the primary "Sign in" (`/auth/signin`) and secondary "Sign up" (`/auth/signup`) CTAs. Remove the three boilerplate feature-card blocks entirely. Preserve the existing cosmic background markup (orbs + star field) and the `Topbar` include.
+**Intent**: Replace the starter hero copy with product branding — heading "Handouts Scriptorium" and a one-line tagline conveying the value (compose themed TTRPG handouts and share them via a permanent link). Keep the primary "Sign in" (`/auth/signin`) and secondary "Sign up" (`/auth/signup`) CTAs. Remove the three boilerplate feature-card blocks entirely. Preserve the existing cosmic background markup (orbs + star field) and the `Topbar` include.
 
 **Contract**: Astro component, no props. Renders the same outer `bg-cosmic` wrapper + `Topbar`; hero `<h1>` text becomes the app name; exactly two anchor CTAs pointing at `/auth/signin` and `/auth/signup`; the `grid ... feature cards` section (`Welcome.astro:56-124`) is deleted. Class composition stays in the existing Tailwind/theme style. (Optional: the file may be renamed to a product-meaningful organism name such as `LandingPage.astro` with `index.astro`'s import updated — implementer's call; keeping the name is acceptable.)
 
@@ -58,17 +58,17 @@ Turn the boilerplate `Welcome.astro` into the Handouts Generatorium landing hero
 
 **File**: `src/layouts/Layout.astro`
 
-**Intent**: Update the default `title` fallback from `"10x Astro Starter"` to `"Handouts Generatorium"` so the app-wide default and the landing tab both reflect the product.
+**Intent**: Update the default `title` fallback from `"10x Astro Starter"` to `"Handouts Scriptorium"` so the app-wide default and the landing tab both reflect the product.
 
-**Contract**: The `title` default in the `Astro.props` destructure (`Layout.astro:10`) becomes `"Handouts Generatorium"`.
+**Contract**: The `title` default in the `Astro.props` destructure (`Layout.astro:10`) becomes `"Handouts Scriptorium"`.
 
 #### 3. Landing route title (optional reinforcement)
 
 **File**: `src/pages/index.astro`
 
-**Intent**: Pass an explicit `title="Handouts Generatorium"` to `<Layout>` on the landing route so the tab is correct independent of the layout default.
+**Intent**: Pass an explicit `title="Handouts Scriptorium"` to `<Layout>` on the landing route so the tab is correct independent of the layout default.
 
-**Contract**: `<Layout title="Handouts Generatorium">` wrapping `<Welcome />` (or the renamed organism).
+**Contract**: `<Layout title="Handouts Scriptorium">` wrapping `<Welcome />` (or the renamed organism).
 
 ### Success Criteria:
 
@@ -79,7 +79,7 @@ Turn the boilerplate `Welcome.astro` into the Handouts Generatorium landing hero
 
 #### Manual Verification:
 
-- Visiting `/` logged out shows "Handouts Generatorium" in the hero and the browser tab.
+- Visiting `/` logged out shows "Handouts Scriptorium" in the hero and the browser tab.
 - A product tagline (not the starter blurb) is shown; the three starter feature cards are gone.
 - "Sign in" navigates to `/auth/signin`; "Sign up" navigates to `/auth/signup`.
 - Layout/background and `Topbar` still render correctly; page is responsive on a narrow (mobile) viewport.
@@ -129,7 +129,7 @@ Redirect a signed-in GM who visits the landing page (`/`) to `/dashboard`, so th
 
 ### Manual Testing Steps:
 
-1. Logged out, open `/` → see "Handouts Generatorium", tagline, Sign in + Sign up CTAs; no feature cards; tab title correct.
+1. Logged out, open `/` → see "Handouts Scriptorium", tagline, Sign in + Sign up CTAs; no feature cards; tab title correct.
 2. Click "Sign in" → lands on `/auth/signin`; back, click "Sign up" → lands on `/auth/signup`.
 3. Sign in, then navigate to `/` → redirected to `/dashboard`.
 4. Sign out, navigate to `/` → landing page renders (no redirect loop).
@@ -165,7 +165,7 @@ None — no data or schema changes.
 
 #### Manual
 
-- [x] 1.3 `/` logged out shows "Handouts Generatorium" in hero and browser tab — 431ea77
+- [x] 1.3 `/` logged out shows "Handouts Scriptorium" in hero and browser tab — 431ea77
 - [x] 1.4 Product tagline shown; three starter feature cards removed — 431ea77
 - [x] 1.5 "Sign in" → `/auth/signin`; "Sign up" → `/auth/signup` — 431ea77
 - [x] 1.6 Background + Topbar render correctly; responsive on mobile viewport — 431ea77
