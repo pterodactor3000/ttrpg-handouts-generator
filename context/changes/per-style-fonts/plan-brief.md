@@ -29,7 +29,7 @@ Every handout article panel — in both the GM preview and the shared player vie
 ## Scope
 
 **In scope:**
-- `@font-face` registration for Glendora, Metalick, Consul Typewriter
+- `@font-face` registration for Tisk, Metalick, Consul Typewriter (fantasy uses Tisk; Glendora.otf superseded)
 - `src/lib/fonts.ts` — typed font config
 - `backgrounds.ts` label corrections
 - Per-category CSS in `global.css`

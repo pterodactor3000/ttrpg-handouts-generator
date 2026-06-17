@@ -8,7 +8,7 @@ Add per-category font families and text colors to the handout rendering pipeline
 
 - `HandoutArticle` (both `.tsx` and `.astro`) accept only `title` and `html` — no category awareness. All category-specific styling today lives in the parent wrappers.
 - `backgrounds.ts` maps category → CSS gradient background. No font or color config exists.
-- Three font files already committed to `public/fonts/`: `Glendora.otf`, `Metalick.ttf`, `Consul Typewriter.ttf`. No `@font-face` declarations yet.
+- Three font files in use from `public/fonts/`: `Tisk.ttf`, `Metalick.ttf`, `Consul Typewriter.ttf`. (`Glendora.otf` remains in the repo but was superseded by Tisk for fantasy.) No `@font-face` declarations yet at plan time.
 - `global.css` owns all prose overrides (`.handout-article .prose-invert`). Per-category overrides must go here too.
 - Display labels in `backgrounds.ts` are currently wrong: `horror` shows "Grimdark" and `scifi` shows "Post-Apocalyptic". The intended themes are the reverse.
 
@@ -49,7 +49,7 @@ Add per-category font families and text colors to the handout rendering pipeline
 - No WOFF2 conversion — TTF/OTF served directly; conversion is a future optimization.
 - No background gradient changes — that is S-09 (`retheme-backgrounds`).
 - No per-category link or code-block color overrides — prose accent colors stay as the S-05 palette defaults.
-- No font size changes — only font family and text color.
+- No font size changes for scifi/horror — only font family and text color. **Addendum:** fantasy category adds larger h1/prose sizing (see Phase 2 CSS) for High Fantasy readability on parchment backgrounds.
 - No user font selection — fonts are preset per category.
 
 ## Implementation Approach
@@ -85,7 +85,7 @@ Register the three self-hosted fonts via `@font-face` in `global.css`. Create `s
 **Intent:** Register the three font families so CSS can reference them by name. Place declarations near the top of the file, after the existing `@import` statements.
 
 **Contract:** Three `@font-face` blocks:
-- `font-family: 'Glendora'` — `src: url('/fonts/Glendora.otf') format('opentype')`
+- `font-family: 'Tisk'` — `src: url('/fonts/Tisk.ttf') format('truetype')`
 - `font-family: 'Metalick'` — `src: url('/fonts/Metalick.ttf') format('truetype')`
 - `font-family: 'Consul Typewriter'` — `src: url('/fonts/Consul Typewriter.ttf') format('truetype')`
 
@@ -105,7 +105,7 @@ interface FontConfig {
 }
 
 const FONT_CONFIGS: Record<BackgroundCategory, FontConfig> = {
-  fantasy: { fontFamily: "'Glendora', serif",               fontColor: '#2c1810' },
+  fantasy: { fontFamily: "'Tisk', serif",                 fontColor: '#2c1810' },
   scifi:   { fontFamily: "'Metalick', monospace",            fontColor: '#39ff14' },
   horror:  { fontFamily: "'Consul Typewriter', sans-serif",  fontColor: '#1a1812' },
 };
@@ -133,7 +133,7 @@ Export `FontConfig` type and `FONT_CONFIGS` constant. Follow the exports-at-end-
 
 #### Manual Verification
 
-- Opening `/handouts/new` and inspecting network tab: `GET /fonts/Glendora.otf` (and the other two) returns 200
+- Opening `/handouts/new` and inspecting network tab: `GET /fonts/Tisk.ttf` (and the other two) returns 200
 - Category picker in new-handout form shows "High Fantasy", "Grimdark", "Eldritch" labels (corrected)
 - Dashboard card subtitle shows corrected labels for existing handouts
 
@@ -164,9 +164,16 @@ Values from `FONT_CONFIGS`:
 
 | Selector | `font-family` | `color` / prose vars |
 |---|---|---|
-| `[data-category="fantasy"]` | `'Glendora', serif` | `#2c1810` |
+| `[data-category="fantasy"]` | `'Tisk', serif` | `#2c1810` |
 | `[data-category="scifi"]` | `'Metalick', monospace` | `#39ff14` |
 | `[data-category="horror"]` | `'Consul Typewriter', sans-serif` | `#1a1812` |
+
+**Fantasy-only sizing (addendum):** In addition to font/color, fantasy blocks set `h1` to `3.75rem`, prose body to `2em`, and normalize pre/code sizes within prose. scifi and horror have no per-category size overrides.
+
+| Selector | Size overrides |
+|---|---|
+| `[data-category="fantasy"] > h1` | `font-size: 3.75rem; line-height: 1.2` |
+| `[data-category="fantasy"] .prose-invert` | `font-size: 2em` (+ pre/code size normalization) |
 
 ### Success Criteria
 
@@ -176,7 +183,7 @@ Values from `FONT_CONFIGS`:
 
 #### Manual Verification
 
-- Selecting "High Fantasy" in the new-handout editor and clicking Generate: article panel text renders in Glendora font, dark sepia color
+- Selecting "High Fantasy" in the new-handout editor and clicking Generate: article panel text renders in Tisk font, dark sepia color
 - Selecting "Grimdark" and generating: article renders in Metalick, neon green
 - Selecting "Eldritch" and generating: article renders in Consul Typewriter, cream color
 - H1 title and prose body both use the category font and color
@@ -258,7 +265,7 @@ Two unit test files: one for the `FONT_CONFIGS` contract, one for `HandoutArticl
 
 **Contract:** Tests assert:
 - `Object.keys(FONT_CONFIGS)` equals `['fantasy', 'scifi', 'horror']`
-- Each entry's `fontFamily` is a non-empty string containing the expected font name (`'Glendora'`, `'Metalick'`, `'Consul Typewriter'`)
+- Each entry's `fontFamily` is a non-empty string containing the expected font name (`'Tisk'`, `'Metalick'`, `'Consul Typewriter'`)
 - Each entry's `fontColor` matches the expected hex value
 
 #### 2. HandoutArticle rendering tests
@@ -298,7 +305,7 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 1. Start dev server: `npm run dev`
 2. Log in, open `/handouts/new`
-3. Type any markdown, select "High Fantasy" → click Generate → confirm Glendora font and dark sepia text
+3. Type any markdown, select "High Fantasy" → click Generate → confirm Tisk font and dark sepia text
 4. Select "Grimdark" → Generate → confirm Metalick font and neon green text
 5. Select "Eldritch" → Generate → confirm Consul Typewriter font and cream text
 6. Create and publish a handout for each category; open `/share/<token>` for each → confirm fonts match
@@ -336,7 +343,7 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 #### Manual
 
-- [x] 2.2 High Fantasy → Glendora font + dark sepia in preview — 5636e7d
+- [x] 2.2 High Fantasy → Tisk font + dark sepia in preview — 5636e7d
 - [x] 2.3 Grimdark → Metalick font + neon green in preview — 5636e7d
 - [x] 2.4 Eldritch → Consul Typewriter font + cream in preview — 5636e7d
 - [x] 2.5 H1 title and prose body both use category font + color — 5636e7d
