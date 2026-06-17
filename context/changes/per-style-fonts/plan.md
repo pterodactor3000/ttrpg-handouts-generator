@@ -346,7 +346,7 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 #### Automated
 
 - [x] 3.1 Lint + type check pass (`npm run lint`) — 3ae3b5d
-- [x] 3.2 Unit tests pass (`npm test -- --project unit`)
+- [x] 3.2 Unit tests pass (`npm test -- --project unit`) — 45d11f2
 
 #### Manual
 
@@ -358,4 +358,4 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 #### Automated
 
-- [x] 4.1 `npm test -- --project unit` — all new tests green
+- [x] 4.1 `npm test -- --project unit` — all new tests green — 45d11f2
