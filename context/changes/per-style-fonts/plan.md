@@ -345,14 +345,14 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 #### Automated
 
-- [x] 3.1 Lint + type check pass (`npm run lint`)
+- [x] 3.1 Lint + type check pass (`npm run lint`) — 3ae3b5d
 - [ ] 3.2 Unit tests pass (`npm test -- --project unit`)
 
 #### Manual
 
-- [x] 3.3 GM preview reflects font on Generate with correct category
-- [x] 3.4 Share view shows correct font for each published category
-- [x] 3.5 No category selected → no `data-category` attribute, default font applied
+- [x] 3.3 GM preview reflects font on Generate with correct category — 3ae3b5d
+- [x] 3.4 Share view shows correct font for each published category — 3ae3b5d
+- [x] 3.5 No category selected → no `data-category` attribute, default font applied — 3ae3b5d
 
 ### Phase 4: Unit tests
 
