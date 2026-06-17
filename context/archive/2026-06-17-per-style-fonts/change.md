@@ -2,9 +2,11 @@
 id: per-style-fonts
 roadmap_id: S-07
 title: Per-style fonts and font colors for handouts
-status: impl_reviewed
+status: archived
 created: 2026-06-17
-updated: 2026-06-17---
+updated: 2026-06-17
+archived_at: 2026-06-17T16:13:50Z
+---
 
 ## Identity
 
