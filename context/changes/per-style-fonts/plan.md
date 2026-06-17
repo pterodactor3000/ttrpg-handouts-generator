@@ -320,39 +320,39 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 #### Automated
 
-- [x] 1.1 Type check + build passes (`npm run lint && npm run build`)
+- [x] 1.1 Type check + build passes (`npm run lint && npm run build`) — 84d18ee
 
 #### Manual
 
-- [x] 1.2 Font files return 200 in network tab
-- [x] 1.3 Category picker shows corrected labels (High Fantasy / Grimdark / Eldritch)
-- [x] 1.4 Dashboard cards show corrected labels
+- [x] 1.2 Font files return 200 in network tab — 84d18ee
+- [x] 1.3 Category picker shows corrected labels (High Fantasy / Grimdark / Eldritch) — 84d18ee
+- [x] 1.4 Dashboard cards show corrected labels — 84d18ee
 
 ### Phase 2: Per-category CSS rules
 
 #### Automated
 
-- [ ] 2.1 Lint passes (`npm run lint`)
+- [x] 2.1 Lint passes (`npm run lint`)
 
 #### Manual
 
-- [ ] 2.2 High Fantasy → Glendora font + dark sepia in preview
-- [ ] 2.3 Grimdark → Metalick font + neon green in preview
-- [ ] 2.4 Eldritch → Consul Typewriter font + cream in preview
-- [ ] 2.5 H1 title and prose body both use category font + color
+- [x] 2.2 High Fantasy → Glendora font + dark sepia in preview
+- [x] 2.3 Grimdark → Metalick font + neon green in preview
+- [x] 2.4 Eldritch → Consul Typewriter font + cream in preview
+- [x] 2.5 H1 title and prose body both use category font + color
 
 ### Phase 3: HandoutArticle props and caller wiring
 
 #### Automated
 
-- [ ] 3.1 Lint + type check pass (`npm run lint`)
+- [x] 3.1 Lint + type check pass (`npm run lint`)
 - [ ] 3.2 Unit tests pass (`npm test -- --project unit`)
 
 #### Manual
 
-- [ ] 3.3 GM preview reflects font on Generate with correct category
-- [ ] 3.4 Share view shows correct font for each published category
-- [ ] 3.5 No category selected → no `data-category` attribute, default font applied
+- [x] 3.3 GM preview reflects font on Generate with correct category
+- [x] 3.4 Share view shows correct font for each published category
+- [x] 3.5 No category selected → no `data-category` attribute, default font applied
 
 ### Phase 4: Unit tests
 

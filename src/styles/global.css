@@ -4,8 +4,8 @@
 @plugin '@tailwindcss/typography';
 
 @font-face {
-  font-family: 'Glendora';
-  src: url('/fonts/Glendora.otf') format('opentype');
+  font-family: 'Tisk';
+  src: url('/fonts/Tisk.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -293,6 +293,65 @@
   .handout-article .prose-invert :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)):hover {
     color: var(--palette-accent);
   }
+}
+
+/* Unlayered — must beat .handout-article base color (also unlayered) and @layer components prose vars */
+.handout-article[data-category='fantasy'] {
+  font-family: 'Tisk', serif;
+  color: #2c1810;
+}
+
+.handout-article[data-category='fantasy'] > h1 {
+  font-size: 3.75rem;
+  line-height: 1.2;
+}
+
+.handout-article[data-category='fantasy'] .prose-invert,
+.handout-article[data-category='fantasy'] .prose-invert.handout-article-prose {
+  font-size: 2em;
+  --tw-prose-body: #2c1810;
+  --tw-prose-headings: #2c1810;
+  --tw-prose-bold: #2c1810;
+  --tw-prose-lead: #2c1810;
+  --tw-prose-quotes: #2c1810;
+}
+
+.handout-article[data-category='fantasy'] .prose-invert :where(pre):not(:where([class~='not-prose'], [class~='not-prose'] *)),
+.handout-article[data-category='fantasy'] .prose-invert.handout-article-prose :where(pre):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-size: 0.875rem;
+}
+
+.handout-article[data-category='fantasy'] .prose-invert :where(pre code):not(:where([class~='not-prose'], [class~='not-prose'] *)),
+.handout-article[data-category='fantasy'] .prose-invert.handout-article-prose :where(pre code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-size: 1em;
+}
+
+.handout-article[data-category='scifi'] {
+  font-family: 'Metalick', monospace;
+  color: #39ff14;
+}
+
+.handout-article[data-category='scifi'] .prose-invert,
+.handout-article[data-category='scifi'] .prose-invert.handout-article-prose {
+  --tw-prose-body: #39ff14;
+  --tw-prose-headings: #39ff14;
+  --tw-prose-bold: #39ff14;
+  --tw-prose-lead: #39ff14;
+  --tw-prose-quotes: #39ff14;
+}
+
+.handout-article[data-category='horror'] {
+  font-family: 'Consul Typewriter', sans-serif;
+  color: #1a1812;
+}
+
+.handout-article[data-category='horror'] .prose-invert,
+.handout-article[data-category='horror'] .prose-invert.handout-article-prose {
+  --tw-prose-body: #1a1812;
+  --tw-prose-headings: #1a1812;
+  --tw-prose-bold: #1a1812;
+  --tw-prose-lead: #1a1812;
+  --tw-prose-quotes: #1a1812;
 }
 
 @layer base {
