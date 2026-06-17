@@ -320,13 +320,13 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 #### Automated
 
-- [ ] 1.1 Type check + build passes (`npm run lint && npm run build`)
+- [x] 1.1 Type check + build passes (`npm run lint && npm run build`)
 
 #### Manual
 
-- [ ] 1.2 Font files return 200 in network tab
-- [ ] 1.3 Category picker shows corrected labels (High Fantasy / Grimdark / Eldritch)
-- [ ] 1.4 Dashboard cards show corrected labels
+- [x] 1.2 Font files return 200 in network tab
+- [x] 1.3 Category picker shows corrected labels (High Fantasy / Grimdark / Eldritch)
+- [x] 1.4 Dashboard cards show corrected labels
 
 ### Phase 2: Per-category CSS rules
 

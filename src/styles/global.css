@@ -3,6 +3,24 @@
 @import 'highlight.js/styles/github-dark.css';
 @plugin '@tailwindcss/typography';
 
+@font-face {
+  font-family: 'Glendora';
+  src: url('/fonts/Glendora.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Metalick';
+  src: url('/fonts/Metalick.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Consul Typewriter';
+  src: url('/fonts/Consul Typewriter.ttf') format('truetype');
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
