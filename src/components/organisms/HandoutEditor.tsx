@@ -272,6 +272,7 @@ const HandoutEditor = () => {
               <HandoutArticle
                 title={title || 'Untitled'}
                 html={markdownContent ? renderedPreview : ''}
+                category={backgroundCategory ?? undefined}
                 className="w-full max-w-2xl"
                 emptyPlaceholder={
                   <p className="text-muted-foreground text-sm italic">Your rendered markdown will appear here…</p>
