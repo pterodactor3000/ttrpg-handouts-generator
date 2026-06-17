@@ -1,16 +1,18 @@
 import type { ReactNode } from 'react';
+import type { BackgroundCategory } from '@/types';
 import { cn } from '@/lib/utils';
 
 interface HandoutArticleProps {
   title: string;
   html: string;
+  category?: BackgroundCategory;
   className?: string;
   emptyPlaceholder?: ReactNode;
 }
 
-const HandoutArticle = ({ title, html, className, emptyPlaceholder }: HandoutArticleProps) => {
+const HandoutArticle = ({ title, html, category, className, emptyPlaceholder }: HandoutArticleProps) => {
   return (
-    <article className={cn('handout-article mx-auto w-full max-w-2xl p-4 md:p-8', className)}>
+    <article className={cn('handout-article mx-auto w-full max-w-2xl p-4 md:p-8', className)} data-category={category}>
       <h1 className="mb-6 text-3xl font-bold break-words">{title}</h1>
       {html ? (
         <div

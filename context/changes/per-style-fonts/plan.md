@@ -332,14 +332,14 @@ Follows the TSX test lesson: add `@vitejs/plugin-react` to `vitest.config.ts` if
 
 #### Automated
 
-- [x] 2.1 Lint passes (`npm run lint`)
+- [x] 2.1 Lint passes (`npm run lint`) — 5636e7d
 
 #### Manual
 
-- [x] 2.2 High Fantasy → Glendora font + dark sepia in preview
-- [x] 2.3 Grimdark → Metalick font + neon green in preview
-- [x] 2.4 Eldritch → Consul Typewriter font + cream in preview
-- [x] 2.5 H1 title and prose body both use category font + color
+- [x] 2.2 High Fantasy → Glendora font + dark sepia in preview — 5636e7d
+- [x] 2.3 Grimdark → Metalick font + neon green in preview — 5636e7d
+- [x] 2.4 Eldritch → Consul Typewriter font + cream in preview — 5636e7d
+- [x] 2.5 H1 title and prose body both use category font + color — 5636e7d
 
 ### Phase 3: HandoutArticle props and caller wiring
 
