@@ -1,5 +1,6 @@
 ---
 import StatusBadge from '@/components/atoms/StatusBadge.astro';
+import ArchiveButton from '@/components/atoms/ArchiveButton';
 import CopyLinkButton from '@/components/atoms/CopyLinkButton';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import type { HandoutListItem } from '@/lib/handout-list';
@@ -47,9 +48,12 @@ const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
       )
     }
     {
-      handout.share_token && (
-        <div class="border-surface flex justify-end border-t pt-3">
-          <CopyLinkButton shareToken={handout.share_token} client:idle />
+      (handout.share_token != null || handout.status !== 'archived') && (
+        <div class="border-surface flex items-center justify-between gap-2 border-t pt-3" data-handout-card-footer>
+          {handout.status !== 'archived' && (
+            <ArchiveButton handoutId={handout.id} handoutTitle={handout.title} client:idle />
+          )}
+          {handout.share_token && <CopyLinkButton shareToken={handout.share_token} client:idle />}
         </div>
       )
     }
