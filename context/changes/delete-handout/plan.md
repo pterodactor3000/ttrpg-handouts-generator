@@ -298,17 +298,17 @@ None. The `archived_at` column, `archived` enum value, and all required RLS poli
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes on all new/changed files
-- [x] 2.2 `npm run build` succeeds with no type errors
-- [x] 2.3 `npx prettier --check .` passes
+- [x] 2.1 `npm run lint` passes on all new/changed files — f7c9895
+- [x] 2.2 `npm run build` succeeds with no type errors — f7c9895
+- [x] 2.3 `npx prettier --check .` passes — f7c9895
 
 #### Manual
 
-- [x] 2.4 Draft card has Delete button; published active card has Delete + Copy link; archived card has Copy link only
-- [x] 2.5 Cancel closes dialog without any change
-- [x] 2.6 Confirm archives the row and removes the card from the DOM immediately
-- [x] 2.7 Published handout's `/share/[token]` page still loads after archiving
-- [x] 2.8 Simulated API failure → toast error, card stays visible
+- [x] 2.4 Draft card has Delete button; published active card has Delete + Copy link; archived card has Copy link only — f7c9895
+- [x] 2.5 Cancel closes dialog without any change — f7c9895
+- [x] 2.6 Confirm archives the row and removes the card from the DOM immediately — f7c9895
+- [x] 2.7 Published handout's `/share/[token]` page still loads after archiving — f7c9895
+- [x] 2.8 Simulated API failure → toast error, card stays visible — f7c9895
 
 ### Phase 3: Tests
 
