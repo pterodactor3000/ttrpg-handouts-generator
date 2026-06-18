@@ -403,15 +403,15 @@ describe('BACKGROUND_CONFIGS', () => {
 
 #### Automated
 
-- [x] 4.1 Lint passes (`npm run lint`)
+- [x] 4.1 Lint passes (`npm run lint`) — a876574
 
 #### Manual
 
-- [x] 4.2 BackgroundPicker swatches identical to before
-- [x] 4.3 HandoutCard strips identical to before
+- [x] 4.2 BackgroundPicker swatches identical to before — a876574
+- [x] 4.3 HandoutCard strips identical to before — a876574
 
 ### Phase 5: Unit test
 
 #### Automated
 
-- [ ] 5.1 `npm test -- --project unit` — all new tests green
+- [x] 5.1 `npm test -- --project unit` — all new tests green
