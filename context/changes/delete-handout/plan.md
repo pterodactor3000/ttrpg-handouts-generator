@@ -282,15 +282,15 @@ None. The `archived_at` column, `archived` enum value, and all required RLS poli
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` passes on the new file
-- [ ] 1.2 `npm run build` succeeds with no type errors
-- [ ] 1.3 `npx prettier --check .` passes (no formatting drift)
+- [x] 1.1 `npm run lint` passes on the new file
+- [x] 1.2 `npm run build` succeeds with no type errors
+- [x] 1.3 `npx prettier --check .` passes (no formatting drift)
 
 #### Manual
 
-- [ ] 1.4 Valid draft → 200, row has `status = 'archived'` and non-null `archived_at`
-- [ ] 1.5 Calling archive again on archived row → 404
-- [ ] 1.6 Calling archive with another user's session → 404
+- [x] 1.4 Valid draft → 200, row has `status = 'archived'` and non-null `archived_at`
+- [x] 1.5 Calling archive again on archived row → 404
+- [x] 1.6 Calling archive with another user's session → 404
 
 ### Phase 2: ArchiveButton Island + Toast + Card Integration
 
