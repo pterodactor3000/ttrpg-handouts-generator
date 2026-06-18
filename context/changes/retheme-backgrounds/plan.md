@@ -387,28 +387,28 @@ describe('BACKGROUND_CONFIGS', () => {
 
 #### Automated
 
-- [x] 3.1 Lint passes (`npm run lint`)
+- [x] 3.1 Lint passes (`npm run lint`) — 796ebe1
 
 #### Manual
 
-- [x] 3.2 Fantasy: parchment border + fill texture visible, sharp corners
-- [x] 3.3 Horror: newspaper border + fill texture visible, sharp corners
-- [x] 3.4 Scifi: CRT border + fill texture visible, sharp corners
-- [x] 3.5 Text readable on each themed card interior
-- [x] 3.6 Share view renders correctly for all three categories
-- [x] 3.7 BackgroundPicker and HandoutCard no visual regression
-- [x] 3.8 Mobile: border renders cleanly on narrow viewport
+- [x] 3.2 Fantasy: parchment border + fill texture visible, sharp corners — 796ebe1
+- [x] 3.3 Horror: newspaper border + fill texture visible, sharp corners — 796ebe1
+- [x] 3.4 Scifi: CRT border + fill texture visible, sharp corners — 796ebe1
+- [x] 3.5 Text readable on each themed card interior — 796ebe1
+- [x] 3.6 Share view renders correctly for all three categories — 796ebe1
+- [x] 3.7 BackgroundPicker and HandoutCard no visual regression — 796ebe1
+- [x] 3.8 Mobile: border renders cleanly on narrow viewport — 796ebe1
 
 ### Phase 4: background-size on picker and card
 
 #### Automated
 
-- [ ] 4.1 Lint passes (`npm run lint`)
+- [x] 4.1 Lint passes (`npm run lint`)
 
 #### Manual
 
-- [ ] 4.2 BackgroundPicker swatches identical to before
-- [ ] 4.3 HandoutCard strips identical to before
+- [x] 4.2 BackgroundPicker swatches identical to before
+- [x] 4.3 HandoutCard strips identical to before
 
 ### Phase 5: Unit test
 

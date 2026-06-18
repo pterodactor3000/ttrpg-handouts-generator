@@ -23,7 +23,11 @@ const BackgroundPicker = ({ value, onChange }: BackgroundPickerProps) => {
               ? 'border-brand-accent-light ring-brand-accent-light ring-offset-background ring-2 ring-offset-2'
               : 'border-surface hover:border-brand-accent-light/50',
           )}
-          style={{ background: BACKGROUND_CONFIGS[option].cssBackground }}
+          style={{
+            background: BACKGROUND_CONFIGS[option].cssBackground,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
           <span className="text-xs font-semibold text-white drop-shadow">{BACKGROUND_CONFIGS[option].label}</span>
         </button>
