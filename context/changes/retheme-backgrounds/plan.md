@@ -363,25 +363,25 @@ describe('BACKGROUND_CONFIGS', () => {
 
 #### Automated
 
-- [x] 1.1 Type check + lint passes (`npm run lint`)
+- [x] 1.1 Type check + lint passes (`npm run lint`) — 95c39fe
 
 #### Manual
 
-- [x] 1.2 BackgroundPicker swatches show updated gradient colors
-- [x] 1.3 HandoutCard strips reflect updated gradients
-- [x] 1.4 Preview wrapper and share page background update
+- [x] 1.2 BackgroundPicker swatches show updated gradient colors — 95c39fe
+- [x] 1.3 HandoutCard strips reflect updated gradients — 95c39fe
+- [x] 1.4 Preview wrapper and share page background update — 95c39fe
 
 ### Phase 2: Border image assets
 
 #### Automated
 
-- [ ] 2.1 Build passes with new files (`npm run build`)
+- [x] 2.1 Build passes with new files (`npm run build`)
 
 #### Manual
 
-- [ ] 2.2 `/borders/fantasy-border.png` returns 200 in network tab
-- [ ] 2.3 `/borders/horror-border.png` returns 200 in network tab
-- [ ] 2.4 `/borders/scifi-border.png` returns 200 in network tab
+- [x] 2.2 `/borders/fantasy-border.png` returns 200 in network tab
+- [x] 2.3 `/borders/horror-border.png` returns 200 in network tab
+- [x] 2.4 `/borders/scifi-border.png` returns 200 in network tab
 
 ### Phase 3: Per-category border-image CSS
 
