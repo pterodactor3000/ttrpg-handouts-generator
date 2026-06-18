@@ -414,4 +414,4 @@ describe('BACKGROUND_CONFIGS', () => {
 
 #### Automated
 
-- [x] 5.1 `npm test -- --project unit` — all new tests green
+- [x] 5.1 `npm test -- --project unit` — all new tests green — 6c3b470
