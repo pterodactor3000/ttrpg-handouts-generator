@@ -14,7 +14,7 @@ const BACKGROUND_CONFIGS: Record<BackgroundCategory, { label: string; cssBackgro
   scifi: {
     label: 'Grimdark',
     cssBackground:
-      'repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 0, 0, 0.3) 2px, rgba(0, 0, 0, 0.3) 4px), radial-gradient(ellipse at top, #0c2010 0%, #020a05 40%), linear-gradient(180deg, #082008 0%, #010802 100%)',
+      'radial-gradient(ellipse at top, #0c2010 0%, #020a05 40%), linear-gradient(180deg, #082008 0%, #010802 100%)',
   },
 };
 

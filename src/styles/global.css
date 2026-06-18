@@ -10,6 +10,12 @@
 }
 
 @font-face {
+  font-family: 'Papyrus';
+  src: url('/fonts/Papyrus.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Metalick';
   src: url('/fonts/Metalick.ttf') format('truetype');
   font-display: swap;
@@ -297,33 +303,17 @@
 
 /* Unlayered — must beat .handout-article base color (also unlayered) and @layer components prose vars */
 .handout-article[data-category='fantasy'] {
-  font-family: 'Tisk', serif;
+  font-family: 'Papyrus', serif;
   color: #2c1810;
-}
-
-.handout-article[data-category='fantasy'] > h1 {
-  font-size: 3.75rem;
-  line-height: 1.2;
 }
 
 .handout-article[data-category='fantasy'] .prose-invert,
 .handout-article[data-category='fantasy'] .prose-invert.handout-article-prose {
-  font-size: 2em;
   --tw-prose-body: #2c1810;
   --tw-prose-headings: #2c1810;
   --tw-prose-bold: #2c1810;
   --tw-prose-lead: #2c1810;
   --tw-prose-quotes: #2c1810;
-}
-
-.handout-article[data-category='fantasy'] .prose-invert :where(pre):not(:where([class~='not-prose'], [class~='not-prose'] *)),
-.handout-article[data-category='fantasy'] .prose-invert.handout-article-prose :where(pre):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-  font-size: 0.875rem;
-}
-
-.handout-article[data-category='fantasy'] .prose-invert :where(pre code):not(:where([class~='not-prose'], [class~='not-prose'] *)),
-.handout-article[data-category='fantasy'] .prose-invert.handout-article-prose :where(pre code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-  font-size: 1em;
 }
 
 .handout-article[data-category='scifi'] {
@@ -364,19 +354,43 @@
 }
 
 .handout-article[data-category='horror'] {
-  border-image: url('/borders/horror-border.png') 80 fill / 60px / 0 round;
+  border-image: url('/borders/horror-border.png') 80 / 60px / 0 round;
   border-width: 60px;
   border-radius: 0;
-  background-color: transparent;
+  background: radial-gradient(ellipse at center, #fffefa 0%, #f7f2db 100%);
   box-shadow: 0 12px 40px -8px rgba(60, 50, 30, 0.4);
 }
 
 .handout-article[data-category='scifi'] {
+  position: relative;
   border-image: url('/borders/scifi-border.png') 80 fill / 60px / 0 round;
   border-width: 60px;
   border-radius: 0;
   background-color: transparent;
   box-shadow: 0 12px 40px -8px rgba(0, 80, 30, 0.5);
+}
+
+/* Scanline overlay across the whole scifi card, border included */
+.handout-article[data-category='scifi']::before {
+  content: '';
+  position: absolute;
+  inset: -60px;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    #003d00 0px,
+    #003d00 4px,
+    transparent 4px,
+    transparent 14px
+  );
+  filter: blur(2.5px);
+  opacity: 0.6;
+}
+
+.handout-article[data-category='scifi'] > * {
+  position: relative;
+  z-index: 1;
 }
 
 @layer base {
