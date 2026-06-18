@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-17
+updated: 2026-06-18
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
@@ -41,7 +41,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-06 | `new-handout-back-button`            | return to the dashboard from the new-handout view via a clear back control, without submitting the form                                                                                                       | S-01          | FR-013, FR-002                                                 | done     |
 | S-07 | `per-style-fonts`                    | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view                                       | S-01          | FR-014, FR-005                                                 | done     |
 | S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
-| S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                     | S-01, S-07    | FR-005, FR-009, FR-011                                         | proposed |
+| S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                     | S-01, S-07    | FR-005, FR-009, FR-011                                         | done     |
 
 ## Streams
 
@@ -229,7 +229,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Are these CSS-only effects (gradient + overlay for CRT, CSS paper texture for fantasy, CSS newspaper grid for postapo) or raster image assets? — Owner: user. Block: no.
 - **Risk:** The three new images must remain visually compatible with the per-style fonts and colors introduced by S-07 — this is why S-07 is a prerequisite. The primary risk is readability: if a new background (especially the CRT scanline effect or the newspaper texture) is too busy or high-contrast, the text overlay could become unreadable. Since these are pre-loaded static assets (no user upload path), blast radius is limited to visual presentation only. The mobile-responsive NFR requires verification on the shared read-only page, where screen density can exaggerate texture contrast. CSS-only backgrounds (color-gradient CRT, CSS paper texture) are lower-risk than raster images from a load-time perspective (NFR < 5 s generation).
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -272,3 +272,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-02: GM can view a list of all their handouts (draft and published) with titles and tags, and navigate to create a new handout or open an existing one.** — Archived 2026-06-07 → `context/archive/2026-06-07-handout-dashboard/`. Lesson: —.
 - **S-05: GM (and players, on the shared read-only page) see a refreshed, visually consistent UI across the existing screens — dashboard, new-handout editor, preview, and shared view. Improvements are limited to typography, spacing, color theming, and a shared loading animation; no user flows change and no new screens are added.** — Archived 2026-06-13 → `context/archive/2026-06-09-ui-restyle/`. Lesson: —.
 - **S-07: Each handout style/background category (grimdark / high fantasy / postapo) renders with its own preset font family and font color, applied consistently in both the GM preview and the shared read-only view.** — Archived 2026-06-17 → `context/archive/2026-06-17-per-style-fonts/`. Lesson: —.
+- **S-09: GM (and players on the shared read-only view) see each of the three style categories rendered over a new, themed pre-loaded background image: old paper texture for high fantasy, green-tinted CRT display for grimdark, and newspaper print for postapo — in both the GM preview and the shared player view.** — Archived 2026-06-18 → `context/archive/2026-06-17-retheme-backgrounds/`. Lesson: —.

@@ -1,10 +1,10 @@
 ---
 change_id: retheme-backgrounds
 title: Retheme backgrounds
-status: impl_reviewed
+status: archived
 created: 2026-06-17
 updated: 2026-06-18
-archived_at: null
+archived_at: 2026-06-18T17:49:29Z
 ---
 
 ## Notes
