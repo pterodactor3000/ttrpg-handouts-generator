@@ -363,13 +363,13 @@ describe('BACKGROUND_CONFIGS', () => {
 
 #### Automated
 
-- [ ] 1.1 Type check + lint passes (`npm run lint`)
+- [x] 1.1 Type check + lint passes (`npm run lint`)
 
 #### Manual
 
-- [ ] 1.2 BackgroundPicker swatches show updated gradient colors
-- [ ] 1.3 HandoutCard strips reflect updated gradients
-- [ ] 1.4 Preview wrapper and share page background update
+- [x] 1.2 BackgroundPicker swatches show updated gradient colors
+- [x] 1.3 HandoutCard strips reflect updated gradients
+- [x] 1.4 Preview wrapper and share page background update
 
 ### Phase 2: Border image assets
 
