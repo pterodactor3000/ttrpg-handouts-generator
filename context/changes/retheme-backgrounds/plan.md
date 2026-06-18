@@ -375,29 +375,29 @@ describe('BACKGROUND_CONFIGS', () => {
 
 #### Automated
 
-- [x] 2.1 Build passes with new files (`npm run build`)
+- [x] 2.1 Build passes with new files (`npm run build`) — 0f96fc0
 
 #### Manual
 
-- [x] 2.2 `/borders/fantasy-border.png` returns 200 in network tab
-- [x] 2.3 `/borders/horror-border.png` returns 200 in network tab
-- [x] 2.4 `/borders/scifi-border.png` returns 200 in network tab
+- [x] 2.2 `/borders/fantasy-border.png` returns 200 in network tab — 0f96fc0
+- [x] 2.3 `/borders/horror-border.png` returns 200 in network tab — 0f96fc0
+- [x] 2.4 `/borders/scifi-border.png` returns 200 in network tab — 0f96fc0
 
 ### Phase 3: Per-category border-image CSS
 
 #### Automated
 
-- [ ] 3.1 Lint passes (`npm run lint`)
+- [x] 3.1 Lint passes (`npm run lint`)
 
 #### Manual
 
-- [ ] 3.2 Fantasy: parchment border + fill texture visible, sharp corners
-- [ ] 3.3 Horror: newspaper border + fill texture visible, sharp corners
-- [ ] 3.4 Scifi: CRT border + fill texture visible, sharp corners
-- [ ] 3.5 Text readable on each themed card interior
-- [ ] 3.6 Share view renders correctly for all three categories
-- [ ] 3.7 BackgroundPicker and HandoutCard no visual regression
-- [ ] 3.8 Mobile: border renders cleanly on narrow viewport
+- [x] 3.2 Fantasy: parchment border + fill texture visible, sharp corners
+- [x] 3.3 Horror: newspaper border + fill texture visible, sharp corners
+- [x] 3.4 Scifi: CRT border + fill texture visible, sharp corners
+- [x] 3.5 Text readable on each themed card interior
+- [x] 3.6 Share view renders correctly for all three categories
+- [x] 3.7 BackgroundPicker and HandoutCard no visual regression
+- [x] 3.8 Mobile: border renders cleanly on narrow viewport
 
 ### Phase 4: background-size on picker and card
 

@@ -354,6 +354,31 @@
   --tw-prose-quotes: #1a1812;
 }
 
+/* S-09: themed border-image per category */
+.handout-article[data-category='fantasy'] {
+  border-image: url('/borders/fantasy-border.png') 80 fill / 60px / 0 round;
+  border-width: 60px;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: 0 12px 40px -8px rgba(120, 80, 20, 0.5);
+}
+
+.handout-article[data-category='horror'] {
+  border-image: url('/borders/horror-border.png') 80 fill / 60px / 0 round;
+  border-width: 60px;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: 0 12px 40px -8px rgba(60, 50, 30, 0.4);
+}
+
+.handout-article[data-category='scifi'] {
+  border-image: url('/borders/scifi-border.png') 80 fill / 60px / 0 round;
+  border-width: 60px;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: 0 12px 40px -8px rgba(0, 80, 30, 0.5);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
