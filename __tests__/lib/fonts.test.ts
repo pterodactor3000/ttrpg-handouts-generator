@@ -6,10 +6,10 @@ describe('FONT_CONFIGS', () => {
     expect(Object.keys(FONT_CONFIGS).sort()).toEqual(['fantasy', 'horror', 'scifi']);
   });
 
-  it('maps fantasy to Tisk with dark sepia color', () => {
+  it('maps fantasy to Papyrus with dark sepia color', () => {
     const config = FONT_CONFIGS.fantasy;
-    expect(config.fontFamily).toBe("'Tisk', serif");
-    expect(config.fontFamily).toContain('Tisk');
+    expect(config.fontFamily).toBe("'Papyrus', serif");
+    expect(config.fontFamily).toContain('Papyrus');
     expect(config.fontColor).toBe('#2c1810');
   });
 
