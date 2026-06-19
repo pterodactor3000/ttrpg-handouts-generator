@@ -1,10 +1,10 @@
 ---
 change_id: test-plan-refresh-2026-06-19
 title: Refresh test-plan.md for 2026-06-19: e2e, Sentry, Risk #8 (RLS/migration prod parity), and guide reconciliation
-status: impl_reviewed
+status: archived
 created: 2026-06-19
 updated: 2026-06-19
-archived_at: null
+archived_at: 2026-06-19T11:27:30Z
 ---
 
 ## Notes
