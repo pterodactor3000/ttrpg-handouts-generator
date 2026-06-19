@@ -462,11 +462,11 @@ Phase 2 adds `__tests__/integration/migration/rls-policy-matrix.integration.test
 
 #### Automated
 
-- [x] 3.1 `npm run test:e2e` passes locally (both test cases green)
-- [x] 3.2 CI run completes with e2e job result (green)
-- [x] 3.3 Playwright HTML report artifact present in CI run
+- [x] 3.1 `npm run test:e2e` passes locally (both test cases green) — b466d6a
+- [x] 3.2 CI run completes with e2e job result (green) — b466d6a
+- [x] 3.3 Playwright HTML report artifact present in CI run — b466d6a
 
 #### Manual
 
-- [x] 3.4 `playwright.config.ts` still uses `/usr/bin/chromium` locally when `CI` env var is unset
-- [x] 3.5 CI PR check shows e2e entry; `continue-on-error` confirmed not blocking merge
+- [x] 3.4 `playwright.config.ts` still uses `/usr/bin/chromium` locally when `CI` env var is unset — b466d6a
+- [x] 3.5 CI PR check shows e2e entry; `continue-on-error` confirmed not blocking merge — b466d6a
