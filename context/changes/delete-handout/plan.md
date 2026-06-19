@@ -314,13 +314,13 @@ None. The `archived_at` column, `archived` enum value, and all required RLS poli
 
 #### Automated
 
-- [ ] 3.1 `npm test -- --project unit` passes including `ArchiveButton.test.tsx`
-- [ ] 3.2 `npm test -- --project integration` passes including `archive-handout.integration.test.ts`
-- [ ] 3.3 `npm run lint` passes
-- [ ] 3.4 `npm run build` succeeds
-- [ ] 3.5 `npx prettier --check .` passes
+- [x] 3.1 `npm test -- --project unit` passes including `ArchiveButton.test.tsx`
+- [x] 3.2 `npm test -- --project integration` passes including `archive-handout.integration.test.ts`
+- [x] 3.3 `npm run lint` passes
+- [x] 3.4 `npm run build` succeeds
+- [x] 3.5 `npx prettier --check .` passes
 
 #### Manual
 
-- [ ] 3.6 Full flow re-checked: draft delete → archived; published delete → archived, share link still works
-- [ ] 3.7 No regressions: CopyLinkButton works; empty-state CTA works
+- [x] 3.6 Full flow re-checked: draft delete → archived; published delete → archived, share link still works
+- [x] 3.7 No regressions: CopyLinkButton works; empty-state CTA works
