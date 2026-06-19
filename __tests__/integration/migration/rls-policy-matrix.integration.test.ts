@@ -48,7 +48,6 @@ interface HandoutFixtureInput {
 
 let adminClient: ReturnType<typeof createAdminClient>;
 let anonymousClient: ReturnType<typeof createClient>;
-let ownerAuthenticatedClient: Awaited<ReturnType<typeof signInAsUser>>;
 let otherOwnerAuthenticatedClient: Awaited<ReturnType<typeof signInAsUser>>;
 let ownerUserId: string;
 let otherOwnerUserId: string;
@@ -109,7 +108,6 @@ describe('RLS policy matrix (integration)', () => {
     ownerUserId = ownerUser.id;
     otherOwnerUserId = otherOwnerUser.id;
 
-    ownerAuthenticatedClient = await signInAsUser(ownerEmail, password);
     otherOwnerAuthenticatedClient = await signInAsUser(otherOwnerEmail, password);
 
     const supabaseUrl = requireEnv('SUPABASE_URL');
@@ -148,9 +146,9 @@ describe('RLS policy matrix (integration)', () => {
       );
 
       expect(createResponse.status).toBe(201);
-      const createBody: unknown = await createResponse.json();
-      expect(createBody).toEqual(expect.objectContaining({ id: expect.any(String) }));
-      const handoutId = (createBody as { id: string }).id;
+      const createBody = (await createResponse.json()) as { id: string };
+      expect(typeof createBody.id).toBe('string');
+      const handoutId = createBody.id;
 
       const { data: adminRead, error: adminReadError } = await adminClient
         .from('handouts')
@@ -434,7 +432,10 @@ describe('RLS policy matrix (integration)', () => {
     });
 
     it('gmB cannot DELETE gmA handout', async () => {
-      const { error: deleteError } = await otherOwnerAuthenticatedClient.from('handouts').delete().eq('id', ownerHandoutId);
+      const { error: deleteError } = await otherOwnerAuthenticatedClient
+        .from('handouts')
+        .delete()
+        .eq('id', ownerHandoutId);
 
       expect(deleteError).toBeNull();
 

@@ -36,10 +36,7 @@ export async function deleteTestUser(adminClient: SupabaseClient, userId: string
   }
 }
 
-export async function signInWithPasswordAndGetCookieHeader(
-  email: string,
-  password: string,
-): Promise<string> {
+export async function signInWithPasswordAndGetCookieHeader(email: string, password: string): Promise<string> {
   const supabaseUrl = requireEnv('SUPABASE_URL');
   const supabaseKey = requireEnv('SUPABASE_ANON_KEY');
   const authCookies: AuthCookie[] = [];
@@ -51,7 +48,7 @@ export async function signInWithPasswordAndGetCookieHeader(
       },
       setAll(cookiesToSet) {
         for (const { name, value } of cookiesToSet) {
-          authCookies.push({ name, value: value ?? '' });
+          authCookies.push({ name, value });
         }
       },
     },
