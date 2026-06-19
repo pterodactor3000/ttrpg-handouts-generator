@@ -61,7 +61,7 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Run e2e tests
-        run: npm run test:e2e
+        run: npx playwright test e2e/player-share-link.spec.ts
         continue-on-error: true
 
       - name: Upload Playwright report

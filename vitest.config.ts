@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 const srcAlias = {
   '@/integration': resolve(__dirname, './__tests__/integration'),
   '@': resolve(__dirname, './src'),
+  'astro:env/server': resolve(__dirname, './__tests__/integration/helpers/astro-env-server-stub.ts'),
   'astro:middleware': resolve(__dirname, './__tests__/integration/helpers/astro-middleware-stub.ts'),
 };
 
