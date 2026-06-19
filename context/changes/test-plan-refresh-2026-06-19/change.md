@@ -1,7 +1,7 @@
 ---
 change_id: test-plan-refresh-2026-06-19
 title: Refresh test-plan.md for 2026-06-19: e2e, Sentry, Risk #8 (RLS/migration prod parity), and guide reconciliation
-status: implemented
+status: impl_reviewed
 created: 2026-06-19
 updated: 2026-06-19
 archived_at: null
@@ -26,3 +26,7 @@ Proposed rollout phases (append after existing complete rows):
 1. Guide reconciliation — fix §4/§5/§6/§8 drift; no new tests unless cookbook references need a smoke assertion.
 2. RLS + migration safety — Risk #8; integration tests for policy/migration regressions on fresh Supabase.
 3. E2E CI wiring — Risk #2 SSR gap + interview Q4; wire Playwright share-path in `.github/workflows/ci.yml`.
+
+## Epilogue
+
+Commit `c1664ed` (`docs(cavecrew): ...`) bundled Phase 3 implementation files (`playwright.config.ts`, `.github/workflows/ci.yml`, `e2e/auth.setup.ts`) with unrelated tooling churn (~80 files: `.agents/skills/cave*/**`, `.cursor/**`, `context/archive/**`, etc.). Impl review F7 accepted this as historical fact — future change commits should isolate change-scoped files.
