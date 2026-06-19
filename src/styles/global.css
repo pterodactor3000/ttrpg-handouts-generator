@@ -346,7 +346,7 @@
   border-width: 60px;
   border-radius: 0;
   background-color: transparent;
-  box-shadow: 0 12px 40px -8px rgba(120, 80, 20, 0.5);
+  box-shadow: none;
 }
 
 .handout-article[data-category='horror'] {
@@ -359,7 +359,7 @@
 
 .handout-article[data-category='scifi'] {
   position: relative;
-  border-image: url('/borders/scifi-border.png') 80 fill / 60px / 0 round;
+  border-image: url('/borders/scifi-border.png') 60 fill;
   border-width: 60px;
   border-radius: 0;
   background-color: transparent;
