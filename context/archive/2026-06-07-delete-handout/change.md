@@ -1,9 +1,10 @@
 ---
 change_id: delete-handout
 title: Delete (soft-archive) handout
-status: implemented
+status: archived
 created: 2026-06-07
 updated: 2026-06-19
+archived_at: 2026-06-19T09:41:01Z
 ---
 
 ## Notes
