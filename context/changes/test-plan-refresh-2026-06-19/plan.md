@@ -435,28 +435,28 @@ Phase 2 adds `__tests__/integration/migration/rls-policy-matrix.integration.test
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes
-- [x] 1.2 `npm test -- --project unit` passes
+- [x] 1.1 `npm run lint` passes — eed734c
+- [x] 1.2 `npm test -- --project unit` passes — eed734c
 
 #### Manual
 
-- [x] 1.3 All §6 paths spot-checked against `__tests__/` folder tree
-- [x] 1.4 §4 stack table has e2e row, Sentry row, corrected browser grounding tool and checked dates
-- [x] 1.5 §2 risk map has Risk #8 row; risk response table has Risk #8 row; Risk #5 archive note updated
-- [x] 1.6 §3 has phases 5–7 appended; Phase 5 status is `complete`
-- [x] 1.7 §8 ledger dates read `2026-06-19`
+- [x] 1.3 All §6 paths spot-checked against `__tests__/` folder tree — eed734c
+- [x] 1.4 §4 stack table has e2e row, Sentry row, corrected browser grounding tool and checked dates — eed734c
+- [x] 1.5 §2 risk map has Risk #8 row; risk response table has Risk #8 row; Risk #5 archive note updated — eed734c
+- [x] 1.6 §3 has phases 5–7 appended; Phase 5 status is `complete` — eed734c
+- [x] 1.7 §8 ledger dates read `2026-06-19` — eed734c
 
 ### Phase 2: RLS + Migration Safety
 
 #### Automated
 
-- [ ] 2.1 `npm test -- --project integration` passes (new suite + all existing suites green)
-- [ ] 2.2 Each test in `rls-policy-matrix.integration.test.ts` completes within 30 s
+- [x] 2.1 `npm test -- --project integration` passes (new suite + all existing suites green)
+- [x] 2.2 Each test in `rls-policy-matrix.integration.test.ts` completes within 30 s
 
 #### Manual
 
-- [ ] 2.3 All six coverage groups have at least one test case
-- [ ] 2.4 Spot-check: disable one policy, confirm corresponding group fails; re-enable
+- [x] 2.3 All six coverage groups have at least one test case
+- [x] 2.4 Spot-check: disable one policy, confirm corresponding group fails; re-enable
 
 ### Phase 3: E2E CI Wiring
 

@@ -91,7 +91,7 @@ orchestrator updates Status as artifacts appear on disk.
 | 3   | Markdown rendering safety                             | Prove malicious markdown is neutralized in both preview and shared output                                                            | #3                                                   | unit        | complete    | `context/changes/testing-markdown-rendering-safety/`          |
 | 4   | Quality-gate wiring                                   | Run the test suite in CI so dev/prod-parity regressions are caught before merge                                                      | cross-cutting                                        | gates       | complete    | `context/archive/2026-06-06-testing-quality-gate-wiring/`     |
 | 5   | Guide reconciliation                                  | Fix §4/§5/§6/§8 drift; add Risk #8 to risk map; no new tests                                                                       | #8 (map update)                                      | none        | complete    | `context/changes/test-plan-refresh-2026-06-19/`               |
-| 6   | RLS + migration safety                                | Prove GM CRUD, anon share read, and cross-owner denial on fresh Supabase after migration                                             | #8                                                   | integration | not started | `context/changes/test-plan-refresh-2026-06-19/`               |
+| 6   | RLS + migration safety                                | Prove GM CRUD, anon share read, and cross-owner denial on fresh Supabase after migration                                             | #8                                                   | integration | complete    | `context/changes/test-plan-refresh-2026-06-19/`               |
 | 7   | E2E CI wiring                                         | Wire Playwright share-path into CI; flip §5 e2e gate to optional                                                                     | #2 (SSR)                                             | e2e         | not started | `context/changes/test-plan-refresh-2026-06-19/`               |
 
 **Status vocabulary** (fixed): `not started` → `opened` (change folder
@@ -274,6 +274,8 @@ here capturing anything surprising the rollout phase taught.)
 **Phase 3 (Markdown rendering safety).** All XSS cases live in one `renderHandoutHtml` unit suite — preview and shared pages share the same function, so component tests add no signal. Pipeline-order comment documents that `rehypeSanitize` must stay before `rehypeHighlight`. The hljs tokenization test documents that `alert(1)` may disappear via span splitting, not sanitizer removal — `<script>` absence is the security oracle.
 
 **Phase 4 (Quality-gate wiring).** `.github/workflows/ci.yml` runs lint → unit → `supabase start` → integration on push/PR to `main` (not `master`). Map `API_URL` from `supabase status -o env` to `SUPABASE_URL` in `.env.test`; values are quoted — strip with `cut -d'"' -f2`. Fail the write step if any extracted var is empty. Cloudflare Pages handles build/deploy separately.
+
+**Phase 6 (RLS + migration safety).** Tests use raw Supabase clients — no `vi.mock`. Anonymous client: `createClient(url, anonKey)` from `@supabase/supabase-js`. Cross-owner cases assert both SELECT (must return empty/error) and UPDATE (admin read-back must show no mutation). The suite runs in CI against a fresh Supabase instance; do not run these against a long-lived local DB to avoid false passes from accumulated state.
 
 ## 7. What We Deliberately Don't Test
 
