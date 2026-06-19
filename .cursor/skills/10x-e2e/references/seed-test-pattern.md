@@ -25,7 +25,7 @@ uses `getByRole`, generated tests do too. If the seed has
   state instead of an arbitrary duration.
 - **Risk-tied assertions.** The test name should bind it unambiguously to a risk
   from `context/foundation/test-plan.md`: `test('flashcard data persists after
-  page reload', ...)`, not `test('test 1', ...)`.
+page reload', ...)`, not `test('test 1', ...)`.
 
 ## Exemplar
 

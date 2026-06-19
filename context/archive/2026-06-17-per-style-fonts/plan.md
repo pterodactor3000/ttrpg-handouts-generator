@@ -34,14 +34,14 @@ Add per-category font families and text colors to the handout rendering pipeline
 
 ### Key Decisions
 
-| Decision | Choice | Why |
-|---|---|---|
-| Font loading | Self-hosted TTF/OTF from `public/fonts/` | Files already committed; no CDN dependency; meets < 5s NFR |
-| CSS architecture | `data-category` attribute + CSS selectors | CSS-only theming, no inline styles, consistent with existing prose overrides in `global.css` |
-| Font config location | New `src/lib/fonts.ts` | Keeps font config separate from background config; testable contract |
-| Scope of font | Both `<h1>` title and prose body | Fully cohesive look; h1 is most visible element |
-| Font fallbacks | Category-appropriate generics | Fantasy → serif, Grimdark → monospace, Eldritch → sans-serif |
-| Label correction | Swap `scifi` ↔ `horror` labels | `scifi` = Grimdark theme, `horror` = Eldritch/newspaper theme — current labels were reversed |
+| Decision             | Choice                                    | Why                                                                                          |
+| -------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Font loading         | Self-hosted TTF/OTF from `public/fonts/`  | Files already committed; no CDN dependency; meets < 5s NFR                                   |
+| CSS architecture     | `data-category` attribute + CSS selectors | CSS-only theming, no inline styles, consistent with existing prose overrides in `global.css` |
+| Font config location | New `src/lib/fonts.ts`                    | Keeps font config separate from background config; testable contract                         |
+| Scope of font        | Both `<h1>` title and prose body          | Fully cohesive look; h1 is most visible element                                              |
+| Font fallbacks       | Category-appropriate generics             | Fantasy → serif, Grimdark → monospace, Eldritch → sans-serif                                 |
+| Label correction     | Swap `scifi` ↔ `horror` labels            | `scifi` = Grimdark theme, `horror` = Eldritch/newspaper theme — current labels were reversed |
 
 ## What We're NOT Doing
 
@@ -85,6 +85,7 @@ Register the three self-hosted fonts via `@font-face` in `global.css`. Create `s
 **Intent:** Register the three font families so CSS can reference them by name. Place declarations near the top of the file, after the existing `@import` statements.
 
 **Contract:** Three `@font-face` blocks:
+
 - `font-family: 'Tisk'` — `src: url('/fonts/Tisk.ttf') format('truetype')`
 - `font-family: 'Metalick'` — `src: url('/fonts/Metalick.ttf') format('truetype')`
 - `font-family: 'Consul Typewriter'` — `src: url('/fonts/Consul Typewriter.ttf') format('truetype')`
@@ -98,16 +99,17 @@ Each with `font-display: swap` to prevent invisible text during load.
 **Intent:** Typed map of `BackgroundCategory` → `{ fontFamily, fontColor }`. Single source of truth that makes the font names and colors testable and discoverable without parsing CSS.
 
 **Contract:**
+
 ```typescript
 interface FontConfig {
   fontFamily: string; // full CSS font-family value including fallback
-  fontColor: string;  // hex color for text
+  fontColor: string; // hex color for text
 }
 
 const FONT_CONFIGS: Record<BackgroundCategory, FontConfig> = {
-  fantasy: { fontFamily: "'Tisk', serif",                 fontColor: '#2c1810' },
-  scifi:   { fontFamily: "'Metalick', monospace",            fontColor: '#39ff14' },
-  horror:  { fontFamily: "'Consul Typewriter', sans-serif",  fontColor: '#1a1812' },
+  fantasy: { fontFamily: "'Tisk', serif", fontColor: '#2c1810' },
+  scifi: { fontFamily: "'Metalick', monospace", fontColor: '#39ff14' },
+  horror: { fontFamily: "'Consul Typewriter', sans-serif", fontColor: '#1a1812' },
 };
 ```
 
@@ -120,6 +122,7 @@ Export `FontConfig` type and `FONT_CONFIGS` constant. Follow the exports-at-end-
 **Intent:** Fix the swapped display labels so `scifi` shows "Grimdark" and `horror` shows "Eldritch". The `fantasy` label "High Fantasy" is unchanged.
 
 **Contract:** Update `BACKGROUND_CONFIGS`:
+
 - `scifi.label`: `'Post-Apocalyptic'` → `'Grimdark'`
 - `horror.label`: `'Grimdark'` → `'Eldritch'`
 
@@ -156,23 +159,24 @@ Add CSS selectors in `global.css` that apply font family and text color based on
 **Intent:** Three CSS blocks, one per category, each scoped to `.handout-article[data-category="X"]`. They must appear in the file **after** the existing `.handout-article .prose-invert` block (around line 253) so source order ensures they win when specificity ties.
 
 **Contract:** Each block sets:
+
 - `font-family` on the article element (inherited by `<h1>` and prose body)
 - `color` on the article element (overrides the base `--palette-font-light` for the `<h1>`)
 - On the nested `.prose-invert`: override `--tw-prose-body`, `--tw-prose-headings`, `--tw-prose-bold`, `--tw-prose-lead`, `--tw-prose-quotes` with the category color
 
 Values from `FONT_CONFIGS`:
 
-| Selector | `font-family` | `color` / prose vars |
-|---|---|---|
-| `[data-category="fantasy"]` | `'Tisk', serif` | `#2c1810` |
-| `[data-category="scifi"]` | `'Metalick', monospace` | `#39ff14` |
-| `[data-category="horror"]` | `'Consul Typewriter', sans-serif` | `#1a1812` |
+| Selector                    | `font-family`                     | `color` / prose vars |
+| --------------------------- | --------------------------------- | -------------------- |
+| `[data-category="fantasy"]` | `'Tisk', serif`                   | `#2c1810`            |
+| `[data-category="scifi"]`   | `'Metalick', monospace`           | `#39ff14`            |
+| `[data-category="horror"]`  | `'Consul Typewriter', sans-serif` | `#1a1812`            |
 
 **Fantasy-only sizing (addendum):** In addition to font/color, fantasy blocks set `h1` to `3.75rem`, prose body to `2em`, and normalize pre/code sizes within prose. scifi and horror have no per-category size overrides.
 
-| Selector | Size overrides |
-|---|---|
-| `[data-category="fantasy"] > h1` | `font-size: 3.75rem; line-height: 1.2` |
+| Selector                                  | Size overrides                                   |
+| ----------------------------------------- | ------------------------------------------------ |
+| `[data-category="fantasy"] > h1`          | `font-size: 3.75rem; line-height: 1.2`           |
 | `[data-category="fantasy"] .prose-invert` | `font-size: 2em` (+ pre/code size normalization) |
 
 ### Success Criteria
@@ -264,6 +268,7 @@ Two unit test files: one for the `FONT_CONFIGS` contract, one for `HandoutArticl
 **Intent:** Verify `FONT_CONFIGS` covers all three categories, each entry has a non-empty `fontFamily` and `fontColor`, and `fontFamily` strings reference the correct font names registered in `@font-face`.
 
 **Contract:** Tests assert:
+
 - `Object.keys(FONT_CONFIGS)` equals `['fantasy', 'scifi', 'horror']`
 - Each entry's `fontFamily` is a non-empty string containing the expected font name (`'Tisk'`, `'Metalick'`, `'Consul Typewriter'`)
 - Each entry's `fontColor` matches the expected hex value
@@ -275,6 +280,7 @@ Two unit test files: one for the `FONT_CONFIGS` contract, one for `HandoutArticl
 **Intent:** Verify the `category` prop renders as `data-category` on the `<article>` element for all three categories and is absent when `category` is `undefined`.
 
 **Contract:**
+
 - 3 tests: render with `category="fantasy"`, `"scifi"`, `"horror"` → expect `article` element to have matching `data-category` attribute
 - 1 test: render without `category` prop → expect `article` to have no `data-category` attribute
 

@@ -450,19 +450,19 @@ Phase 2 adds `__tests__/integration/migration/rls-policy-matrix.integration.test
 
 #### Automated
 
-- [x] 2.1 `npm test -- --project integration` passes (new suite + all existing suites green)
-- [x] 2.2 Each test in `rls-policy-matrix.integration.test.ts` completes within 30 s
+- [x] 2.1 `npm test -- --project integration` passes (new suite + all existing suites green) — a071bbf
+- [x] 2.2 Each test in `rls-policy-matrix.integration.test.ts` completes within 30 s — a071bbf
 
 #### Manual
 
-- [x] 2.3 All six coverage groups have at least one test case
-- [x] 2.4 Spot-check: disable one policy, confirm corresponding group fails; re-enable
+- [x] 2.3 All six coverage groups have at least one test case — a071bbf
+- [x] 2.4 Spot-check: disable one policy, confirm corresponding group fails; re-enable — a071bbf
 
 ### Phase 3: E2E CI Wiring
 
 #### Automated
 
-- [ ] 3.1 `npm run test:e2e` passes locally (both test cases green)
+- [x] 3.1 `npm run test:e2e` passes locally (both test cases green)
 - [ ] 3.2 CI run completes with e2e job result (green)
 - [ ] 3.3 Playwright HTML report artifact present in CI run
 

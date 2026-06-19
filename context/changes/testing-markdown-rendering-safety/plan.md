@@ -20,12 +20,14 @@ at step 5 — after sanitize — which is safe today but is not documented as an
 constraint.
 
 Four confirmed bypass gaps are not tested:
+
 - **Gap A** — case-insensitive protocol (`JAVASCRIPT:`, `Javascript:`)
 - **Gap B** — whitespace-prefixed or newline-encoded protocol
 - **Gap C** — SVG vector (`<svg onload=...>`)
 - **Gap D** — pipeline-order contract (hljs-decorated block still clean after rehypeHighlight)
 
 Two supplementary assertions were also elected:
+
 - **Gap E** — GFM bare `javascript:` string (not a valid autolink per spec; assert no href)
 - **Gap img** — `<img src="javascript:...">` (browser-harmless but worth asserting clean)
 
@@ -121,21 +123,21 @@ neutralized by the renderer. Each new `it()` is appended at the end of the exist
 **Contract**: Six new `it()` cases; each calls `renderHandoutHtml(input)` and asserts on the
 returned string using `expect(output).not.toContain(...)`:
 
-| Test name | Input | Assert not present |
-|-----------|-------|--------------------|
-| strips uppercase JAVASCRIPT: protocol | `[click](JAVASCRIPT:alert(1))` | `'javascript:'`, `'JAVASCRIPT:'` |
-| strips mixed-case Javascript: protocol | `[click](Javascript:alert(1))` | `'javascript:'`, `'Javascript:'` |
-| strips leading-space protocol in link | `[click]( javascript:alert(1))` | `'javascript:'` |
-| strips SVG with event handler | `<svg onload=alert(1)>` | `'onload'`, `'<svg'` |
-| GFM bare javascript: string is not converted to a link | `javascript:alert(1)` (plain text, no markdown link syntax) | `'href="javascript:'` |
-| strips javascript: src on img | `<img src="javascript:alert(1)">` | `'javascript:'` |
+| Test name                                              | Input                                                       | Assert not present               |
+| ------------------------------------------------------ | ----------------------------------------------------------- | -------------------------------- |
+| strips uppercase JAVASCRIPT: protocol                  | `[click](JAVASCRIPT:alert(1))`                              | `'javascript:'`, `'JAVASCRIPT:'` |
+| strips mixed-case Javascript: protocol                 | `[click](Javascript:alert(1))`                              | `'javascript:'`, `'Javascript:'` |
+| strips leading-space protocol in link                  | `[click]( javascript:alert(1))`                             | `'javascript:'`                  |
+| strips SVG with event handler                          | `<svg onload=alert(1)>`                                     | `'onload'`, `'<svg'`             |
+| GFM bare javascript: string is not converted to a link | `javascript:alert(1)` (plain text, no markdown link syntax) | `'href="javascript:'`            |
+| strips javascript: src on img                          | `<img src="javascript:alert(1)">`                           | `'javascript:'`                  |
 
 **Gap D (pipeline order)** is addressed via one additional `it()` case that verifies the order
 contract end-to-end:
 
-| Test name | Input | Assert present | Assert not present |
-|-----------|-------|----------------|--------------------|
-| rehypeHighlight output does not reintroduce dangerous attributes | ` ```js\n<script>alert(1)</script>\n``` ` | `'hljs'` | `'<script>'`, `'alert(1)'` |
+| Test name                                                        | Input                                     | Assert present | Assert not present         |
+| ---------------------------------------------------------------- | ----------------------------------------- | -------------- | -------------------------- |
+| rehypeHighlight output does not reintroduce dangerous attributes | ` ```js\n<script>alert(1)</script>\n``` ` | `'hljs'`       | `'<script>'`, `'alert(1)'` |
 
 Total additions: 7 new `it()` cases inside the existing describe block.
 

@@ -45,24 +45,24 @@
 
 ### Phase 1 — Automated
 
-| Check | Command | Result |
-| ----- | ------- | ------ |
-| 1.1 All auth-gate integration tests pass | `npm test -- --project integration` | ✅ PASS |
-| 1.2 Phase 1 regressions | (same run) | ✅ PASS |
-| 1.3 Lint clean | `npm run lint` | ✅ PASS — 0 errors |
+| Check                                    | Command                             | Result             |
+| ---------------------------------------- | ----------------------------------- | ------------------ |
+| 1.1 All auth-gate integration tests pass | `npm test -- --project integration` | ✅ PASS            |
+| 1.2 Phase 1 regressions                  | (same run)                          | ✅ PASS            |
+| 1.3 Lint clean                           | `npm run lint`                      | ✅ PASS — 0 errors |
 
 ### Phase 2 — Automated
 
-| Check | Command | Result |
-| ----- | ------- | ------ |
-| 2.1 All share-token integration tests pass | `npm test -- --project integration` | ✅ PASS — 5/5 |
-| 2.2 All prior tests still pass | (same run — 37/37 total) | ✅ PASS |
-| 2.3 Lint clean | `npm run lint` | ✅ PASS — 0 errors |
+| Check                                      | Command                             | Result             |
+| ------------------------------------------ | ----------------------------------- | ------------------ |
+| 2.1 All share-token integration tests pass | `npm test -- --project integration` | ✅ PASS — 5/5      |
+| 2.2 All prior tests still pass             | (same run — 37/37 total)            | ✅ PASS            |
+| 2.3 Lint clean                             | `npm run lint`                      | ✅ PASS — 0 errors |
 
 ### Manual
 
-| Check | Evidence | Result |
-| ----- | -------- | ------ |
-| 1.4 New test file picked up by integration project | `src/integration/middleware/auth-gate.integration.test.ts` present | ✅ Verified |
-| 1.5 Real `User` shape in `locals.user` | Lines 131–132, 142–143, 160–161 assert `id` and `email` against live user | ✅ Verified |
-| 2.4 Archived test uses admin insert with explicit comment | Lines 113–114 in share-token suite | ✅ Verified |
+| Check                                                     | Evidence                                                                  | Result      |
+| --------------------------------------------------------- | ------------------------------------------------------------------------- | ----------- |
+| 1.4 New test file picked up by integration project        | `src/integration/middleware/auth-gate.integration.test.ts` present        | ✅ Verified |
+| 1.5 Real `User` shape in `locals.user`                    | Lines 131–132, 142–143, 160–161 assert `id` and `email` against live user | ✅ Verified |
+| 2.4 Archived test uses admin insert with explicit comment | Lines 113–114 in share-token suite                                        | ✅ Verified |

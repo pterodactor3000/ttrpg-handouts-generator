@@ -1,4 +1,5 @@
 <!-- IMPL-REVIEW-REPORT -->
+
 # Implementation Review: Per-Style Fonts
 
 - **Plan**: context/changes/per-style-fonts/plan.md
@@ -9,14 +10,14 @@
 
 ## Verdicts
 
-| Dimension | Verdict |
-|-----------|---------|
-| Plan Adherence | WARNING ⚠️ |
-| Scope Discipline | WARNING ⚠️ |
-| Safety & Quality | PASS ✅ |
-| Architecture | WARNING ⚠️ |
-| Pattern Consistency | PASS ✅ |
-| Success Criteria | PASS ✅ |
+| Dimension           | Verdict    |
+| ------------------- | ---------- |
+| Plan Adherence      | WARNING ⚠️ |
+| Scope Discipline    | WARNING ⚠️ |
+| Safety & Quality    | PASS ✅    |
+| Architecture        | WARNING ⚠️ |
+| Pattern Consistency | PASS ✅    |
+| Success Criteria    | PASS ✅    |
 
 ## Findings
 
@@ -75,14 +76,14 @@
   - Tradeoff: Larger architectural change; departs from current CSS-only theming decision.
   - Confidence: MEDIUM — Astro SSR + Tailwind may complicate injection.
   - Blind spot: Haven't evaluated Cloudflare build impact.
-- **Decision**: FIXED via Fix A — added __tests__/lib/fonts-css-sync.test.ts
+- **Decision**: FIXED via Fix A — added **tests**/lib/fonts-css-sync.test.ts
 
 ### F4 — HandoutArticle style tests inject CSS, not global.css
 
 - **Severity**: ⚠️ WARNING
 - **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
 - **Dimension**: Success Criteria
-- **Location**: __tests__/components/molecules/HandoutArticle.test.tsx:30-40
+- **Location**: **tests**/components/molecules/HandoutArticle.test.tsx:30-40
 - **Detail**: Font/color tests inject rules derived from `FONT_CONFIGS` because jsdom does not reliably compute `font-family` from imported stylesheets. This validates the `data-category` DOM hook and inheritance, but would not catch a mismatch between `FONT_CONFIGS` and actual `global.css` rules (e.g. fantasy font-size overrides, wrong hex in CSS).
 - **Fix**: Add F3's CSS↔config sync test, or import `global.css` in a dedicated integration-style unit test with documented jsdom limitations for font-family only.
 - **Decision**: FIXED — gap covered by fonts-css-sync.test.ts (F3); component tests retain DOM hook coverage
@@ -109,11 +110,11 @@
 
 ## Automated verification (re-run 2026-06-17)
 
-| Command | Result |
-|---------|--------|
-| `npm run lint` | PASS (0 errors, 8 pre-existing no-console warnings) |
-| `npm run build` | PASS |
-| `npm test -- --project unit` | PASS (51 tests) |
+| Command                      | Result                                              |
+| ---------------------------- | --------------------------------------------------- |
+| `npm run lint`               | PASS (0 errors, 8 pre-existing no-console warnings) |
+| `npm run build`              | PASS                                                |
+| `npm test -- --project unit` | PASS (51 tests)                                     |
 
 ## Manual verification (Progress section)
 

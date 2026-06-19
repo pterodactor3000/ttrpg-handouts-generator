@@ -26,22 +26,24 @@ modified.
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-|----------|--------|-----------------|--------|
-| Test layer | Unit only (existing file) | DB not involved; single renderer covers both surfaces | Research |
-| Gap coverage | A–E + img src (full set, 7 cases) | Each is a 1-liner; completeness costs nothing | Plan |
-| File placement | Append to existing XSS describe block | No new file — additions fit naturally alongside existing cases | Research |
-| Pipeline comment | Yes — add to `handout-renderer.ts` | Makes ordering constraint visible to future contributors | Plan |
-| Component-level XSS tests | Out of scope | Single boundary principle; component test would mirror the renderer | Research |
-| CI wiring | Out of scope | Phase 4's job | Test plan §3 |
+| Decision                  | Choice                                | Why (1 sentence)                                                    | Source       |
+| ------------------------- | ------------------------------------- | ------------------------------------------------------------------- | ------------ |
+| Test layer                | Unit only (existing file)             | DB not involved; single renderer covers both surfaces               | Research     |
+| Gap coverage              | A–E + img src (full set, 7 cases)     | Each is a 1-liner; completeness costs nothing                       | Plan         |
+| File placement            | Append to existing XSS describe block | No new file — additions fit naturally alongside existing cases      | Research     |
+| Pipeline comment          | Yes — add to `handout-renderer.ts`    | Makes ordering constraint visible to future contributors            | Plan         |
+| Component-level XSS tests | Out of scope                          | Single boundary principle; component test would mirror the renderer | Research     |
+| CI wiring                 | Out of scope                          | Phase 4's job                                                       | Test plan §3 |
 
 ## Scope
 
 **In scope:**
+
 - 7 new `it()` cases inside `describe('XSS payload stripping')` in `handout-renderer.test.ts`
 - 1-line pipeline-order comment in `handout-renderer.ts` between `.use(rehypeSanitize)` and `.use(rehypeHighlight)`
 
 **Out of scope:**
+
 - New test files or helpers
 - Changes to existing test cases
 - `HandoutEditor.test.tsx` XSS assertions
@@ -58,8 +60,8 @@ being skipped.
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|-------|-----------------|----------|
+| Phase                                      | What it delivers                                      | Key risk                                                                                                                                                                 |
+| ------------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1. Bypass-variant tests + pipeline comment | 7 new XSS tests green; ordering constraint documented | Gap B (whitespace-prefixed protocol) may produce a relative URL rather than strip entirely — assertion is `not.toContain('javascript:')`, not a fixed output expectation |
 
 **Prerequisites:** Local Supabase not needed (unit tests only). `npm install` already complete.

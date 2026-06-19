@@ -4,7 +4,7 @@ researcher: AI Agent
 git_commit: 8aa070c
 branch: feature/S-05-ui-restyle
 repository: ttrpg-handouts-generator
-topic: "Introduce Sentry for error monitoring with MCP connection"
+topic: 'Introduce Sentry for error monitoring with MCP connection'
 tags: [research, sentry, observability, cloudflare-workers, astro, mcp]
 status: complete
 last_updated: 2026-06-13
@@ -41,16 +41,17 @@ The app uses a consistent pattern: `console.error('DB error ...:', error)` serve
 
 **`console.error` coverage** (all DB paths):
 
-| File | Line | Logged message |
-|---|---|---|
-| `src/pages/api/handouts/index.ts` | 64 | `'DB error inserting handout:'` |
-| `src/pages/api/handouts/[id].ts` | 76 | `'DB error updating handout:'` |
-| `src/pages/api/handouts/[id]/publish.ts` | 56 | `'DB error fetching handout for publish:'` |
-| `src/pages/api/handouts/[id]/publish.ts` | 94 | `'DB error publishing handout:'` |
-| `src/pages/dashboard.astro` | 25 | `'DB error loading handouts:'` |
-| `src/pages/share/[token].astro` | 37 | `'DB error loading shared handout:'` |
+| File                                     | Line | Logged message                             |
+| ---------------------------------------- | ---- | ------------------------------------------ |
+| `src/pages/api/handouts/index.ts`        | 64   | `'DB error inserting handout:'`            |
+| `src/pages/api/handouts/[id].ts`         | 76   | `'DB error updating handout:'`             |
+| `src/pages/api/handouts/[id]/publish.ts` | 56   | `'DB error fetching handout for publish:'` |
+| `src/pages/api/handouts/[id]/publish.ts` | 94   | `'DB error publishing handout:'`           |
+| `src/pages/dashboard.astro`              | 25   | `'DB error loading handouts:'`             |
+| `src/pages/share/[token].astro`          | 37   | `'DB error loading shared handout:'`       |
 
 **Gaps not covered by `console.error`**:
+
 - `src/middleware.ts` — no try/catch; Supabase auth errors propagate uncaught
 - `src/pages/api/auth/signin.ts`, `signup.ts`, `signout.ts` — zero logging; errors become redirect query params only
 - No global error page (`_error.astro` / `404.astro` absent at root)
@@ -61,9 +62,9 @@ The app uses a consistent pattern: `console.error('DB error ...:', error)` serve
 ```jsonc
 // wrangler.jsonc — relevant existing config
 {
-  "main": "@astrojs/cloudflare/entrypoints/server",   // line 4
-  "compatibility_flags": ["nodejs_compat"],            // line 6 ✓ already set
-  "observability": { "enabled": true }                 // lines 12–14 (Workers dashboard only)
+  "main": "@astrojs/cloudflare/entrypoints/server", // line 4
+  "compatibility_flags": ["nodejs_compat"], // line 6 ✓ already set
+  "observability": { "enabled": true }, // lines 12–14 (Workers dashboard only)
 }
 ```
 
@@ -125,7 +126,7 @@ export default Sentry.withSentry(
     tracesSampleRate: 1.0,
     enableLogs: true,
   }),
-  handler
+  handler,
 );
 ```
 
@@ -137,10 +138,7 @@ import * as Sentry from '@sentry/astro';
 Sentry.init({
   dsn: import.meta.env.PUBLIC_SENTRY_DSN,
   sendDefaultPii: true,
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
+  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
   tracesSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
@@ -155,30 +153,30 @@ Add one line — `upload_source_maps` for server-side Worker source maps:
 ```jsonc
 {
   // ...existing...
-  "compatibility_flags": ["nodejs_compat"],   // already present ✓
-  "upload_source_maps": true,                 // ADD THIS
-  "observability": { "enabled": true }
+  "compatibility_flags": ["nodejs_compat"], // already present ✓
+  "upload_source_maps": true, // ADD THIS
+  "observability": { "enabled": true },
 }
 ```
 
 #### Environment variables
 
-| Variable | Scope | Where set | Purpose |
-|---|---|---|---|
-| `SENTRY_DSN` | Server runtime | Cloudflare secret / `.dev.vars` | Worker SDK DSN — accessed as `env.SENTRY_DSN` |
-| `PUBLIC_SENTRY_DSN` | Client public | `.env` / Cloudflare var | Browser SDK DSN |
-| `SENTRY_AUTH_TOKEN` | Build time only | `.env` / CI secret | Source maps upload (never goes to Worker) |
-| `SENTRY_ORG` | Build time only | `.env` / CI | `@sentry/astro` integration config |
-| `SENTRY_PROJECT` | Build time only | `.env` / CI | `@sentry/astro` integration config |
+| Variable            | Scope           | Where set                       | Purpose                                       |
+| ------------------- | --------------- | ------------------------------- | --------------------------------------------- |
+| `SENTRY_DSN`        | Server runtime  | Cloudflare secret / `.dev.vars` | Worker SDK DSN — accessed as `env.SENTRY_DSN` |
+| `PUBLIC_SENTRY_DSN` | Client public   | `.env` / Cloudflare var         | Browser SDK DSN                               |
+| `SENTRY_AUTH_TOKEN` | Build time only | `.env` / CI secret              | Source maps upload (never goes to Worker)     |
+| `SENTRY_ORG`        | Build time only | `.env` / CI                     | `@sentry/astro` integration config            |
+| `SENTRY_PROJECT`    | Build time only | `.env` / CI                     | `@sentry/astro` integration config            |
 
 **`.env.example` and `.dev.vars.example`** both need updating with these new vars.
 
 #### Source maps: two-track approach
 
-| Track | Covers | Mechanism |
-|---|---|---|
-| Server (Worker bundle) | `sentry.server.config.ts`, API routes | `"upload_source_maps": true` in `wrangler.jsonc` |
-| Client (browser bundle) | React components, Astro islands | `@sentry/astro` Vite plugin (auto via `astro.config.mjs`) |
+| Track                   | Covers                                | Mechanism                                                 |
+| ----------------------- | ------------------------------------- | --------------------------------------------------------- |
+| Server (Worker bundle)  | `sentry.server.config.ts`, API routes | `"upload_source_maps": true` in `wrangler.jsonc`          |
+| Client (browser bundle) | React components, Astro islands       | `@sentry/astro` Vite plugin (auto via `astro.config.mjs`) |
 
 Both are needed for full stack traces.
 
@@ -228,13 +226,13 @@ Token created at `sentry.io/settings/account/api/auth-tokens/`. Minimum scopes: 
 
 #### Capabilities (20 tools across 5 skills)
 
-| Skill | Key tools |
-|---|---|
-| `inspect` | `search_issues`, `search_events`, `get_sentry_resource`, `find_projects` |
-| `docs` | Sentry SDK documentation search |
-| `seer` | `analyze_issue_with_seer` — AI root-cause + code fix suggestion |
-| `triage` | Resolve, assign, update issues |
-| `project-management` | Create/modify projects, teams, DSNs |
+| Skill                | Key tools                                                                |
+| -------------------- | ------------------------------------------------------------------------ |
+| `inspect`            | `search_issues`, `search_events`, `get_sentry_resource`, `find_projects` |
+| `docs`               | Sentry SDK documentation search                                          |
+| `seer`               | `analyze_issue_with_seer` — AI root-cause + code fix suggestion          |
+| `triage`             | Resolve, assign, update issues                                           |
+| `project-management` | Create/modify projects, teams, DSNs                                      |
 
 ---
 

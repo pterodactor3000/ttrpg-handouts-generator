@@ -4,7 +4,7 @@ researcher: Claude (Sonnet 4.6)
 git_commit: 86ea5531b48677e6e33b07f37210bfd4e4f422b7
 branch: feature/lesson-11
 repository: ttrpg-handouts-generator
-topic: "Access-control critical path — Phase 2 rollout research (Risks #1, #2)"
+topic: 'Access-control critical path — Phase 2 rollout research (Risks #1, #2)'
 tags: [research, middleware, auth, share-token, rls, access-control, integration-testing]
 status: complete
 last_updated: 2026-06-06
@@ -105,12 +105,14 @@ Sign-in POST → `signin.ts:19` redirects to `/` → middleware sees authed user
 #### Failure path (verified)
 
 Anonymous `GET /handouts/new`:
+
 1. `createClient(headers, cookies)` — no session cookie → `getUser()` → `user = null`
 2. `locals.user = null`
 3. `startsWith('/handouts')` matches → `context.redirect('/auth/signin')` [302]
 4. `handouts/new.astro` never reached
 
 Authenticated `GET /dashboard`:
+
 1. Session cookie present → `getUser()` → `User` object
 2. `locals.user = User`
 3. Protected check passes
@@ -118,13 +120,13 @@ Authenticated `GET /dashboard`:
 
 #### Risk #1 gaps (failure scenarios for tests to cover)
 
-| Gap | Evidence |
-|-----|----------|
-| `getUser()` errors silently treated as "signed out" | `middleware.ts:12–15`; no error field read |
-| `startsWith` is broad — new route outside `/dashboard`/`/handouts` would be ungated | `middleware.ts:6`; two-item list |
-| Optional env vars → silent "everyone anonymous" | `astro.config.mjs:19–20`, `supabase.ts:6–8` |
-| `handouts/new.astro` has no page-level defense in depth | `handouts/new.astro:1–8` |
-| No `returnUrl` preserved on redirect | `middleware.ts:26` |
+| Gap                                                                                 | Evidence                                    |
+| ----------------------------------------------------------------------------------- | ------------------------------------------- |
+| `getUser()` errors silently treated as "signed out"                                 | `middleware.ts:12–15`; no error field read  |
+| `startsWith` is broad — new route outside `/dashboard`/`/handouts` would be ungated | `middleware.ts:6`; two-item list            |
+| Optional env vars → silent "everyone anonymous"                                     | `astro.config.mjs:19–20`, `supabase.ts:6–8` |
+| `handouts/new.astro` has no page-level defense in depth                             | `handouts/new.astro:1–8`                    |
+| No `returnUrl` preserved on redirect                                                | `middleware.ts:26`                          |
 
 ---
 
@@ -171,12 +173,12 @@ if (!isConfigured) {
 }
 ```
 
-| Condition | Status | Body |
-|-----------|--------|------|
-| Token not found (PGRST116) | **404** | Generic HTML "Handout not found" — no schema leakage |
-| Any other DB error | **404** (not 500) | Same generic HTML — real failures masquerade as "not found" |
-| Supabase not configured | **500** | "Sharing unavailable" |
-| Valid published/archived row | **200** | Handout content |
+| Condition                    | Status            | Body                                                        |
+| ---------------------------- | ----------------- | ----------------------------------------------------------- |
+| Token not found (PGRST116)   | **404**           | Generic HTML "Handout not found" — no schema leakage        |
+| Any other DB error           | **404** (not 500) | Same generic HTML — real failures masquerade as "not found" |
+| Supabase not configured      | **500**           | "Sharing unavailable"                                       |
+| Valid published/archived row | **200**           | Handout content                                             |
 
 **Note:** Real DB errors (non-PGRST116) are logged server-side but return 404 to the client. This means a DB outage is invisible to the test unless the server log is inspected. Acceptable per-design (no schema leakage), but worth a brief comment in tests.
 
@@ -195,6 +197,7 @@ create policy "anon_select_shared"
 - `share_token` column is `uuid UNIQUE` (migration lines 17, 25) — unguessable by construction.
 
 Other relevant policies:
+
 - `gm_select_own` (`authenticated`, SELECT, `gm_id = auth.uid()`) — separate from player path.
 - `gm_update_non_archived` — UPDATE blocked on archived rows, consistent with link-permanence.
 
@@ -202,10 +205,10 @@ Other relevant policies:
 
 Completely distinct endpoints — no overlap:
 
-| Audience | Route | Auth | Lookup |
-|----------|-------|------|--------|
-| Player | `GET /share/[token]` (Astro page) | None required | `share_token` |
-| GM (write) | `POST/PUT /api/handouts/*` | Required (401 without session) | `id` + `gm_id` |
+| Audience   | Route                             | Auth                           | Lookup         |
+| ---------- | --------------------------------- | ------------------------------ | -------------- |
+| Player     | `GET /share/[token]` (Astro page) | None required                  | `share_token`  |
+| GM (write) | `POST/PUT /api/handouts/*`        | Required (401 without session) | `id` + `gm_id` |
 
 There is no `GET /api/handouts/[id]` for GM reads — GMs create/edit via `HandoutEditor` form only. The two paths do not share code or auth requirements.
 
@@ -219,15 +222,15 @@ There is no `GET /api/handouts/[id]` for GM reads — GMs create/edit via `Hando
 
 #### What is directly reusable
 
-| Asset | Phase 2 use |
-|-------|-------------|
+| Asset                                  | Phase 2 use                                                 |
+| -------------------------------------- | ----------------------------------------------------------- |
 | `vitest.config.ts` integration project | Add new suites under `src/integration/` — no config changes |
-| `src/integration/setup-env.ts` | Unchanged — same Supabase bootstrap |
-| `createAdminClient()` | Insert published/archived handouts as fixtures |
-| `createTestUser` / `signInAsUser` | Risk #1 authed path tests |
-| Unauthenticated anon client pattern | Risk #2 DB-layer tests, Risk #1 anonymous path |
-| `vi.mock('@/lib/supabase')` | Any code that calls `createClient` from `@/lib/supabase` |
-| `assertNoSchemaLeakage` | Error body assertions (JSON responses only) |
+| `src/integration/setup-env.ts`         | Unchanged — same Supabase bootstrap                         |
+| `createAdminClient()`                  | Insert published/archived handouts as fixtures              |
+| `createTestUser` / `signInAsUser`      | Risk #1 authed path tests                                   |
+| Unauthenticated anon client pattern    | Risk #2 DB-layer tests, Risk #1 anonymous path              |
+| `vi.mock('@/lib/supabase')`            | Any code that calls `createClient` from `@/lib/supabase`    |
+| `assertNoSchemaLeakage`                | Error body assertions (JSON responses only)                 |
 
 #### What is NOT reusable: `makeContext` + handler-import
 
@@ -236,6 +239,7 @@ There is no `GET /api/handouts/[id]` for GM reads — GMs create/edit via `Hando
 `src/middleware.ts` exports `onRequest` via `defineMiddleware`. It is callable directly, but requires a context object with `context.url.pathname`, `context.locals`, `context.redirect()`, and a callable `next()`. The existing `makeContext` stub (`context-stub.ts:3–33`) provides none of these — it targets API route handlers (`GET`/`POST` exports), not middleware.
 
 **A new middleware context stub is needed** with:
+
 - `url: { pathname: string }` (or a full `URL` object)
 - `locals: Record<string, unknown>` (mutable)
 - `redirect: (path: string) => Response` (return a real `Response` with `Location` header + 302)
@@ -261,23 +265,23 @@ There is no `GET /api/handouts/[id]` for GM reads — GMs create/edit via `Hando
 
 ## Code References
 
-| File | Lines | Relevance |
-|------|-------|-----------|
-| `src/middleware.ts` | 1–31 | Full middleware — PROTECTED_ROUTES, locals.user, redirect behavior |
-| `src/lib/supabase.ts` | 1–24 | SSR client factory — cookie reading, null on missing env |
-| `src/env.d.ts` | 1–5 | `App.Locals` type — `user: User \| null` |
-| `astro.config.mjs` | 10–22 | `output: 'server'`, env schema (optional secrets) |
-| `src/pages/handouts/new.astro` | 1–8 | No page-level auth guard — fully middleware-reliant |
-| `src/pages/dashboard.astro` | 4–14 | Reads `locals.user` for display; no redirect guard |
-| `src/pages/api/auth/signin.ts` | 4–19 | Cookie set + redirect to `/` → middleware redirect to `/dashboard` |
-| `src/pages/share/[token].astro` | 16–47 | Token extraction, query, 404/500 status logic |
-| `supabase/migrations/20260528200000_create_handouts_table.sql` | 48–54 | `anon_select_shared` policy |
-| `supabase/migrations/20260528200000_create_handouts_table.sql` | 31–33 | `gm_select_own` policy |
-| `supabase/migrations/20260528200000_create_handouts_table.sql` | 9–25 | Column types — `share_token uuid unique`, `status` |
-| `src/types.ts` | 1–19 | `Handout` interface — all 11 fields |
-| `src/integration/helpers/context-stub.ts` | 3–33 | Existing stub — NOT usable for middleware (wrong shape) |
-| `src/integration/helpers/test-users.ts` | 42–67 | `signInAsUser` → returns bearer client (not cookies) |
-| `src/integration/handouts/handout-ownership.integration.test.ts` | 11–15 | Mock seam pattern reusable for Risk #1 |
+| File                                                             | Lines | Relevance                                                          |
+| ---------------------------------------------------------------- | ----- | ------------------------------------------------------------------ |
+| `src/middleware.ts`                                              | 1–31  | Full middleware — PROTECTED_ROUTES, locals.user, redirect behavior |
+| `src/lib/supabase.ts`                                            | 1–24  | SSR client factory — cookie reading, null on missing env           |
+| `src/env.d.ts`                                                   | 1–5   | `App.Locals` type — `user: User \| null`                           |
+| `astro.config.mjs`                                               | 10–22 | `output: 'server'`, env schema (optional secrets)                  |
+| `src/pages/handouts/new.astro`                                   | 1–8   | No page-level auth guard — fully middleware-reliant                |
+| `src/pages/dashboard.astro`                                      | 4–14  | Reads `locals.user` for display; no redirect guard                 |
+| `src/pages/api/auth/signin.ts`                                   | 4–19  | Cookie set + redirect to `/` → middleware redirect to `/dashboard` |
+| `src/pages/share/[token].astro`                                  | 16–47 | Token extraction, query, 404/500 status logic                      |
+| `supabase/migrations/20260528200000_create_handouts_table.sql`   | 48–54 | `anon_select_shared` policy                                        |
+| `supabase/migrations/20260528200000_create_handouts_table.sql`   | 31–33 | `gm_select_own` policy                                             |
+| `supabase/migrations/20260528200000_create_handouts_table.sql`   | 9–25  | Column types — `share_token uuid unique`, `status`                 |
+| `src/types.ts`                                                   | 1–19  | `Handout` interface — all 11 fields                                |
+| `src/integration/helpers/context-stub.ts`                        | 3–33  | Existing stub — NOT usable for middleware (wrong shape)            |
+| `src/integration/helpers/test-users.ts`                          | 42–67 | `signInAsUser` → returns bearer client (not cookies)               |
+| `src/integration/handouts/handout-ownership.integration.test.ts` | 11–15 | Mock seam pattern reusable for Risk #1                             |
 
 ---
 
@@ -299,25 +303,25 @@ There is no `GET /api/handouts/[id]` for GM reads — GMs create/edit via `Hando
 
 ### Risk #1
 
-| Guidance field | Test plan says | Research verdict |
-|----------------|---------------|-----------------|
-| What would prove protection | Anonymous request to protected route is redirected; authenticated GM reaches dashboard; `locals.user` resolves correctly per request | **Confirmed correct.** Middleware lines 24–27 are the exact code path to exercise. |
-| Must challenge | "an auth check exists" ≠ "every protected route is gated" | **Confirmed.** `PROTECTED_ROUTES` is a two-item list; a new route outside those prefixes would be ungated. |
-| Context `/10x-research` must ground | middleware entry point, protected-route list, how `locals.user` is populated, CORS/header behavior | **Grounded.** All four items confirmed. CORS: no CORS-specific config found — Cloudflare Workers handles it at edge; no in-app CORS widening. |
-| Likely cheapest layer | integration (request → redirect / locals shape) | **Confirmed.** Can be achieved by calling `onRequest` directly with a middleware context stub; no e2e needed. |
-| Anti-pattern to avoid | mocking middleware internals instead of exercising the actual request path | **Confirmed critical.** The cookie SSR `createClient` call is the actual path; mocking it outright would make the test worthless for Risk #1. The mock must return a client whose `getUser()` behaves realistically (anon client → `user: null`; bearer client → `User`). |
+| Guidance field                      | Test plan says                                                                                                                       | Research verdict                                                                                                                                                                                                                                                          |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What would prove protection         | Anonymous request to protected route is redirected; authenticated GM reaches dashboard; `locals.user` resolves correctly per request | **Confirmed correct.** Middleware lines 24–27 are the exact code path to exercise.                                                                                                                                                                                        |
+| Must challenge                      | "an auth check exists" ≠ "every protected route is gated"                                                                            | **Confirmed.** `PROTECTED_ROUTES` is a two-item list; a new route outside those prefixes would be ungated.                                                                                                                                                                |
+| Context `/10x-research` must ground | middleware entry point, protected-route list, how `locals.user` is populated, CORS/header behavior                                   | **Grounded.** All four items confirmed. CORS: no CORS-specific config found — Cloudflare Workers handles it at edge; no in-app CORS widening.                                                                                                                             |
+| Likely cheapest layer               | integration (request → redirect / locals shape)                                                                                      | **Confirmed.** Can be achieved by calling `onRequest` directly with a middleware context stub; no e2e needed.                                                                                                                                                             |
+| Anti-pattern to avoid               | mocking middleware internals instead of exercising the actual request path                                                           | **Confirmed critical.** The cookie SSR `createClient` call is the actual path; mocking it outright would make the test worthless for Risk #1. The mock must return a client whose `getUser()` behaves realistically (anon client → `user: null`; bearer client → `User`). |
 
 **No corrections to §2 needed for Risk #1.**
 
 ### Risk #2
 
-| Guidance field | Test plan says | Research verdict |
-|----------------|---------------|-----------------|
-| What would prove protection | Player loads published handout via valid token without login; archived-but-published link still resolves; unknown/invalid token returns clean 404 | **Confirmed correct.** All three behaviors are in live code. |
-| Must challenge | "the GM read path works" ≠ "the anonymous token-read path works"; "archived" must not mean "gone for players" | **Confirmed.** GM path (`gm_select_own` RLS, authenticated) and player path (`anon_select_shared` RLS, unauthenticated) are completely distinct. |
-| Context `/10x-research` must ground | share-token read path, RLS for anonymous token reads, which statuses the read path filters | **Grounded.** Query at `share/[token].astro:26–31`; RLS `anon_select_shared` at migration lines 52–54; statuses: `published` + `archived`. |
-| Likely cheapest layer | integration (DB-backed) | **Confirmed correct, method clarified.** Direct anon-client DB query (not page invocation) is the cheapest approach. `.astro` page cannot be imported; extracting query to `src/lib/` is optional but worthwhile. |
-| Anti-pattern to avoid | asserting only the happy GM path; over-mocking the DB so RLS is never exercised | **Confirmed critical.** Tests must use a real (un-mocked) Supabase anon client against local Supabase so RLS is actually exercised. Mocking would make the test tautological. |
+| Guidance field                      | Test plan says                                                                                                                                    | Research verdict                                                                                                                                                                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What would prove protection         | Player loads published handout via valid token without login; archived-but-published link still resolves; unknown/invalid token returns clean 404 | **Confirmed correct.** All three behaviors are in live code.                                                                                                                                                      |
+| Must challenge                      | "the GM read path works" ≠ "the anonymous token-read path works"; "archived" must not mean "gone for players"                                     | **Confirmed.** GM path (`gm_select_own` RLS, authenticated) and player path (`anon_select_shared` RLS, unauthenticated) are completely distinct.                                                                  |
+| Context `/10x-research` must ground | share-token read path, RLS for anonymous token reads, which statuses the read path filters                                                        | **Grounded.** Query at `share/[token].astro:26–31`; RLS `anon_select_shared` at migration lines 52–54; statuses: `published` + `archived`.                                                                        |
+| Likely cheapest layer               | integration (DB-backed)                                                                                                                           | **Confirmed correct, method clarified.** Direct anon-client DB query (not page invocation) is the cheapest approach. `.astro` page cannot be imported; extracting query to `src/lib/` is optional but worthwhile. |
+| Anti-pattern to avoid               | asserting only the happy GM path; over-mocking the DB so RLS is never exercised                                                                   | **Confirmed critical.** Tests must use a real (un-mocked) Supabase anon client against local Supabase so RLS is actually exercised. Mocking would make the test tautological.                                     |
 
 **One method clarification for §2 Risk Response Guidance (not a source correction):** "integration (DB-backed)" means direct anon-client query, not Astro page invocation. Recommend backporting this to the Risk #2 `Context needed` cell: add "query logic lives in `share/[token].astro` frontmatter; tests target the DB query layer with a raw anon client, not the Astro page directly." Not a risk correction — no Source column change needed.
 

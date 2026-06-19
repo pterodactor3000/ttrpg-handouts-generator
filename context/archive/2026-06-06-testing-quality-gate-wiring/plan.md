@@ -20,22 +20,24 @@ the deploy gate independently. The new workflow is a **test gate only** and does
 not duplicate the build/deploy step.
 
 Vitest is already configured with a two-project split:
+
 - `unit` — no external deps, fast, runs in Node.
 - `integration` — requires Supabase; configured with `setupFiles:
-  ['src/integration/setup-env.ts']` which throws if `.env.test` is missing.
+['src/integration/setup-env.ts']` which throws if `.env.test` is missing.
 
 Integration tests self-provision all fixtures at runtime. `supabase/seed.sql`
 is intentionally empty. Only the three env vars below are required:
 
-| Variable | Source in CI |
-|---|---|
-| `SUPABASE_URL` | `supabase status -o env` (`API_URL` key — see Critical Details) |
-| `SUPABASE_ANON_KEY` | `supabase status -o env` (`ANON_KEY` key — see Critical Details) |
-| `SUPABASE_SERVICE_ROLE_KEY` | `supabase status -o env` (`SERVICE_ROLE_KEY` key) |
+| Variable                    | Source in CI                                                     |
+| --------------------------- | ---------------------------------------------------------------- |
+| `SUPABASE_URL`              | `supabase status -o env` (`API_URL` key — see Critical Details)  |
+| `SUPABASE_ANON_KEY`         | `supabase status -o env` (`ANON_KEY` key — see Critical Details) |
+| `SUPABASE_SERVICE_ROLE_KEY` | `supabase status -o env` (`SERVICE_ROLE_KEY` key)                |
 
 ## Desired End State
 
 Every push and PR to `main` triggers a GitHub Actions job that:
+
 1. Runs `npm run lint` (with `npx astro sync` to generate required type declarations).
 2. Runs all unit tests (`npm test -- --project unit`).
 3. Starts a local Supabase instance, writes `.env.test`, and runs all integration
@@ -71,7 +73,7 @@ accurately describe what CI does.
 - **Docker layer caching** — keeping the first implementation simple; cache
   optimization is a follow-up if startup time proves a bottleneck.
 - **`test:unit` / `test:integration` npm script aliases** — `npm test --
-  --project <name>` is already clear; extra scripts would need maintenance.
+--project <name>` is already clear; extra scripts would need maintenance.
 - **e2e or Playwright** — not required; all Phases 1–3 risks are covered at the
   integration layer.
 
@@ -220,7 +222,7 @@ jobs:
 - Push a branch and open a PR to `main`; the `CI` check appears and turns
   green within ~3–5 minutes
 - In the Actions run, confirm: `Run unit tests` step is green, `Start local
-  Supabase` step shows Supabase startup output, `Run integration tests` step
+Supabase` step shows Supabase startup output, `Run integration tests` step
   shows all integration suites passing
 - Introduce a deliberate lint error on the branch; confirm the CI job fails at
   the lint step before Supabase starts

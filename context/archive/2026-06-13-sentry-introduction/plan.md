@@ -112,6 +112,7 @@ PUBLIC_SENTRY_DSN: envField.string({ context: 'client', access: 'public', option
 **Intent**: Document the five new env vars so developers know what to configure locally for building with source maps.
 
 **Contract**: Add:
+
 ```
 SENTRY_ORG=your-sentry-org-slug
 SENTRY_PROJECT=your-sentry-project-slug
@@ -126,6 +127,7 @@ PUBLIC_SENTRY_DSN=https://xxx@oXXX.ingest.sentry.io/YYYY
 **Intent**: Document the Worker runtime secret needed for local Cloudflare dev (`wrangler dev`).
 
 **Contract**: Add:
+
 ```
 SENTRY_DSN=https://xxx@oXXX.ingest.sentry.io/YYYY
 ```
@@ -161,6 +163,7 @@ Add `Sentry.captureException(error)` alongside every existing `console.error` DB
 #### 1. Handout API routes — DB error sites
 
 **Files**:
+
 - `src/pages/api/handouts/index.ts` (line 63–67)
 - `src/pages/api/handouts/[id].ts` (line 75–79)
 - `src/pages/api/handouts/[id]/publish.ts` (lines 54–58 and 93–95)
@@ -172,6 +175,7 @@ Add `Sentry.captureException(error)` alongside every existing `console.error` DB
 #### 2. Server-rendered pages — DB error sites
 
 **Files**:
+
 - `src/pages/dashboard.astro` (line 25)
 - `src/pages/share/[token].astro` (line 37)
 
@@ -182,6 +186,7 @@ Add `Sentry.captureException(error)` alongside every existing `console.error` DB
 #### 3. Auth routes — first-ever error capture
 
 **Files**:
+
 - `src/pages/api/auth/signin.ts`
 - `src/pages/api/auth/signup.ts`
 
@@ -257,6 +262,7 @@ Add `SENTRY_AUTH_TOKEN` to GitHub Actions secrets, extend `ci.yml` with a build 
 **Intent**: Register the official Sentry MCP server via its remote OAuth endpoint so AI agents in Cursor can call `search_issues`, `search_events`, `get_sentry_resource`, and `analyze_issue_with_seer` against this project's Sentry data. Cursor handles OAuth on first use — no token to commit.
 
 **Contract**: New JSON file:
+
 ```json
 {
   "mcpServers": {

@@ -17,21 +17,23 @@ Two new integration suites are green against local Supabase. Middleware gating i
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-|----------|--------|-----------------|--------|
-| Auth injection for middleware tests | `vi.mock('@/lib/supabase')` → pre-built bearer client | Avoids cookie-parsing complexity; mock returns real Supabase client so `getUser()` calls live auth | Plan |
-| Share test approach | Direct anon-client DB query, no mock | Exercises real `anon_select_shared` RLS policy — mocking would make the test tautological | Research + Plan |
-| Share query extraction | No extraction to `src/lib/services/` | Out of scope; direct DB query proves the contract with less added scope | Plan |
-| `getUser()` error scenario | Excluded | Fail-closed behavior is implicit in the anonymous-path tests; not worth added mock complexity | Plan |
+| Decision                            | Choice                                                | Why (1 sentence)                                                                                   | Source          |
+| ----------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------- |
+| Auth injection for middleware tests | `vi.mock('@/lib/supabase')` → pre-built bearer client | Avoids cookie-parsing complexity; mock returns real Supabase client so `getUser()` calls live auth | Plan            |
+| Share test approach                 | Direct anon-client DB query, no mock                  | Exercises real `anon_select_shared` RLS policy — mocking would make the test tautological          | Research + Plan |
+| Share query extraction              | No extraction to `src/lib/services/`                  | Out of scope; direct DB query proves the contract with less added scope                            | Plan            |
+| `getUser()` error scenario          | Excluded                                              | Fail-closed behavior is implicit in the anonymous-path tests; not worth added mock complexity      | Plan            |
 
 ## Scope
 
 **In scope:**
+
 - New helper `src/integration/helpers/middleware-context-stub.ts`
 - New suite `src/integration/middleware/auth-gate.integration.test.ts` (Risk #1)
 - New suite `src/integration/share/share-token-read.integration.test.ts` (Risk #2)
 
 **Out of scope:**
+
 - Astro page HTML rendering or HTTP status-code testing for the share page
 - Extraction of share query to `src/lib/services/share.ts`
 - E2e tests (integration layer proves both risks)
@@ -45,10 +47,10 @@ Two new integration suites are green against local Supabase. Middleware gating i
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|-------|-----------------|----------|
+| Phase                                        | What it delivers                                                                      | Key risk                                                                            |
+| -------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | 1. Middleware context stub + auth-gate tests | Locks redirect behavior, `locals.user` population, and public-path bypass for Risk #1 | `onRequest` context shape must match Astro's `defineMiddleware` expectation exactly |
-| 2. Share-token DB-layer tests | Locks RLS + query contract for Risk #2; proves link-permanence for archived rows | Archive status must be inserted via admin client (S-04 not shipped) |
+| 2. Share-token DB-layer tests                | Locks RLS + query contract for Risk #2; proves link-permanence for archived rows      | Archive status must be inserted via admin client (S-04 not shipped)                 |
 
 **Prerequisites:** Local Supabase running (`npx supabase start`), `.env.test` populated.
 **Estimated effort:** ~1 session across 2 phases.

@@ -8,11 +8,11 @@ This document records findings from connecting Linear to Cursor on Linux when th
 
 ## Prerequisites
 
-| Step | Detail |
-|------|--------|
-| Cursor | Installed as an `.AppImage` on an Arch-based distribution |
-| Linear account | Required for integration |
-| Linear plugin | Installed in Cursor (Settings → MCP) |
+| Step           | Detail                                                    |
+| -------------- | --------------------------------------------------------- |
+| Cursor         | Installed as an `.AppImage` on an Arch-based distribution |
+| Linear account | Required for integration                                  |
+| Linear plugin  | Installed in Cursor (Settings → MCP)                      |
 
 ---
 
@@ -35,20 +35,20 @@ This is not Linear-specific - the same failure is reported for the Notion MCP se
 
 The `cursor://` URL scheme handler **is** registered correctly. The failure is that the callback is delivered to a **new Cursor process/window** instead of being routed to the already-running instance that started the OAuth flow, so the in-flight auth session never receives the callback.
 
-| Item | Detail |
-|------|--------|
-| **Flow** | Browser-based OAuth → `cursor://` deep-link callback |
-| **Expected behavior** | Callback attaches auth to the existing Cursor instance |
-| **Actual behavior** | Callback spawns a fresh Cursor window with no MCP auth state |
-| **Scheme handler** | `x-scheme-handler/cursor` is registered - not a missing-handler issue |
-| **Impact** | Official plugin **Connect** button cannot finish authorization |
+| Item                  | Detail                                                                |
+| --------------------- | --------------------------------------------------------------------- |
+| **Flow**              | Browser-based OAuth → `cursor://` deep-link callback                  |
+| **Expected behavior** | Callback attaches auth to the existing Cursor instance                |
+| **Actual behavior**   | Callback spawns a fresh Cursor window with no MCP auth state          |
+| **Scheme handler**    | `x-scheme-handler/cursor` is registered - not a missing-handler issue |
+| **Impact**            | Official plugin **Connect** button cannot finish authorization        |
 
 Diagnostic observations from the community reports:
 
-| Command | Result |
-|---------|--------|
-| `xdg-open 'cursor://test'` | Opens a **new** window |
-| `gio open 'cursor://test'` | Opens a **new** window |
+| Command                                               | Result                                            |
+| ----------------------------------------------------- | ------------------------------------------------- |
+| `xdg-open 'cursor://test'`                            | Opens a **new** window                            |
+| `gio open 'cursor://test'`                            | Opens a **new** window                            |
 | `/usr/share/cursor/cursor --open-url 'cursor://test'` | Does **not** open a new window (routes correctly) |
 
 Cursor logs during the failed flow show:
@@ -117,7 +117,7 @@ NoDisplay=true
 MimeType=x-scheme-handler/cursor;
 ```
 
-   Replace `/path/to/cursor` with your AppImage path (or `/usr/share/cursor/cursor` for `.deb`/`.rpm` installs).
+Replace `/path/to/cursor` with your AppImage path (or `/usr/share/cursor/cursor` for `.deb`/`.rpm` installs).
 
 2. Register the scheme:
 
@@ -131,10 +131,10 @@ xdg-mime default cursor-url-handler.desktop 'x-scheme-handler/cursor'
 
 ## Why the API key approach works
 
-| Approach | Auth method | Linux deep-link impact |
-|----------|-------------|------------------------|
-| Official plugin | OAuth via browser + `cursor://` callback | Broken - callback opens a new window and loses context |
-| Custom MCP + API key | `LINEAR_API_KEY` in env | No browser redirect; works regardless of how Cursor is launched |
+| Approach             | Auth method                              | Linux deep-link impact                                          |
+| -------------------- | ---------------------------------------- | --------------------------------------------------------------- |
+| Official plugin      | OAuth via browser + `cursor://` callback | Broken - callback opens a new window and loses context          |
+| Custom MCP + API key | `LINEAR_API_KEY` in env                  | No browser redirect; works regardless of how Cursor is launched |
 
 The custom setup proxies Linear's hosted MCP endpoint (or runs the local server) and authenticates with a static API key, bypassing the broken deep-link callback entirely.
 

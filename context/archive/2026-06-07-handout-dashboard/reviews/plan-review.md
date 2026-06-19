@@ -1,4 +1,5 @@
 <!-- PLAN-REVIEW-REPORT -->
+
 # Plan Review: Handout Dashboard List View
 
 - **Plan**: context/changes/handout-dashboard/plan.md
@@ -9,13 +10,13 @@
 
 ## Verdicts
 
-| Dimension | Verdict |
-|-----------|---------|
-| End-State Alignment | PASS |
-| Lean Execution | WARNING |
-| Architectural Fitness | PASS |
-| Blind Spots | PASS |
-| Plan Completeness | FAIL |
+| Dimension             | Verdict |
+| --------------------- | ------- |
+| End-State Alignment   | PASS    |
+| Lean Execution        | WARNING |
+| Architectural Fitness | PASS    |
+| Blind Spots           | PASS    |
+| Plan Completeness     | FAIL    |
 
 ## Grounding
 

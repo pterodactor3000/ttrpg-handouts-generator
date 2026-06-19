@@ -10,14 +10,14 @@
 
 ## Verdicts
 
-| Dimension           | Verdict |
-| ------------------- | ------- |
-| Plan Adherence      | PASS ✅ |
+| Dimension           | Verdict                |
+| ------------------- | ---------------------- |
+| Plan Adherence      | PASS ✅                |
 | Scope Discipline    | WARNING ⚠️ (1 finding) |
-| Safety & Quality    | PASS ✅ |
-| Architecture        | PASS ✅ |
+| Safety & Quality    | PASS ✅                |
+| Architecture        | PASS ✅                |
 | Pattern Consistency | WARNING ⚠️ (1 finding) |
-| Success Criteria    | PASS ✅ |
+| Success Criteria    | PASS ✅                |
 
 ## Findings
 
@@ -84,15 +84,15 @@
 
 ### Automated (Phase 1)
 
-| Check | Command | Result |
-| ----- | ------- | ------ |
-| 1.1 Auth-gate + all integration tests | `npm test -- --project integration` | ✅ PASS — 3 files, 30 tests |
-| 1.2 Phase 1 regression | (same run) | ✅ PASS |
-| 1.3 Lint clean | `npm run lint` | ✅ PASS — 0 errors (5 pre-existing `no-console` warnings in API/share routes) |
+| Check                                 | Command                             | Result                                                                        |
+| ------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| 1.1 Auth-gate + all integration tests | `npm test -- --project integration` | ✅ PASS — 3 files, 30 tests                                                   |
+| 1.2 Phase 1 regression                | (same run)                          | ✅ PASS                                                                       |
+| 1.3 Lint clean                        | `npm run lint`                      | ✅ PASS — 0 errors (5 pre-existing `no-console` warnings in API/share routes) |
 
 ### Manual (Phase 1)
 
-| Check | Evidence | Result |
-| ----- | -------- | ------ |
-| 1.4 Test file under `src/integration/middleware/` | File exists; picked up by integration project `include` | ✅ Verified |
-| 1.5 Real `User` shape in `locals.user` | Lines 131–132, 142–143, 160–161 assert `id` and `email` against live `testUserId`/`testUserEmail` | ✅ Verified |
+| Check                                             | Evidence                                                                                          | Result      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------- |
+| 1.4 Test file under `src/integration/middleware/` | File exists; picked up by integration project `include`                                           | ✅ Verified |
+| 1.5 Real `User` shape in `locals.user`            | Lines 131–132, 142–143, 160–161 assert `id` and `email` against live `testUserId`/`testUserEmail` | ✅ Verified |

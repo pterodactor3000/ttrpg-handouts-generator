@@ -41,7 +41,7 @@ Skip GitHub unless a PR is already linked to the issue at write time.
 
 ## Interactive prompts — host-agnostic
 
-When the procedure says *"ask the user"*, use `AskQuestion` in Cursor, or the host's equivalent structured-question tool. If none exists, ask in plain chat with labelled options. State which tool you use the first time.
+When the procedure says _"ask the user"_, use `AskQuestion` in Cursor, or the host's equivalent structured-question tool. If none exists, ask in plain chat with labelled options. State which tool you use the first time.
 
 ## Step 0 — Read context
 
@@ -65,14 +65,14 @@ If the user's opening message already names the feature, treat it as the seed fo
 
 Ask **one question at a time**. Cap at **6 questions**; skip any whose answer is already clear from context.
 
-| # | Topic | Question (adapt wording) | Maps to |
-|---|-------|--------------------------|---------|
-| 1 | Outcome | Who is the actor (GM / player / visitor)? What can they do end-to-end in one sentence? | `Outcome`, issue `title` |
-| 2 | Done when | List 2–5 concrete acceptance criteria — observable behaviors, not implementation. | `Outcome` detail, `Unknowns` if gaps remain |
-| 3 | Out of scope | What must this slice **not** do? (flows, screens, data changes) | `Risk`, scope cap in Outcome |
-| 4 | Prerequisites | Which roadmap items must be **done** before this slice? Offer top 3 candidates + `— (none)`. | `Prerequisites`, `Status`, Backlog Handoff |
-| 5 | Change ID | Propose a kebab-case `change-id` (≤4 words). User confirms or overrides. | `Change ID`, folder name for `/10x-plan` |
-| 6 | PRD refs | Which existing `FR-NNN` / NFR labels apply? Offer matches from Step 0; allow `TBD — add FR in separate PRD edit`. | `PRD refs` field |
+| #   | Topic         | Question (adapt wording)                                                                                          | Maps to                                     |
+| --- | ------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| 1   | Outcome       | Who is the actor (GM / player / visitor)? What can they do end-to-end in one sentence?                            | `Outcome`, issue `title`                    |
+| 2   | Done when     | List 2–5 concrete acceptance criteria — observable behaviors, not implementation.                                 | `Outcome` detail, `Unknowns` if gaps remain |
+| 3   | Out of scope  | What must this slice **not** do? (flows, screens, data changes)                                                   | `Risk`, scope cap in Outcome                |
+| 4   | Prerequisites | Which roadmap items must be **done** before this slice? Offer top 3 candidates + `— (none)`.                      | `Prerequisites`, `Status`, Backlog Handoff  |
+| 5   | Change ID     | Propose a kebab-case `change-id` (≤4 words). User confirms or overrides.                                          | `Change ID`, folder name for `/10x-plan`    |
+| 6   | PRD refs      | Which existing `FR-NNN` / NFR labels apply? Offer matches from Step 0; allow `TBD — add FR in separate PRD edit`. | `PRD refs` field                            |
 
 After Q6, synthesize a one-paragraph recap (plain markdown, no new question) and confirm the user is ready for the draft preview. If they correct anything, update the synthesis before Step 2.
 
@@ -104,8 +104,8 @@ Bullets only for decisions still open after the interview. Format: `- <question>
 
 ### Backlog Handoff row
 
-| Ready for `/10x-plan` | Notes |
-|-----------------------|-------|
+| Ready for `/10x-plan`                 | Notes                                                 |
+| ------------------------------------- | ----------------------------------------------------- |
 | `yes` if status is `ready`, else `no` | `Depends on <prereqs>; run \`/10x-plan <change-id>\`` |
 
 ### Streams table
@@ -164,35 +164,42 @@ Present the draft. **Stop here.** Do not edit files or call Linear write tools u
 ```markdown
 ## Planned slice — S-NN: <short name>
 
-| Field | Value |
-|-------|-------|
-| Roadmap ID | S-NN |
-| Change ID | `<change-id>` |
-| Status | ready / proposed / blocked |
-| Prerequisites | … |
-| Parallel with | … |
-| Ready for `/10x-plan` | yes / no |
+| Field                 | Value                      |
+| --------------------- | -------------------------- |
+| Roadmap ID            | S-NN                       |
+| Change ID             | `<change-id>`              |
+| Status                | ready / proposed / blocked |
+| Prerequisites         | …                          |
+| Parallel with         | …                          |
+| Ready for `/10x-plan` | yes / no                   |
 
 ### Outcome
+
 <full Outcome>
 
 ### Acceptance criteria
+
 - …
 - …
 
 ### Out of scope
+
 - …
 
 ### PRD refs
+
 …
 
 ### Risk
+
 …
 
 ### Unknowns
+
 … (or "—")
 
 ### Roadmap edits
+
 - Frontmatter: `updated`, changelog comment
 - `## At a glance`: new row
 - `## Slices`: new `### S-NN` block
@@ -200,9 +207,10 @@ Present the draft. **Stop here.** Do not edit files or call Linear write tools u
 - `## Streams`: <no change | updated chain | new row>
 
 ### Linear
-| Action | Title | Labels | Prerequisite blocks |
-|--------|-------|--------|---------------------|
-| create / skip | `// [S-NN]::[<change-id>] // feat: <brief explanation>` | slice | F-01 → S-NN, … |
+
+| Action        | Title                                                   | Labels | Prerequisite blocks |
+| ------------- | ------------------------------------------------------- | ------ | ------------------- |
+| create / skip | `// [S-NN]::[<change-id>] // feat: <brief explanation>` | slice  | F-01 → S-NN, …      |
 ```
 
 End with: **Awaiting your approval to write the roadmap and create the Linear issue.** Proceed only after explicit user confirmation.
@@ -236,12 +244,12 @@ Run independent creates in parallel; run blocking updates after the new issue id
 ```markdown
 ## rites-of-holy-modification — complete
 
-| Artifact | Result |
-|----------|--------|
-| Roadmap | S-NN `<change-id>` added to `context/foundation/roadmap.md` |
-| Linear | TEC-N created (or skipped — already exists) |
-| Blocks wired | <prereq ids → new id> |
-| Next step | `/10x-plan <change-id>` when Ready = yes |
+| Artifact     | Result                                                      |
+| ------------ | ----------------------------------------------------------- |
+| Roadmap      | S-NN `<change-id>` added to `context/foundation/roadmap.md` |
+| Linear       | TEC-N created (or skipped — already exists)                 |
+| Blocks wired | <prereq ids → new id>                                       |
+| Next step    | `/10x-plan <change-id>` when Ready = yes                    |
 ```
 
 ## Notes

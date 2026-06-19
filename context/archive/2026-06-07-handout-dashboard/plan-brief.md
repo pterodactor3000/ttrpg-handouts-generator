@@ -16,15 +16,15 @@ Replace the dashboard stub with a real list of the GM's handouts (titles + tags)
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-| --- | --- | --- | --- |
-| Render approach | Pure SSR in `dashboard.astro` | Read-only data → simplest, fastest, matches "Astro for static content" convention | Plan |
-| "Open" target | Token present (published/archived) → `/share/[token]`; drafts non-clickable | No dead links since S-03 edit isn't built yet | Plan |
-| Status scope | Two sections: Active (draft+published) + Archived | User wants the PRD's separate archived list now, even though S-04 hasn't created archived rows | Plan |
-| Status display | Status badge (Draft/Published/Archived) per card | Distinguishes draft vs published in the mixed Active list | Plan |
-| Empty state | "Create your first handout" CTA | Guides first-run GMs into the core flow | Plan |
-| Copy share link | "Copy link" button on shareable cards | Fast re-sharing from the dashboard (the one interactive piece → small React island) | Plan |
-| Card visual | Theme gradient swatch from `BACKGROUND_CONFIGS` | Reuses single source of truth; quick visual identity | Plan |
+| Decision        | Choice                                                                      | Why (1 sentence)                                                                               | Source |
+| --------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------ |
+| Render approach | Pure SSR in `dashboard.astro`                                               | Read-only data → simplest, fastest, matches "Astro for static content" convention              | Plan   |
+| "Open" target   | Token present (published/archived) → `/share/[token]`; drafts non-clickable | No dead links since S-03 edit isn't built yet                                                  | Plan   |
+| Status scope    | Two sections: Active (draft+published) + Archived                           | User wants the PRD's separate archived list now, even though S-04 hasn't created archived rows | Plan   |
+| Status display  | Status badge (Draft/Published/Archived) per card                            | Distinguishes draft vs published in the mixed Active list                                      | Plan   |
+| Empty state     | "Create your first handout" CTA                                             | Guides first-run GMs into the core flow                                                        | Plan   |
+| Copy share link | "Copy link" button on shareable cards                                       | Fast re-sharing from the dashboard (the one interactive piece → small React island)            | Plan   |
+| Card visual     | Theme gradient swatch from `BACKGROUND_CONFIGS`                             | Reuses single source of truth; quick visual identity                                           | Plan   |
 
 ## Scope
 
@@ -38,11 +38,11 @@ Replace the dashboard stub with a real list of the GM's handouts (titles + tags)
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Data layer + Active list | SSR fetch, partition helper, card/list components, Active section + empty CTA | Card legibility over the gradient swatch |
-| 2. Archived + copy island | Archived section (reused list) + `CopyLinkButton` on shareable cards | Nested-anchor/button HTML; archived rows can't exist yet (S-04) |
-| 3. Responsive + tests | Mobile grid, unit tests for helper + copy button | Keeping `.test.tsx` working (React plugin already configured) |
+| Phase                       | What it delivers                                                              | Key risk                                                        |
+| --------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1. Data layer + Active list | SSR fetch, partition helper, card/list components, Active section + empty CTA | Card legibility over the gradient swatch                        |
+| 2. Archived + copy island   | Archived section (reused list) + `CopyLinkButton` on shareable cards          | Nested-anchor/button HTML; archived rows can't exist yet (S-04) |
+| 3. Responsive + tests       | Mobile grid, unit tests for helper + copy button                              | Keeping `.test.tsx` working (React plugin already configured)   |
 
 **Prerequisites:** S-01 done (it is). No new env, schema, or deps.
 **Estimated effort:** ~1–2 focused sessions across 3 phases.

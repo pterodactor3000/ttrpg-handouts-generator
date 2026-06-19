@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const localChromiumLaunchOptions = process.env.CI ? {} : { executablePath: '/usr/bin/chromium' };
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -14,14 +16,12 @@ export default defineConfig({
   },
 
   projects: [
-    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    { name: 'setup', testMatch: /auth\.setup\.ts/, use: { launchOptions: localChromiumLaunchOptions } },
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        launchOptions: {
-          executablePath: '/usr/bin/chromium',
-        },
+        launchOptions: localChromiumLaunchOptions,
         storageState: 'e2e/auth.json',
       },
       dependencies: ['setup'],

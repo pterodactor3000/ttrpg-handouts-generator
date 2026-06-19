@@ -17,15 +17,15 @@ All four screens render in the warm-dark palette from one token source in `globa
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-| --- | --- | --- | --- |
-| Theme direction | Warm dark theme | Smallest blast radius — reuses dark-glass structure, keeps prose-invert/overlays valid | Plan |
-| Palette wiring | Centralize in `global.css` tokens + `@theme inline` + utilities | Single source of truth; aligns the disconnected oklch system so primitives inherit the restyle | Plan |
-| Loader scope | Everywhere (editor, auth, clipboard) | One consistent loader app-wide | Plan |
-| Markdown prose | Keep `prose-invert`, tune accents to palette | Body text stays readable on dark backgrounds; only accents shift | Plan |
-| Syntax theme | Keep `github-dark` | Reads fine on warm-dark; zero work/regression | Plan |
-| Shared component | Extract `HandoutArticle` (shared CSS class + thin wrappers) | Eliminates preview/share drift; CSS class bridges the Astro/React boundary | Plan |
-| `bg-cosmic` / not-found | Redefine `bg-cosmic` in place (don't remove) | `not-found` + auth pages inherit warm-dark for free, no markup edits | Plan |
+| Decision                | Choice                                                          | Why (1 sentence)                                                                               | Source |
+| ----------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------ |
+| Theme direction         | Warm dark theme                                                 | Smallest blast radius — reuses dark-glass structure, keeps prose-invert/overlays valid         | Plan   |
+| Palette wiring          | Centralize in `global.css` tokens + `@theme inline` + utilities | Single source of truth; aligns the disconnected oklch system so primitives inherit the restyle | Plan   |
+| Loader scope            | Everywhere (editor, auth, clipboard)                            | One consistent loader app-wide                                                                 | Plan   |
+| Markdown prose          | Keep `prose-invert`, tune accents to palette                    | Body text stays readable on dark backgrounds; only accents shift                               | Plan   |
+| Syntax theme            | Keep `github-dark`                                              | Reads fine on warm-dark; zero work/regression                                                  | Plan   |
+| Shared component        | Extract `HandoutArticle` (shared CSS class + thin wrappers)     | Eliminates preview/share drift; CSS class bridges the Astro/React boundary                     | Plan   |
+| `bg-cosmic` / not-found | Redefine `bg-cosmic` in place (don't remove)                    | `not-found` + auth pages inherit warm-dark for free, no markup edits                           | Plan   |
 
 ## Scope
 
@@ -39,13 +39,13 @@ Foundation-first. Phase 1 defines the palette once in `global.css` (CSS vars →
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Token foundation | Palette, aligned tokens, loader, shared class in `global.css` | Token misalignment cascading to all screens |
-| 2. Content & prose parity | `HandoutArticle` wrapper; preview = share | XSS regression / prose legibility over gradients |
-| 3. Dashboard restyle | Dashboard + list/card/badge on-palette | Status badges losing distinction |
-| 4. Editor restyle | Editor shell unified; controls/dialogs on-palette | Dialog override removal breaking readability |
-| 5. Loader wiring & QA | One loader everywhere; responsive + compat pass | Clipboard loader flicker; older-browser fallback |
+| Phase                     | What it delivers                                              | Key risk                                         |
+| ------------------------- | ------------------------------------------------------------- | ------------------------------------------------ |
+| 1. Token foundation       | Palette, aligned tokens, loader, shared class in `global.css` | Token misalignment cascading to all screens      |
+| 2. Content & prose parity | `HandoutArticle` wrapper; preview = share                     | XSS regression / prose legibility over gradients |
+| 3. Dashboard restyle      | Dashboard + list/card/badge on-palette                        | Status badges losing distinction                 |
+| 4. Editor restyle         | Editor shell unified; controls/dialogs on-palette             | Dialog override removal breaking readability     |
+| 5. Loader wiring & QA     | One loader everywhere; responsive + compat pass               | Clipboard loader flicker; older-browser fallback |
 
 **Prerequisites:** S-01 shipped (done); no data/schema work.
 **Estimated effort:** ~2–3 sessions across 5 phases.

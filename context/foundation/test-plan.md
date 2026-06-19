@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-06-19 (Phase 7 in progress)
+> Last updated: 2026-06-19 (Phase 7 complete)
 
 ## 1. Strategy
 
@@ -92,7 +92,7 @@ orchestrator updates Status as artifacts appear on disk.
 | 4   | Quality-gate wiring                                   | Run the test suite in CI so dev/prod-parity regressions are caught before merge                                                      | cross-cutting                                        | gates       | complete    | `context/archive/2026-06-06-testing-quality-gate-wiring/`     |
 | 5   | Guide reconciliation                                  | Fix §4/§5/§6/§8 drift; add Risk #8 to risk map; no new tests                                                                       | #8 (map update)                                      | none        | complete    | `context/changes/test-plan-refresh-2026-06-19/`               |
 | 6   | RLS + migration safety                                | Prove GM CRUD, anon share read, and cross-owner denial on fresh Supabase after migration                                             | #8                                                   | integration | complete    | `context/changes/test-plan-refresh-2026-06-19/`               |
-| 7   | E2E CI wiring                                         | Wire Playwright share-path into CI; flip §5 e2e gate to optional                                                                     | #2 (SSR)                                             | e2e         | not started | `context/changes/test-plan-refresh-2026-06-19/`               |
+| 7   | E2E CI wiring                                         | Wire Playwright share-path into CI; flip §5 e2e gate to optional                                                                     | #2 (SSR)                                             | e2e         | complete    | `context/changes/test-plan-refresh-2026-06-19/`               |
 
 **Status vocabulary** (fixed): `not started` → `opened` (change folder
 created) → `researched` → `planned` → `implementing` → `complete`.
@@ -134,7 +134,7 @@ phase lands; before that, the gate is `planned`.
 | unit + integration   | local + CI           | required (CI starts local Supabase for integration project)             | logic regressions, API/DB contract breaks       |
 | markdown-safety unit | local + CI           | required after §3 Phase 3                                               | sanitization regressions (XSS)                  |
 | pre-prod smoke       | between merge + prod | optional                                                                | environment-specific (dev/prod parity) failures |
-| e2e on share path    | CI on PR             | planned (optional) — flip to optional once §3 Phase 7 lands             | broken SSR player read path (Risk #2)           |
+| e2e on share path    | CI on PR             | optional (CI on PR; `continue-on-error: true` — does not block merge) | broken SSR player read path (Risk #2)           |
 
 ## 6. Cookbook Patterns
 
@@ -276,6 +276,8 @@ here capturing anything surprising the rollout phase taught.)
 **Phase 4 (Quality-gate wiring).** `.github/workflows/ci.yml` runs lint → unit → `supabase start` → integration on push/PR to `main` (not `master`). Map `API_URL` from `supabase status -o env` to `SUPABASE_URL` in `.env.test`; values are quoted — strip with `cut -d'"' -f2`. Fail the write step if any extracted var is empty. Cloudflare Pages handles build/deploy separately.
 
 **Phase 6 (RLS + migration safety).** Tests use raw Supabase clients — no `vi.mock`. Anonymous client: `createClient(url, anonKey)` from `@supabase/supabase-js`. Cross-owner cases assert both SELECT (must return empty/error) and UPDATE (admin read-back must show no mutation). The suite runs in CI against a fresh Supabase instance; do not run these against a long-lived local DB to avoid false passes from accumulated state.
+
+**Phase 7 (E2E CI wiring).** `playwright.config.ts` `executablePath` must be `undefined` in CI — Playwright's installed binary (from `npx playwright install chromium`) is not at `/usr/bin/chromium` on Ubuntu runners. `.dev.vars` must be written before `npm run dev` starts because Cloudflare workerd reads secrets from `.dev.vars`, not `.env.test`.
 
 ## 7. What We Deliberately Don't Test
 
