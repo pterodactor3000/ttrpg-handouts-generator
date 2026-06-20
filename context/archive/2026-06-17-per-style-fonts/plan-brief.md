@@ -16,19 +16,20 @@ Every handout article panel — in both the GM preview and the shared player vie
 
 ## Key Decisions Made
 
-| Decision | Choice | Why | Source |
-|---|---|---|---|
-| Font loading | Self-hosted TTF/OTF from `public/fonts/` | Files already committed, no CDN dependency, meets < 5s NFR | Plan |
-| CSS architecture | `data-category` attr + CSS selectors | CSS-only theming, consistent with existing prose overrides in `global.css` | Plan |
-| Font config | New `src/lib/fonts.ts` | Testable contract, separate from background config | Plan |
-| Scope | Both `<h1>` and prose body | Fully cohesive look | Plan |
-| Fallbacks | Category-appropriate generics (serif / monospace / sans-serif) | Correct semantic degradation per theme | Plan |
-| Label fix | `scifi` → "Grimdark", `horror` → "Eldritch" | Corrects reversed labels from initial setup | Plan |
-| No DB migration | Enum values unchanged | Labels are application-layer only | Plan |
+| Decision         | Choice                                                         | Why                                                                        | Source |
+| ---------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- | ------ |
+| Font loading     | Self-hosted TTF/OTF from `public/fonts/`                       | Files already committed, no CDN dependency, meets < 5s NFR                 | Plan   |
+| CSS architecture | `data-category` attr + CSS selectors                           | CSS-only theming, consistent with existing prose overrides in `global.css` | Plan   |
+| Font config      | New `src/lib/fonts.ts`                                         | Testable contract, separate from background config                         | Plan   |
+| Scope            | Both `<h1>` and prose body                                     | Fully cohesive look                                                        | Plan   |
+| Fallbacks        | Category-appropriate generics (serif / monospace / sans-serif) | Correct semantic degradation per theme                                     | Plan   |
+| Label fix        | `scifi` → "Grimdark", `horror` → "Eldritch"                    | Corrects reversed labels from initial setup                                | Plan   |
+| No DB migration  | Enum values unchanged                                          | Labels are application-layer only                                          | Plan   |
 
 ## Scope
 
 **In scope:**
+
 - `@font-face` registration for Tisk, Metalick, Consul Typewriter (fantasy uses Tisk; Glendora.otf superseded)
 - `src/lib/fonts.ts` — typed font config
 - `backgrounds.ts` label corrections
@@ -38,6 +39,7 @@ Every handout article panel — in both the GM preview and the shared player vie
 - Unit tests for font config + attribute rendering
 
 **Out of scope:**
+
 - Background gradient changes (S-09)
 - WOFF2 conversion
 - Per-category link or code-block colors
@@ -50,12 +52,12 @@ Font files are served as static assets from `public/fonts/`. `@font-face` declar
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|---|---|---|
-| 1. Font registration & config | `@font-face` + `fonts.ts` + label corrections | Font file paths must match exactly |
-| 2. Per-category CSS | Visual font + color per category in both views | CSS specificity — rules must come after base prose block |
-| 3. Component wiring | `category` prop plumbed through both variants + callers | Dual-component parity (TSX + Astro) |
-| 4. Unit tests | Contract verified for `FONT_CONFIGS` + `HandoutArticle` rendering | Vitest TSX setup may need React plugin check |
+| Phase                         | What it delivers                                                  | Key risk                                                 |
+| ----------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
+| 1. Font registration & config | `@font-face` + `fonts.ts` + label corrections                     | Font file paths must match exactly                       |
+| 2. Per-category CSS           | Visual font + color per category in both views                    | CSS specificity — rules must come after base prose block |
+| 3. Component wiring           | `category` prop plumbed through both variants + callers           | Dual-component parity (TSX + Astro)                      |
+| 4. Unit tests                 | Contract verified for `FONT_CONFIGS` + `HandoutArticle` rendering | Vitest TSX setup may need React plugin check             |
 
 **Prerequisites:** S-01 done, S-05 done (prose overrides in `global.css` are the base this plan builds on)  
 **Estimated effort:** ~1 session, 4 phases

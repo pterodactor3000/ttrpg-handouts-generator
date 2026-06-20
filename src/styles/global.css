@@ -246,11 +246,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-conic-gradient(
-      transparent 0 5%,
-      var(--palette-accent),
-      transparent 20% 50%
-    );
+    background: repeating-conic-gradient(transparent 0 5%, var(--palette-accent), transparent 20% 50%);
     animation: loader-mask 1.5s linear infinite;
   }
 
@@ -350,7 +346,7 @@
   border-width: 60px;
   border-radius: 0;
   background-color: transparent;
-  box-shadow: 0 12px 40px -8px rgba(120, 80, 20, 0.5);
+  box-shadow: none;
 }
 
 .handout-article[data-category='horror'] {
@@ -363,7 +359,7 @@
 
 .handout-article[data-category='scifi'] {
   position: relative;
-  border-image: url('/borders/scifi-border.png') 80 fill / 60px / 0 round;
+  border-image: url('/borders/scifi-border.png') 60 fill;
   border-width: 60px;
   border-radius: 0;
   background-color: transparent;
@@ -377,13 +373,7 @@
   inset: -60px;
   z-index: 0;
   pointer-events: none;
-  background-image: repeating-linear-gradient(
-    0deg,
-    #003d00 0px,
-    #003d00 4px,
-    transparent 4px,
-    transparent 14px
-  );
+  background-image: repeating-linear-gradient(0deg, #003d00 0px, #003d00 4px, transparent 4px, transparent 14px);
   filter: blur(2.5px);
   opacity: 0.6;
 }

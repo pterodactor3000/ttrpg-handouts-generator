@@ -60,7 +60,7 @@
 
 ## Astro Atoms May Use class:list Instead of cn()
 
-- **Context**: src/components/atoms/*.astro
+- **Context**: src/components/atoms/\*.astro
 - **Problem**: Plans or reviews may flag Astro atoms for not using `cn()` when `class:list` is the idiomatic Astro directive for conditional/merged classes.
 - **Rule**: In `.astro` components, prefer `class:list` for conditional classes; reserve `cn()` from `@/lib/utils` for TSX/React components.
 - **Applies to**: all Astro components

@@ -3,8 +3,8 @@ change_id: retheme-backgrounds
 title: Retheme backgrounds
 status: archived
 created: 2026-06-17
-updated: 2026-06-18
-archived_at: 2026-06-18T17:49:29Z
+updated: 2026-06-19
+archived_at: 2026-06-19T09:45:12Z
 ---
 
 ## Notes

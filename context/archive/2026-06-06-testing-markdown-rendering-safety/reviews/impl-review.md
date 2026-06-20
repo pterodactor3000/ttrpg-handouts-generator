@@ -6,7 +6,7 @@
 - **Scope**: Phase 1 of 1
 - **Date**: 2026-06-06
 - **Verdict**: NEEDS ATTENTION (1 warning, fixed during triage)
-- **Findings**: 0 critical  1 warning  0 observations
+- **Findings**: 0 critical 1 warning 0 observations
 
 ## Verdicts
 
@@ -26,7 +26,7 @@
 - **Severity**: ⚠️ WARNING
 - **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
 - **Dimension**: Safety & Quality
-- **Location**: src/lib/__tests__/handout-renderer.test.ts:147
+- **Location**: src/lib/**tests**/handout-renderer.test.ts:147
 - **Detail**: The assertion `expect(output).not.toContain('alert(1)')` in the pipeline-order test passes because rehypeHighlight tokenizes `alert` and `(1)` into separate `<span>` elements — not because the sanitizer stripped the payload. The actual security guarantee is carried by the companion assertion `.not.toContain('<script>')`. A future hljs version collapsing those tokens would produce a false test failure with no obvious cause.
 - **Fix**: Add an inline comment explaining the tokenization mechanism.
 - **Decision**: FIXED — added `// hljs splits across spans; contiguous string absent by tokenization` on line 147.

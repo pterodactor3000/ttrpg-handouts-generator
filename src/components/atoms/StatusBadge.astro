@@ -25,6 +25,9 @@ const statusConfig: Record<HandoutStatus, { label: string; className: string }> 
 const { label, className } = statusConfig[status];
 ---
 
-<span class:list={['inline-flex shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium', className]}>
+<span
+  data-status-badge
+  class:list={['inline-flex shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium', className]}
+>
   {label}
 </span>

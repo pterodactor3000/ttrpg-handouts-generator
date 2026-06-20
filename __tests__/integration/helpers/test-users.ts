@@ -1,5 +1,11 @@
+import { createServerClient } from '@supabase/ssr';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { requireEnv } from '@/integration/helpers/env';
+
+interface AuthCookie {
+  name: string;
+  value: string;
+}
 
 export async function createTestUser(
   adminClient: SupabaseClient,
@@ -28,6 +34,36 @@ export async function deleteTestUser(adminClient: SupabaseClient, userId: string
   if (error) {
     throw error;
   }
+}
+
+export async function signInWithPasswordAndGetCookieHeader(email: string, password: string): Promise<string> {
+  const supabaseUrl = requireEnv('SUPABASE_URL');
+  const supabaseKey = requireEnv('SUPABASE_ANON_KEY');
+  const authCookies: AuthCookie[] = [];
+
+  const serverClient = createServerClient(supabaseUrl, supabaseKey, {
+    cookies: {
+      getAll() {
+        return [];
+      },
+      setAll(cookiesToSet) {
+        for (const { name, value } of cookiesToSet) {
+          authCookies.push({ name, value });
+        }
+      },
+    },
+  });
+
+  const { error } = await serverClient.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return authCookies.map(({ name, value }) => `${name}=${value}`).join('; ');
 }
 
 export async function signInAsUser(email: string, password: string) {

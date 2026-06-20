@@ -4,7 +4,7 @@ researcher: Claude (Sonnet 4.6)
 git_commit: bcf275e
 branch: feature/S-05-ui-restyle
 repository: ttrpg-handouts-generator
-topic: "S-05 UI restyle — affected screens, color audit, loading states, browser compat"
+topic: 'S-05 UI restyle — affected screens, color audit, loading states, browser compat'
 tags: [research, ui-restyle, tailwind, components, colors, loading, browser-compat]
 status: complete
 last_updated: 2026-06-09
@@ -34,6 +34,7 @@ S-05 is a cross-cutting visual change touching ~12 component files plus `global.
 ### 1. Screen map and component trees
 
 #### Dashboard (`src/pages/dashboard.astro`)
+
 - Layout: `src/layouts/Layout.astro`
 - Page is pure Astro SSR with one React island: `CopyLinkButton` (`client:idle`) inside `HandoutCard.astro`
 - Component tree:
@@ -48,6 +49,7 @@ S-05 is a cross-cutting visual change touching ~12 component files plus `global.
 - Header, welcome text, CTA, error/empty states are all **inline** in `dashboard.astro:37–100` (no sub-component)
 
 #### New-handout editor (`src/pages/handouts/new.astro`)
+
 - Layout: `src/layouts/Layout.astro`
 - Full React island: `HandoutEditor` (`client:load`)
 - Component tree:
@@ -65,6 +67,7 @@ S-05 is a cross-cutting visual change touching ~12 component files plus `global.
 - Native `<input>` / `<textarea>` styled with Tailwind (not shadcn inputs)
 
 #### Preview (embedded — no dedicated route)
+
 - Lives in `HandoutEditor.tsx:234–257` (right column of the editor)
 - Rendering pipeline: `src/lib/handout-renderer.ts` (`renderHandoutHtml`) via `useMemo`
 - Synchronous — no async loading state today
@@ -73,6 +76,7 @@ S-05 is a cross-cutting visual change touching ~12 component files plus `global.
 - Parity target: shared view uses the same renderer with `prose prose-invert` (full size, no `prose-sm`)
 
 #### Shared read-only view (`src/pages/share/[token].astro`)
+
 - Layout: `src/layouts/Layout.astro`
 - Pure Astro SSR (`export const prerender = false`)
 - **No component imports** — all markup is inline (lines 56–94)
@@ -81,11 +85,12 @@ S-05 is a cross-cutting visual change touching ~12 component files plus `global.
 - Error branch reuses `bg-cosmic` glass-card pattern
 
 #### `src/components/` structure (Atomic Design)
-| Tier | Files | S-05 relevant |
-|------|-------|---------------|
-| `atoms/` | `Banner.astro`, `button.tsx`, `dialog.tsx`, `CopyLinkButton.tsx`, `LibBadge.astro`, `PasswordToggle.tsx`, `ServerError.tsx`, `StatusBadge.astro`, `SubmitButton.tsx` | `button.tsx`, `dialog.tsx`, `CopyLinkButton.tsx`, `StatusBadge.astro` |
-| `molecules/` | `BackgroundPicker.tsx`, `FormField.tsx`, `HandoutCard.astro`, `TagsInput.tsx`, `Topbar.astro` | `BackgroundPicker.tsx`, `HandoutCard.astro`, `TagsInput.tsx` |
-| `organisms/` | `HandoutEditor.tsx`, `HandoutList.astro`, `ShareDialog.tsx`, `SignInForm.tsx`, `SignUpForm.tsx`, `Welcome.astro` | `HandoutEditor.tsx`, `HandoutList.astro`, `ShareDialog.tsx` |
+
+| Tier         | Files                                                                                                                                                                | S-05 relevant                                                         |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `atoms/`     | `Banner.astro`, `button.tsx`, `dialog.tsx`, `CopyLinkButton.tsx`, `LibBadge.astro`, `PasswordToggle.tsx`, `ServerError.tsx`, `StatusBadge.astro`, `SubmitButton.tsx` | `button.tsx`, `dialog.tsx`, `CopyLinkButton.tsx`, `StatusBadge.astro` |
+| `molecules/` | `BackgroundPicker.tsx`, `FormField.tsx`, `HandoutCard.astro`, `TagsInput.tsx`, `Topbar.astro`                                                                        | `BackgroundPicker.tsx`, `HandoutCard.astro`, `TagsInput.tsx`          |
+| `organisms/` | `HandoutEditor.tsx`, `HandoutList.astro`, `ShareDialog.tsx`, `SignInForm.tsx`, `SignUpForm.tsx`, `Welcome.astro`                                                     | `HandoutEditor.tsx`, `HandoutList.astro`, `ShareDialog.tsx`           |
 
 **shadcn note:** No `src/components/ui/` directory. `components.json` maps the shadcn alias to `@/components/atoms`. Installed primitives: `button.tsx`, `dialog.tsx` only.
 
@@ -94,40 +99,43 @@ S-05 is a cross-cutting visual change touching ~12 component files plus `global.
 ### 2. Color audit
 
 #### Current aesthetic: "cosmic dark glass"
+
 The four screens share a deep navy + white/opacity glassmorphism + purple/blue accent palette that largely **bypasses** the shadcn oklch token system defined in `global.css:8–75`. That token system exists but only `button.tsx` and `dialog.tsx` actually consume it.
 
 #### Hardcoded hex values to replace
 
-| File | Line(s) | Value(s) | Context |
-|------|---------|----------|---------|
-| `src/styles/global.css` | 116 | `#0a0e1a`, `#0f1529` | `bg-cosmic` gradient (dashboard, share error) |
-| `src/components/organisms/HandoutEditor.tsx` | 240 | `#1a1a2e` | Preview fallback `backgroundColor` |
-| `src/lib/backgrounds.ts` | 7 | `#1a3a1a`, `#0d1f0d`, `#2d4a0e` | Fantasy genre gradient — **content theme, leave as-is** |
-| `src/lib/backgrounds.ts` | 12 | `#1a0000`, `#0a0a0a`, `#3a0000` | Horror genre gradient — **content theme, leave as-is** |
-| `src/lib/backgrounds.ts` | 17 | `#001a3a`, `#000d1a`, `#002244` | Sci-fi genre gradient — **content theme, leave as-is** |
+| File                                         | Line(s) | Value(s)                        | Context                                                 |
+| -------------------------------------------- | ------- | ------------------------------- | ------------------------------------------------------- |
+| `src/styles/global.css`                      | 116     | `#0a0e1a`, `#0f1529`            | `bg-cosmic` gradient (dashboard, share error)           |
+| `src/components/organisms/HandoutEditor.tsx` | 240     | `#1a1a2e`                       | Preview fallback `backgroundColor`                      |
+| `src/lib/backgrounds.ts`                     | 7       | `#1a3a1a`, `#0d1f0d`, `#2d4a0e` | Fantasy genre gradient — **content theme, leave as-is** |
+| `src/lib/backgrounds.ts`                     | 12      | `#1a0000`, `#0a0a0a`, `#3a0000` | Horror genre gradient — **content theme, leave as-is**  |
+| `src/lib/backgrounds.ts`                     | 17      | `#001a3a`, `#000d1a`, `#002244` | Sci-fi genre gradient — **content theme, leave as-is**  |
 
 Genre gradients in `backgrounds.ts` are handout content themes, not UI chrome — they should be preserved.
 
 #### Key Tailwind color patterns to replace
 
-| Current class(es) | Role | Replace with |
-|-------------------|------|-------------|
-| `bg-cosmic` | Page shell background | New `bg-app` utility using `#5E5E5E` tones |
-| `bg-gray-950` | Editor shell (inconsistent!) | Same as above — unify with dashboard |
-| `from-blue-200 to-purple-200` / `text-purple-200` | Gradient headings, links | `#B2675E` / `#E3B5A4` accent tones |
-| `border-purple-400/30 bg-purple-500/20` | CTA panels | Accent palette equivalents |
-| `bg-white/10 border-white/10` | Glass cards / inputs | `#E3D5CA`/`#C6AC8F` with opacity |
-| `text-white`, `text-white/80` | Body copy | `#F7F7F7` |
-| `bg-gray-900` | Dialog backgrounds | Warm dark tone from new palette |
-| `bg-black/40`, `bg-black/55` | Preview + share overlay | Warm dark overlay |
+| Current class(es)                                 | Role                         | Replace with                               |
+| ------------------------------------------------- | ---------------------------- | ------------------------------------------ |
+| `bg-cosmic`                                       | Page shell background        | New `bg-app` utility using `#5E5E5E` tones |
+| `bg-gray-950`                                     | Editor shell (inconsistent!) | Same as above — unify with dashboard       |
+| `from-blue-200 to-purple-200` / `text-purple-200` | Gradient headings, links     | `#B2675E` / `#E3B5A4` accent tones         |
+| `border-purple-400/30 bg-purple-500/20`           | CTA panels                   | Accent palette equivalents                 |
+| `bg-white/10 border-white/10`                     | Glass cards / inputs         | `#E3D5CA`/`#C6AC8F` with opacity           |
+| `text-white`, `text-white/80`                     | Body copy                    | `#F7F7F7`                                  |
+| `bg-gray-900`                                     | Dialog backgrounds           | Warm dark tone from new palette            |
+| `bg-black/40`, `bg-black/55`                      | Preview + share overlay      | Warm dark overlay                          |
 
 #### `global.css` structure
+
 - **`:root` / `.dark`**: Full shadcn neutral oklch token set (lines 8–75) — currently disconnected from actual screen colors
 - **`@theme inline`**: Maps CSS vars to Tailwind color names (lines 77–113)
 - **`@utility bg-cosmic`**: Only custom utility; hardcoded hex gradient (lines 115–117)
 - **Recommendation**: Wire new palette into `:root` + `@theme inline` so shadcn tokens and custom utilities use the same values
 
 #### Out-of-scope color files
+
 - `src/assets/` — empty; no color variable files
 - No `tailwind.config.*` — Tailwind 4 config is purely in `global.css`
 - `highlight.js/styles/github-dark.css` — syntax highlight colors; imported in `global.css:3`; consider replacement for warm palette (e.g. `github.css` or a custom theme)
@@ -139,12 +147,14 @@ Genre gradients in `backgrounds.ts` are handout content themes, not UI chrome �
 #### Existing loading indicators (replace with `.loader`)
 
 **`src/components/atoms/SubmitButton.tsx:20–24`** — Auth form spinner
+
 - `useFormStatus()` → `pending` boolean
 - Current: `animate-spin` border-spinner + pending text
 - Used by: `SignInForm.tsx:82–84`, `SignUpForm.tsx:129–131`
 - **→ Replace `animate-spin` span with `<div className="loader" />`** (auth forms are outside S-05 but may benefit)
 
 **`src/components/organisms/HandoutEditor.tsx:42–44, 205–214`** — Save & publish
+
 - State: `isSaving`, `isPublishing` via `useState`
 - Current: text-only (`'Saving…'` / `'Publishing…'`) + `disabled` on button
 - **→ Add `.loader` alongside the disabled button state**
@@ -152,15 +162,18 @@ Genre gradients in `backgrounds.ts` are handout content themes, not UI chrome �
 #### No loader today (candidates for new loading UX)
 
 **`src/components/atoms/CopyLinkButton.tsx:10–27`** — Clipboard copy (dashboard card)
+
 - Async `navigator.clipboard.writeText` → label swap only
 - Low priority; clipboard writes are near-instant
 
 **`src/components/organisms/ShareDialog.tsx:20–35`** — Clipboard copy (share dialog)
+
 - Same pattern; same low priority
 
 #### Roadmap aspirational — patterns that don't exist yet
 
 The roadmap (`roadmap.md:147`) mentions "dashboard fetch" and "preview generation" as loader use cases:
+
 - **Dashboard fetch**: Supabase query is SSR; there is no client fetch spinner to replace. Adding one would require converting the dashboard to a client-side fetch pattern — out of scope for S-05 (visual-only).
 - **Preview generation**: `renderHandoutHtml` in `HandoutEditor.tsx:68` is a synchronous `useMemo` — no async state. The loader is not applicable unless rendering is moved async.
 
@@ -174,16 +187,17 @@ The roadmap (`roadmap.md:147`) mentions "dashboard fetch" and "preview generatio
 
 The loader uses: `mask` with `conic-gradient` + `exclude` compositing, `filter: blur`, `repeating-conic-gradient`, standalone `rotate` property.
 
-| Feature | Bottleneck versions | Notes |
-|---------|--------------------|----|
-| `mask-composite: exclude` | Chrome 120+ (Dec 2023), Safari 15.4+ (Mar 2022) | Primary limiting factor |
-| `repeating-conic-gradient` | Firefox 83+ (Nov 2020) | Well-supported in 2026 |
-| `rotate` (standalone) | Chrome 104+, Firefox 72+, Safari 14.1+ | Less restrictive than `mask-composite` |
-| Combined floor | Chrome/Edge 120+, Firefox 83+, Safari 15.4+ | |
+| Feature                    | Bottleneck versions                             | Notes                                  |
+| -------------------------- | ----------------------------------------------- | -------------------------------------- |
+| `mask-composite: exclude`  | Chrome 120+ (Dec 2023), Safari 15.4+ (Mar 2022) | Primary limiting factor                |
+| `repeating-conic-gradient` | Firefox 83+ (Nov 2020)                          | Well-supported in 2026                 |
+| `rotate` (standalone)      | Chrome 104+, Firefox 72+, Safari 14.1+          | Less restrictive than `mask-composite` |
+| Combined floor             | Chrome/Edge 120+, Firefox 83+, Safari 15.4+     |                                        |
 
 **2026 estimated coverage: ~96–97%.**
 
 **Recommended fallback** — wrap with `@supports`:
+
 ```css
 @supports (mask-composite: exclude) and (background: repeating-conic-gradient(red 0 5%, transparent 5% 50%)) {
   /* full .loader styles */
@@ -193,11 +207,15 @@ The loader uses: `mask` with `conic-gradient` + `exclude` compositing, `filter: 
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 6px solid #C6AC8F33;
-  border-top-color: #B2675E;
+  border: 6px solid #c6ac8f33;
+  border-top-color: #b2675e;
   animation: loader-spin 1s linear infinite;
 }
-@keyframes loader-spin { to { transform: rotate(1turn); } }
+@keyframes loader-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
 ```
 
 ---

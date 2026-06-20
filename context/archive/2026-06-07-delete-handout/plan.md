@@ -193,6 +193,7 @@ Add automated coverage for the two units that carry logic: the `ArchiveButton` i
 **Contract**: Must begin with `// @vitest-environment jsdom` (per lessons — `unit` project defaults to `node`). Stub `window.location` with `origin` set (per `HandoutEditor.test.tsx:16-22` pattern). Mock `global.fetch`. Mock `sonner` to capture `toast.error` calls (`vi.mock('sonner', () => ({ toast: { error: vi.fn() } }))`).
 
 Test cases:
+
 - Renders "Delete" button; no dialog visible initially.
 - Clicking "Delete" opens confirmation dialog with the handout title and a "Delete" confirm button.
 - Clicking "Cancel" closes the dialog; `fetch` not called.
@@ -210,6 +211,7 @@ Wrap the component in an `<article>` in each test so `closest('article')` has a 
 **Contract**: Follows `handout-ownership.integration.test.ts` exactly: `vi.mock('@/lib/supabase')`, import `POST as archiveHandout` from the route, `createAdminClient`, `createTestUser`/`signInAsUser`, `makeContext({ params: { id } })`, `deleteAllTestHandouts` in `afterEach`/`afterAll`.
 
 Test cases:
+
 - Unauthenticated → 401 `{ error: 'Unauthorized' }`.
 - Own draft → 200 `{ id }`, row has `status = 'archived'`, `archived_at` is a valid ISO timestamp, `share_token` stays `null`.
 - Own published → 200 `{ id }`, row has `status = 'archived'`, `archived_at` set, `share_token` preserved (not nulled).
@@ -282,43 +284,43 @@ None. The `archived_at` column, `archived` enum value, and all required RLS poli
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` passes on the new file
-- [ ] 1.2 `npm run build` succeeds with no type errors
-- [ ] 1.3 `npx prettier --check .` passes (no formatting drift)
+- [x] 1.1 `npm run lint` passes on the new file — 3adcb49
+- [x] 1.2 `npm run build` succeeds with no type errors — 3adcb49
+- [x] 1.3 `npx prettier --check .` passes (no formatting drift) — 3adcb49
 
 #### Manual
 
-- [ ] 1.4 Valid draft → 200, row has `status = 'archived'` and non-null `archived_at`
-- [ ] 1.5 Calling archive again on archived row → 404
-- [ ] 1.6 Calling archive with another user's session → 404
+- [x] 1.4 Valid draft → 200, row has `status = 'archived'` and non-null `archived_at` — 3adcb49
+- [x] 1.5 Calling archive again on archived row → 404 — 3adcb49
+- [x] 1.6 Calling archive with another user's session → 404 — 3adcb49
 
 ### Phase 2: ArchiveButton Island + Toast + Card Integration
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes on all new/changed files
-- [ ] 2.2 `npm run build` succeeds with no type errors
-- [ ] 2.3 `npx prettier --check .` passes
+- [x] 2.1 `npm run lint` passes on all new/changed files — f7c9895
+- [x] 2.2 `npm run build` succeeds with no type errors — f7c9895
+- [x] 2.3 `npx prettier --check .` passes — f7c9895
 
 #### Manual
 
-- [ ] 2.4 Draft card has Delete button; published active card has Delete + Copy link; archived card has Copy link only
-- [ ] 2.5 Cancel closes dialog without any change
-- [ ] 2.6 Confirm archives the row and removes the card from the DOM immediately
-- [ ] 2.7 Published handout's `/share/[token]` page still loads after archiving
-- [ ] 2.8 Simulated API failure → toast error, card stays visible
+- [x] 2.4 Draft card has Delete button; published active card has Delete + Copy link; archived card has Copy link only — f7c9895
+- [x] 2.5 Cancel closes dialog without any change — f7c9895
+- [x] 2.6 Confirm archives the row and removes the card from the DOM immediately — f7c9895
+- [x] 2.7 Published handout's `/share/[token]` page still loads after archiving — f7c9895
+- [x] 2.8 Simulated API failure → toast error, card stays visible — f7c9895
 
 ### Phase 3: Tests
 
 #### Automated
 
-- [ ] 3.1 `npm test -- --project unit` passes including `ArchiveButton.test.tsx`
-- [ ] 3.2 `npm test -- --project integration` passes including `archive-handout.integration.test.ts`
-- [ ] 3.3 `npm run lint` passes
-- [ ] 3.4 `npm run build` succeeds
-- [ ] 3.5 `npx prettier --check .` passes
+- [x] 3.1 `npm test -- --project unit` passes including `ArchiveButton.test.tsx` — 968183d
+- [x] 3.2 `npm test -- --project integration` passes including `archive-handout.integration.test.ts` — 968183d
+- [x] 3.3 `npm run lint` passes — 968183d
+- [x] 3.4 `npm run build` succeeds — 968183d
+- [x] 3.5 `npx prettier --check .` passes — 968183d
 
 #### Manual
 
-- [ ] 3.6 Full flow re-checked: draft delete → archived; published delete → archived, share link still works
-- [ ] 3.7 No regressions: CopyLinkButton works; empty-state CTA works
+- [x] 3.6 Full flow re-checked: draft delete → archived; published delete → archived, share link still works — 968183d
+- [x] 3.7 No regressions: CopyLinkButton works; empty-state CTA works — 968183d

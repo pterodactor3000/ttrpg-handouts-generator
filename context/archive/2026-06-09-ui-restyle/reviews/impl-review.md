@@ -1,4 +1,5 @@
 <!-- IMPL-REVIEW-REPORT -->
+
 # Implementation Review: UI Restyle (S-05)
 
 - **Plan**: context/changes/ui-restyle/plan.md
@@ -9,14 +10,14 @@
 
 ## Verdicts
 
-| Dimension | Verdict |
-|-----------|---------|
-| Plan Adherence | PASS ✅ |
-| Scope Discipline | PASS ✅ |
-| Safety & Quality | PASS ✅ |
-| Architecture | PASS ✅ |
+| Dimension           | Verdict    |
+| ------------------- | ---------- |
+| Plan Adherence      | PASS ✅    |
+| Scope Discipline    | PASS ✅    |
+| Safety & Quality    | PASS ✅    |
+| Architecture        | PASS ✅    |
 | Pattern Consistency | WARNING ⚠️ |
-| Success Criteria | PASS ✅ |
+| Success Criteria    | PASS ✅    |
 
 ## Findings
 
@@ -62,18 +63,18 @@
 
 ## Automated Verification (re-run 2026-06-13)
 
-| Command | Result |
-|---------|--------|
-| `npm run lint` | PASS (0 errors; 6 pre-existing `no-console` warnings) |
-| `npm test -- --project unit` | PASS (38/38) |
+| Command                             | Result                                                                                                |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `npm run lint`                      | PASS (0 errors; 6 pre-existing `no-console` warnings)                                                 |
+| `npm test -- --project unit`        | PASS (38/38)                                                                                          |
 | `npm test -- --project integration` | SKIP locally — Supabase not running (`ECONNREFUSED 127.0.0.1:54321`); plan recorded pass at `30f3aa9` |
-| `npm run build` | PASS |
+| `npm run build`                     | PASS                                                                                                  |
 
 ## Prior Review Fixes — Verified Present
 
-| Fix | Status |
-|-----|--------|
-| F1 Preview title in editor | Present (`HandoutEditor.tsx:269`) |
-| F2 Share error branch palette | Present (`share/[token].astro:68–88`) |
-| F3 SubmitButton purple removed | Present (`SubmitButton.tsx:15`) |
-| F5 setTimeout unmount cleanup | Present (`CopyLinkButton.tsx`, `ShareDialog.tsx`) |
+| Fix                            | Status                                            |
+| ------------------------------ | ------------------------------------------------- |
+| F1 Preview title in editor     | Present (`HandoutEditor.tsx:269`)                 |
+| F2 Share error branch palette  | Present (`share/[token].astro:68–88`)             |
+| F3 SubmitButton purple removed | Present (`SubmitButton.tsx:15`)                   |
+| F5 setTimeout unmount cleanup  | Present (`CopyLinkButton.tsx`, `ShareDialog.tsx`) |

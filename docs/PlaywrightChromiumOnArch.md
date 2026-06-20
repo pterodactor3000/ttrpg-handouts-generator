@@ -19,33 +19,33 @@ Run "npx playwright install chrome"
 
 ## Root Cause
 
-| Item | Detail |
-|------|--------|
-| **Source** | Global `@playwright/cli` v0.1.13 — not the project's Playwright test config |
-| **Default behavior** | Tries to launch the **`chrome` channel** (real Google Chrome) |
-| **Expected path** | `/opt/google/chrome/chrome` |
-| **Typical Arch setup** | System Chromium at `/usr/bin/chromium`, no Google Chrome installed |
+| Item                   | Detail                                                                      |
+| ---------------------- | --------------------------------------------------------------------------- |
+| **Source**             | Global `@playwright/cli` v0.1.13 — not the project's Playwright test config |
+| **Default behavior**   | Tries to launch the **`chrome` channel** (real Google Chrome)               |
+| **Expected path**      | `/opt/google/chrome/chrome`                                                 |
+| **Typical Arch setup** | System Chromium at `/usr/bin/chromium`, no Google Chrome installed          |
 
 The project's `playwright.config.ts` was unaffected — it already points E2E tests at `/usr/bin/chromium` and Vivaldi via `launchOptions.executablePath`. This error only affects the **agent CLI tool** (`playwright-cli`), used by coding agents for browser automation.
 
 ### Browsers available on this system
 
-| Browser | Path | Notes |
-|---------|------|-------|
-| Chromium (system) | `/usr/bin/chromium` | Installed via package manager |
-| Vivaldi | `/usr/bin/vivaldi-stable` → `/opt/vivaldi/vivaldi` | Chromium-based |
-| Google Chrome | *not installed* | Expected by default `chrome` channel |
-| Playwright bundled | `~/.cache/ms-playwright/chromium-1223/` | Downloaded by `npx playwright install` |
+| Browser            | Path                                               | Notes                                  |
+| ------------------ | -------------------------------------------------- | -------------------------------------- |
+| Chromium (system)  | `/usr/bin/chromium`                                | Installed via package manager          |
+| Vivaldi            | `/usr/bin/vivaldi-stable` → `/opt/vivaldi/vivaldi` | Chromium-based                         |
+| Google Chrome      | _not installed_                                    | Expected by default `chrome` channel   |
+| Playwright bundled | `~/.cache/ms-playwright/chromium-1223/`            | Downloaded by `npx playwright install` |
 
 ---
 
 ## What Was Tried
 
-| Approach | Result |
-|----------|--------|
-| `--browser=chromium` | Failed — CLI expects `chrome-for-testing`, not the bundled Playwright Chromium |
-| `PLAYWRIGHT_MCP_EXECUTABLE_PATH=/usr/bin/chromium` | **Works** — launches system Chromium with no download |
-| `source ~/.zshrc` in fish | Failed — fish cannot parse zsh syntax (see below) |
+| Approach                                           | Result                                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `--browser=chromium`                               | Failed — CLI expects `chrome-for-testing`, not the bundled Playwright Chromium |
+| `PLAYWRIGHT_MCP_EXECUTABLE_PATH=/usr/bin/chromium` | **Works** — launches system Chromium with no download                          |
+| `source ~/.zshrc` in fish                          | Failed — fish cannot parse zsh syntax (see below)                              |
 
 ---
 
@@ -106,11 +106,11 @@ Fish and zsh use different variable syntax. **Do not source `~/.zshrc` from fish
 
 If you prefer a different approach later:
 
-| Option | Command | When to use |
-|--------|---------|-------------|
-| **System Chromium** (chosen) | `set -Ux PLAYWRIGHT_MCP_EXECUTABLE_PATH /usr/bin/chromium` | No download; uses existing package |
-| **Chrome-for-testing** | `playwright-cli install-browser chrome-for-testing` | Playwright-managed browser for the CLI |
-| **Google Chrome** | `npx playwright install chrome` | Makes the default `chrome` channel work as-is |
+| Option                       | Command                                                    | When to use                                   |
+| ---------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
+| **System Chromium** (chosen) | `set -Ux PLAYWRIGHT_MCP_EXECUTABLE_PATH /usr/bin/chromium` | No download; uses existing package            |
+| **Chrome-for-testing**       | `playwright-cli install-browser chrome-for-testing`        | Playwright-managed browser for the CLI        |
+| **Google Chrome**            | `npx playwright install chrome`                            | Makes the default `chrome` channel work as-is |
 
 ---
 

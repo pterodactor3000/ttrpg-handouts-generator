@@ -4,7 +4,7 @@ researcher: AI agent
 git_commit: 73652affb456284d4fec6b45db1ec4588f306b5c
 branch: feature/lesson-11
 repository: ttrpg-handouts-generator
-topic: "Ground rollout Phase 3 — markdown rendering safety (Risk #3)"
+topic: 'Ground rollout Phase 3 — markdown rendering safety (Risk #3)'
 tags: [research, codebase, markdown, unified, rehype, rehype-sanitize, xss, rendering, handout-renderer]
 status: complete
 last_updated: 2026-06-06
@@ -59,14 +59,14 @@ src/lib/handout-renderer.ts:1–24
 
 Step order (exact):
 
-| Step | Plugin | Option |
-|------|--------|--------|
-| 1 | `remarkParse` | — |
-| 2 | `remarkGfm` | — |
-| 3 | `remarkRehype` | `{ allowDangerousHtml: false }` |
-| 4 | `rehypeSanitize` | no custom schema (default GitHub-mirror) |
-| 5 | `rehypeHighlight` | — |
-| 6 | `rehypeStringify` | — |
+| Step | Plugin            | Option                                   |
+| ---- | ----------------- | ---------------------------------------- |
+| 1    | `remarkParse`     | —                                        |
+| 2    | `remarkGfm`       | —                                        |
+| 3    | `remarkRehype`    | `{ allowDangerousHtml: false }`          |
+| 4    | `rehypeSanitize`  | no custom schema (default GitHub-mirror) |
+| 5    | `rehypeHighlight` | —                                        |
+| 6    | `rehypeStringify` | —                                        |
 
 `.freeze()` is called at line 16, satisfying `context/foundation/lessons.md:33–38`.
 
@@ -113,14 +113,15 @@ extended schema.
 
 Both consumers call the same `renderHandoutHtml` and inject the returned string as raw HTML:
 
-| Surface | File | Render call | Injection |
-|---------|------|-------------|-----------|
+| Surface    | File                                            | Render call                                              | Injection                                                          |
+| ---------- | ----------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
 | GM preview | `src/components/organisms/HandoutEditor.tsx:68` | `useMemo(() => renderHandoutHtml(markdownContent), ...)` | `dangerouslySetInnerHTML={{ __html: renderedPreview }}` (line 250) |
-| Share page | `src/pages/share/[token].astro:49` | `renderHandoutHtml(handout.markdown_content)` | `<Fragment set:html={renderedHtml} />` (line 65) |
+| Share page | `src/pages/share/[token].astro:49`              | `renderHandoutHtml(handout.markdown_content)`            | `<Fragment set:html={renderedHtml} />` (line 65)                   |
 
 There is no second renderer. `renderHandoutHtml` is the only function that produces HTML from
 markdown anywhere in the codebase. HTML is never persisted — only `markdown_content` is stored; the
 HTML is derived at read time on every request/render. This means:
+
 - Sanitize cannot be bypassed by stale stored output.
 - Changing the pipeline (e.g. adding a new plugin) takes effect for all handouts immediately.
 
@@ -135,14 +136,14 @@ complexity without adding coverage signal — this is the "implementation mirror
 
 `src/lib/__tests__/handout-renderer.test.ts`, lines 78–109:
 
-| Test | Adversarial input | Assertion |
-|------|-------------------|-----------|
-| strips script tags | `<script>alert(1)</script>` | `not.toContain('<script>')`, `not.toContain('alert(1)')` |
-| strips onerror attributes | `<img src=x onerror=alert(1)>` | `not.toContain('onerror')` |
-| strips javascript: href | `[click](javascript:alert(1))` | `not.toContain('javascript:')` |
-| strips raw inline HTML | `<b>bold</b>` | `not.toContain('<b>bold</b>')` |
-| strips style with javascript: | `<p style="background:url(javascript:alert(1))">` | `not.toContain('javascript:')` |
-| strips data: URI | `[click](data:text/html,<script>alert(1)</script>)` | `not.toContain('data:')` |
+| Test                          | Adversarial input                                   | Assertion                                                |
+| ----------------------------- | --------------------------------------------------- | -------------------------------------------------------- |
+| strips script tags            | `<script>alert(1)</script>`                         | `not.toContain('<script>')`, `not.toContain('alert(1)')` |
+| strips onerror attributes     | `<img src=x onerror=alert(1)>`                      | `not.toContain('onerror')`                               |
+| strips javascript: href       | `[click](javascript:alert(1))`                      | `not.toContain('javascript:')`                           |
+| strips raw inline HTML        | `<b>bold</b>`                                       | `not.toContain('<b>bold</b>')`                           |
+| strips style with javascript: | `<p style="background:url(javascript:alert(1))">`   | `not.toContain('javascript:')`                           |
+| strips data: URI              | `[click](data:text/html,<script>alert(1)</script>)` | `not.toContain('data:')`                                 |
 
 **This directly satisfies the Phase 3 goal as stated in the test plan.** The "proof" is already there
 for the three canonical XSS categories: `<script>`, `onerror`, `javascript:`.
@@ -153,34 +154,40 @@ The existing coverage is correct and non-trivial. However, protocol-handling byp
 are common in sanitizer bypass writeups are not yet tested:
 
 **Gap A — Case-insensitive protocol variants**
+
 - `JAVASCRIPT:alert(1)` and `Javascript:alert(1)` — some sanitizers normalise to lowercase before
   checking, others do not. rehype-sanitize's protocol allowlist comparison is case-sensitive against
   the parsed protocol; WHATWG URL parsing lowercases the scheme before rehype sees it, so this is
   likely already handled, but not asserted.
 
 **Gap B — Whitespace-prefixed or newline-embedded protocols**
+
 - `[click]( javascript:alert(1))` (leading space before scheme)
 - `[click](java&#x0A;script:alert(1))` (newline-encoded in URL)
   Some older parsers skip whitespace before the scheme. Markdown parsers may behave differently from
   HTML parsers here. Not tested.
 
 **Gap C — SVG vector**
+
 - `<svg onload=alert(1)>` or `<svg><script>alert(1)</script></svg>` — SVG is not in the default
   sanitize allowlist so the outer `<svg>` tag is stripped, but the content handling under
   `allowDangerousHtml: false` + the MDAST stripping should already prevent this. Not tested.
 
 **Gap D — Pipeline order regression guard**
+
 - No test verifies that syntax-highlighted output (which passes through `rehypeHighlight` AFTER
   `rehypeSanitize`) does not re-introduce a dangerous attribute. A single test that feeds a
   language-tagged fenced block containing an injected payload into the renderer and asserts clean
   output would lock this contract.
 
 **Gap E — GFM autolink protocol**
+
 - remark-gfm enables bare-URL autolinks (`https://example.com` → `<a href="...">`. A bare
   `javascript:alert(1)` is not a valid autolink per GFM spec (scheme must be followed by `//` or
   be an email), so this is likely safe by specification. Not yet tested.
 
 **Not a gap:**
+
 - `<img src="javascript:...">` — style and event handlers are dropped; `src` with `javascript:`
   on an image is browser-harmless (images cannot execute scripts) and is already partially covered
   by the style test.
@@ -200,14 +207,14 @@ unit layer.
 
 ### 7. Response guidance corrections
 
-| Guidance item | Plan says | Research verdict |
-|---------------|-----------|-----------------|
+| Guidance item                                            | Plan says           | Research verdict                                                                                                                                                                                                                        |
+| -------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | "rehype-sanitize is installed" does not mean it is wired | Challenge to verify | **Verified wired.** `handout-renderer.ts:13`, no bypass, two independent layers. Correction: the challenge should be reframed — the real open question is _completeness_ of the bypass variant coverage, not whether sanitize is wired. |
-| "cannot be bypassed via raw HTML or link protocols" | Challenge to verify | `allowDangerousHtml: false` drops raw HTML before sanitize. Default schema allowlists `http`/`https`/`mailto` for `href`. The bypass variants (gaps A–C) are not yet tested and are the actual remaining risk. |
-| Preview vs shared parity | Must prove | **Architecturally guaranteed** by single renderer. Not a separate test concern. |
-| Avoid snapshotting rendered HTML | Anti-pattern | Existing tests use `toContain`/`not.toContain`, not snapshots. ✓ |
-| Avoid asserting benign markdown only | Anti-pattern | Already avoided — XSS block exists with adversarial inputs. ✓ |
-| Likely cheapest layer: unit (pure renderer) | Hypothesis | **Confirmed.** |
+| "cannot be bypassed via raw HTML or link protocols"      | Challenge to verify | `allowDangerousHtml: false` drops raw HTML before sanitize. Default schema allowlists `http`/`https`/`mailto` for `href`. The bypass variants (gaps A–C) are not yet tested and are the actual remaining risk.                          |
+| Preview vs shared parity                                 | Must prove          | **Architecturally guaranteed** by single renderer. Not a separate test concern.                                                                                                                                                         |
+| Avoid snapshotting rendered HTML                         | Anti-pattern        | Existing tests use `toContain`/`not.toContain`, not snapshots. ✓                                                                                                                                                                        |
+| Avoid asserting benign markdown only                     | Anti-pattern        | Already avoided — XSS block exists with adversarial inputs. ✓                                                                                                                                                                           |
+| Likely cheapest layer: unit (pure renderer)              | Hypothesis          | **Confirmed.**                                                                                                                                                                                                                          |
 
 ---
 

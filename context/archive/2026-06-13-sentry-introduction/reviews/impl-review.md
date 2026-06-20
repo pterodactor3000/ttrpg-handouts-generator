@@ -1,4 +1,5 @@
 <!-- IMPL-REVIEW-REPORT -->
+
 # Implementation Review: Sentry Introduction
 
 - **Plan**: context/changes/sentry-introduction/plan.md
@@ -9,14 +10,14 @@
 
 ## Verdicts
 
-| Dimension | Verdict |
-|-----------|---------|
-| Plan Adherence | FAIL |
-| Scope Discipline | PASS |
-| Safety & Quality | FAIL |
-| Architecture | WARNING |
+| Dimension           | Verdict |
+| ------------------- | ------- |
+| Plan Adherence      | FAIL    |
+| Scope Discipline    | PASS    |
+| Safety & Quality    | FAIL    |
+| Architecture        | WARNING |
 | Pattern Consistency | WARNING |
-| Success Criteria | WARNING |
+| Success Criteria    | WARNING |
 
 ## Findings
 

@@ -85,3 +85,50 @@ export const PUT: APIRoute = async (context) => {
 
   return new Response(JSON.stringify({ id: data.id }), { status: 200 });
 };
+
+export const DELETE: APIRoute = async (context) => {
+  const supabase = createClient(context.request.headers, context.cookies);
+  if (!supabase) {
+    return new Response(JSON.stringify({ error: 'Supabase is not configured' }), { status: 500 });
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  }
+
+  const handoutId = context.params.id;
+  if (!handoutId) {
+    return new Response(JSON.stringify({ error: 'Missing handout id' }), { status: 400 });
+  }
+
+  const uuidParseResult = z.uuid().safeParse(handoutId);
+  if (!uuidParseResult.success) {
+    return new Response(JSON.stringify({ error: 'Invalid handout id' }), { status: 400 });
+  }
+
+  const { data, error } = (await supabase
+    .from('handouts')
+    .delete()
+    .eq('id', handoutId)
+    .eq('gm_id', user.id)
+    .eq('status', 'archived')
+    .select('id')
+    .single()) as HandoutQueryResult;
+
+  if (error?.code === 'PGRST116' || !data) {
+    return new Response(JSON.stringify({ error: 'Handout not found or not archived' }), {
+      status: 404,
+    });
+  }
+
+  if (error) {
+    console.error('DB error deleting handout:', error);
+    Sentry.captureException(error);
+    return new Response(JSON.stringify({ error: 'Failed to delete handout' }), { status: 500 });
+  }
+
+  return new Response(JSON.stringify({ id: data.id }), { status: 200 });
+};

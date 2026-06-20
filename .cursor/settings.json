@@ -1,0 +1,19 @@
+{
+  "plugins": {
+    "cloudflare": {
+      "enabled": true
+    },
+    "supabase": {
+      "enabled": true
+    },
+    "sentry": {
+      "enabled": true
+    },
+    "shadcn": {
+      "enabled": true
+    },
+    "context7-plugin": {
+      "enabled": true
+    }
+  }
+}

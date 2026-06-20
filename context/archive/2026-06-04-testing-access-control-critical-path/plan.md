@@ -74,6 +74,7 @@ Create a new helper that builds the middleware context shape, then write an inte
 **Intent**: Export `makeMiddlewareContext({ pathname, requestInit? })` — builds the minimal Astro middleware context object that `onRequest` needs. Keeps the middleware tests as simple as the handler tests in Phase 1.
 
 **Contract**: `makeMiddlewareContext` accepts `{ pathname: string; requestInit?: RequestInit }` and returns an object with:
+
 - `url: URL` — constructed from `http://localhost` + `pathname`
 - `locals: App.Locals` — typed as `{ user: null }` initially (mutable)
 - `request: Request` — constructed from `http://localhost` + `pathname` using `requestInit` (allows injecting `Cookie` or `Authorization` headers if ever needed)
@@ -88,6 +89,7 @@ Create a new helper that builds the middleware context shape, then write an inte
 **Intent**: `@/middleware` imports `defineMiddleware` from `astro:middleware`, which Vitest/Node cannot resolve natively. A minimal identity stub plus a one-line alias in `vitest.config.ts` unblocks direct `onRequest` invocation in the integration project. `defineMiddleware` is a compile-time type helper in Astro — the stub returns the handler unchanged.
 
 **Contract**:
+
 - `astro-middleware-stub.ts` exports `defineMiddleware(handler) => handler`
 - `vitest.config.ts` adds `'astro:middleware': resolve(__dirname, './src/integration/helpers/astro-middleware-stub.ts')` to `srcAlias`
 
@@ -110,20 +112,24 @@ import { createClient as createAppSupabaseClient } from '@/lib/supabase';
 Suite structure (all suites in the integration project, `beforeAll` / `afterAll` for user lifecycle):
 
 **Anonymous → protected route** (mock returns `unauthenticatedClient` in `beforeEach`):
+
 - `GET /dashboard` → response status 302, `Location: /auth/signin`
 - `GET /handouts` → response status 302, `Location: /auth/signin`
 - `GET /handouts/new` → response status 302, `Location: /auth/signin`
 
 **Anonymous → public route** (mock returns `unauthenticatedClient`):
+
 - `GET /` → `next` called (no redirect; anonymous users stay on landing)
 - `GET /share/some-uuid` → `next` called (share path intentionally ungated)
 - `GET /auth/signin` → `next` called
 
 **Authenticated → protected route** (mock returns `authenticatedClient` in `beforeEach`):
+
 - `GET /dashboard` → `next` called; `locals.user` is a `User` object with non-null `id` and `email`
 - `GET /handouts/new` → `next` called; `locals.user` populated
 
 **Authenticated → root redirect**:
+
 - `GET /` → response status 302, `Location: /dashboard`
 
 **Teardown**: `deleteTestUser` in `afterAll`.

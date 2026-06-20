@@ -48,6 +48,30 @@ jobs:
       - name: Run integration tests
         run: npm test -- --project integration
 
+      - name: Write .dev.vars
+        run: |
+          STATUS=$(npx supabase status -o env)
+          SUPABASE_URL=$(echo "$STATUS" | grep '^API_URL=' | cut -d'"' -f2)
+          ANON_KEY=$(echo "$STATUS" | grep '^ANON_KEY=' | cut -d'"' -f2)
+          test -n "$SUPABASE_URL" -a -n "$ANON_KEY" \
+            || { echo "Missing Supabase env vars from supabase status"; exit 1; }
+          printf 'SUPABASE_URL=%s\nSUPABASE_KEY=%s\n' "$SUPABASE_URL" "$ANON_KEY" > .dev.vars
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run e2e tests
+        run: npx playwright test e2e/player-share-link.spec.ts
+        continue-on-error: true
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
       # PREREQUISITE: Add GitHub repository secrets before this step runs:
       #   SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT
       - name: Build with Sentry source map upload

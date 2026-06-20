@@ -1,6 +1,8 @@
 ---
 import StatusBadge from '@/components/atoms/StatusBadge.astro';
+import ArchiveButton from '@/components/atoms/ArchiveButton';
 import CopyLinkButton from '@/components/atoms/CopyLinkButton';
+import DeleteHandoutButton from '@/components/atoms/DeleteHandoutButton';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import type { HandoutListItem } from '@/lib/handout-list';
 
@@ -10,6 +12,7 @@ interface Props {
 
 const { handout } = Astro.props;
 const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
+const hasShareLink = handout.share_token != null;
 ---
 
 <article class="border-surface bg-surface w-full min-w-0 overflow-hidden rounded-xl border backdrop-blur-xl">
@@ -46,12 +49,19 @@ const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
         </div>
       )
     }
-    {
-      handout.share_token && (
-        <div class="border-surface flex justify-end border-t pt-3">
-          <CopyLinkButton shareToken={handout.share_token} client:idle />
-        </div>
-      )
-    }
+    <div class="border-surface flex items-center justify-between gap-2 border-t pt-3" data-handout-card-footer>
+      <span data-handout-archive-action class:list={[handout.status === 'archived' && 'hidden']}>
+        <ArchiveButton handoutId={handout.id} handoutTitle={handout.title} client:idle />
+      </span>
+      <span data-handout-delete-action class:list={[handout.status !== 'archived' && 'hidden']}>
+        <DeleteHandoutButton
+          handoutId={handout.id}
+          handoutTitle={handout.title}
+          hasShareLink={hasShareLink}
+          client:idle
+        />
+      </span>
+      {handout.share_token && <CopyLinkButton shareToken={handout.share_token} client:idle />}
+    </div>
   </div>
 </article>

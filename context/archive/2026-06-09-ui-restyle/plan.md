@@ -53,7 +53,7 @@ Foundation-first. Phase 1 establishes the palette as the single source of truth 
 - **Astro/React boundary for the shared article**: the editor preview lives inside the `HandoutEditor.tsx` React island and the share view is an Astro page. A single shared component is not possible across the boundary. The single source of truth is a CSS class layer (e.g. a `@utility`/component class for the article surface + a prose-accent rule) defined once in `global.css`; thin per-framework wrappers (`HandoutArticle.astro` for share, a small React block/`HandoutArticle.tsx` for the preview) apply the same class. Keep the preview at the same prose scale as share (drop the `prose-sm`/full-size divergence) for true parity.
 - **Loader accent reconciliation**: the roadmap loader CSS uses `#c02942`; replace with the palette accent `#B2675E` when porting it into `global.css`.
 - **`bg-cosmic` is shared chrome**: redefine its gradient to warm-dark palette values in place (keep the utility name) so `not-found` and auth pages update without markup edits. Do not delete the utility.
-- **shadcn token alignment**: editor/dashboard dialogs currently *override* shadcn `bg-background` with `bg-gray-900`. Once `--primary`/`--background`/`--accent` are aligned to the palette, prefer removing those hard overrides so primitives theme centrally; verify dialogs still read correctly afterward.
+- **shadcn token alignment**: editor/dashboard dialogs currently _override_ shadcn `bg-background` with `bg-gray-900`. Once `--primary`/`--background`/`--accent` are aligned to the palette, prefer removing those hard overrides so primitives theme centrally; verify dialogs still read correctly afterward.
 
 ## Phase 1: Token & palette foundation
 
@@ -96,7 +96,11 @@ Establish the warm-dark palette as the single source of truth in `global.css`, a
   border-top-color: var(--palette-accent);
   animation: loader-spin 1s linear infinite;
 }
-@keyframes loader-spin { to { transform: rotate(1turn); } }
+@keyframes loader-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
 
 @supports (mask-composite: exclude) and (background: repeating-conic-gradient(red 0 5%, transparent 5% 50%)) {
   .loader {

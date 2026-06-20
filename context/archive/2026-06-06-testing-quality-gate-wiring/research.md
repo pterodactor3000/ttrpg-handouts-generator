@@ -4,7 +4,7 @@ researcher: Claude (Sonnet 4.6)
 git_commit: 0d8aa9499adc0a95c5d0637336d0719d2248cb63
 branch: feature/lesson-11
 repository: ttrpg-handouts-generator
-topic: "Wire unit and integration Vitest suite into CI quality gate"
+topic: 'Wire unit and integration Vitest suite into CI quality gate'
 tags: [research, ci, vitest, supabase, github-actions, quality-gates]
 status: complete
 last_updated: 2026-06-06
@@ -96,16 +96,17 @@ separately.
 
 `vitest.config.ts:17-42` defines two projects:
 
-| Project | Include glob | Exclude | setupFiles | Supabase needed? |
-|---------|-------------|---------|------------|-----------------|
-| `unit` | `src/**/*.test.{ts,tsx}` | `src/integration/**` | none | No |
-| `integration` | `src/integration/**/*.test.ts` | — | `src/integration/setup-env.ts` | **Yes** |
+| Project       | Include glob                   | Exclude              | setupFiles                     | Supabase needed? |
+| ------------- | ------------------------------ | -------------------- | ------------------------------ | ---------------- |
+| `unit`        | `src/**/*.test.{ts,tsx}`       | `src/integration/**` | none                           | No               |
+| `integration` | `src/integration/**/*.test.ts` | —                    | `src/integration/setup-env.ts` | **Yes**          |
 
 Both share: `environment: 'node'`, `@vitejs/plugin-react`, `@` alias → `src/`, `astro:middleware`
 alias → `src/integration/helpers/astro-middleware-stub.ts`.
 
 `npm test` (`vitest run`) runs **both projects**. There is no dedicated `test:unit` or
 `test:integration` npm script. Individual project runs use the `--project` flag:
+
 - `npm test -- --project unit` — unit only (no Supabase)
 - `npm test -- --project integration` — integration only
 
@@ -123,11 +124,11 @@ It parses `.env.test` manually into `process.env`. Vitest 4 project-level `envFi
 
 **Required env vars** (read via `requireEnv()` in `src/integration/helpers/env.ts:1-8`):
 
-| Variable | Where used | Notes |
-|----------|-----------|-------|
-| `SUPABASE_URL` | All integration suites, `admin-client.ts`, `test-users.ts` | Default: `http://127.0.0.1:54321` |
-| `SUPABASE_ANON_KEY` | `test-users.ts`, auth-gate + share-token suites | Naming differs from app runtime's `SUPABASE_KEY` |
-| `SUPABASE_SERVICE_ROLE_KEY` | `admin-client.ts` (bypasses RLS for fixtures) | Never exposed to HTTP clients |
+| Variable                    | Where used                                                 | Notes                                            |
+| --------------------------- | ---------------------------------------------------------- | ------------------------------------------------ |
+| `SUPABASE_URL`              | All integration suites, `admin-client.ts`, `test-users.ts` | Default: `http://127.0.0.1:54321`                |
+| `SUPABASE_ANON_KEY`         | `test-users.ts`, auth-gate + share-token suites            | Naming differs from app runtime's `SUPABASE_KEY` |
+| `SUPABASE_SERVICE_ROLE_KEY` | `admin-client.ts` (bypasses RLS for fixtures)              | Never exposed to HTTP clients                    |
 
 **Important naming note:** The app runtime (`src/lib/supabase.ts`) uses `SUPABASE_KEY` (anon key),
 declared in `astro.config.mjs:19`. The integration tests use `SUPABASE_ANON_KEY`. These are the
@@ -140,14 +141,14 @@ same secret to both names.
 
 `supabase/config.toml` key settings:
 
-| Setting | Value |
-|---------|-------|
-| `project_id` | `"10x-astro-starter"` |
-| API port | `54321` |
-| DB port | `54322` |
-| DB major version | `17` (Postgres) |
-| Auth email confirmation | `false` (local) |
-| Seed | Enabled; `seed.sql` is **intentionally empty** |
+| Setting                 | Value                                          |
+| ----------------------- | ---------------------------------------------- |
+| `project_id`            | `"10x-astro-starter"`                          |
+| API port                | `54321`                                        |
+| DB port                 | `54322`                                        |
+| DB major version        | `17` (Postgres)                                |
+| Auth email confirmation | `false` (local)                                |
+| Seed                    | Enabled; `seed.sql` is **intentionally empty** |
 
 `supabase/migrations/`: one file — `20260528200000_create_handouts_table.sql` (54 lines).
 
@@ -168,6 +169,7 @@ generated types. Either run `npx astro sync` before lint, or keep a combined wor
 ### 6. Stale documentation
 
 `AGENTS.md` and `CLAUDE.md` both contain:
+
 > "CI gate (`.github/workflows/ci.yml`): runs `npm run lint` + `npm run build` on push/PR to
 > `master`"
 
@@ -205,6 +207,7 @@ future contributors (and agents) have accurate CI information.
    Supabase start (env vars are optional in build). Already wired outside GHA.
 
 **Supabase-in-CI pattern for GitHub Actions:**
+
 1. `uses: supabase/setup-cli@v1 with: version: <lockfile version>` — installs the Supabase CLI
 2. `run: supabase start` — starts local Postgres + GoTrue + PostgREST (requires Docker; GHA
    ubuntu-latest has Docker pre-installed)

@@ -1,10 +1,10 @@
 ---
 change_id: testing-markdown-rendering-safety
 title: Markdown rendering safety tests (test-plan Phase 3)
-status: impl_reviewed
+status: archived
 created: 2026-06-06
-updated: 2026-06-06
-archived_at: null
+updated: 2026-06-19
+archived_at: 2026-06-19T00:00:00Z
 ---
 
 ## Notes
@@ -16,6 +16,7 @@ Risks covered: #3 (malicious markdown renders executable script / XSS in preview
 Test types planned: unit (pure renderer, adversarial inputs).
 
 Risk response intent:
+
 - Prove `<script>`, `onerror`, or `javascript:` payloads are neutralized in rendered output in both preview and shared view.
 - Challenge: "rehype-sanitize is installed" does not mean it is wired and cannot be bypassed via raw HTML or link protocols.
 - Avoid: asserting benign markdown only; snapshotting rendered HTML (brittle, breaks on trivial change).

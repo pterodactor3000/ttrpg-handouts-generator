@@ -80,7 +80,7 @@ if (!supabase) {
               </div>
             </header>
 
-            <HandoutList heading="Your handouts" handouts={activeHandouts}>
+            <HandoutList heading="Your handouts" handouts={activeHandouts} listKind="active">
               <div class="border-surface bg-surface text-foreground rounded-2xl border border-dashed p-8 text-center">
                 <p class="text-muted-foreground">You have not created any handouts yet.</p>
                 <a
@@ -92,7 +92,7 @@ if (!supabase) {
               </div>
             </HandoutList>
 
-            {archivedHandouts.length > 0 && <HandoutList heading="Archived" handouts={archivedHandouts} />}
+            <HandoutList heading="Archived" handouts={archivedHandouts} listKind="archived" />
           </>
         )
       }
