@@ -62,6 +62,8 @@ const reactConfig = tseslint.config({
 const astroConfig = tseslint.config({
   files: ['**/*.astro'],
   rules: {
+    // astro-eslint-parser AST lacks parent nodes for return Astro.redirect(); rule crashes instead of reporting
+    '@typescript-eslint/no-misused-promises': 'off',
     'astro/no-set-html-directive': 'error',
     'astro/no-unused-css-selector': 'warn',
     'astro/prefer-class-list-directive': 'warn',

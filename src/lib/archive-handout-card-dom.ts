@@ -25,6 +25,9 @@ function moveHandoutCardToArchivedSection(archiveButtonContainer: HTMLElement): 
   const archiveAction = handoutCard.querySelector('[data-handout-archive-action]');
   archiveAction?.classList.add('hidden');
 
+  const editAction = handoutCard.querySelector('[data-handout-edit-action]');
+  editAction?.classList.add('hidden');
+
   const deleteAction = handoutCard.querySelector('[data-handout-delete-action]');
   deleteAction?.classList.remove('hidden');
 

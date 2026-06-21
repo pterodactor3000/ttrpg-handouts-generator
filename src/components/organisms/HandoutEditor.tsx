@@ -160,7 +160,12 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
     }
   };
 
-  const shareUrl = shareToken ? `${window.location.origin}/share/${shareToken}` : '';
+  const shareUrl = useMemo(() => {
+    if (!shareToken || typeof window === 'undefined') {
+      return '';
+    }
+    return `${window.location.origin}/share/${shareToken}`;
+  }, [shareToken]);
 
   return (
     <div className="bg-cosmic min-h-screen p-4 md:p-8">
