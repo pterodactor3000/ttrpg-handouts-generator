@@ -273,7 +273,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                   disabled={isDirty}
                   className={cn(
                     'hover:text-brand-accent underline',
-                    isDirty && 'cursor-not-allowed opacity-50 no-underline',
+                    isDirty && 'cursor-not-allowed no-underline opacity-50',
                   )}
                   onClick={() => {
                     if (isDirty) return;
