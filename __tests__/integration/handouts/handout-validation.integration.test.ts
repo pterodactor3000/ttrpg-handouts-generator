@@ -260,7 +260,7 @@ describe('handout validation (integration)', () => {
       await readErrorBody(response);
     });
 
-    it('returns 500 when updating a published handout', async () => {
+    it('accepts update on a published handout with 200', async () => {
       const shareToken = crypto.randomUUID();
       const { error: publishError } = await adminClient
         .from('handouts')
@@ -283,9 +283,9 @@ describe('handout validation (integration)', () => {
         }),
       );
 
-      expect(response.status).toBe(500);
-      const body = await readErrorBody(response);
-      expect(body).toEqual({ error: 'Failed to save handout' });
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { id: string };
+      expect(body).toEqual({ id: draftHandoutId });
     });
   });
 

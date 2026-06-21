@@ -1,0 +1,26 @@
+---
+export const prerender = false;
+
+import { z } from 'zod';
+import Layout from '@/layouts/Layout.astro';
+import HandoutEditor from '@/components/organisms/HandoutEditor';
+import { loadHandoutForEdit } from '@/lib/load-handout-for-edit';
+
+const { user } = Astro.locals;
+const handoutId = Astro.params.id;
+
+const uuidParseResult = z.uuid().safeParse(handoutId);
+
+const initialHandout =
+  uuidParseResult.success && user
+    ? await loadHandoutForEdit(handoutId, user.id, Astro.request.headers, Astro.cookies)
+    : null;
+
+if (!initialHandout) {
+  return Astro.redirect('/dashboard');
+}
+---
+
+<Layout title="Edit Handout">
+  <HandoutEditor client:load initialHandout={initialHandout} />
+</Layout>

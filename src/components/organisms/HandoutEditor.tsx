@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import * as Sentry from '@sentry/astro';
 import { ArrowLeft } from 'lucide-react';
-import type { BackgroundCategory } from '@/types';
+import type { BackgroundCategory, InitialHandout } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
@@ -39,20 +39,31 @@ const fieldInputClass = cn(
   'border-surface bg-surface text-foreground placeholder:text-muted-foreground w-full rounded-md border px-3 py-2 outline-none focus:border-ring focus:ring-2 focus:ring-ring/50',
 );
 
-const HandoutEditor = () => {
-  const [title, setTitle] = useState('');
-  const [markdownContent, setMarkdownContent] = useState('');
-  const [backgroundCategory, setBackgroundCategory] = useState<BackgroundCategory | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
-  const [handoutId, setHandoutId] = useState<string | null>(null);
+const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) => {
+  const [title, setTitle] = useState(initialHandout?.title ?? '');
+  const [markdownContent, setMarkdownContent] = useState(initialHandout?.markdownContent ?? '');
+  const [backgroundCategory, setBackgroundCategory] = useState<BackgroundCategory | null>(
+    initialHandout?.backgroundCategory ?? null,
+  );
+  const [tags, setTags] = useState<string[]>(initialHandout?.tags ?? []);
+  const [handoutId, setHandoutId] = useState<string | null>(initialHandout?.id ?? null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
-  const [shareToken, setShareToken] = useState<string | null>(null);
+  const [shareToken, setShareToken] = useState<string | null>(initialHandout?.shareToken ?? null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [confirmBackOpen, setConfirmBackOpen] = useState(false);
-  const [savedSnapshot, setSavedSnapshot] = useState(() => serializeFormState('', '', null, []));
+  const [savedSnapshot, setSavedSnapshot] = useState(() =>
+    initialHandout
+      ? serializeFormState(
+          initialHandout.title,
+          initialHandout.markdownContent,
+          initialHandout.backgroundCategory,
+          initialHandout.tags,
+        )
+      : serializeFormState('', '', null, []),
+  );
 
   const isDirty = useMemo(
     () => serializeFormState(title, markdownContent, backgroundCategory, tags) !== savedSnapshot,
@@ -117,7 +128,12 @@ const HandoutEditor = () => {
   };
 
   const handleShare = async () => {
-    if (!handoutId) return;
+    if (!handoutId || isDirty) return;
+
+    if (shareToken) {
+      setShareDialogOpen(true);
+      return;
+    }
 
     setIsPublishing(true);
     setPublishError(null);
@@ -144,7 +160,12 @@ const HandoutEditor = () => {
     }
   };
 
-  const shareUrl = shareToken ? `${window.location.origin}/share/${shareToken}` : '';
+  const shareUrl = useMemo(() => {
+    if (!shareToken || typeof window === 'undefined') {
+      return '';
+    }
+    return `${window.location.origin}/share/${shareToken}`;
+  }, [shareToken]);
 
   return (
     <div className="bg-cosmic min-h-screen p-4 md:p-8">
@@ -157,7 +178,9 @@ const HandoutEditor = () => {
           <ArrowLeft />
           Back to dashboard
         </Button>
-        <h1 className="text-brand-accent-light mb-6 text-2xl font-bold tracking-tight">New Handout</h1>
+        <h1 className="text-brand-accent-light mb-6 text-2xl font-bold tracking-tight">
+          {initialHandout ? 'Edit Handout' : 'New Handout'}
+        </h1>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Form column */}
@@ -210,7 +233,7 @@ const HandoutEditor = () => {
             {publishError && <p className="text-destructive text-sm">{publishError}</p>}
 
             <div className="flex gap-3">
-              <Button onClick={() => void handleSave()} disabled={isSaving || !!shareToken} className="flex-1">
+              <Button onClick={() => void handleSave()} disabled={isSaving} className="flex-1">
                 {isSaving ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="loader loader-sm" aria-hidden="true" />
@@ -225,7 +248,7 @@ const HandoutEditor = () => {
               <Button
                 variant="outline"
                 onClick={() => void handleShare()}
-                disabled={!handoutId || isSaving || isPublishing || !!shareToken}
+                disabled={!handoutId || isSaving || isPublishing || isDirty}
                 className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
               >
                 {isPublishing ? (
@@ -246,8 +269,14 @@ const HandoutEditor = () => {
               <p className="text-brand-accent-light text-xs">
                 Published —{' '}
                 <button
-                  className="hover:text-brand-accent underline"
+                  type="button"
+                  disabled={isDirty}
+                  className={cn(
+                    'hover:text-brand-accent underline',
+                    isDirty && 'cursor-not-allowed no-underline opacity-50',
+                  )}
                   onClick={() => {
+                    if (isDirty) return;
                     setShareDialogOpen(true);
                   }}
                 >

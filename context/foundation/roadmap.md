@@ -3,10 +3,11 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-19
+updated: 2026-06-21
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
+# 2026-06-21: S-10 square-ui-containers, S-11 dashboard-tile-style, S-12 dashboard-drawer-nav, S-13 remove-account, S-14 unarchive-handout — dashboard polish, account lifecycle, state-machine extension
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -42,6 +43,11 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-07 | `per-style-fonts`                    | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view                                       | S-01          | FR-014, FR-005                                                 | done     |
 | S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
 | S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                    | S-01, S-07    | FR-005, FR-009, FR-011                                         | done     |
+| S-10 | `square-ui-containers`               | see all UI containers (cards, modals, inputs, buttons) with squared corners — reduced border-radius consistently site-wide                                                                                    | S-05          | FR-012                                                         | ready    |
+| S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | ready    |
+| S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | ready    |
+| S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | ready    |
+| S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | proposed |
 
 ## Streams
 
@@ -50,9 +56,10 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | Stream | Theme              | Chain                             | Note                                                                                                                                            |
 | ------ | ------------------ | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | A      | Core value proof   | `F-01` → `S-01`                   | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline.                                                        |
-| B      | Handout management | `S-02` → `S-03` / `S-04`          | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; either can be planned independently.                                   |
-| C      | Polish & theming   | `S-05` / `S-06` / `S-07` → `S-09` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-05, S-06, S-07 are independent and parallel; S-09 follows S-07. |
+| B      | Handout management | `S-02` → `S-03` / `S-04` → `S-12` → `S-14` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; S-12 adds status filtering; S-14 extends the archive state machine after S-12. |
+| C      | Polish & theming   | `S-05` / `S-06` / `S-07` → `S-09` / `S-10` / `S-11` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-10 and S-11 are parallel dashboard/UI polish after S-05 and S-09. |
 | D      | Entry & discovery  | `S-08`                            | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow.     |
+| E      | Account lifecycle  | `S-13`                            | Standalone account-deletion slice; joins Stream A at S-01. Soft-delete with 30-day retention before permanent purge.                            |
 
 ## Baseline
 
@@ -231,6 +238,68 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** The three new images must remain visually compatible with the per-style fonts and colors introduced by S-07 — this is why S-07 is a prerequisite. The primary risk is readability: if a new background (especially the CRT scanline effect or the newspaper texture) is too busy or high-contrast, the text overlay could become unreadable. Since these are pre-loaded static assets (no user upload path), blast radius is limited to visual presentation only. The mobile-responsive NFR requires verification on the shared read-only page, where screen density can exaggerate texture contrast. CSS-only backgrounds (color-gradient CRT, CSS paper texture) are lower-risk than raster images from a load-time perspective (NFR < 5 s generation).
 - **Status:** done
 
+### S-10: Squared UI containers
+
+- **Outcome:** GM (and players on the shared read-only page) see all UI containers — cards, modals, inputs, buttons, dialogs, dropdowns, and toasts — rendered with a squared, angular aesthetic (significantly reduced border-radius) consistently across every screen (dashboard, new-handout, preview, shared view).
+- **Change ID:** `square-ui-containers`
+- **PRD refs:** FR-012, NFR mobile-responsive, NFR browser-compatibility
+- **Prerequisites:** S-05
+- **Parallel with:** S-11, S-12, S-13
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Cross-cutting visual change touching every existing screen; blast radius is presentational only. Main risk: Tailwind 4 `--radius` CSS variable or shadcn/ui component defaults may cascade unexpectedly — verify each container type. No flow or data changes.
+- **Status:** ready
+
+### S-11: Dashboard tile style & uniform sizing
+
+- **Outcome:** GM sees dashboard handout tiles with uniform width and height across all cards, each tile topped by a decorative strip showing the handout's themed background texture (same assets as preview/shared view) in place of the current color bar — replacing the colored status bar with the handout border/style treatment.
+- **Change ID:** `dashboard-tile-style`
+- **PRD refs:** FR-002
+- **Prerequisites:** S-02, S-09
+- **Parallel with:** S-10, S-12, S-13
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Uses three static background assets already shipped in S-09; no new data fetch. Main risk: uniform sizing may clip long titles — ellipsis truncation required. Fixed-height top strip as `background-image` CSS; verify mobile dashboard layout.
+- **Status:** ready
+
+### S-12: Dashboard drawer navigation
+
+- **Outcome:** GM can open a left-side slide-in navigation drawer from the dashboard (triggered by a toggle button) with three filter options — Drafts, Published, Archived — to view only handouts in that state; a pin button makes the drawer persist as a fixed sidebar for the session.
+- **Change ID:** `dashboard-drawer-nav`
+- **PRD refs:** FR-002, FR-008
+- **Prerequisites:** S-02, S-04
+- **Parallel with:** S-10, S-11, S-13
+- **Blockers:** —
+- **Unknowns:**
+  - Should the Archived tab be read-only (no edit affordance shown) or show an unarchive action? — Owner: user. Block: no (S-14 adds the action when it lands).
+- **Risk:** Status filter queries the existing `status` column from F-01 — no schema change. Main risk: pin/persist state (session in-memory vs. localStorage); in-memory is simplest for v1. Drawer overlay on mobile must not break existing tile grid layout.
+- **Status:** ready
+
+### S-13: Remove account
+
+- **Outcome:** GM can request account deletion from account settings; the account is immediately deactivated (sign-in blocked), all data is retained for 30 days and then permanently purged (handouts + auth record), and shared links go dead after the purge window. No reactivation flow in scope.
+- **Change ID:** `remove-account`
+- **PRD refs:** TBD — add FR in separate PRD edit
+- **Prerequisites:** S-01
+- **Parallel with:** S-10, S-11, S-12
+- **Blockers:** —
+- **Unknowns:**
+  - Purge mechanism: pg_cron on Supabase vs. Cloudflare CRON Worker vs. deferred manual cleanup? — Owner: user. Block: no.
+- **Risk:** Touches Supabase `auth.users` deletion — must use service-role admin API server-side only. Soft-delete flag must be handled in RLS so deactivated GMs cannot read their own data during the 30-day window while shared links (anon token path) still work until purge. Scheduled purge is the biggest open decision for `/10x-plan`.
+- **Status:** ready
+
+### S-14: Unarchive handout
+
+- **Outcome:** GM can select an archived handout from the Archived tab (introduced by S-12) and restore it to either Draft or Published state via a choice prompt; restoring to Published re-activates the existing share link immediately (same `share_token`, not regenerated).
+- **Change ID:** `unarchive-handout`
+- **PRD refs:** FR-008, Business Logic (state machine)
+- **Prerequisites:** S-04, S-12
+- **Parallel with:** —
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** PRD Business Logic states archived handouts are "read-only for the GM — no further edits allowed"; this slice deliberately extends the state machine to allow archived → draft/published transition. `/10x-plan` must update RLS write policies if F-01 currently blocks GM writes on archived rows. Restoring to Published without a new token preserves bookmarked player links — desirable per user confirmation.
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
@@ -245,6 +314,11 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-07       | `per-style-fonts`                    | Per-style fonts and font colors for handouts         | yes                   | S-01 done; run `/10x-plan per-style-fonts`                                             |
 | S-08       | `landing-page`                       | Landing page with app name and login entry point     | yes                   | No prerequisites; run `/10x-plan landing-page`                                         |
 | S-09       | `retheme-backgrounds`                | Replace themed background images per style category  | no                    | Depends on S-07; run `/10x-plan retheme-backgrounds` after S-07 is done                |
+| S-10       | `square-ui-containers`               | Squared UI containers across all screens             | yes                   | S-05 done; run `/10x-plan square-ui-containers`                                        |
+| S-11       | `dashboard-tile-style`               | Themed top-strip and uniform dashboard tile sizing   | yes                   | S-02, S-09 done; run `/10x-plan dashboard-tile-style`                                  |
+| S-12       | `dashboard-drawer-nav`               | Left drawer navigation with status filters           | yes                   | S-02, S-04 done; run `/10x-plan dashboard-drawer-nav`                                   |
+| S-13       | `remove-account`                     | Soft-delete account removal with 30-day retention    | yes                   | S-01 done; run `/10x-plan remove-account`                                              |
+| S-14       | `unarchive-handout`                  | Restore archived handout to draft or published       | no                    | Depends on S-12; run `/10x-plan unarchive-handout` after S-12 is done                  |
 
 ## Open Roadmap Questions
 
