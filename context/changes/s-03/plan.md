@@ -290,22 +290,22 @@ Extend the existing `HandoutEditor` unit test file with prop-variant coverage. A
 #### Manual
 
 - [x] 2.3 `/handouts/new` unchanged (empty form, "New Handout" heading) — 07d196a
-- [x] 2.4 Edit page: draft handout pre-populated, not dirty on load, Save enabled
-- [x] 2.5 Edit page: published handout — Save enabled, Share opens dialog without publish call
+- [x] 2.4 Edit page: draft handout pre-populated, not dirty on load, Save enabled — ec40c2e
+- [x] 2.5 Edit page: published handout — Save enabled, Share opens dialog without publish call — ec40c2e
 
 ### Phase 3: Edit Page and Dashboard Navigation
 
 #### Automated
 
-- [x] 3.1 Build succeeds
-- [x] 3.2 Lint passes
+- [x] 3.1 Build succeeds — ec40c2e
+- [x] 3.2 Lint passes — ec40c2e
 
 #### Manual
 
-- [x] 3.3 Edit link visible on draft + published cards; absent on archived
-- [x] 3.4 Edit flow end-to-end: draft handout
-- [x] 3.5 Edit flow end-to-end: published handout, share link reflects edits
-- [x] 3.6 Archived redirect and wrong-owner redirect work
+- [x] 3.3 Edit link visible on draft + published cards; absent on archived — ec40c2e
+- [x] 3.4 Edit flow end-to-end: draft handout — ec40c2e
+- [x] 3.5 Edit flow end-to-end: published handout, share link reflects edits — ec40c2e
+- [x] 3.6 Archived redirect and wrong-owner redirect work — ec40c2e
 
 ### Phase 4: Tests
 
