@@ -272,13 +272,13 @@ Extend the existing `HandoutEditor` unit test file with prop-variant coverage. A
 
 #### Automated
 
-- [x] 1.1 Lint passes after filter change
+- [x] 1.1 Lint passes after filter change — 8a5f74f
 
 #### Manual
 
-- [x] 1.2 PUT on published handout returns 200
-- [x] 1.3 PUT on archived handout returns non-2xx
-- [x] 1.4 PUT by wrong owner returns non-2xx
+- [x] 1.2 PUT on published handout returns 200 — 8a5f74f
+- [x] 1.3 PUT on archived handout returns non-2xx — 8a5f74f
+- [x] 1.4 PUT by wrong owner returns non-2xx — 8a5f74f
 
 ### Phase 2: HandoutEditor Initial-Data Props
 
