@@ -128,7 +128,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
   };
 
   const handleShare = async () => {
-    if (!handoutId) return;
+    if (!handoutId || isDirty) return;
 
     if (shareToken) {
       setShareDialogOpen(true);
@@ -248,7 +248,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
               <Button
                 variant="outline"
                 onClick={() => void handleShare()}
-                disabled={!handoutId || isSaving || isPublishing}
+                disabled={!handoutId || isSaving || isPublishing || isDirty}
                 className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
               >
                 {isPublishing ? (
@@ -269,8 +269,14 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
               <p className="text-brand-accent-light text-xs">
                 Published —{' '}
                 <button
-                  className="hover:text-brand-accent underline"
+                  type="button"
+                  disabled={isDirty}
+                  className={cn(
+                    'hover:text-brand-accent underline',
+                    isDirty && 'cursor-not-allowed opacity-50 no-underline',
+                  )}
                   onClick={() => {
+                    if (isDirty) return;
                     setShareDialogOpen(true);
                   }}
                 >

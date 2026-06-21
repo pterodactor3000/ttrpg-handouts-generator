@@ -128,4 +128,13 @@ describe('HandoutEditor — edit mode (initialHandout prop)', () => {
     expect(screen.queryByText('Discard unsaved changes?')).not.toBeInTheDocument();
     expect(window.location.href).toBe('/dashboard');
   });
+
+  it('disables Share when the form is dirty in edit mode', async () => {
+    const user = userEvent.setup();
+    render(<HandoutEditor initialHandout={publishedInitialHandout} />);
+
+    await user.type(screen.getByLabelText(/title/i), ' updated');
+
+    expect(screen.getByRole('button', { name: /^share$/i })).toBeDisabled();
+  });
 });
