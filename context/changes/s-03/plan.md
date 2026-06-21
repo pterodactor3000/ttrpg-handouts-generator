@@ -284,12 +284,12 @@ Extend the existing `HandoutEditor` unit test file with prop-variant coverage. A
 
 #### Automated
 
-- [ ] 2.1 Lint passes
-- [ ] 2.2 Unit tests (HandoutEditor edit-mode describe block) pass
+- [x] 2.1 Lint passes
+- [x] 2.2 Unit tests (HandoutEditor edit-mode describe block) pass
 
 #### Manual
 
-- [ ] 2.3 `/handouts/new` unchanged (empty form, "New Handout" heading)
+- [x] 2.3 `/handouts/new` unchanged (empty form, "New Handout" heading)
 - [ ] 2.4 Edit page: draft handout pre-populated, not dirty on load, Save enabled
 - [ ] 2.5 Edit page: published handout — Save enabled, Share opens dialog without publish call
 

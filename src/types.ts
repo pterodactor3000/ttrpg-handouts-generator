@@ -16,4 +16,14 @@ interface Handout {
   archived_at: string | null; // null until archived
 }
 
-export type { HandoutStatus, BackgroundCategory, Handout };
+interface InitialHandout {
+  id: string;
+  title: string;
+  markdownContent: string;
+  backgroundCategory: BackgroundCategory;
+  tags: string[];
+  status: HandoutStatus;
+  shareToken: string | null;
+}
+
+export type { HandoutStatus, BackgroundCategory, Handout, InitialHandout };
