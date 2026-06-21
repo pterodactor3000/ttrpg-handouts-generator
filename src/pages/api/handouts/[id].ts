@@ -69,7 +69,7 @@ export const PUT: APIRoute = async (context) => {
     })
     .eq('id', handoutId)
     .eq('gm_id', user.id)
-    .eq('status', 'draft')
+    .neq('status', 'archived')
     .select('id')
     .single()) as HandoutQueryResult;
 
