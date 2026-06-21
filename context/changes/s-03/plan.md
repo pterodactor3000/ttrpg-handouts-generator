@@ -311,6 +311,6 @@ Extend the existing `HandoutEditor` unit test file with prop-variant coverage. A
 
 #### Automated
 
-- [ ] 4.1 Unit tests pass (all HandoutEditor tests)
-- [ ] 4.2 Integration tests pass (edit-handout suite)
-- [ ] 4.3 Lint passes
+- [x] 4.1 Unit tests pass (all HandoutEditor tests)
+- [x] 4.2 Integration tests pass (edit-handout suite)
+- [x] 4.3 Lint passes
