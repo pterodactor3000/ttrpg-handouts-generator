@@ -182,4 +182,4 @@ GitHub Actions runs lint, unit tests, and integration tests (with local Supabase
 
 ---
 
-**Timeline**: 3-week MVP | **Status**: In development
+**Timeline**: 3-week MVP | **Status**: In development | **MVP**: Delivered
