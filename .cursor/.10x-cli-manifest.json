@@ -2,8 +2,8 @@
   "package": "@przeprogramowani/10x-cli",
   "version": "1.10.0",
   "manifestVersion": 3,
-  "lastApplied": "2026-06-29T09:09:21.804Z",
-  "lessonId": "m0l0",
+  "lastApplied": "2026-06-29T10:49:28.008Z",
+  "lessonId": "m5l5",
   "course": "10xdevs3",
   "tool": "cursor",
   "files": {
@@ -1547,7 +1547,7 @@
       ]
     },
     "m5l5": {
-      "appliedAt": "2026-06-25T10:48:28.288Z",
+      "appliedAt": "2026-06-29T10:49:28.007Z",
       "skills": {
         "10x-goal-implement": {
           "files": [
