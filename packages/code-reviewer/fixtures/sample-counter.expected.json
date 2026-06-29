@@ -1,0 +1,36 @@
+{
+  "verdict": "request_changes",
+  "summary": "The Counter refactor introduces a stale-closure bug in useEffect and drops support for the initial prop. The functional setState update is a good change.",
+  "findings": [
+    {
+      "id": "ignored-initial-prop",
+      "severity": "major",
+      "category": "correctness",
+      "title": "initial prop is ignored after refactor",
+      "description": "useState was changed from useState(initial) to useState(0), so callers passing a non-zero initial value will always start at 0.",
+      "filePath": "src/components/Counter.tsx",
+      "lineHint": "useState(0)",
+      "suggestion": "Restore useState(initial) or useState(() => initial) so the prop is honored."
+    },
+    {
+      "id": "stale-closure-document-title",
+      "severity": "major",
+      "category": "correctness",
+      "title": "useEffect reads count with an empty dependency array",
+      "description": "document.title uses count but the effect depends on []. The title is set once on mount and never updates when count changes.",
+      "filePath": "src/components/Counter.tsx",
+      "lineHint": "useEffect(..., [])",
+      "suggestion": "Add count to the dependency array: useEffect(() => { document.title = `Count: ${count}`; }, [count]);"
+    },
+    {
+      "id": "side-effect-in-presentational-component",
+      "severity": "minor",
+      "category": "maintainability",
+      "title": "Document title side effect couples UI to global DOM",
+      "description": "Updating document.title inside Counter makes the component harder to test and reuse outside a page context.",
+      "filePath": "src/components/Counter.tsx",
+      "lineHint": "document.title = ...",
+      "suggestion": "Move title updates to a parent route/layout or a dedicated usePageTitle hook."
+    }
+  ]
+}

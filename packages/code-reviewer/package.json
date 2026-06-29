@@ -1,0 +1,24 @@
+{
+  "name": "@ttrpg-handouts/code-reviewer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "review": "tsx src/index.ts",
+    "dry-review": "tsx src/index.ts --dry-run --file fixtures/sample-counter.diff",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cursor/sdk": "^1.0.22",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
