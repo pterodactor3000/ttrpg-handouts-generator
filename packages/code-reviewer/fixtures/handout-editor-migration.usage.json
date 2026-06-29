@@ -1,0 +1,85 @@
+[
+  {
+    "model": {
+      "label": "Composer 2.5",
+      "id": "composer-2.5"
+    },
+    "status": "finished",
+    "elapsedMs": 55912,
+    "durationMs": 54178,
+    "usage": {
+      "inputTokens": 119957,
+      "outputTokens": 3582,
+      "cacheReadTokens": 97024,
+      "cacheWriteTokens": 0,
+      "totalTokens": 220563
+    },
+    "cost": {
+      "inputTokens": 119957,
+      "outputTokens": 3582,
+      "cacheReadTokens": 97024,
+      "cacheWriteTokens": 0,
+      "totalTokens": 220563,
+      "apiCostUsd": 0.0883383,
+      "cursorTokenRateUsd": 0.05514075,
+      "estimatedTotalUsdTeams": 0.14347905,
+      "pool": "auto_composer"
+    }
+  },
+  {
+    "model": {
+      "label": "Gemini 3.5 Flash",
+      "id": "gemini-3.5-flash"
+    },
+    "status": "finished",
+    "elapsedMs": 82572,
+    "durationMs": 80840,
+    "usage": {
+      "inputTokens": 226899,
+      "outputTokens": 16585,
+      "cacheReadTokens": 158461,
+      "cacheWriteTokens": 0,
+      "totalTokens": 401945,
+      "reasoningTokens": 13848
+    },
+    "cost": {
+      "inputTokens": 226899,
+      "outputTokens": 16585,
+      "cacheReadTokens": 158461,
+      "cacheWriteTokens": 0,
+      "totalTokens": 401945,
+      "apiCostUsd": 0.17112754999999996,
+      "cursorTokenRateUsd": 0.10048625,
+      "estimatedTotalUsdTeams": 0.27161379999999996,
+      "pool": "api",
+      "ratesNote": "Rates aligned with Gemini 3 Flash; verify on Cursor pricing page if billing differs."
+    }
+  },
+  {
+    "model": {
+      "label": "Sonnet 4.5",
+      "id": "claude-sonnet-4-5"
+    },
+    "status": "finished",
+    "elapsedMs": 46947,
+    "durationMs": 45180,
+    "usage": {
+      "inputTokens": 21484,
+      "outputTokens": 2807,
+      "cacheReadTokens": 17296,
+      "cacheWriteTokens": 4179,
+      "totalTokens": 45766
+    },
+    "cost": {
+      "inputTokens": 21484,
+      "outputTokens": 2807,
+      "cacheReadTokens": 17296,
+      "cacheWriteTokens": 4179,
+      "totalTokens": 45766,
+      "apiCostUsd": 0.12741705,
+      "cursorTokenRateUsd": 0.0114415,
+      "estimatedTotalUsdTeams": 0.13885855,
+      "pool": "api"
+    }
+  }
+]

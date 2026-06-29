@@ -1,0 +1,184 @@
+{
+  "model": {
+    "label": "Sonnet 4.5",
+    "id": "claude-sonnet-4-5"
+  },
+  "ok": true,
+  "elapsed": 57643,
+  "review": {
+    "state": "fail",
+    "summary": "Critical security vulnerabilities (hardcoded service role key, missing RLS), major correctness bug (missing useEffect dependencies breaks preview updates), and scope violations. The migration itself is a good modernization but the useEffect is broken and the duplicate route has multiple security and correctness issues.",
+    "acceptanceCriteria": [
+      {
+        "id": "A1",
+        "status": "not_assessed",
+        "note": "Cannot verify CI status from diff alone"
+      },
+      {
+        "id": "A2",
+        "status": "not_met",
+        "note": "Missing prerender=false on API route; missing RLS policy on new handout_duplicates_log table"
+      },
+      {
+        "id": "A3",
+        "status": "not_met",
+        "note": "Unrelated max-w-6xl styling change in dashboard.astro"
+      },
+      {
+        "id": "A4",
+        "status": "met",
+        "note": "PR title follows required format with roadmap ID and change-id"
+      },
+      {
+        "id": "A5",
+        "status": "not_met",
+        "note": "No JSDoc on duplicate route; no comment explaining why useEffect deps are empty"
+      },
+      {
+        "id": "A6",
+        "status": "not_assessed",
+        "note": "E2E not a gate yet"
+      }
+    ],
+    "findings": [
+      {
+        "id": "hardcoded-service-role-key",
+        "severity": "bug",
+        "criterion": "security",
+        "acceptanceCriterion": "A2",
+        "title": "Hardcoded service role key in source code",
+        "description": "SERVICE_ROLE_KEY is hardcoded as a string literal. This is a critical security vulnerability — the service role key bypasses RLS and grants full database access. If this code is committed, the key is exposed in version control forever.",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "line 4",
+        "suggestion": "Load from environment variable: const SERVICE_ROLE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY; Ensure the env var is never committed and is configured in deployment environment only."
+      },
+      {
+        "id": "missing-rls-policy",
+        "severity": "bug",
+        "criterion": "security",
+        "acceptanceCriterion": "A2",
+        "title": "New handout_duplicates_log table has no RLS policy",
+        "description": "The migration creates a new table but does not enable RLS or define policies. Per A2 hard rules, all new tables require RLS. Without RLS, any authenticated user can read/write this audit log.",
+        "filePath": "supabase/migrations/20260629120000_handout_duplicates.sql",
+        "lineHint": "after line 8",
+        "suggestion": "Add: alter table public.handout_duplicates_log enable row level security; create policy \"Users can view their own duplicate logs\" on public.handout_duplicates_log for select using (source_handout_id in (select id from public.handouts where gm_id = auth.uid())); create policy \"Service role can insert\" on public.handout_duplicates_log for insert with check (true);"
+      },
+      {
+        "id": "no-input-validation",
+        "severity": "bug",
+        "criterion": "security",
+        "title": "Unvalidated input in duplicate route",
+        "description": "body.gmId is used directly without validation (type, presence, or authorization check). An attacker could pass any gmId and create handouts under another user's account.",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "line 29",
+        "suggestion": "Validate that body.gmId matches the authenticated user: const user = await supabase.auth.getUser(); if (!user.data.user || user.data.user.id !== body.gmId) { return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 403 }); }"
+      },
+      {
+        "id": "missing-useeffect-dependencies",
+        "severity": "bug",
+        "criterion": "correctness",
+        "title": "useEffect missing critical dependencies — preview will not update",
+        "description": "The useEffect has an empty dependency array but uses markdownContent, backgroundCategory, and onSaveSnapshot. This means the preview renders only once on mount and never updates when the user edits content or changes background — breaking the core preview functionality.",
+        "filePath": "src/components/organisms/HandoutPreviewPanel.tsx",
+        "lineHint": "line 33",
+        "suggestion": "Add dependencies: }, [markdownContent, backgroundCategory, onSaveSnapshot]); If onSaveSnapshot causes unwanted re-renders, wrap it in useCallback at the call site."
+      },
+      {
+        "id": "swallowed-error",
+        "severity": "risk",
+        "criterion": "correctness",
+        "title": "Empty catch block silently swallows rendering errors",
+        "description": "The .catch(() => {}) hides any errors from renderHandoutHtml. If rendering fails (e.g., invalid markdown, network issue), the user sees a blank preview with no indication of what went wrong.",
+        "filePath": "src/components/organisms/HandoutPreviewPanel.tsx",
+        "lineHint": "line 29",
+        "suggestion": "Log or display the error: .catch((err) => { console.error('Preview render failed:', err); if (!cancelled) setRenderedHtml('<p class=\"text-red-500\">Failed to render preview</p>'); });"
+      },
+      {
+        "id": "leaked-stack-trace",
+        "severity": "risk",
+        "criterion": "security",
+        "title": "Stack trace leaked in 404 response",
+        "description": "new Error().stack exposes internal server paths and structure to clients. This is an information disclosure risk.",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "line 21",
+        "suggestion": "Remove stack property: return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });"
+      },
+      {
+        "id": "leaked-error-details",
+        "severity": "risk",
+        "criterion": "security",
+        "title": "Internal error object leaked in 500 response",
+        "description": "The entire Supabase error object (which may contain query details, internal IDs, or schema info) is sent to the client. Only safe, user-facing messages should be exposed.",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "line 39",
+        "suggestion": "Return only error.message: return new Response(JSON.stringify({ error: error.message }), { status: 500 });"
+      },
+      {
+        "id": "no-handout-id-validation",
+        "severity": "risk",
+        "criterion": "correctness",
+        "title": "No validation of handoutId parameter",
+        "description": "handoutId is used directly in the query without checking if it's a valid UUID. While Supabase may handle this, explicit validation provides a better error message and prevents potential injection-style issues.",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "line 11",
+        "suggestion": "Validate before use: if (!handoutId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(handoutId)) { return new Response(JSON.stringify({ error: 'Invalid handout ID' }), { status: 400 }); }"
+      },
+      {
+        "id": "missing-prerender-false",
+        "severity": "bug",
+        "criterion": "repo_idioms",
+        "acceptanceCriterion": "A2",
+        "title": "API route missing export const prerender = false",
+        "description": "Per A2 hard rules, all API routes must explicitly disable prerendering. Without this, Astro 6 may attempt static generation at build time, causing runtime failures.",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "after line 3",
+        "suggestion": "Add after imports: export const prerender = false;"
+      },
+      {
+        "id": "unrelated-styling-change",
+        "severity": "nit",
+        "criterion": "minimal_scope",
+        "acceptanceCriterion": "A3",
+        "title": "Unrelated max-w-6xl styling in dashboard.astro",
+        "description": "This PR is about migrating the preview panel and adding duplicate functionality. The max-w-6xl constraint on the dashboard is unrelated and violates strict scope (A3).",
+        "filePath": "src/pages/dashboard.astro",
+        "lineHint": "line 7",
+        "suggestion": "Remove max-w-6xl or move to a separate PR focused on dashboard layout improvements."
+      },
+      {
+        "id": "unnecessary-comment",
+        "severity": "nit",
+        "criterion": "minimal_scope",
+        "title": "Unnecessary // sorted imports comment",
+        "description": "The comment adds no value and appears to be a leftover note. Comments should explain non-obvious intent, not narrate trivial facts.",
+        "filePath": "src/pages/dashboard.astro",
+        "lineHint": "line 3",
+        "suggestion": "Remove the comment."
+      },
+      {
+        "id": "no-jsdoc-on-api-route",
+        "severity": "nit",
+        "criterion": "repo_idioms",
+        "acceptanceCriterion": "A5",
+        "title": "Missing JSDoc on reusable duplicate route handler",
+        "description": "Per A5, reusable functions should have JSDoc. This API route is a public interface and should document its contract (request body shape, response, auth requirements).",
+        "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+        "lineHint": "line 6",
+        "suggestion": "Add JSDoc: /** * Duplicates an existing handout. * @param context.params.id - UUID of source handout * @param context.request.body - { gmId: string } - ID of user who will own the duplicate * @returns 201 with { id: string } on success * @throws 404 if source handout not found * @throws 403 if user unauthorized */"
+      },
+      {
+        "id": "no-audit-log-insert",
+        "severity": "question",
+        "criterion": "correctness",
+        "title": "Why create handout_duplicates_log table if it's never written to?",
+        "description": "The migration adds an audit log table, but the duplicate route never inserts records into it. Is this table intended for future use, or is the insert missing from this PR?",
+        "filePath": "src/pages/api/hardouts/[id]/duplicate.ts",
+        "lineHint": "after line 35",
+        "suggestion": "If the table should be used now, insert a log record after successful duplication. If it's for future use, consider adding it in a later PR when the logging is actually implemented."
+      }
+    ],
+    "documentedExceptions": [],
+    "mergeBlocked": true
+  },
+  "error": null
+}
