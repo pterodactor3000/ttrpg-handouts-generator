@@ -14,6 +14,8 @@ import {
   resolveCodeReviewCwd,
   resolveCodeReviewModelId,
 } from "./lib/cursor-config.js";
+import { normalizeCodeReviewOutput } from "./lib/normalize-review-output.js";
+import { parseDocumentedExceptionsFromPrBody } from "./lib/parse-documented-exceptions.js";
 import { parseJsonFromAgentText } from "./lib/parse-review-output.js";
 import {
   buildCodeReviewOutputInstructions,
@@ -22,10 +24,15 @@ import {
   CODE_REVIEW_SYSTEM_INSTRUCTIONS,
 } from "./prompts/code-review-instructions.js";
 import {
+  acceptanceCriterionIdSchema,
+  acceptanceCriterionResultSchema,
+  acceptanceCriterionStatusSchema,
   CODE_REVIEW_OUTPUT_JSON_SCHEMA,
   codeReviewFindingSchema,
   codeReviewOutputSchema,
-  reviewCategorySchema,
+  documentedExceptionSchema,
+  prStateSchema,
+  reviewCriterionSchema,
   reviewSeveritySchema,
 } from "./schemas/code-review-output.js";
 
@@ -37,14 +44,21 @@ export {
   getCodeReviewAgentOptions,
   DEFAULT_MODEL_ID,
   resolveCodeReviewCwd,
+  normalizeCodeReviewOutput,
+  parseDocumentedExceptionsFromPrBody,
   buildCodeReviewOutputInstructions,
   buildCodeReviewPrompt,
   buildCodeReviewUserPrompt,
   CODE_REVIEW_SYSTEM_INSTRUCTIONS,
   CODE_REVIEW_OUTPUT_JSON_SCHEMA,
+  acceptanceCriterionIdSchema,
+  acceptanceCriterionResultSchema,
+  acceptanceCriterionStatusSchema,
   codeReviewFindingSchema,
   codeReviewOutputSchema,
-  reviewCategorySchema,
+  documentedExceptionSchema,
+  prStateSchema,
+  reviewCriterionSchema,
   reviewSeveritySchema,
 };
 
@@ -55,9 +69,15 @@ export { createCodeReviewAgentOptionsFromInput as createCodeReviewAgent };
 export { getCodeReviewAgentOptionsFromDefaults as getCodeReviewAgent };
 
 export type {
+  AcceptanceCriterionId,
+  AcceptanceCriterionResult,
+  AcceptanceCriterionStatus,
   CodeReviewFinding,
   CodeReviewOutput,
-  ReviewCategory,
+  DocumentedException,
+  NormalizedCodeReviewOutput,
+  PrState,
+  ReviewCriterion,
   ReviewSeverity,
 } from "./schemas/code-review-output.js";
 
@@ -65,6 +85,10 @@ export type {
   CreateCodeReviewAgentOptions,
   RunCodeReviewInput,
 } from "./agent/code-review-agent.js";
+
+export type { NormalizeReviewOutputOptions } from "./lib/normalize-review-output.js";
+
+export type { BuildCodeReviewUserPromptInput } from "./prompts/code-review-instructions.js";
 
 async function readStdin(): Promise<string> {
   const chunks: Buffer[] = [];
@@ -101,8 +125,8 @@ async function main() {
 
   if (args.includes("--help") || args.includes("-h")) {
     console.log(`Usage:
-  npm run review -- [--file] <diff-file> [--model <model-id>] [--cwd <path>]
-  npm run review -- --dry-run [--file <diff-file>] [--expected <json-file>]
+  npm run review -- [--file] <diff-file> [--title <pr-title>] [--description <path-or-text>] [--model <model-id>] [--cwd <path>]
+  npm run review -- --dry-run [--file <diff-file>] [--expected <json-file>] [--title <pr-title>] [--description <path-or-text>]
   cat patch.diff | npm run review
 
 Environment:
@@ -114,9 +138,18 @@ Environment:
   }
 
   const diff = await readDiffFromArgs(args);
+  const prTitle = readFlagValue(args, "--title");
+  const prDescriptionRaw = readFlagValue(args, "--description");
+  const prDescription = prDescriptionRaw
+    ? await readFileIfExists(prDescriptionRaw)
+    : undefined;
 
   if (args.includes("--dry-run")) {
-    const prompt = buildCodeReviewPrompt(diff);
+    const prompt = buildCodeReviewPrompt({
+      diff,
+      prTitle,
+      prDescription,
+    });
     const expectedPath =
       readFlagValue(args, "--expected") ??
       "fixtures/sample-counter.expected.json";
@@ -124,6 +157,7 @@ Environment:
     const parsed = codeReviewOutputSchema.parse(
       parseJsonFromAgentText(expectedRaw),
     );
+    const review = normalizeCodeReviewOutput(parsed, { prDescription });
 
     console.log(
       JSON.stringify(
@@ -133,7 +167,7 @@ Environment:
           cwd: resolveCodeReviewCwd(readFlagValue(args, "--cwd")),
           diffLines: diff.trim().split("\n").length,
           promptPreview: `${prompt.slice(0, 400)}…`,
-          review: parsed,
+          review,
         },
         null,
         2,
@@ -144,11 +178,21 @@ Environment:
 
   const output = await runCodeReview({
     diff,
+    prTitle,
+    prDescription,
     modelId: readFlagValue(args, "--model"),
     cwd: readFlagValue(args, "--cwd"),
   });
 
   console.log(JSON.stringify(output, null, 2));
+}
+
+async function readFileIfExists(path: string): Promise<string> {
+  try {
+    return await readFile(path, "utf8");
+  } catch {
+    return path;
+  }
 }
 
 const entryPath = process.argv[1]

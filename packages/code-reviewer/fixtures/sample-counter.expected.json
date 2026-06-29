@@ -1,11 +1,40 @@
 {
-  "verdict": "request_changes",
+  "state": "fail",
   "summary": "The Counter refactor introduces a stale-closure bug in useEffect and drops support for the initial prop. The functional setState update is a good change.",
+  "acceptanceCriteria": [
+    {
+      "id": "A1",
+      "status": "not_assessed",
+      "note": "CI status cannot be verified from the diff alone."
+    },
+    {
+      "id": "A2",
+      "status": "met"
+    },
+    {
+      "id": "A3",
+      "status": "met"
+    },
+    {
+      "id": "A4",
+      "status": "not_assessed",
+      "note": "PR title not provided in fixture."
+    },
+    {
+      "id": "A5",
+      "status": "met"
+    },
+    {
+      "id": "A6",
+      "status": "not_assessed",
+      "note": "E2E is not a merge gate yet."
+    }
+  ],
   "findings": [
     {
       "id": "ignored-initial-prop",
-      "severity": "major",
-      "category": "correctness",
+      "severity": "bug",
+      "criterion": "correctness",
       "title": "initial prop is ignored after refactor",
       "description": "useState was changed from useState(initial) to useState(0), so callers passing a non-zero initial value will always start at 0.",
       "filePath": "src/components/Counter.tsx",
@@ -14,8 +43,8 @@
     },
     {
       "id": "stale-closure-document-title",
-      "severity": "major",
-      "category": "correctness",
+      "severity": "bug",
+      "criterion": "correctness",
       "title": "useEffect reads count with an empty dependency array",
       "description": "document.title uses count but the effect depends on []. The title is set once on mount and never updates when count changes.",
       "filePath": "src/components/Counter.tsx",
@@ -24,13 +53,14 @@
     },
     {
       "id": "side-effect-in-presentational-component",
-      "severity": "minor",
-      "category": "maintainability",
+      "severity": "nit",
+      "criterion": "repo_idioms",
       "title": "Document title side effect couples UI to global DOM",
       "description": "Updating document.title inside Counter makes the component harder to test and reuse outside a page context.",
       "filePath": "src/components/Counter.tsx",
       "lineHint": "document.title = ...",
       "suggestion": "Move title updates to a parent route/layout or a dedicated usePageTitle hook."
     }
-  ]
+  ],
+  "documentedExceptions": []
 }

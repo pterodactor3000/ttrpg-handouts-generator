@@ -6,15 +6,18 @@ import {
   getCodeReviewAgentOptions,
   type CreateCodeReviewAgentOptions,
 } from "../lib/cursor-config.js";
+import { normalizeCodeReviewOutput } from "../lib/normalize-review-output.js";
 import { parseJsonFromAgentText } from "../lib/parse-review-output.js";
 import { buildCodeReviewPrompt } from "../prompts/code-review-instructions.js";
 import {
   codeReviewOutputSchema,
-  type CodeReviewOutput,
+  type NormalizedCodeReviewOutput,
 } from "../schemas/code-review-output.js";
 
 export type RunCodeReviewInput = {
   diff: string;
+  prTitle?: string;
+  prDescription?: string;
   context?: string;
   modelId?: string;
   apiKey?: string;
@@ -39,7 +42,7 @@ export const getCodeReviewAgent = getCodeReviewAgentOptionsFromDefaults;
 
 export async function runCodeReview(
   input: RunCodeReviewInput,
-): Promise<CodeReviewOutput> {
+): Promise<NormalizedCodeReviewOutput> {
   const agentOptions =
     input.modelId || input.apiKey || input.cwd
       ? createCodeReviewAgentOptions({
@@ -50,7 +53,12 @@ export async function runCodeReview(
       : getCodeReviewAgentOptions();
 
   const result = await Agent.prompt(
-    buildCodeReviewPrompt(input.diff, input.context),
+    buildCodeReviewPrompt({
+      diff: input.diff,
+      prTitle: input.prTitle,
+      prDescription: input.prDescription,
+      context: input.context,
+    }),
     agentOptions,
   );
 
@@ -67,7 +75,11 @@ export async function runCodeReview(
   }
 
   const parsed = parseJsonFromAgentText(result.result);
-  return codeReviewOutputSchema.parse(parsed);
+  const output = codeReviewOutputSchema.parse(parsed);
+
+  return normalizeCodeReviewOutput(output, {
+    prDescription: input.prDescription,
+  });
 }
 
 export { codeReviewOutputSchema };
