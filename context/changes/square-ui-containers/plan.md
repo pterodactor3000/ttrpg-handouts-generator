@@ -366,28 +366,28 @@ Not applicable — no data model, schema, or persisted-state changes.
 
 #### Automated
 
-- [x] 2.1 Files exist: `card.tsx`, `input.tsx`, `textarea.tsx` under `src/components/atoms/`
-- [x] 2.2 Build succeeds: `npm run build`
-- [x] 2.3 Lint passes: `npm run lint`
+- [x] 2.1 Files exist: `card.tsx`, `input.tsx`, `textarea.tsx` under `src/components/atoms/` — 1899fb9
+- [x] 2.2 Build succeeds: `npm run build` — 1899fb9
+- [x] 2.3 Lint passes: `npm run lint` — 1899fb9
 
 #### Manual
 
-- [x] 2.4 No visible change yet (atoms installed but not yet consumed anywhere)
+- [x] 2.4 No visible change yet (atoms installed but not yet consumed anywhere) — 1899fb9
 
 ### Phase 3: Migrate hand-rolled cards to the Card atom
 
 #### Automated
 
-- [ ] 3.1 Build succeeds: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
-- [ ] 3.3 Existing unit tests pass: `npm test -- --project unit`
-- [ ] 3.4 Existing integration tests pass: `npm test -- --project integration`
+- [x] 3.1 Build succeeds: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.3 Existing unit tests pass: `npm test -- --project unit`
+- [x] 3.4 Existing integration tests pass: `npm test -- --project integration`
 
 #### Manual
 
-- [ ] 3.5 Dashboard header, empty-state card, and handout tiles render square; archive/delete/edit actions still work
-- [ ] 3.6 Auth signin/signup/confirm-email cards render square; forms still submit
-- [ ] 3.7 Share valid link, invalid token, and misconfigured state all render square cards
+- [x] 3.5 Dashboard header, empty-state card, and handout tiles render square; archive/delete/edit actions still work
+- [x] 3.6 Auth signin/signup/confirm-email cards render square; forms still submit
+- [x] 3.7 Share valid link, invalid token, and misconfigured state all render square cards
 
 ### Phase 4: Migrate hand-rolled text fields to Input/Textarea atoms
 

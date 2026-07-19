@@ -15,6 +15,11 @@ const backgroundConfig = BACKGROUND_CONFIGS[handout.background_category];
 const hasShareLink = handout.share_token != null;
 ---
 
+<!--
+  Card has no asChild, so keep semantic <article> for archive/delete DOM helpers
+  (.closest('article')). Radius stays token-linked via rounded-xl (Phase 1 zeroed
+  --radius-xl). Plan Phase 3 HandoutCard "otherwise" path.
+-->
 <article class="border-surface bg-surface w-full min-w-0 overflow-hidden rounded-xl border backdrop-blur-xl">
   <div
     class="h-12 w-full"
