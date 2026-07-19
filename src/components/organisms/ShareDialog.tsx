@@ -79,7 +79,7 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
           type="text"
           readOnly
           value={shareUrl}
-          className="border-surface bg-surface text-muted-foreground dark:bg-surface focus-visible:border-surface h-auto py-2 text-sm shadow-none focus-visible:ring-0"
+          className="border-surface bg-surface text-muted-foreground dark:bg-surface focus-visible:ring-ring/40 h-auto py-2 text-sm shadow-none focus-visible:ring-1"
           onFocus={(event) => {
             event.target.select();
           }}
