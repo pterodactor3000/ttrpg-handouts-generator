@@ -352,27 +352,27 @@ Not applicable — no data model, schema, or persisted-state changes.
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Build succeeds: `npm run build`
-- [x] 1.3 Existing unit tests still pass: `npm test -- --project unit`
+- [x] 1.1 Lint passes: `npm run lint` — 1c8520b
+- [x] 1.2 Build succeeds: `npm run build` — 1c8520b
+- [x] 1.3 Existing unit tests still pass: `npm test -- --project unit` — 1c8520b
 
 #### Manual
 
-- [x] 1.4 Dialog panel corners and close button are square
-- [x] 1.5 Buttons across the app have square corners
-- [x] 1.6 Toast notification has square corners
+- [x] 1.4 Dialog panel corners and close button are square — 1c8520b
+- [x] 1.5 Buttons across the app have square corners — 1c8520b
+- [x] 1.6 Toast notification has square corners — 1c8520b
 
 ### Phase 2: Install shadcn card, input, and textarea atoms
 
 #### Automated
 
-- [ ] 2.1 Files exist: `card.tsx`, `input.tsx`, `textarea.tsx` under `src/components/atoms/`
-- [ ] 2.2 Build succeeds: `npm run build`
-- [ ] 2.3 Lint passes: `npm run lint`
+- [x] 2.1 Files exist: `card.tsx`, `input.tsx`, `textarea.tsx` under `src/components/atoms/`
+- [x] 2.2 Build succeeds: `npm run build`
+- [x] 2.3 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.4 No visible change yet (atoms installed but not yet consumed anywhere)
+- [x] 2.4 No visible change yet (atoms installed but not yet consumed anywhere)
 
 ### Phase 3: Migrate hand-rolled cards to the Card atom
 
