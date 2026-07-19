@@ -51,7 +51,9 @@ export function FormField({
           placeholder={placeholder}
           className={cn(
             inputBase,
-            error ? 'border-red-400/60 focus-visible:ring-red-400' : 'border-white/20 focus-visible:ring-purple-400',
+            error
+              ? 'border-red-400/60 focus-visible:border-red-400/60 focus-visible:ring-red-400'
+              : 'border-white/20 focus-visible:border-white/20 focus-visible:ring-purple-400',
           )}
         />
         {endContent}

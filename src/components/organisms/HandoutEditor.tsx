@@ -222,7 +222,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 placeholder="# My Handout&#10;&#10;Write your content here…"
                 rows={16}
                 maxLength={50000}
-                className={cn(fieldInputClass, 'resize-y font-mono text-sm')}
+                className={cn(fieldInputClass, 'field-sizing-fixed min-h-0 resize-y font-mono text-sm')}
               />
             </div>
 

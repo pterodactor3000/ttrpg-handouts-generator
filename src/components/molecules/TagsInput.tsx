@@ -34,7 +34,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
       {tags.map((tag) => (
         <span
           key={tag}
-          className="border-surface bg-surface text-foreground flex items-center gap-1 rounded-full border px-3 py-1 text-sm"
+          className="border-surface bg-surface text-foreground flex items-center gap-1 rounded-none border px-3 py-1 text-sm"
         >
           {tag}
           <button
@@ -43,7 +43,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
               removeTag(tag);
             }}
             className={cn(
-              'text-muted-foreground hover:text-foreground ml-1 rounded-full leading-none transition-colors',
+              'text-muted-foreground hover:text-foreground ml-1 rounded-none leading-none transition-colors',
             )}
             aria-label={`Remove tag ${tag}`}
           >
@@ -60,7 +60,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
         onKeyDown={handleKeyDown}
         onBlur={addTag}
         placeholder={tags.length === 0 ? 'Add tags (press Enter or comma)' : 'Add another tag'}
-        className="border-surface bg-surface text-foreground dark:bg-surface h-auto min-w-32 flex-1 py-1 text-sm shadow-none focus-visible:ring-2"
+        className="border-surface bg-surface text-foreground dark:bg-surface h-auto w-auto min-w-32 flex-1 py-1 text-sm shadow-none focus-visible:ring-2"
       />
     </div>
   );

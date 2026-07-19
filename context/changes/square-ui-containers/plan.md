@@ -403,26 +403,26 @@ Discovered during Phase 3 manual verification (`impl-review-phase-3.md`, finding
 
 #### Automated
 
-- [x] 4.1 Build succeeds: `npm run build`
-- [x] 4.2 Lint passes: `npm run lint`
-- [x] 4.3 Existing unit tests pass: `npm test -- --project unit`
+- [x] 4.1 Build succeeds: `npm run build` — 248c1ae
+- [x] 4.2 Lint passes: `npm run lint` — 248c1ae
+- [x] 4.3 Existing unit tests pass: `npm test -- --project unit` — 248c1ae
 
 #### Manual
 
-- [x] 4.4 New handout form fields render square and capture input correctly
-- [x] 4.5 Edit form pre-populates migrated fields correctly
-- [x] 4.6 Sign in / sign up fields render square with correct icon inset and error states
-- [x] 4.7 Share dialog URL field renders square and is selectable/copyable
+- [x] 4.4 New handout form fields render square and capture input correctly — 248c1ae
+- [x] 4.5 Edit form pre-populates migrated fields correctly — 248c1ae
+- [x] 4.6 Sign in / sign up fields render square with correct icon inset and error states — 248c1ae
+- [x] 4.7 Share dialog URL field renders square and is selectable/copyable — 248c1ae
 
 ### Phase 5: Square remaining non-token-linked classes
 
 #### Automated
 
-- [ ] 5.1 Build succeeds: `npm run build`
-- [ ] 5.2 Lint passes: `npm run lint`
-- [ ] 5.3 Existing unit tests pass: `npm test -- --project unit`
+- [x] 5.1 Build succeeds: `npm run build`
+- [x] 5.2 Lint passes: `npm run lint`
+- [x] 5.3 Existing unit tests pass: `npm test -- --project unit`
 
 #### Manual
 
-- [ ] 5.4 Tag chips and status badges render square, including immediately after in-page archive action
-- [ ] 5.5 Landing page ambient glows are square-edged
+- [x] 5.4 Tag chips and status badges render square, including immediately after in-page archive action
+- [x] 5.5 Landing page ambient glows are square-edged

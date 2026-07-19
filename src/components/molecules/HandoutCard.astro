@@ -50,7 +50,7 @@ const hasShareLink = handout.share_token != null;
       handout.tags.length > 0 && (
         <div class="mb-3 flex flex-wrap gap-2">
           {handout.tags.map((tag) => (
-            <span class="border-surface bg-surface text-foreground rounded-full border px-3 py-1 text-sm">{tag}</span>
+            <span class="border-surface bg-surface text-foreground rounded-none border px-3 py-1 text-sm">{tag}</span>
           ))}
         </div>
       )
