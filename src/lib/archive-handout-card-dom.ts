@@ -1,5 +1,5 @@
 const archivedStatusBadgeClassName =
-  'inline-flex shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium border-surface bg-surface text-muted-foreground';
+  'inline-flex shrink-0 rounded-none border px-2.5 py-0.5 text-xs font-medium border-surface bg-surface text-muted-foreground';
 
 function moveHandoutCardToArchivedSection(archiveButtonContainer: HTMLElement): void {
   const handoutCard = archiveButtonContainer.closest('article');

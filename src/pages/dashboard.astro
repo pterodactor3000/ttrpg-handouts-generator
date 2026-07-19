@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/cloudflare';
 import Layout from '@/layouts/Layout.astro';
 import HandoutList from '@/components/organisms/HandoutList.astro';
+import { Card, CardContent } from '@/components/atoms/card';
 import { createClient } from '@/lib/supabase';
 import { partitionHandouts, type HandoutListItem } from '@/lib/handout-list';
 
@@ -40,56 +41,64 @@ if (!supabase) {
     <div class="mx-auto w-full max-w-6xl">
       {
         !isConfigured ? (
-          <div class="border-surface bg-surface text-foreground rounded-2xl border p-8 text-center backdrop-blur-xl">
-            <h1 class="mb-3 text-2xl font-bold">Dashboard temporarily unavailable</h1>
-            <p class="text-muted-foreground text-sm">Please try again later.</p>
-          </div>
+          <Card className="border-surface bg-surface text-foreground gap-0 border py-0 text-center shadow-none backdrop-blur-xl">
+            <CardContent className="p-8">
+              <h1 class="mb-3 text-2xl font-bold">Dashboard temporarily unavailable</h1>
+              <p class="text-muted-foreground text-sm">Please try again later.</p>
+            </CardContent>
+          </Card>
         ) : hasLoadError ? (
-          <div class="border-surface bg-surface text-foreground rounded-2xl border p-8 text-center backdrop-blur-xl">
-            <h1 class="mb-3 text-2xl font-bold">Could not load handouts</h1>
-            <p class="text-muted-foreground text-sm">
-              Something went wrong while loading your handouts. Please try again later.
-            </p>
-          </div>
+          <Card className="border-surface bg-surface text-foreground gap-0 border py-0 text-center shadow-none backdrop-blur-xl">
+            <CardContent className="p-8">
+              <h1 class="mb-3 text-2xl font-bold">Could not load handouts</h1>
+              <p class="text-muted-foreground text-sm">
+                Something went wrong while loading your handouts. Please try again later.
+              </p>
+            </CardContent>
+          </Card>
         ) : (
           <>
-            <header class="border-surface bg-surface text-foreground rounded-2xl border p-6 backdrop-blur-xl">
-              <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h1 class="text-brand-accent-light text-3xl font-bold tracking-tight">Dashboard</h1>
-                  <p class="text-muted-foreground mt-1">
-                    Welcome, <span class="text-foreground font-semibold">{user?.email}</span>
-                  </p>
-                </div>
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <a
-                    href="/handouts/new"
-                    class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted rounded-lg border px-4 py-2 text-center text-sm font-medium transition-colors hover:brightness-110"
-                  >
-                    + New handout
-                  </a>
-                  <form method="POST" action="/api/auth/signout">
-                    <button
-                      type="submit"
-                      class="border-surface bg-surface hover:bg-accent w-full rounded-lg border px-4 py-2 text-sm transition-colors sm:w-auto"
+            <Card className="border-surface bg-surface text-foreground gap-0 border py-0 shadow-none backdrop-blur-xl">
+              <CardContent className="p-6">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h1 class="text-brand-accent-light text-3xl font-bold tracking-tight">Dashboard</h1>
+                    <p class="text-muted-foreground mt-1">
+                      Welcome, <span class="text-foreground font-semibold">{user?.email}</span>
+                    </p>
+                  </div>
+                  <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <a
+                      href="/handouts/new"
+                      class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted rounded-lg border px-4 py-2 text-center text-sm font-medium transition-colors hover:brightness-110"
                     >
-                      Sign out
-                    </button>
-                  </form>
+                      + New handout
+                    </a>
+                    <form method="POST" action="/api/auth/signout">
+                      <button
+                        type="submit"
+                        class="border-surface bg-surface hover:bg-accent w-full rounded-lg border px-4 py-2 text-sm transition-colors sm:w-auto"
+                      >
+                        Sign out
+                      </button>
+                    </form>
+                  </div>
                 </div>
-              </div>
-            </header>
+              </CardContent>
+            </Card>
 
             <HandoutList heading="Your handouts" handouts={activeHandouts} listKind="active">
-              <div class="border-surface bg-surface text-foreground rounded-2xl border border-dashed p-8 text-center">
-                <p class="text-muted-foreground">You have not created any handouts yet.</p>
-                <a
-                  href="/handouts/new"
-                  class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted mt-4 inline-block rounded-lg border px-6 py-3 text-sm font-medium transition-colors hover:brightness-110"
-                >
-                  Create your first handout
-                </a>
-              </div>
+              <Card className="border-surface bg-surface text-foreground gap-0 border border-dashed py-0 text-center shadow-none">
+                <CardContent className="p-8">
+                  <p class="text-muted-foreground">You have not created any handouts yet.</p>
+                  <a
+                    href="/handouts/new"
+                    class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted mt-4 inline-block rounded-lg border px-6 py-3 text-sm font-medium transition-colors hover:brightness-110"
+                  >
+                    Create your first handout
+                  </a>
+                </CardContent>
+              </Card>
             </HandoutList>
 
             <HandoutList heading="Archived" handouts={archivedHandouts} listKind="archived" />

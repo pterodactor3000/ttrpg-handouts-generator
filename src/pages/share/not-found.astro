@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { Card, CardContent } from '@/components/atoms/card';
 
 export const prerender = false;
 
@@ -8,15 +9,19 @@ Astro.response.status = 404;
 
 <Layout title="Handout not found">
   <main class="bg-cosmic flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
-    <div class="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
-      <h1 class="mb-3 text-2xl font-bold">Handout not found</h1>
-      <p class="text-sm text-white/70">This link may be invalid or the handout has not been shared yet.</p>
-      <a
-        href="/"
-        class="mt-6 inline-block rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
-      >
-        Back to home
-      </a>
-    </div>
+    <Card
+      className="mx-auto w-full max-w-md gap-0 border border-white/10 bg-white/10 py-0 text-white shadow-none backdrop-blur-xl"
+    >
+      <CardContent className="p-8">
+        <h1 class="mb-3 text-2xl font-bold">Handout not found</h1>
+        <p class="text-sm text-white/70">This link may be invalid or the handout has not been shared yet.</p>
+        <a
+          href="/"
+          class="mt-6 inline-block rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+        >
+          Back to home
+        </a>
+      </CardContent>
+    </Card>
   </main>
 </Layout>

@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/cloudflare';
 import Layout from '@/layouts/Layout.astro';
 import HandoutArticle from '@/components/molecules/HandoutArticle.astro';
+import { Card, CardContent } from '@/components/atoms/card';
 import { createClient } from '@/lib/supabase';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
@@ -67,27 +68,29 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
   ) : (
     <Layout title={isConfigured ? 'Handout not found' : 'Sharing unavailable'}>
       <main class="bg-cosmic flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
-        <div class="border-surface bg-surface text-foreground mx-auto w-full max-w-md rounded-2xl border p-8 backdrop-blur-xl">
-          {isConfigured ? (
-            <>
-              <h1 class="mb-3 text-2xl font-bold">Handout not found</h1>
-              <p class="text-muted-foreground text-sm">
-                This link may be invalid or the handout has not been shared yet.
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 class="mb-3 text-2xl font-bold">Sharing unavailable</h1>
-              <p class="text-muted-foreground text-sm">Sharing is temporarily unavailable. Please try again later.</p>
-            </>
-          )}
-          <a
-            href="/"
-            class="border-surface bg-surface text-foreground hover:bg-accent mt-6 inline-block rounded-lg border px-4 py-2 text-sm transition-colors"
-          >
-            Back to home
-          </a>
-        </div>
+        <Card className="border-surface bg-surface text-foreground mx-auto w-full max-w-md gap-0 border py-0 shadow-none backdrop-blur-xl">
+          <CardContent className="p-8">
+            {isConfigured ? (
+              <>
+                <h1 class="mb-3 text-2xl font-bold">Handout not found</h1>
+                <p class="text-muted-foreground text-sm">
+                  This link may be invalid or the handout has not been shared yet.
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 class="mb-3 text-2xl font-bold">Sharing unavailable</h1>
+                <p class="text-muted-foreground text-sm">Sharing is temporarily unavailable. Please try again later.</p>
+              </>
+            )}
+            <a
+              href="/"
+              class="border-surface bg-surface text-foreground hover:bg-accent mt-6 inline-block rounded-lg border px-4 py-2 text-sm transition-colors"
+            >
+              Back to home
+            </a>
+          </CardContent>
+        </Card>
       </main>
     </Layout>
   )

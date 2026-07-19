@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-21
+updated: 2026-07-19
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
@@ -43,7 +43,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-07 | `per-style-fonts`                    | see each handout style category (grimdark / high fantasy / postapo) rendered with its own preset font and font color, in both the preview and the shared read-only view                                       | S-01          | FR-014, FR-005                                                 | done     |
 | S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
 | S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                    | S-01, S-07    | FR-005, FR-009, FR-011                                         | done     |
-| S-10 | `square-ui-containers`               | see all UI containers (cards, modals, inputs, buttons) with squared corners — reduced border-radius consistently site-wide                                                                                    | S-05          | FR-012                                                         | ready    |
+| S-10 | `square-ui-containers`               | see all UI containers (cards, modals, inputs, buttons) with squared corners — reduced border-radius consistently site-wide                                                                                    | S-05          | FR-012                                                         | done     |
 | S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | ready    |
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | ready    |
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | ready    |
@@ -248,7 +248,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Cross-cutting visual change touching every existing screen; blast radius is presentational only. Main risk: Tailwind 4 `--radius` CSS variable or shadcn/ui component defaults may cascade unexpectedly — verify each container type. No flow or data changes.
-- **Status:** ready
+- **Status:** done
 
 ### S-11: Dashboard tile style & uniform sizing
 
@@ -348,3 +348,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-07: Each handout style/background category (grimdark / high fantasy / postapo) renders with its own preset font family and font color, applied consistently in both the GM preview and the shared read-only view.** — Archived 2026-06-17 → `context/archive/2026-06-17-per-style-fonts/`. Lesson: —.
 - **S-04: GM can delete a handout from the dashboard; the handout moves to archived state, disappears from the GM's active list, and the shared link remains accessible to players.** — Archived 2026-06-19 → `context/archive/2026-06-07-delete-handout/`. Lesson: —.
 - **S-09: GM (and players on the shared read-only view) see each of the three style categories rendered over a new, themed pre-loaded background image: old paper texture for high fantasy, green-tinted CRT display for grimdark, and newspaper print for postapo — in both the GM preview and the shared player view.** — Archived 2026-06-19 → `context/archive/2026-06-17-retheme-backgrounds/`. Lesson: —.
+- **S-10: GM (and players on the shared read-only page) see all UI containers — cards, modals, inputs, buttons, dialogs, dropdowns, and toasts — rendered with a squared, angular aesthetic (significantly reduced border-radius) consistently across every screen (dashboard, new-handout, preview, shared view).** — Archived 2026-07-19 → `context/archive/2026-07-19-square-ui-containers/`. Lesson: —.

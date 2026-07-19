@@ -64,3 +64,24 @@
 - **Problem**: Plans or reviews may flag Astro atoms for not using `cn()` when `class:list` is the idiomatic Astro directive for conditional/merged classes.
 - **Rule**: In `.astro` components, prefer `class:list` for conditional classes; reserve `cn()` from `@/lib/utils` for TSX/React components.
 - **Applies to**: all Astro components
+
+## Audit shadcn Atom Defaults Before Migrating Onto Them
+
+- **Context**: any migration from hand-rolled markup onto a newly-installed shadcn atom (e.g. `Card`, `Input`, `Textarea`)
+- **Problem**: shadcn atoms ship their own default spacing/shadow classes (e.g. `Card`'s `gap-6 py-6 shadow-sm`) that migration plans don't always call out. Every call site in square-ui-containers Phase 3 needed explicit overrides (`gap-0 py-0 shadow-none`) to avoid introducing new visual spacing/shadow not present in the original hand-rolled markup.
+- **Rule**: before migrating a hand-rolled element onto a shadcn atom, diff the atom's default className against the classes being replaced, and explicitly cancel any atom defaults (spacing, shadow, gap) that weren't present in the original markup.
+- **Applies to**: all phases/changes that migrate existing markup onto a newly-installed shadcn atom
+
+## Custom Utility Classes Aren't tailwind-merge Aware
+
+- **Context**: any component mixing shadcn atom defaults with project-custom Tailwind utilities (e.g. `border-surface`, `bg-surface`) via `cn()`
+- **Problem**: `cn()` (tailwind-merge) only dedupes stock Tailwind class groups it knows about. Project-custom `@utility` classes aren't registered with `twMerge`'s config, so they can't cancel a shadcn atom's own default class in the same group (e.g. `border-input`). Both classes land in the DOM's class list; the effective style depends on generated CSS rule order, not `className` string order.
+- **Rule**: when overriding a shadcn atom's color/border classes with a project-custom utility, explicitly cancel the atom's own class for that group (e.g. add `border-input` to a `twMerge` custom group config, or explicitly override with a stock Tailwind class) rather than relying on `cn()` to dedupe a custom utility against it.
+- **Applies to**: all components that combine shadcn atoms with project-custom Tailwind `@utility` classes via `cn()`
+
+## Theme-Linked Radius Classes on Non-Enumerated Elements Are Still a Silent Dependency
+
+- **Context**: any plan that changes a `--radius`-derived token's value or formula (e.g. `square-ui-containers`)
+- **Problem**: elements using theme-linked `rounded-lg`/`rounded-md`/etc. outside the plan's enumerated card/chip/badge list render correctly only because the token currently resolves to the desired value. They were never explicitly listed as in-scope, so a future radius-token change has no plan entry pointing back at them and could silently regress their appearance.
+- **Rule**: when a plan changes a shared theme token's formula or value, grep the codebase for every utility class derived from that token (not just the elements the plan's narrative focuses on) and record the full list of affected files/elements in the plan or its research notes, even for elements whose visual outcome doesn't change under the new value.
+- **Applies to**: any change that modifies a Tailwind `@theme` token's derivation formula or base value
