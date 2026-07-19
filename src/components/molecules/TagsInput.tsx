@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Input } from '@/components/atoms/input';
 import { cn } from '@/lib/utils';
 
 interface TagsInputProps {
@@ -50,7 +51,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
           </button>
         </span>
       ))}
-      <input
+      <Input
         type="text"
         value={inputValue}
         onChange={(event) => {
@@ -59,7 +60,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
         onKeyDown={handleKeyDown}
         onBlur={addTag}
         placeholder={tags.length === 0 ? 'Add tags (press Enter or comma)' : 'Add another tag'}
-        className="border-surface bg-surface text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring/50 min-w-32 flex-1 rounded-md border px-3 py-1 text-sm outline-none focus:ring-2"
+        className="border-surface bg-surface text-foreground dark:bg-surface h-auto min-w-32 flex-1 py-1 text-sm shadow-none focus-visible:ring-2"
       />
     </div>
   );

@@ -17,6 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/atoms/dialog';
+import { Input } from '@/components/atoms/input';
+import { Textarea } from '@/components/atoms/textarea';
 import { cn } from '@/lib/utils';
 
 type SaveApiResponse = { id: string } | { error: string };
@@ -36,7 +38,7 @@ const serializeFormState = (
   });
 
 const fieldInputClass = cn(
-  'border-surface bg-surface text-foreground placeholder:text-muted-foreground w-full rounded-md border px-3 py-2 outline-none focus:border-ring focus:ring-2 focus:ring-ring/50',
+  'border-surface bg-surface text-foreground h-auto py-2 shadow-none focus-visible:ring-2 dark:bg-surface',
 );
 
 const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) => {
@@ -189,7 +191,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
               <label htmlFor="handout-title" className="text-muted-foreground text-sm font-medium">
                 Title
               </label>
-              <input
+              <Input
                 id="handout-title"
                 type="text"
                 value={title}
@@ -211,7 +213,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
               <label htmlFor="handout-markdown" className="text-muted-foreground text-sm font-medium">
                 Content (Markdown)
               </label>
-              <textarea
+              <Textarea
                 id="handout-markdown"
                 value={markdownContent}
                 onChange={(event) => {

@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/atoms/dialog';
+import { Input } from '@/components/atoms/input';
 
 interface ShareDialogProps {
   open: boolean;
@@ -74,11 +75,11 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <input
+        <Input
           type="text"
           readOnly
           value={shareUrl}
-          className="border-surface bg-surface text-muted-foreground w-full rounded-md border px-3 py-2 text-sm outline-none"
+          className="border-surface bg-surface text-muted-foreground dark:bg-surface h-auto py-2 text-sm shadow-none"
           onFocus={(event) => {
             event.target.select();
           }}

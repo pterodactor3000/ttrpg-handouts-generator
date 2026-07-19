@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { CircleAlert } from 'lucide-react';
+import { Input } from '@/components/atoms/input';
 import { cn } from '@/lib/utils';
 
 const inputBase =
-  'w-full rounded-lg bg-white/10 border px-3 py-2 pl-10 text-white placeholder-white/40 focus:outline-none focus:ring-2 transition-colors';
+  'h-auto bg-white/10 py-2 pl-10 text-white shadow-none placeholder:text-white/40 focus-visible:ring-2 dark:bg-white/10';
 
 interface FormFieldProps {
   id: string;
@@ -39,7 +40,7 @@ export function FormField({
       </label>
       <div className="relative">
         <span className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/40">{icon}</span>
-        <input
+        <Input
           id={id}
           name={name ?? id}
           type={type}
@@ -50,7 +51,7 @@ export function FormField({
           placeholder={placeholder}
           className={cn(
             inputBase,
-            error ? 'border-red-400/60 focus:ring-red-400' : 'border-white/20 focus:ring-purple-400',
+            error ? 'border-red-400/60 focus-visible:ring-red-400' : 'border-white/20 focus-visible:ring-purple-400',
           )}
         />
         {endContent}

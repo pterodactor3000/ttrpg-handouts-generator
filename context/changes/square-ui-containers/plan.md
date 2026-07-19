@@ -344,6 +344,16 @@ Not applicable — no data model, schema, or persisted-state changes.
 - Token definitions: `src/styles/global.css:32-160`
 - shadcn config: `components.json`
 
+## Addenda (from implementation review)
+
+### Phase 3 — SSR wrapper + client island composition rule
+
+Discovered during Phase 3 manual verification (`impl-review-phase-3.md`, finding F1): the original auth-card contract said "no client directive needed" when wrapping `SignInForm`/`SignUpForm` (both `client:load` React organisms) in the new `Card` atom. That's wrong — nesting a `client:load` child inside an SSR-only React `Card` throws `ReactSharedInternals.H is null` at runtime and the form inputs vanish after hydration, because Astro cannot split one JSX composition into two independent hydration roots.
+
+**Rule**: when an SSR-styling wrapper (e.g. `Card`) contains a `client:*` React child in the same JSX tree, the wrapper itself must carry the `client:*` directive and become the sole hydration root; drop the directive from the nested child(ren). Applied in `src/pages/auth/signin.astro` and `src/pages/auth/signup.astro` (`Card client:load`, `SignInForm`/`SignUpForm` with no directive).
+
+**Relevance to Phase 4**: `HandoutEditor.tsx` and `ShareDialog.tsx` are already `client:load` islands with inputs to migrate onto `Input`/`Textarea`. Since those atoms will be rendered as children inside the already-hydrated organism (not wrapped by a *new* SSR Astro-level React wrapper), this specific failure mode should not recur there — but audit each Phase 4 call site against this rule before assuming it's safe.
+
 ## Progress
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles. See `references/progress-format.md`.
@@ -378,31 +388,31 @@ Not applicable — no data model, schema, or persisted-state changes.
 
 #### Automated
 
-- [x] 3.1 Build succeeds: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
-- [x] 3.3 Existing unit tests pass: `npm test -- --project unit`
-- [x] 3.4 Existing integration tests pass: `npm test -- --project integration`
+- [x] 3.1 Build succeeds: `npm run build` — 493ee83
+- [x] 3.2 Lint passes: `npm run lint` — 493ee83
+- [x] 3.3 Existing unit tests pass: `npm test -- --project unit` — 493ee83
+- [x] 3.4 Existing integration tests pass: `npm test -- --project integration` — 493ee83
 
 #### Manual
 
-- [x] 3.5 Dashboard header, empty-state card, and handout tiles render square; archive/delete/edit actions still work
-- [x] 3.6 Auth signin/signup/confirm-email cards render square; forms still submit
-- [x] 3.7 Share valid link, invalid token, and misconfigured state all render square cards
+- [x] 3.5 Dashboard header, empty-state card, and handout tiles render square; archive/delete/edit actions still work — 493ee83
+- [x] 3.6 Auth signin/signup/confirm-email cards render square; forms still submit — 493ee83
+- [x] 3.7 Share valid link, invalid token, and misconfigured state all render square cards — 493ee83
 
 ### Phase 4: Migrate hand-rolled text fields to Input/Textarea atoms
 
 #### Automated
 
-- [ ] 4.1 Build succeeds: `npm run build`
-- [ ] 4.2 Lint passes: `npm run lint`
-- [ ] 4.3 Existing unit tests pass: `npm test -- --project unit`
+- [x] 4.1 Build succeeds: `npm run build`
+- [x] 4.2 Lint passes: `npm run lint`
+- [x] 4.3 Existing unit tests pass: `npm test -- --project unit`
 
 #### Manual
 
-- [ ] 4.4 New handout form fields render square and capture input correctly
-- [ ] 4.5 Edit form pre-populates migrated fields correctly
-- [ ] 4.6 Sign in / sign up fields render square with correct icon inset and error states
-- [ ] 4.7 Share dialog URL field renders square and is selectable/copyable
+- [x] 4.4 New handout form fields render square and capture input correctly
+- [x] 4.5 Edit form pre-populates migrated fields correctly
+- [x] 4.6 Sign in / sign up fields render square with correct icon inset and error states
+- [x] 4.7 Share dialog URL field renders square and is selectable/copyable
 
 ### Phase 5: Square remaining non-token-linked classes
 

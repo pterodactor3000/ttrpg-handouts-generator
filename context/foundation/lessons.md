@@ -64,3 +64,10 @@
 - **Problem**: Plans or reviews may flag Astro atoms for not using `cn()` when `class:list` is the idiomatic Astro directive for conditional/merged classes.
 - **Rule**: In `.astro` components, prefer `class:list` for conditional classes; reserve `cn()` from `@/lib/utils` for TSX/React components.
 - **Applies to**: all Astro components
+
+## Audit shadcn Atom Defaults Before Migrating Onto Them
+
+- **Context**: any migration from hand-rolled markup onto a newly-installed shadcn atom (e.g. `Card`, `Input`, `Textarea`)
+- **Problem**: shadcn atoms ship their own default spacing/shadow classes (e.g. `Card`'s `gap-6 py-6 shadow-sm`) that migration plans don't always call out. Every call site in square-ui-containers Phase 3 needed explicit overrides (`gap-0 py-0 shadow-none`) to avoid introducing new visual spacing/shadow not present in the original hand-rolled markup.
+- **Rule**: before migrating a hand-rolled element onto a shadcn atom, diff the atom's default className against the classes being replaced, and explicitly cancel any atom defaults (spacing, shadow, gap) that weren't present in the original markup.
+- **Applies to**: all phases/changes that migrate existing markup onto a newly-installed shadcn atom
