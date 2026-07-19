@@ -418,11 +418,11 @@ Discovered during Phase 3 manual verification (`impl-review-phase-3.md`, finding
 
 #### Automated
 
-- [x] 5.1 Build succeeds: `npm run build`
-- [x] 5.2 Lint passes: `npm run lint`
-- [x] 5.3 Existing unit tests pass: `npm test -- --project unit`
+- [x] 5.1 Build succeeds: `npm run build` — 55c517a
+- [x] 5.2 Lint passes: `npm run lint` — 55c517a
+- [x] 5.3 Existing unit tests pass: `npm test -- --project unit` — 55c517a
 
 #### Manual
 
-- [x] 5.4 Tag chips and status badges render square, including immediately after in-page archive action
-- [x] 5.5 Landing page ambient glows are square-edged
+- [x] 5.4 Tag chips and status badges render square, including immediately after in-page archive action — 55c517a
+- [x] 5.5 Landing page ambient glows are square-edged — 55c517a

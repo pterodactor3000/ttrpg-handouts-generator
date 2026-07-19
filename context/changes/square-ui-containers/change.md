@@ -1,7 +1,7 @@
 ---
 change_id: square-ui-containers
 title: Squared UI containers across all screens
-status: implementing
+status: implemented
 created: 2026-07-19
 updated: 2026-07-19
 archived_at: null
