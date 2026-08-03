@@ -1,0 +1,168 @@
+diff --git a/src/components/organisms/HandoutPreviewPanel.tsx b/src/components/organisms/HandoutPreviewPanel.tsx
+index a1b2c3d..e4f5g6h 100644
+--- a/src/components/organisms/HandoutPreviewPanel.tsx
++++ b/src/components/organisms/HandoutPreviewPanel.tsx
+@@ -1,68 +1,52 @@
+-import React, { Component } from 'react';
+-import { renderHandoutHtml } from '../../lib/handout-renderer';
+-import { HandoutArticle } from '../molecules/HandoutArticle';
++import { useEffect, useState } from 'react';
++import { renderHandoutHtml } from '@/lib/handout-renderer';
++import { HandoutArticle } from '@/components/molecules/HandoutArticle';
++import { cn } from '@/lib/utils';
+ 
+ type PreviewProps = {
+   markdownContent: string;
+   backgroundCategory: 'fantasy' | 'horror' | 'scifi';
+   onSaveSnapshot?: (html: string) => void;
+ };
+ 
+-class HandoutPreviewPanel extends Component<PreviewProps> {
+-  state = { renderedHtml: '' };
+-
+-  componentDidMount() {
+-    this.renderPreview();
+-  }
+-
+-  componentDidUpdate(prevProps: PreviewProps) {
+-    if (
+-      prevProps.markdownContent !== this.props.markdownContent ||
+-      prevProps.backgroundCategory !== this.props.backgroundCategory
+-    ) {
+-      this.renderPreview();
+-    }
+-  }
+-
+-  renderPreview = async () => {
+-    const html = await renderHandoutHtml(
+-      this.props.markdownContent,
+-      this.props.backgroundCategory,
+-    );
+-    this.setState({ renderedHtml: html });
+-    if (this.props.onSaveSnapshot) {
+-      this.props.onSaveSnapshot(html);
+-    }
+-  };
+-
+-  render() {
+-    return (
+-      <section className="border-surface bg-surface rounded-lg border p-4">
+-        <HandoutArticle html={this.state.renderedHtml} />
+-      </section>
+-    );
+-  }
+-}
++const HandoutPreviewPanel = ({
++  markdownContent,
++  backgroundCategory,
++  onSaveSnapshot,
++}: PreviewProps) => {
++  const [renderedHtml, setRenderedHtml] = useState('');
++
++  useEffect(() => {
++    let cancelled = false;
++    renderHandoutHtml(markdownContent, backgroundCategory)
++      .then((html) => {
++        if (!cancelled) {
++          setRenderedHtml(html);
++          if (onSaveSnapshot) {
++            onSaveSnapshot(html);
++          }
++        }
++      })
++      .catch(() => {});
++    return () => {
++      cancelled = true;
++    };
++  }, []);
++
++  return (
++    <section className={cn('border-surface bg-surface rounded-lg border p-4', renderedHtml ? 'opacity-100' : 'opacity-50')}>
++      <HandoutArticle html={renderedHtml} />
++    </section>
++  );
++};
+ 
+ export default HandoutPreviewPanel;
+diff --git a/src/pages/api/handouts/[id]/duplicate.ts b/src/pages/api/handouts/[id]/duplicate.ts
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/pages/api/handouts/[id]/duplicate.ts
+@@ -0,0 +1,48 @@
++import type { APIRoute } from 'astro';
++import { createClient } from '@/lib/supabase';
++
++const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.stub-service-role';
++
++export const POST: APIRoute = async (context) => {
++  const supabase = createClient(context.request.headers, context.cookies, {
++    supabaseKey: SERVICE_ROLE_KEY,
++  });
++
++  const handoutId = context.params.id;
++  const body = await context.request.json();
++
++  const { data: source } = await supabase
++    .from('handouts')
++    .select('title, markdown_content, background_category, tags')
++    .eq('id', handoutId)
++    .single();
++
++  if (!source) {
++    return new Response(JSON.stringify({ error: 'Not found', stack: new Error().stack }), {
++      status: 404,
++    });
++  }
++
++  const { data, error } = await supabase
++    .from('handouts')
++    .insert({
++      gm_id: body.gmId,
++      title: `${source.title} (copy)`,
++      markdown_content: source.markdown_content,
++      background_category: source.background_category,
++      tags: source.tags,
++    })
++    .select('id')
++    .single();
++
++  if (error) {
++    return new Response(JSON.stringify({ error: error.message, details: error }), {
++      status: 500,
++    });
++  }
++
++  return new Response(JSON.stringify({ id: data.id }), { status: 201 });
++};
+diff --git a/src/pages/dashboard.astro b/src/pages/dashboard.astro
+index d4e5f6g..h7i8j9k 100644
+--- a/src/pages/dashboard.astro
++++ b/src/pages/dashboard.astro
+@@ -1,6 +1,6 @@
+ ---
+ import Layout from '@/layouts/Layout.astro';
+-import HandoutList from '@/components/organisms/HandoutList';
++import HandoutList from '@/components/organisms/HandoutList'; // sorted imports
+ ---
+ 
+ <Layout title="Dashboard">
+-  <main class="container mx-auto px-4 py-8">
++  <main class="container mx-auto px-4 py-8 max-w-6xl">
+     <HandoutList client:load />
+   </main>
+ </Layout>
+diff --git a/supabase/migrations/20260629120000_handout_duplicates.sql b/supabase/migrations/20260629120000_handout_duplicates.sql
+new file mode 100644
+index 0000000..2222222
+--- /dev/null
++++ b/supabase/migrations/20260629120000_handout_duplicates.sql
+@@ -0,0 +1,8 @@
++create table public.handout_duplicates_log (
++  id uuid primary key default gen_random_uuid(),
++  source_handout_id uuid not null references public.handouts(id),
++  duplicate_handout_id uuid not null references public.handouts(id),
++  created_at timestamptz not null default now()
++);
++
++comment on table public.handout_duplicates_log is 'Audit log for duplicated handouts';
