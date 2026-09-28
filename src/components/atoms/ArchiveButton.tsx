@@ -55,13 +55,18 @@ const ArchiveButton = ({ handoutId, handoutTitle }: ArchiveButtonProps) => {
         onClick={() => {
           setConfirmOpen(true);
         }}
-        className={cn('border-surface bg-surface text-muted-foreground hover:bg-accent hover:text-foreground')}
+        className={cn(
+          'border-border bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground',
+        )}
       >
         Archive
       </Button>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent showCloseButton={false} className="sm:max-w-md">
+        <DialogContent
+          showCloseButton={false}
+          className={cn('moon-chrome bg-popover text-popover-foreground border-border sm:max-w-md')}
+        >
           <DialogHeader>
             <DialogTitle>Archive handout?</DialogTitle>
             <DialogDescription>

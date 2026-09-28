@@ -10,15 +10,15 @@ const { status } = Astro.props;
 const statusConfig: Record<HandoutStatus, { label: string; className: string }> = {
   draft: {
     label: 'Draft',
-    className: 'border-brand-neutral-warm/40 bg-secondary text-brand-accent-light',
+    className: 'border-border bg-muted text-muted-foreground',
   },
   published: {
     label: 'Published',
-    className: 'border-brand-accent bg-brand-accent-muted text-brand-accent-light',
+    className: 'border-primary/30 bg-primary/10 text-primary',
   },
   archived: {
     label: 'Archived',
-    className: 'border-surface bg-surface text-muted-foreground',
+    className: 'border-border bg-muted text-muted-foreground',
   },
 };
 
@@ -27,7 +27,8 @@ const { label, className } = statusConfig[status];
 
 <span
   data-status-badge
-  class:list={['inline-flex shrink-0 rounded-none border px-2.5 py-0.5 text-xs font-medium', className]}
+  data-status={status}
+  class:list={['inline-flex shrink-0 rounded-[0.5rem] border px-2.5 py-0.5 text-xs font-medium', className]}
 >
   {label}
 </span>

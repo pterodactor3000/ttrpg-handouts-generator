@@ -6,25 +6,18 @@ import { Card, CardContent } from '@/components/atoms/card';
 const error = Astro.url.searchParams.get('error');
 ---
 
-<Layout title="Sign up">
-  <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
+<Layout title="Sign up" loadChromeFont>
+  <div class="moon-chrome bg-background text-foreground flex min-h-screen items-center justify-center p-4">
     <!--
       Card is the client island parent. Nesting SignUpForm (previously client:load)
       inside an SSR-only React Card breaks hydration (ReactSharedInternals.H is null).
     -->
-    <Card
-      client:load
-      className="w-full max-w-sm gap-0 border border-white/10 bg-white/10 py-0 text-white shadow-none backdrop-blur-xl"
-    >
+    <Card client:load className="border-border bg-card text-card-foreground w-full max-w-sm gap-0 py-0 shadow-sm">
       <CardContent className="p-8">
-        <h1
-          class="mb-6 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-center text-2xl font-bold text-transparent"
-        >
-          Sign up
-        </h1>
+        <h1 class="text-foreground mb-6 text-center text-2xl font-bold">Sign up</h1>
         <SignUpForm serverError={error} />
-        <p class="mt-4 text-center text-sm text-blue-100/60">
-          Already have an account? <a href="/auth/signin" class="text-purple-300 hover:underline">Sign in</a>
+        <p class="text-muted-foreground mt-4 text-center text-sm">
+          Already have an account? <a href="/auth/signin" class="text-primary hover:underline">Sign in</a>
         </p>
       </CardContent>
     </Card>

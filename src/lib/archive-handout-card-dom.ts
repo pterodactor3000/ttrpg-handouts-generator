@@ -1,5 +1,5 @@
 const archivedStatusBadgeClassName =
-  'inline-flex shrink-0 rounded-none border px-2.5 py-0.5 text-xs font-medium border-surface bg-surface text-muted-foreground';
+  'inline-flex shrink-0 rounded-[0.5rem] border px-2.5 py-0.5 text-xs font-medium border-border bg-muted text-muted-foreground';
 
 function moveHandoutCardToArchivedSection(archiveButtonContainer: HTMLElement): void {
   const handoutCard = archiveButtonContainer.closest('article');
@@ -20,6 +20,7 @@ function moveHandoutCardToArchivedSection(archiveButtonContainer: HTMLElement): 
   if (statusBadge) {
     statusBadge.textContent = 'Archived';
     statusBadge.className = archivedStatusBadgeClassName;
+    statusBadge.setAttribute('data-status', 'archived');
   }
 
   const archiveAction = handoutCard.querySelector('[data-handout-archive-action]');

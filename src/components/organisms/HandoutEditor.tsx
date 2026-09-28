@@ -37,10 +37,6 @@ const serializeFormState = (
     tags: [...tagsValue].sort(),
   });
 
-const fieldInputClass = cn(
-  'border-surface bg-surface text-foreground h-auto py-2 shadow-none focus-visible:ring-2 dark:bg-surface',
-);
-
 const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) => {
   const [title, setTitle] = useState(initialHandout?.title ?? '');
   const [markdownContent, setMarkdownContent] = useState(initialHandout?.markdownContent ?? '');
@@ -170,7 +166,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
   }, [shareToken]);
 
   return (
-    <div className="bg-cosmic min-h-screen p-4 md:p-8">
+    <div className={cn('moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8')}>
       <div className="mx-auto max-w-6xl">
         <Button
           variant="ghost"
@@ -180,7 +176,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
           <ArrowLeft />
           Back to dashboard
         </Button>
-        <h1 className="text-brand-accent-light mb-6 text-2xl font-bold tracking-tight">
+        <h1 className="text-foreground mb-6 text-2xl font-bold tracking-tight">
           {initialHandout ? 'Edit Handout' : 'New Handout'}
         </h1>
 
@@ -188,7 +184,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
           {/* Form column */}
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="handout-title" className="text-muted-foreground text-sm font-medium">
+              <label htmlFor="handout-title" className="text-foreground text-base">
                 Title
               </label>
               <Input
@@ -200,17 +196,16 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 }}
                 placeholder="Handout title…"
                 maxLength={300}
-                className={fieldInputClass}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-muted-foreground text-sm font-medium">Background</span>
+              <span className="text-foreground text-base">Background</span>
               <BackgroundPicker value={backgroundCategory} onChange={setBackgroundCategory} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="handout-markdown" className="text-muted-foreground text-sm font-medium">
+              <label htmlFor="handout-markdown" className="text-foreground text-base">
                 Content (Markdown)
               </label>
               <Textarea
@@ -222,12 +217,12 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 placeholder="# My Handout&#10;&#10;Write your content here…"
                 rows={16}
                 maxLength={50000}
-                className={cn(fieldInputClass, 'field-sizing-fixed min-h-0 resize-y font-mono text-sm')}
+                className="field-sizing-fixed min-h-0 resize-y font-mono text-sm"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-muted-foreground text-sm font-medium">Tags</span>
+              <span className="text-foreground text-base">Tags</span>
               <TagsInput tags={tags} onChange={setTags} />
             </div>
 
@@ -235,7 +230,11 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
             {publishError && <p className="text-destructive text-sm">{publishError}</p>}
 
             <div className="flex gap-3">
-              <Button onClick={() => void handleSave()} disabled={isSaving} className="flex-1">
+              <Button
+                onClick={() => void handleSave()}
+                disabled={isSaving}
+                className="bg-primary text-primary-foreground flex-1"
+              >
                 {isSaving ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="loader loader-sm" aria-hidden="true" />
@@ -251,7 +250,10 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 variant="outline"
                 onClick={() => void handleShare()}
                 disabled={!handoutId || isSaving || isPublishing || isDirty}
-                className={cn('flex-1', !handoutId && 'cursor-not-allowed opacity-50')}
+                className={cn(
+                  'border-border bg-card text-foreground flex-1',
+                  !handoutId && 'cursor-not-allowed opacity-50',
+                )}
               >
                 {isPublishing ? (
                   <span className="flex items-center justify-center gap-2">
@@ -268,13 +270,13 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
               <p className="text-muted-foreground text-xs">Draft saved — click Share to publish.</p>
             )}
             {shareToken && (
-              <p className="text-brand-accent-light text-xs">
+              <p className="text-primary text-xs">
                 Published —{' '}
                 <button
                   type="button"
                   disabled={isDirty}
                   className={cn(
-                    'hover:text-brand-accent underline',
+                    'hover:text-primary/80 underline',
                     isDirty && 'cursor-not-allowed no-underline opacity-50',
                   )}
                   onClick={() => {
@@ -290,7 +292,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
 
           {/* Preview column */}
           <div className="flex flex-col gap-1.5">
-            <span className="text-muted-foreground text-sm font-medium">Preview</span>
+            <span className="text-foreground text-base">Preview</span>
             <div
               className="flex min-h-64 justify-center rounded-lg p-4"
               style={{
@@ -306,7 +308,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 category={backgroundCategory ?? undefined}
                 className="w-full max-w-2xl"
                 emptyPlaceholder={
-                  <p className="text-muted-foreground text-sm italic">Your rendered markdown will appear here…</p>
+                  <p className="text-brand-accent-light text-sm italic">Your rendered markdown will appear here…</p>
                 }
               />
             </div>
@@ -323,7 +325,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
       />
 
       <Dialog open={confirmBackOpen} onOpenChange={setConfirmBackOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className={cn('moon-chrome bg-popover text-popover-foreground border-border sm:max-w-md')}>
           <DialogHeader>
             <DialogTitle>Discard unsaved changes?</DialogTitle>
             <DialogDescription>You have unsaved edits. If you leave now, your changes will be lost.</DialogDescription>

@@ -52,9 +52,9 @@ const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
       onClick={() => void handleCopyLink()}
       disabled={isCopying}
       className={cn(
-        'border-surface bg-surface text-muted-foreground hover:bg-accent hover:text-foreground',
+        'border-border bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground',
         copyButtonLabel === 'Copied!' &&
-          'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
+          'border-primary/30 bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
       )}
     >
       {isCopying ? <span className="loader loader-sm" aria-hidden="true" /> : copyButtonLabel}

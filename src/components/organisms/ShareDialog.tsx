@@ -67,7 +67,10 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton className="sm:max-w-md">
+      <DialogContent
+        showCloseButton
+        className={cn('moon-chrome bg-popover text-popover-foreground border-border sm:max-w-md')}
+      >
         <DialogHeader>
           <DialogTitle id="share-dialog-title">Handout published!</DialogTitle>
           <DialogDescription>
@@ -79,7 +82,9 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
           type="text"
           readOnly
           value={shareUrl}
-          className="border-surface bg-surface text-muted-foreground dark:bg-surface focus-visible:ring-ring/40 h-auto py-2 text-sm shadow-none focus-visible:ring-1"
+          className={cn(
+            'border-border bg-background text-foreground focus-visible:ring-ring/40 h-auto py-2 text-sm shadow-none focus-visible:ring-1',
+          )}
           onFocus={(event) => {
             event.target.select();
           }}
@@ -90,9 +95,9 @@ const ShareDialog = ({ open, onClose, shareUrl }: ShareDialogProps) => {
             onClick={() => void handleCopyLink()}
             disabled={isCopying}
             className={cn(
-              'flex-1 transition-colors',
+              'bg-primary text-primary-foreground flex-1 transition-colors',
               copyButtonLabel === 'Copied!' &&
-                'border-brand-accent-light bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted hover:text-brand-accent-light',
+                'border-border bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground',
             )}
           >
             {isCopying ? <span className="loader loader-sm" aria-hidden="true" /> : copyButtonLabel}

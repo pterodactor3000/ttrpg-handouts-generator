@@ -36,19 +36,19 @@ if (!supabase) {
 }
 ---
 
-<Layout title="Dashboard">
-  <div class="bg-cosmic min-h-screen p-4 md:p-8">
+<Layout title="Dashboard" loadChromeFont>
+  <div class="moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8">
     <div class="mx-auto w-full max-w-6xl">
       {
         !isConfigured ? (
-          <Card className="border-surface bg-surface text-foreground gap-0 border py-0 text-center shadow-none backdrop-blur-xl">
+          <Card className="border-border bg-card text-foreground gap-0 border py-0 text-center shadow-sm">
             <CardContent className="p-8">
               <h1 class="mb-3 text-2xl font-bold">Dashboard temporarily unavailable</h1>
               <p class="text-muted-foreground text-sm">Please try again later.</p>
             </CardContent>
           </Card>
         ) : hasLoadError ? (
-          <Card className="border-surface bg-surface text-foreground gap-0 border py-0 text-center shadow-none backdrop-blur-xl">
+          <Card className="border-border bg-card text-foreground gap-0 border py-0 text-center shadow-sm">
             <CardContent className="p-8">
               <h1 class="mb-3 text-2xl font-bold">Could not load handouts</h1>
               <p class="text-muted-foreground text-sm">
@@ -58,11 +58,11 @@ if (!supabase) {
           </Card>
         ) : (
           <>
-            <Card className="border-surface bg-surface text-foreground gap-0 border py-0 shadow-none backdrop-blur-xl">
+            <Card className="border-border bg-card text-foreground gap-0 border py-0 shadow-sm">
               <CardContent className="p-6">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h1 class="text-brand-accent-light text-3xl font-bold tracking-tight">Dashboard</h1>
+                    <h1 class="text-foreground text-3xl font-bold tracking-tight">Dashboard</h1>
                     <p class="text-muted-foreground mt-1">
                       Welcome, <span class="text-foreground font-semibold">{user?.email}</span>
                     </p>
@@ -70,14 +70,16 @@ if (!supabase) {
                   <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <a
                       href="/handouts/new"
-                      class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted rounded-lg border px-4 py-2 text-center text-sm font-medium transition-colors hover:brightness-110"
+                      data-slot="button"
+                      class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
                     >
                       + New handout
                     </a>
                     <form method="POST" action="/api/auth/signout">
                       <button
                         type="submit"
-                        class="border-surface bg-surface hover:bg-accent w-full rounded-lg border px-4 py-2 text-sm transition-colors sm:w-auto"
+                        data-slot="button"
+                        class="border-border bg-card hover:bg-accent w-full rounded-[0.5rem] border px-4 py-2 text-sm font-semibold transition-colors sm:w-auto"
                       >
                         Sign out
                       </button>
@@ -88,12 +90,13 @@ if (!supabase) {
             </Card>
 
             <HandoutList heading="Your handouts" handouts={activeHandouts} listKind="active">
-              <Card className="border-surface bg-surface text-foreground gap-0 border border-dashed py-0 text-center shadow-none">
+              <Card className="border-border bg-card text-foreground gap-0 border border-dashed py-0 text-center shadow-sm">
                 <CardContent className="p-8">
                   <p class="text-muted-foreground">You have not created any handouts yet.</p>
                   <a
                     href="/handouts/new"
-                    class="border-brand-accent bg-brand-accent-muted text-brand-accent-light hover:bg-brand-accent-muted mt-4 inline-block rounded-lg border px-6 py-3 text-sm font-medium transition-colors hover:brightness-110"
+                    data-slot="button"
+                    class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
                   >
                     Create your first handout
                   </a>
