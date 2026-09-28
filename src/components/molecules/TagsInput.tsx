@@ -39,9 +39,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
             onClick={() => {
               removeTag(tag);
             }}
-            className={cn(
-              'text-muted-foreground hover:text-foreground ml-1 rounded-md leading-none transition-colors',
-            )}
+            className={cn('text-muted-foreground hover:text-foreground ml-1 rounded-md leading-none transition-colors')}
             aria-label={`Remove tag ${tag}`}
           >
             ×

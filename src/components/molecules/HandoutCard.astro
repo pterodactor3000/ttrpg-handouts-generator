@@ -48,7 +48,9 @@ const hasShareLink = handout.share_token != null;
       handout.tags.length > 0 && (
         <div class="mb-3 flex flex-wrap gap-2">
           {handout.tags.map((tag) => (
-            <span data-moon-chip class="px-3 py-1">{tag}</span>
+            <span data-moon-chip class="px-3 py-1">
+              {tag}
+            </span>
           ))}
         </div>
       )

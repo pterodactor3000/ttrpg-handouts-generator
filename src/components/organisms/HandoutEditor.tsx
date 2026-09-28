@@ -328,9 +328,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
       />
 
       <Dialog open={confirmBackOpen} onOpenChange={setConfirmBackOpen}>
-        <DialogContent
-          className={cn('moon-chrome bg-popover text-popover-foreground border-border sm:max-w-md')}
-        >
+        <DialogContent className={cn('moon-chrome bg-popover text-popover-foreground border-border sm:max-w-md')}>
           <DialogHeader>
             <DialogTitle>Discard unsaved changes?</DialogTitle>
             <DialogDescription>You have unsaved edits. If you leave now, your changes will be lost.</DialogDescription>

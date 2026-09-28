@@ -11,7 +11,10 @@ interface Props {
 const { title, html, category, class: className } = Astro.props;
 ---
 
-<article class:list={['handout-article mx-auto w-full max-w-2xl p-2 sm:p-4 md:p-8', className]} data-category={category}>
+<article
+  class:list={['handout-article mx-auto w-full max-w-2xl p-2 sm:p-4 md:p-8', className]}
+  data-category={category}
+>
   <h1 class="mb-6 text-2xl font-bold break-words sm:text-3xl">{title}</h1>
   <div class="prose prose-invert max-w-none break-words">
     {/* renderHandoutHtml sanitizes via rehype-sanitize — the XSS boundary (see Phase 1 tests) */}
