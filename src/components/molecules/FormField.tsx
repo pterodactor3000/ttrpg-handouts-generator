@@ -49,6 +49,7 @@ export function FormField({
             onChange(e.target.value);
           }}
           placeholder={placeholder}
+          aria-invalid={error ? true : undefined}
           className={cn(
             inputBase,
             error

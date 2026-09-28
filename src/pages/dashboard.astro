@@ -36,7 +36,7 @@ if (!supabase) {
 }
 ---
 
-<Layout title="Dashboard">
+<Layout title="Dashboard" loadChromeFont>
   <div class="moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8">
     <div class="mx-auto w-full max-w-6xl">
       {
@@ -70,6 +70,7 @@ if (!supabase) {
                   <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <a
                       href="/handouts/new"
+                      data-slot="button"
                       class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
                     >
                       + New handout
@@ -77,6 +78,7 @@ if (!supabase) {
                     <form method="POST" action="/api/auth/signout">
                       <button
                         type="submit"
+                        data-slot="button"
                         class="border-border bg-card hover:bg-accent w-full rounded-[0.5rem] border px-4 py-2 text-sm font-semibold transition-colors sm:w-auto"
                       >
                         Sign out
@@ -93,7 +95,8 @@ if (!supabase) {
                   <p class="text-muted-foreground">You have not created any handouts yet.</p>
                   <a
                     href="/handouts/new"
-                    class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-lg px-6 py-3 text-sm font-medium transition-colors"
+                    data-slot="button"
+                    class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
                   >
                     Create your first handout
                   </a>

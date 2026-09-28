@@ -117,9 +117,11 @@
 
 /* Moon Design System v1 light chrome (theme-moon-light).
    Wrap landing, auth, dashboard, and the handout form shell with .moon-chrome.
-   Do not retune --palette-* here. .handout-article and the preview pane read those. */
+   Do not retune --palette-* here. .handout-article and the preview pane read those.
+   Do not set --radius here. :root keeps 0rem, and @theme derives rounded-sm/md/lg/xl
+   from it. 8px controls set 0.5rem on the slot rules below, or rounded-[0.5rem]
+   on anchors (Welcome, dashboard, edit). Cards and dialogs set 0.75rem below. */
 .moon-chrome {
-  --radius: 0.75rem;
   --background: #f6f7f9;
   --foreground: #000000;
   --card: #ffffff;
@@ -134,19 +136,12 @@
   --muted-foreground: #687083;
   --accent: #0000000a;
   --accent-foreground: #000000;
-  --destructive: #ff4e64;
+  /* #ff4e64 with white text is 3.22:1. #b83848 keeps that hue and clears 4.5:1. */
+  --destructive: #b83848;
   --destructive-foreground: #ffffff;
   --border: #dcdee3;
   --input: #ffffff;
   --ring: #5c33cf;
-  --sidebar: #f6f7f9;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #5c33cf;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #0000000a;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #dcdee3;
-  --sidebar-ring: #5c33cf;
   font-family: 'DM Sans', ui-sans-serif, sans-serif;
   background-color: var(--background);
   color: var(--foreground);
@@ -157,7 +152,17 @@
 .moon-chrome [data-slot='button'] {
   border-radius: 0.5rem;
   font-weight: 600;
+}
+
+/* Flat at rest. Focus draws the ring here so anchors that share data-slot="button"
+   get the same keyboard ring as the Button atom (its utility ring is a box-shadow). */
+.moon-chrome [data-slot='button']:not(:focus-visible) {
   box-shadow: none;
+}
+
+.moon-chrome [data-slot='button']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
 }
 
 .moon-chrome [data-slot='button'].h-8 {
@@ -190,13 +195,17 @@
   padding: 0.5rem;
 }
 
-.moon-chrome [data-slot='input'] {
-  height: 2.5rem;
+.moon-chrome [data-slot='input'],
+.moon-chrome [data-slot='textarea'] {
   border: 0;
   border-radius: 0.5rem;
-  background-color: #ffffff;
-  color: #000000;
-  box-shadow: inset 0 0 0 1px #dcdee3;
+  background-color: var(--input);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.moon-chrome [data-slot='input'] {
+  height: 2.5rem;
   padding: 0 1rem;
   font-size: 1rem;
   line-height: 1.5rem;
@@ -206,46 +215,33 @@
   padding-left: 2.5rem;
 }
 
-.moon-chrome [data-slot='input']:hover:not(:focus-visible):not(:disabled) {
-  border-radius: 0.75rem;
-  box-shadow: inset 0 0 0 2px #dcdee3;
-}
-
-.moon-chrome [data-slot='input']:focus-visible {
-  border-radius: 0.75rem;
-  box-shadow: inset 0 0 0 2px #5c33cf;
-  outline: none;
-}
-
-.moon-chrome [data-slot='input'][aria-invalid='true'] {
-  box-shadow: inset 0 0 0 2px #ff4e64;
-}
-
 .moon-chrome [data-slot='textarea'] {
-  border: 0;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  color: #000000;
-  box-shadow: inset 0 0 0 1px #dcdee3;
   padding: 0.75rem 1rem;
 }
 
-.moon-chrome [data-slot='textarea']:hover:not(:focus-visible):not(:disabled) {
-  border-radius: 0.75rem;
-  box-shadow: inset 0 0 0 2px #dcdee3;
+.moon-chrome [data-slot='input']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']),
+.moon-chrome [data-slot='textarea']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']) {
+  box-shadow: inset 0 0 0 2px var(--border);
 }
 
-.moon-chrome [data-slot='textarea']:focus-visible {
-  border-radius: 0.75rem;
-  box-shadow: inset 0 0 0 2px #5c33cf;
+.moon-chrome [data-slot='input']:focus-visible:not([aria-invalid='true']),
+.moon-chrome [data-slot='textarea']:focus-visible:not([aria-invalid='true']) {
+  box-shadow: inset 0 0 0 2px var(--ring);
   outline: none;
+}
+
+.moon-chrome [data-slot='input'][aria-invalid='true'],
+.moon-chrome [data-slot='input'][aria-invalid='true']:focus-visible,
+.moon-chrome [data-slot='textarea'][aria-invalid='true'],
+.moon-chrome [data-slot='textarea'][aria-invalid='true']:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--destructive);
 }
 
 .moon-chrome [data-slot='card'],
 .moon-chrome article:not(.handout-article) {
   border-radius: 0.75rem;
-  background-color: #ffffff;
-  border-color: #dcdee3;
+  background-color: var(--card);
+  border-color: var(--border);
   box-shadow:
     0 6px 6px -6px rgb(0 0 0 / 0.16),
     0 0 1px rgb(0 0 0 / 0.4);
@@ -253,27 +249,26 @@
 
 .moon-chrome[data-slot='dialog-content'] {
   border-radius: 0.75rem;
-  background-color: #ffffff;
-  border-color: #dcdee3;
+  background-color: var(--popover);
+  border-color: var(--border);
   box-shadow:
     0 8px 24px -6px rgb(0 0 0 / 0.16),
     0 0 1px rgb(0 0 0 / 0.4);
 }
 
-.moon-chrome [data-status-badge],
+/* Geometry only. Status colors stay on StatusBadge so draft, published, and archived can differ. */
+.moon-chrome [data-status-badge] {
+  border-radius: 0.5rem;
+}
+
 .moon-chrome [data-moon-chip] {
   border-radius: 0.5rem;
   border-color: transparent;
-  background-color: #f6f7f9;
-  color: #000000;
+  background-color: var(--muted);
+  color: var(--foreground);
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.5rem;
-}
-
-.moon-chrome [data-status-badge][data-status='published'] {
-  background-color: rgb(92 51 207 / 0.12);
-  color: #5c33cf;
 }
 
 .moon-chrome .loader {
@@ -281,7 +276,7 @@
   height: 1.5rem;
   padding: 0;
   border: 2px solid transparent;
-  border-top-color: #5c33cf;
+  border-top-color: var(--primary);
   border-radius: 50%;
   background: none;
   filter: none;
@@ -584,24 +579,13 @@
     border-width: 24px;
   }
 
+  /* Desktop sci-fi is `60 fill` (stretch). Only the width changes here. */
   .handout-article[data-category='scifi'] {
-    border-image: url('/borders/scifi-border.png') 60 fill / 24px / 0 round;
     border-width: 24px;
   }
 
   .handout-article[data-category='scifi']::before {
     inset: -24px;
-  }
-
-  .handout-article .prose :where(h1):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    font-size: 1.5rem;
-    line-height: 1.25;
-    margin-top: 0;
-  }
-
-  .handout-article .prose :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    font-size: 1.25rem;
-    line-height: 1.3;
   }
 }
 

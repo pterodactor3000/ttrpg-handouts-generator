@@ -39,7 +39,9 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
             onClick={() => {
               removeTag(tag);
             }}
-            className={cn('text-muted-foreground hover:text-foreground ml-1 rounded-md leading-none transition-colors')}
+            className={cn(
+              'text-muted-foreground hover:text-foreground ml-1 rounded-[0.5rem] leading-none transition-colors',
+            )}
             aria-label={`Remove tag ${tag}`}
           >
             ×
@@ -55,9 +57,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
         onKeyDown={handleKeyDown}
         onBlur={addTag}
         placeholder={tags.length === 0 ? 'Add tags (press Enter or comma)' : 'Add another tag'}
-        className={cn(
-          'border-border bg-background text-foreground h-auto w-auto min-w-32 flex-1 py-1 text-sm shadow-none focus-visible:ring-2',
-        )}
+        className={cn('border-border bg-background text-foreground h-auto w-auto min-w-32 flex-1 py-1 text-sm')}
       />
     </div>
   );

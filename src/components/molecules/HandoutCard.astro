@@ -18,7 +18,7 @@ const hasShareLink = handout.share_token != null;
 <!--
   Keep a semantic article so archive and delete helpers can use .closest('article').
 -->
-<article class="border-border bg-card w-full min-w-0 overflow-hidden rounded-xl border shadow-sm">
+<article class="border-border bg-card w-full min-w-0 overflow-hidden rounded-[0.75rem] border shadow-sm">
   <div
     class="h-12 w-full"
     style={`background: ${backgroundConfig.cssBackground}; background-size: cover; background-position: center`}
@@ -62,7 +62,8 @@ const hasShareLink = handout.share_token != null;
             <span data-handout-edit-action>
               <a
                 href={`/handouts/${handout.id}/edit`}
-                class="border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground inline-flex items-center rounded-md border px-3 py-1.5 text-sm transition-colors"
+                class="border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground inline-flex items-center rounded-[0.5rem] border px-3 py-1.5 text-sm transition-colors"
+                data-slot="button"
               >
                 Edit
               </a>

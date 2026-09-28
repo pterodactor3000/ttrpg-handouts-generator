@@ -37,8 +37,6 @@ const serializeFormState = (
     tags: [...tagsValue].sort(),
   });
 
-const fieldInputClass = cn('shadow-none');
-
 const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) => {
   const [title, setTitle] = useState(initialHandout?.title ?? '');
   const [markdownContent, setMarkdownContent] = useState(initialHandout?.markdownContent ?? '');
@@ -198,7 +196,6 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 }}
                 placeholder="Handout title…"
                 maxLength={300}
-                className={fieldInputClass}
               />
             </div>
 
@@ -220,7 +217,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 placeholder="# My Handout&#10;&#10;Write your content here…"
                 rows={16}
                 maxLength={50000}
-                className={cn(fieldInputClass, 'field-sizing-fixed min-h-0 resize-y font-mono text-sm')}
+                className="field-sizing-fixed min-h-0 resize-y font-mono text-sm"
               />
             </div>
 
@@ -297,7 +294,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
           <div className="flex flex-col gap-1.5">
             <span className="text-foreground text-base">Preview</span>
             <div
-              className="flex min-h-64 justify-center rounded-lg p-2 md:p-4"
+              className="flex min-h-64 justify-center rounded-lg p-4"
               style={{
                 backgroundColor: 'var(--palette-preview-fallback)',
                 backgroundImage: previewBackground,
@@ -311,7 +308,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
                 category={backgroundCategory ?? undefined}
                 className="w-full max-w-2xl"
                 emptyPlaceholder={
-                  <p className="text-muted-foreground text-sm italic">Your rendered markdown will appear here…</p>
+                  <p className="text-brand-accent-light text-sm italic">Your rendered markdown will appear here…</p>
                 }
               />
             </div>

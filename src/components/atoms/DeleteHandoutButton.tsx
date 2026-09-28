@@ -56,13 +56,18 @@ const DeleteHandoutButton = ({ handoutId, handoutTitle, hasShareLink }: DeleteHa
         onClick={() => {
           setConfirmOpen(true);
         }}
-        className={cn('border-red-500/30 bg-red-500/10 text-red-300 hover:bg-red-500/20 hover:text-red-300')}
+        className={cn(
+          'border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/15 hover:text-destructive',
+        )}
       >
         Delete
       </Button>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent showCloseButton={false} className="sm:max-w-md">
+        <DialogContent
+          showCloseButton={false}
+          className={cn('moon-chrome bg-popover text-popover-foreground border-border sm:max-w-md')}
+        >
           <DialogHeader>
             <DialogTitle>Delete handout permanently?</DialogTitle>
             <DialogDescription>
