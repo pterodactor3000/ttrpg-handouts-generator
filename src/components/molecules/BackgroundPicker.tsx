@@ -9,7 +9,7 @@ interface BackgroundPickerProps {
 
 const BackgroundPicker = ({ value, onChange }: BackgroundPickerProps) => {
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-2 sm:gap-3">
       {BACKGROUND_CATEGORY_OPTIONS.map((option) => (
         <button
           key={option}
@@ -18,10 +18,10 @@ const BackgroundPicker = ({ value, onChange }: BackgroundPickerProps) => {
             onChange(option);
           }}
           className={cn(
-            'flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-lg border-2 p-3 transition-all',
+            'flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-lg border-2 p-2 transition-all sm:p-3',
             value === option
-              ? 'border-brand-accent-light ring-brand-accent-light ring-offset-background ring-2 ring-offset-2'
-              : 'border-surface hover:border-brand-accent-light/50',
+              ? 'border-primary ring-primary ring-offset-background ring-2 ring-offset-2'
+              : 'border-border hover:border-primary/50',
           )}
           style={{
             background: BACKGROUND_CONFIGS[option].cssBackground,
@@ -29,7 +29,9 @@ const BackgroundPicker = ({ value, onChange }: BackgroundPickerProps) => {
             backgroundPosition: 'center',
           }}
         >
-          <span className="text-xs font-semibold text-white drop-shadow">{BACKGROUND_CONFIGS[option].label}</span>
+          <span className="text-center text-[11px] leading-tight font-semibold text-white drop-shadow sm:text-xs">
+            {BACKGROUND_CONFIGS[option].label}
+          </span>
         </button>
       ))}
     </div>

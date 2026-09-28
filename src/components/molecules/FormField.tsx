@@ -4,7 +4,7 @@ import { Input } from '@/components/atoms/input';
 import { cn } from '@/lib/utils';
 
 const inputBase =
-  'h-auto bg-white/10 py-2 pl-10 text-white shadow-none placeholder:text-white/40 focus-visible:ring-2 dark:bg-white/10';
+  'h-auto border-border bg-background py-2 pl-10 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring dark:bg-background';
 
 interface FormFieldProps {
   id: string;
@@ -35,11 +35,11 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1 block text-sm text-blue-100/80">
+      <label htmlFor={id} className="text-foreground mb-2 block text-base">
         {label}
       </label>
       <div className="relative">
-        <span className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/40">{icon}</span>
+        <span className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2">{icon}</span>
         <Input
           id={id}
           name={name ?? id}
@@ -52,14 +52,14 @@ export function FormField({
           className={cn(
             inputBase,
             error
-              ? 'border-red-400/60 focus-visible:border-red-400/60 focus-visible:ring-red-400'
-              : 'border-white/20 focus-visible:border-white/20 focus-visible:ring-purple-400',
+              ? 'border-destructive focus-visible:border-destructive focus-visible:ring-destructive'
+              : 'border-border focus-visible:border-border focus-visible:ring-ring',
           )}
         />
         {endContent}
       </div>
       {error ? (
-        <p className="mt-1 flex items-center gap-1 text-xs text-red-300">
+        <p className="text-destructive mt-1 flex items-center gap-1 text-xs">
           <CircleAlert className="size-3" />
           {error}
         </p>

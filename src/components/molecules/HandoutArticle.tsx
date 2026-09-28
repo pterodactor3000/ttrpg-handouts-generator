@@ -12,8 +12,8 @@ interface HandoutArticleProps {
 
 const HandoutArticle = ({ title, html, category, className, emptyPlaceholder }: HandoutArticleProps) => {
   return (
-    <article className={cn('handout-article mx-auto w-full max-w-2xl p-4 md:p-8', className)} data-category={category}>
-      <h1 className="mb-6 text-3xl font-bold break-words">{title}</h1>
+    <article className={cn('handout-article mx-auto w-full max-w-2xl p-2 sm:p-4 md:p-8', className)} data-category={category}>
+      <h1 className="mb-6 text-2xl font-bold break-words sm:text-3xl">{title}</h1>
       {html ? (
         <div
           className="prose prose-invert max-w-none break-words"
