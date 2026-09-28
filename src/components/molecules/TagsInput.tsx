@@ -57,7 +57,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
         onKeyDown={handleKeyDown}
         onBlur={addTag}
         placeholder={tags.length === 0 ? 'Add tags (press Enter or comma)' : 'Add another tag'}
-        className={cn('border-border bg-background text-foreground h-auto w-auto min-w-32 flex-1 py-1 text-sm')}
+        className={cn('border-border bg-background text-foreground w-auto min-w-32 flex-1')}
       />
     </div>
   );

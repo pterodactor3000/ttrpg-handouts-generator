@@ -52,6 +52,7 @@ export function FormField({
           aria-invalid={error ? true : undefined}
           className={cn(
             inputBase,
+            endContent && 'pr-10',
             error
               ? 'border-destructive focus-visible:border-destructive focus-visible:ring-destructive'
               : 'border-border focus-visible:border-border focus-visible:ring-ring',

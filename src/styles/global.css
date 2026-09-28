@@ -215,6 +215,11 @@
   padding-left: 2.5rem;
 }
 
+/* The padding shorthand above beats a utility. Fields with an end icon opt in with pr-10. */
+.moon-chrome [data-slot='input'].pr-10 {
+  padding-right: 2.5rem;
+}
+
 .moon-chrome [data-slot='textarea'] {
   padding: 0.75rem 1rem;
 }
