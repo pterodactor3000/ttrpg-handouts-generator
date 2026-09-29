@@ -1,10 +1,10 @@
 ---
 change_id: s-03
 title: S 03
-status: impl_reviewed
+status: archived
 created: 2026-06-21
-updated: 2026-06-21
-archived_at: null
+updated: 2026-09-29
+archived_at: 2026-09-29T11:11:54Z
 ---
 
 ## Notes
