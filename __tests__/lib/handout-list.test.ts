@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { partitionHandouts, type HandoutListItem } from '@/lib/handout-list';
+import { groupHandoutsByStatus, type HandoutListItem } from '@/lib/handout-list';
 
 function createHandoutListItem(
   overrides: Partial<HandoutListItem> & Pick<HandoutListItem, 'id' | 'status' | 'created_at'>,
@@ -13,33 +13,8 @@ function createHandoutListItem(
   };
 }
 
-describe('partitionHandouts', () => {
-  it('places drafts and published handouts in active and archived handouts in archived', () => {
-    const draftHandout = createHandoutListItem({
-      id: 'draft-1',
-      status: 'draft',
-      created_at: '2026-01-01T12:00:00.000Z',
-    });
-    const publishedHandout = createHandoutListItem({
-      id: 'published-1',
-      status: 'published',
-      created_at: '2026-01-02T12:00:00.000Z',
-      share_token: 'published-token',
-    });
-    const archivedHandout = createHandoutListItem({
-      id: 'archived-1',
-      status: 'archived',
-      created_at: '2026-01-03T12:00:00.000Z',
-      share_token: 'archived-token',
-    });
-
-    const result = partitionHandouts([draftHandout, publishedHandout, archivedHandout]);
-
-    expect(result.active.map((handout) => handout.id)).toEqual(['published-1', 'draft-1']);
-    expect(result.archived.map((handout) => handout.id)).toEqual(['archived-1']);
-  });
-
-  it('sorts active and archived groups by created_at descending', () => {
+describe('groupHandoutsByStatus', () => {
+  it('returns separate draft, published, and archived arrays ordered by created_at descending', () => {
     const olderDraft = createHandoutListItem({
       id: 'older-draft',
       status: 'draft',
@@ -50,30 +25,50 @@ describe('partitionHandouts', () => {
       status: 'draft',
       created_at: '2026-01-05T12:00:00.000Z',
     });
+    const olderPublished = createHandoutListItem({
+      id: 'older-published',
+      status: 'published',
+      created_at: '2026-01-02T12:00:00.000Z',
+      share_token: 'older-published-token',
+    });
+    const newerPublished = createHandoutListItem({
+      id: 'newer-published',
+      status: 'published',
+      created_at: '2026-01-04T12:00:00.000Z',
+      share_token: 'newer-published-token',
+    });
     const olderArchived = createHandoutListItem({
       id: 'older-archived',
       status: 'archived',
-      created_at: '2026-01-02T12:00:00.000Z',
-      share_token: 'older-token',
+      created_at: '2026-01-03T12:00:00.000Z',
+      share_token: 'older-archived-token',
     });
     const newerArchived = createHandoutListItem({
       id: 'newer-archived',
       status: 'archived',
       created_at: '2026-01-06T12:00:00.000Z',
-      share_token: 'newer-token',
+      share_token: 'newer-archived-token',
     });
 
-    const result = partitionHandouts([olderDraft, newerDraft, olderArchived, newerArchived]);
+    const result = groupHandoutsByStatus([
+      olderDraft,
+      newerDraft,
+      olderPublished,
+      newerPublished,
+      olderArchived,
+      newerArchived,
+    ]);
 
-    expect(result.active.map((handout) => handout.id)).toEqual(['newer-draft', 'older-draft']);
+    expect(result.draft.map((handout) => handout.id)).toEqual(['newer-draft', 'older-draft']);
+    expect(result.published.map((handout) => handout.id)).toEqual(['newer-published', 'older-published']);
     expect(result.archived.map((handout) => handout.id)).toEqual(['newer-archived', 'older-archived']);
   });
 
-  it('returns empty active and archived arrays for empty input', () => {
-    expect(partitionHandouts([])).toEqual({ active: [], archived: [] });
+  it('returns empty draft, published, and archived arrays for empty input', () => {
+    expect(groupHandoutsByStatus([])).toEqual({ draft: [], published: [], archived: [] });
   });
 
-  it('returns empty active when all handouts are archived', () => {
+  it('returns empty draft and published arrays when all handouts are archived', () => {
     const archivedHandout = createHandoutListItem({
       id: 'archived-only',
       status: 'archived',
@@ -81,9 +76,10 @@ describe('partitionHandouts', () => {
       share_token: 'archived-token',
     });
 
-    const result = partitionHandouts([archivedHandout]);
+    const result = groupHandoutsByStatus([archivedHandout]);
 
-    expect(result.active).toEqual([]);
+    expect(result.draft).toEqual([]);
+    expect(result.published).toEqual([]);
     expect(result.archived).toEqual([archivedHandout]);
   });
 });

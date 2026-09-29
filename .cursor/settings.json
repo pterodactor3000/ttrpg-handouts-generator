@@ -14,6 +14,9 @@
     },
     "context7-plugin": {
       "enabled": true
+    },
+    "pstack": {
+      "enabled": true
     }
   }
 }
