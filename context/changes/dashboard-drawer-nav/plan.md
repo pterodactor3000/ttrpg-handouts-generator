@@ -277,9 +277,9 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Automated
 
-- [x] 1.1 `groupHandoutsByStatus` returns separate `draft`, `published`, and `archived` arrays, each ordered by `created_at` descending.
-- [x] 1.2 `npm test -- --project unit` passes `__tests__/lib/handout-list.test.ts` and `__tests__/lib/archive-handout-card-dom.test.ts`.
-- [x] 1.3 Archiving a card does not remove the `hidden` attribute from `[data-handout-list="archived"]`.
+- [x] 1.1 `groupHandoutsByStatus` returns separate `draft`, `published`, and `archived` arrays, each ordered by `created_at` descending. 97a5d02
+- [x] 1.2 `npm test -- --project unit` passes `__tests__/lib/handout-list.test.ts` and `__tests__/lib/archive-handout-card-dom.test.ts`. 97a5d02
+- [x] 1.3 Archiving a card does not remove the `hidden` attribute from `[data-handout-list="archived"]`. 97a5d02
 
 #### Manual
 
@@ -291,9 +291,9 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Automated
 
-- [ ] 2.1 Choosing Published in the drawer test sets `data-status-filter="published"` and closes the panel.
-- [ ] 2.2 Escape closes the panel and leaves `data-status-filter` unchanged.
-- [ ] 2.3 `npm test -- --project unit` passes `__tests__/components/organisms/DashboardDrawer.test.tsx`.
+- [x] 2.1 Choosing Published in the drawer test sets `data-status-filter="published"` and closes the panel.
+- [x] 2.2 Escape closes the panel and leaves `data-status-filter` unchanged.
+- [x] 2.3 `npm test -- --project unit` passes `__tests__/components/organisms/DashboardDrawer.test.tsx`.
 
 #### Manual
 

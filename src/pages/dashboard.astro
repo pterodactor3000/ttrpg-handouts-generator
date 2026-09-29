@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/cloudflare';
 import Layout from '@/layouts/Layout.astro';
 import HandoutList from '@/components/organisms/HandoutList.astro';
+import DashboardDrawer from '@/components/organisms/DashboardDrawer';
 import { Card, CardContent } from '@/components/atoms/card';
 import { createClient } from '@/lib/supabase';
 import { groupHandoutsByStatus, type HandoutListItem } from '@/lib/handout-list';
@@ -63,11 +64,13 @@ if (!supabase) {
         </div>
       ) : (
         <div data-dashboard data-status-filter="draft">
+          <div data-dashboard-drawer-slot />
           <div class="mx-auto w-full max-w-6xl">
             <Card className="border-border bg-card text-foreground gap-0 border py-0 shadow-sm">
               <CardContent className="p-6">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
+                    <DashboardDrawer client:load />
                     <h1 class="text-foreground text-3xl font-bold tracking-tight">Dashboard</h1>
                     <p class="text-muted-foreground mt-1">
                       Welcome, <span class="text-foreground font-semibold">{user?.email}</span>
