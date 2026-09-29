@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import DashboardDrawer from '@/components/organisms/DashboardDrawer';
 
 function renderDrawerFixture() {
@@ -24,9 +24,24 @@ function renderDrawerFixture() {
   return render(<DashboardDrawer />, { container: drawerRoot });
 }
 
+function stubMatchMedia(isWide: boolean) {
+  vi.stubGlobal(
+    'matchMedia',
+    vi.fn((query: string) => ({
+      matches: isWide,
+      media: query,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  );
+}
+
 afterEach(() => {
   cleanup();
   document.body.innerHTML = '';
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe('DashboardDrawer', () => {
@@ -54,5 +69,34 @@ describe('DashboardDrawer', () => {
 
     expect(document.querySelector('[data-dashboard]')?.getAttribute('data-status-filter')).toBe('draft');
     expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the panel open when a filter is chosen on a pinned wide drawer and does not write localStorage', async () => {
+    const user = userEvent.setup();
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+    stubMatchMedia(true);
+    renderDrawerFixture();
+
+    await user.click(screen.getByRole('button', { name: 'Filters' }));
+    await user.click(screen.getByRole('button', { name: 'Pin' }));
+    await user.click(screen.getByRole('button', { name: 'Published' }));
+
+    expect(document.querySelector('[data-dashboard]')?.getAttribute('data-drawer-pinned')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Published' })).toBeInTheDocument();
+    expect(setItemSpy).not.toHaveBeenCalled();
+  });
+
+  it('keeps a pinned narrow drawer as an overlay', async () => {
+    const user = userEvent.setup();
+    stubMatchMedia(false);
+    renderDrawerFixture();
+
+    await user.click(screen.getByRole('button', { name: 'Filters' }));
+    await user.click(screen.getByRole('button', { name: 'Pin' }));
+
+    expect(document.querySelector('[data-dashboard]')?.getAttribute('data-drawer-pinned')).toBe('true');
+    expect(document.querySelector('[data-dashboard-drawer-panel]')?.getAttribute('data-drawer-presentation')).toBe(
+      'overlay',
+    );
   });
 });

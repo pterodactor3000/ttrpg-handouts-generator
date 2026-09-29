@@ -291,9 +291,9 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Automated
 
-- [x] 2.1 Choosing Published in the drawer test sets `data-status-filter="published"` and closes the panel.
-- [x] 2.2 Escape closes the panel and leaves `data-status-filter` unchanged.
-- [x] 2.3 `npm test -- --project unit` passes `__tests__/components/organisms/DashboardDrawer.test.tsx`.
+- [x] 2.1 Choosing Published in the drawer test sets `data-status-filter="published"` and closes the panel. 1df2fa8
+- [x] 2.2 Escape closes the panel and leaves `data-status-filter` unchanged. 1df2fa8
+- [x] 2.3 `npm test -- --project unit` passes `__tests__/components/organisms/DashboardDrawer.test.tsx`. 1df2fa8
 
 #### Manual
 
@@ -306,10 +306,10 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Automated
 
-- [ ] 3.1 `getDrawerPresentation` returns `sidebar` only when pinned and wide, and `overlay` for the other three input pairs.
-- [ ] 3.2 The drawer test asserts `localStorage.setItem` is not called when pin is toggled.
-- [ ] 3.3 Choosing a filter while the presentation is `sidebar` leaves the panel open.
-- [ ] 3.4 `npm test -- --project unit` passes the drawer unit tests, and `npm run lint` passes.
+- [x] 3.1 `getDrawerPresentation` returns `sidebar` only when pinned and wide, and `overlay` for the other three input pairs.
+- [x] 3.2 The drawer test asserts `localStorage.setItem` is not called when pin is toggled.
+- [x] 3.3 Choosing a filter while the presentation is `sidebar` leaves the panel open.
+- [x] 3.4 `npm test -- --project unit` passes the drawer unit tests, and `npm run lint` passes.
 
 #### Manual
 
