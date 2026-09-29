@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-07-19
+updated: 2026-09-29
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
@@ -36,7 +36,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | F-01 | `handout-schema`                     | (foundation) `handouts` table with state-machine columns and RLS policies in place; share tokens are unguessable UUIDs                                                                                        | —             | FR-001, FR-003, FR-005, FR-006, FR-008, FR-010, Business Logic | done     |
 | S-01 | `first-handout-creation-and-sharing` | create a new handout (markdown + background + tags), see a rendered preview, and share it via a permanent link that players can open in read-only mode                                                        | F-01          | US-01, FR-003, FR-004, FR-005, FR-006, FR-009, FR-010, FR-011  | done     |
 | S-02 | `handout-dashboard`                  | view a list of their handouts (draft and published) with titles and tags                                                                                                                                      | S-01          | FR-002                                                         | done     |
-| S-03 | `edit-handout`                       | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link)                                                        | S-02          | FR-007                                                         | proposed |
+| S-03 | `edit-handout`                       | open an existing handout, modify content, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link)                                                        | S-02          | FR-007                                                         | done     |
 | S-04 | `delete-handout`                     | delete a handout from the dashboard (soft-delete to archived state; shared link remains active for players)                                                                                                   | S-02          | FR-008                                                         | done     |
 | S-05 | `ui-restyle`                         | see a refreshed, visually consistent UI across existing screens (dashboard, new-handout, preview, shared view) — improved typography, spacing, color theming, and a themed loading animation, no flow changes | S-01          | FR-012                                                         | done     |
 | S-06 | `new-handout-back-button`            | return to the dashboard from the new-handout view via a clear back control, without submitting the form                                                                                                       | S-01          | FR-013, FR-002                                                 | done     |
@@ -124,7 +124,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Edit re-opens the same editor built in S-01 with pre-populated values; the main risk is that draft/published status display stays consistent after save. The Business Logic rule that "edits on published handouts propagate immediately" means there is no versioning or staging step — simplifies implementation but requires the RLS policy from F-01 to allow GM writes on published rows.
-- **Status:** proposed
+- **Status:** done
 
 ### S-04: Delete handout
 
@@ -349,3 +349,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-04: GM can delete a handout from the dashboard; the handout moves to archived state, disappears from the GM's active list, and the shared link remains accessible to players.** — Archived 2026-06-19 → `context/archive/2026-06-07-delete-handout/`. Lesson: —.
 - **S-09: GM (and players on the shared read-only view) see each of the three style categories rendered over a new, themed pre-loaded background image: old paper texture for high fantasy, green-tinted CRT display for grimdark, and newspaper print for postapo — in both the GM preview and the shared player view.** — Archived 2026-06-19 → `context/archive/2026-06-17-retheme-backgrounds/`. Lesson: —.
 - **S-10: GM (and players on the shared read-only page) see all UI containers — cards, modals, inputs, buttons, dialogs, dropdowns, and toasts — rendered with a squared, angular aesthetic (significantly reduced border-radius) consistently across every screen (dashboard, new-handout, preview, shared view).** — Archived 2026-07-19 → `context/archive/2026-07-19-square-ui-containers/`. Lesson: —.
+- **S-03: GM can open an existing handout from the dashboard, modify markdown text, background category, or tags, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link per Business Logic).** — Archived 2026-09-29 → `context/archive/2026-06-21-s-03/`. Lesson: —.
