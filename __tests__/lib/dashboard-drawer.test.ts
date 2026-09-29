@@ -2,10 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { getDrawerPresentation } from '@/lib/dashboard-drawer';
 
 describe('getDrawerPresentation', () => {
-  it('returns sidebar only when pinned and wide, and overlay for the other three pairs', () => {
-    expect(getDrawerPresentation({ isPinned: true, isWide: true })).toBe('sidebar');
-    expect(getDrawerPresentation({ isPinned: true, isWide: false })).toBe('overlay');
-    expect(getDrawerPresentation({ isPinned: false, isWide: true })).toBe('overlay');
-    expect(getDrawerPresentation({ isPinned: false, isWide: false })).toBe('overlay');
+  it('returns sidebar on a wide viewport and overlay on a narrow viewport', () => {
+    expect(getDrawerPresentation({ isWide: true })).toBe('sidebar');
+    expect(getDrawerPresentation({ isWide: false })).toBe('overlay');
   });
 });

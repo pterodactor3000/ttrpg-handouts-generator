@@ -1,12 +1,11 @@
 type DrawerPresentation = 'sidebar' | 'overlay';
 
 interface DrawerPresentationInput {
-  isPinned: boolean;
   isWide: boolean;
 }
 
 function getDrawerPresentation(input: DrawerPresentationInput): DrawerPresentation {
-  if (input.isPinned && input.isWide) {
+  if (input.isWide) {
     return 'sidebar';
   }
   return 'overlay';

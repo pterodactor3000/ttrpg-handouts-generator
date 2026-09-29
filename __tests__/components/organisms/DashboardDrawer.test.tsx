@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import DashboardDrawer from '@/components/organisms/DashboardDrawer';
@@ -49,7 +49,9 @@ describe('DashboardDrawer', () => {
     const user = userEvent.setup();
     renderDrawerFixture();
 
-    await user.click(screen.getByRole('button', { name: 'Filters' }));
+    await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
+    expect(screen.queryByRole('button', { name: 'Pin sidebar' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Unpin sidebar' })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Published' }));
 
     const dashboard = document.querySelector('[data-dashboard]');
@@ -57,46 +59,36 @@ describe('DashboardDrawer', () => {
     expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
-    expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+    });
   });
 
   it('leaves the status filter unchanged when Escape closes the panel', async () => {
     const user = userEvent.setup();
     renderDrawerFixture();
 
-    await user.click(screen.getByRole('button', { name: 'Filters' }));
+    await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
     await user.keyboard('{Escape}');
 
     expect(document.querySelector('[data-dashboard]')?.getAttribute('data-status-filter')).toBe('draft');
-    expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+    });
   });
 
-  it('keeps the panel open when a filter is chosen on a pinned wide drawer and does not write localStorage', async () => {
+  it('keeps the sidebar open on a wide viewport', async () => {
     const user = userEvent.setup();
-    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
     stubMatchMedia(true);
     renderDrawerFixture();
 
-    await user.click(screen.getByRole('button', { name: 'Filters' }));
-    await user.click(screen.getByRole('button', { name: 'Pin' }));
+    expect(screen.getByRole('button', { name: 'Published' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Pin sidebar' })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Published' }));
 
-    expect(document.querySelector('[data-dashboard]')?.getAttribute('data-drawer-pinned')).toBe('true');
     expect(screen.getByRole('button', { name: 'Published' })).toBeInTheDocument();
-    expect(setItemSpy).not.toHaveBeenCalled();
-  });
-
-  it('keeps a pinned narrow drawer as an overlay', async () => {
-    const user = userEvent.setup();
-    stubMatchMedia(false);
-    renderDrawerFixture();
-
-    await user.click(screen.getByRole('button', { name: 'Filters' }));
-    await user.click(screen.getByRole('button', { name: 'Pin' }));
-
-    expect(document.querySelector('[data-dashboard]')?.getAttribute('data-drawer-pinned')).toBe('true');
     expect(document.querySelector('[data-dashboard-drawer-panel]')?.getAttribute('data-drawer-presentation')).toBe(
-      'overlay',
+      'sidebar',
     );
   });
 });

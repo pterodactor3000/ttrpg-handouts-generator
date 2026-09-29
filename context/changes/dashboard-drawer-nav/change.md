@@ -14,8 +14,7 @@ Roadmap S-12. Locked in rites-of-true-aim on 2026-09-29.
 
 - Complexity: Medium.
 - First load shows Drafts only.
-- Pin is session memory. Refresh clears it and returns to Drafts.
-- A pinned drawer is a sidebar only at viewport width 768px and up. Narrower viewports stay an overlay.
+- At viewport width 768px and up, the drawer stays open as a sidebar. There is no pin control.
+- Narrower viewports use an icon to open an overlay. Choosing a status closes that overlay.
 - Archived cards stay read-only. Unarchive is S-14.
 - The filter runs on handouts already loaded for `/dashboard`. No schema or API change.
-- An unpinned drawer closes after a filter choice.

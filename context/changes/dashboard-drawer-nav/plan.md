@@ -283,9 +283,9 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Manual
 
-- [ ] 1.4 `/dashboard` first paint shows the Drafts heading and only draft cards.
-- [ ] 1.5 A GM whose handouts are all published sees "No drafts." and does not see those published cards.
-- [ ] 1.6 Archiving a draft removes that card from Drafts and does not show the Archived list.
+- [x] 1.4 `/dashboard` first paint shows the Drafts heading and only draft cards.
+- [x] 1.5 A GM whose handouts are all published sees "No drafts." and does not see those published cards.
+- [x] 1.6 Archiving a draft removes that card from Drafts and does not show the Archived list.
 
 ### Phase 2: Drawer filters
 
@@ -297,10 +297,10 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Manual
 
-- [ ] 2.4 The Filters control opens a left overlay over the dashboard.
-- [ ] 2.5 Drafts, Published, and Archived each show only handouts of that status.
-- [ ] 2.6 Backdrop click and Escape close the overlay without changing the current list.
-- [ ] 2.7 A fresh load still opens on Drafts with the overlay closed.
+- [x] 2.4 The sidebar icon opens a left overlay over the dashboard on a narrow viewport.
+- [x] 2.5 Drafts, Published, and Archived each show only handouts of that status.
+- [x] 2.6 Backdrop click and Escape close the overlay without changing the current list.
+- [x] 2.7 A fresh load still opens on Drafts with the overlay closed.
 
 ### Phase 3: Session pin
 
@@ -313,7 +313,7 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Manual
 
-- [ ] 3.5 At 768px or wider, Pin keeps the drawer open beside the tiles, and the grid remains usable.
-- [ ] 3.6 Refresh shows Drafts with the drawer closed and unpinned.
-- [ ] 3.7 Below 768px, Pin does not squeeze the grid. The drawer stays an overlay.
-- [ ] 3.8 Unpin returns the drawer to overlay behavior, including close-on-select.
+- [x] 3.5 At 768px or wider, the drawer stays open beside the tiles with no pin control, and the grid remains usable.
+- [x] 3.6 Refresh shows Drafts. At 768px or wider the drawer is open. Below that it is closed.
+- [x] 3.7 Below 768px the drawer is an overlay and does not squeeze the grid.
+- [x] 3.8 Choosing a status in the overlay closes it.

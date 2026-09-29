@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import { getDrawerPresentation } from '@/lib/dashboard-drawer';
+import { cn } from '@/lib/utils';
 
 type StatusFilter = 'draft' | 'published' | 'archived';
 
@@ -12,6 +14,7 @@ const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
 ];
 
 const WIDE_VIEWPORT_QUERY = '(min-width: 768px)';
+const PANEL_MOTION_MS = 200;
 
 function isStatusFilter(value: string | null): value is StatusFilter {
   return value === 'draft' || value === 'published' || value === 'archived';
@@ -38,12 +41,41 @@ function readIsWide(): boolean {
   return window.matchMedia(WIDE_VIEWPORT_QUERY).matches;
 }
 
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 function DashboardDrawer() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
+  const [isOverlayMounted, setIsOverlayMounted] = useState(false);
+  const [isOverlayShown, setIsOverlayShown] = useState(false);
   const [isWide, setIsWide] = useState(readIsWide);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(readStatusFilter);
-  const presentation = getDrawerPresentation({ isPinned, isWide });
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const presentation = getDrawerPresentation({ isWide });
+  const isSidebar = presentation === 'sidebar';
+
+  const closeOverlay = useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+
+    if (prefersReducedMotion()) {
+      setIsOverlayShown(false);
+      setIsOverlayMounted(false);
+      return;
+    }
+
+    setIsOverlayShown(false);
+    closeTimerRef.current = setTimeout(() => {
+      setIsOverlayMounted(false);
+      closeTimerRef.current = null;
+    }, PANEL_MOTION_MS);
+  }, []);
 
   useEffect(() => {
     if (typeof window.matchMedia !== 'function') {
@@ -51,18 +83,31 @@ function DashboardDrawer() {
     }
 
     const mediaQuery = window.matchMedia(WIDE_VIEWPORT_QUERY);
+
     function handleViewportChange(event: MediaQueryListEvent) {
       setIsWide(event.matches);
+      if (event.matches) {
+        setIsOverlayMounted(false);
+        setIsOverlayShown(false);
+      }
     }
 
     mediaQuery.addEventListener('change', handleViewportChange);
+    const frame = window.requestAnimationFrame(() => {
+      setIsWide(mediaQuery.matches);
+    });
+
     return () => {
+      window.cancelAnimationFrame(frame);
       mediaQuery.removeEventListener('change', handleViewportChange);
+      if (closeTimerRef.current !== null) {
+        clearTimeout(closeTimerRef.current);
+      }
     };
   }, []);
 
   useEffect(() => {
-    if (!isOpen || presentation !== 'overlay') {
+    if (!isOverlayShown || isSidebar) {
       return;
     }
 
@@ -70,24 +115,27 @@ function DashboardDrawer() {
       if (event.key !== 'Escape') {
         return;
       }
-      setIsOpen(false);
+      closeOverlay();
     }
 
     document.addEventListener('keydown', closeOnEscape);
     return () => {
       document.removeEventListener('keydown', closeOnEscape);
     };
-  }, [isOpen, presentation]);
+  }, [closeOverlay, isOverlayShown, isSidebar]);
 
-  function togglePin() {
-    const dashboard = document.querySelector('[data-dashboard]');
-    if (!(dashboard instanceof HTMLElement)) {
+  function clearCloseTimer() {
+    if (closeTimerRef.current === null) {
       return;
     }
+    clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = null;
+  }
 
-    const nextIsPinned = !isPinned;
-    setIsPinned(nextIsPinned);
-    dashboard.setAttribute('data-drawer-pinned', nextIsPinned ? 'true' : 'false');
+  function openOverlay() {
+    clearCloseTimer();
+    setIsOverlayMounted(true);
+    setIsOverlayShown(true);
   }
 
   function applyStatusFilter(nextFilter: StatusFilter) {
@@ -111,69 +159,97 @@ function DashboardDrawer() {
       }
     }
 
-    if (presentation === 'overlay') {
-      setIsOpen(false);
+    if (!isSidebar) {
+      closeOverlay();
     }
   }
 
-  const slotElement = isOpen ? document.querySelector('[data-dashboard-drawer-slot]') : null;
-  const isSidebar = presentation === 'sidebar';
+  function handleOpenClick() {
+    if (isSidebar) {
+      return;
+    }
+    if (isOverlayShown) {
+      closeOverlay();
+      return;
+    }
+    openOverlay();
+  }
 
-  const panel = (
-    <>
-      {isSidebar ? null : (
-        <button
-          type="button"
-          aria-label="Close filters"
-          className="fixed inset-0 z-30 bg-black/40"
-          onClick={() => {
-            setIsOpen(false);
-          }}
-        />
-      )}
-      <div
-        data-dashboard-drawer-panel
-        data-drawer-presentation={presentation}
-        className={
-          isSidebar
-            ? 'bg-card border-border flex h-full w-full flex-col gap-2 border-r p-4'
-            : 'bg-card border-border fixed top-0 left-0 z-40 flex h-screen w-64 flex-col gap-2 border-r p-4'
-        }
-      >
-        <Button type="button" variant="outline" aria-pressed={isPinned} onClick={togglePin}>
-          {isPinned ? 'Unpin' : 'Pin'}
-        </Button>
-        {STATUS_FILTERS.map((filter) => (
-          <Button
-            key={filter.value}
-            type="button"
-            variant={statusFilter === filter.value ? 'default' : 'outline'}
-            aria-pressed={statusFilter === filter.value}
-            className="justify-start"
-            onClick={() => {
-              applyStatusFilter(filter.value);
-            }}
+  const slotElement = typeof document === 'undefined' ? null : document.querySelector('[data-dashboard-drawer-slot]');
+  const dashboardElement = typeof document === 'undefined' ? null : document.querySelector('[data-dashboard]');
+  const overlayState = isOverlayShown ? 'open' : 'closed';
+
+  const statusButtons = STATUS_FILTERS.map((filter) => (
+    <Button
+      key={filter.value}
+      type="button"
+      variant={statusFilter === filter.value ? 'secondary' : 'ghost'}
+      aria-pressed={statusFilter === filter.value}
+      className="w-full justify-start"
+      onClick={() => {
+        applyStatusFilter(filter.value);
+      }}
+    >
+      {filter.label}
+    </Button>
+  ));
+
+  const sidebarPanel =
+    isSidebar && slotElement instanceof HTMLElement
+      ? createPortal(
+          <div
+            data-dashboard-drawer-panel
+            data-drawer-presentation="sidebar"
+            className="bg-card text-card-foreground border-border animate-in fade-in-0 slide-in-from-left flex h-full w-full flex-col gap-1 border-r p-3 duration-300 motion-reduce:animate-none"
           >
-            {filter.label}
-          </Button>
-        ))}
-      </div>
-    </>
-  );
+            {statusButtons}
+          </div>,
+          slotElement,
+        )
+      : null;
+
+  const overlayPanel =
+    !isSidebar && isOverlayMounted && dashboardElement instanceof HTMLElement
+      ? createPortal(
+          <>
+            <button
+              type="button"
+              aria-label="Close sidebar"
+              data-state={overlayState}
+              className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fixed inset-0 z-40 bg-black/40 duration-200 motion-reduce:animate-none"
+              onClick={closeOverlay}
+            />
+            <div
+              data-dashboard-drawer-panel
+              data-drawer-presentation="overlay"
+              data-state={overlayState}
+              className={cn(
+                'bg-card text-card-foreground border-border fixed top-0 left-0 z-50 flex h-dvh w-64 flex-col gap-1 border-r p-3 shadow-xl',
+                'data-[state=open]:animate-in data-[state=open]:slide-in-from-left data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left duration-200 motion-reduce:animate-none',
+              )}
+            >
+              {statusButtons}
+            </div>
+          </>,
+          dashboardElement,
+        )
+      : null;
 
   return (
     <>
       <Button
         type="button"
-        variant="outline"
-        aria-expanded={isOpen}
-        onClick={() => {
-          setIsOpen((current) => !current);
-        }}
+        size="icon"
+        variant="ghost"
+        className="md:hidden [&_svg]:size-5"
+        aria-expanded={isOverlayShown}
+        aria-label={isOverlayShown ? 'Close sidebar' : 'Open sidebar'}
+        onClick={handleOpenClick}
       >
-        Filters
+        <PanelLeftOpen />
       </Button>
-      {isOpen && slotElement instanceof HTMLElement ? createPortal(panel, slotElement) : null}
+      {sidebarPanel}
+      {overlayPanel}
     </>
   );
 }
