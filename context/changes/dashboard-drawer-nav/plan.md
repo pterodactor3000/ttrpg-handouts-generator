@@ -306,10 +306,10 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Automated
 
-- [x] 3.1 `getDrawerPresentation` returns `sidebar` only when pinned and wide, and `overlay` for the other three input pairs.
-- [x] 3.2 The drawer test asserts `localStorage.setItem` is not called when pin is toggled.
-- [x] 3.3 Choosing a filter while the presentation is `sidebar` leaves the panel open.
-- [x] 3.4 `npm test -- --project unit` passes the drawer unit tests, and `npm run lint` passes.
+- [x] 3.1 `getDrawerPresentation` returns `sidebar` only when pinned and wide, and `overlay` for the other three input pairs. 952b918
+- [x] 3.2 The drawer test asserts `localStorage.setItem` is not called when pin is toggled. 952b918
+- [x] 3.3 Choosing a filter while the presentation is `sidebar` leaves the panel open. 952b918
+- [x] 3.4 `npm test -- --project unit` passes the drawer unit tests, and `npm run lint` passes. 952b918
 
 #### Manual
 
