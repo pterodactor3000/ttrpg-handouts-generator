@@ -50,9 +50,16 @@ function removePermanentDeletedHandoutCard(deleteButtonContainer: HTMLElement): 
   handoutCard.remove();
 
   const archivedGrid = document.querySelector('[data-handout-grid="archived"]');
-  if (archivedGrid instanceof HTMLElement && archivedGrid.children.length === 0) {
-    document.querySelector('[data-handout-list="archived"]')?.classList.add('hidden');
+  if (!(archivedGrid instanceof HTMLElement) || archivedGrid.children.length > 0) {
+    return;
   }
+
+  const dashboard = document.querySelector('[data-dashboard][data-status-filter]');
+  if (dashboard) {
+    return;
+  }
+
+  document.querySelector('[data-handout-list="archived"]')?.classList.add('hidden');
 }
 
 export { moveHandoutCardToArchivedSection, removePermanentDeletedHandoutCard };

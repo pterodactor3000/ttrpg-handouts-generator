@@ -90,7 +90,7 @@ function getDrawerPresentation(input: { isPinned: boolean; isWide: boolean }): D
 
 **Intent:** The selected list stays on screen when it has no cards, with copy for that status.
 
-**Contract:** `listKind` is `'draft' | 'published' | 'archived'`. `data-handout-list` and `data-handout-grid` use that value. Always render the grid, including when it is empty. Always render a following `[data-handout-empty]` node. Draft empty copy is "No drafts." and keeps the create-handout link. Published copy is "No published handouts." Archived copy is "No archived handouts." Do not put the `hidden` class on an empty archived section. Add a style rule so `[data-handout-empty]` is `display: none` when the previous grid is not `:empty`.
+**Contract:** `listKind` is `'draft' | 'published' | 'archived'`. `data-handout-list` and `data-handout-grid` use that value. The section has the HTML `hidden` attribute when `listKind` is not `draft`. Always render the grid, including when it is empty. Always render a following `[data-handout-empty]` node. Draft empty copy is "No drafts." and keeps the create-handout link. Published copy is "No published handouts." Archived copy is "No archived handouts." Do not put the `hidden` class on an empty archived section. Add a style rule so `[data-handout-empty]` is `display: none` when the previous grid is not `:empty`.
 
 #### 4. Archive and delete stay on the hidden attribute
 
@@ -158,7 +158,7 @@ A header toggle opens a left overlay with Drafts, Published, and Archived. Choos
 
 **Intent:** Cover filter selection and dismiss.
 
-**Contract:** Render the island against a fixture that contains `[data-dashboard]`, three `[data-handout-list]` sections (published and archived start with the `hidden` attribute), and `[data-dashboard-drawer-slot]`. Clicking Published sets `data-status-filter="published"`, removes `hidden` from the published section, sets `hidden` on draft and archived, and closes the panel. Escape after open leaves `data-status-filter` at its previous value.
+**Contract:** The file starts with `// @vitest-environment jsdom` and `import '@testing-library/jest-dom/vitest'`, matching `ArchiveButton.test.tsx`. Render the island against a fixture that contains `[data-dashboard]`, three `[data-handout-list]` sections (published and archived start with the `hidden` attribute), and `[data-dashboard-drawer-slot]`. Clicking Published sets `data-status-filter="published"`, removes `hidden` from the published section, sets `hidden` on draft and archived, and closes the panel. Escape after open leaves `data-status-filter` at its previous value.
 
 ### Success Criteria
 
@@ -207,7 +207,7 @@ Pin keeps the drawer open as a sidebar at width 768px and up until refresh. Narr
 
 **Intent:** Lock the width rule without a browser viewport.
 
-**Contract:** `getDrawerPresentation({ isPinned: true, isWide: true })` is `sidebar`. `{ isPinned: true, isWide: false }` is `overlay`. `{ isPinned: false, isWide: true }` is `overlay`.
+**Contract:** `getDrawerPresentation({ isPinned: true, isWide: true })` is `sidebar`. `{ isPinned: true, isWide: false }` is `overlay`. `{ isPinned: false, isWide: true }` is `overlay`. `{ isPinned: false, isWide: false }` is `overlay`.
 
 **File:** `__tests__/components/organisms/DashboardDrawer.test.tsx`
 
@@ -277,9 +277,9 @@ No data migration. Revert the branch to restore the two-list dashboard. Archive 
 
 #### Automated
 
-- [ ] 1.1 `groupHandoutsByStatus` returns separate `draft`, `published`, and `archived` arrays, each ordered by `created_at` descending.
-- [ ] 1.2 `npm test -- --project unit` passes `__tests__/lib/handout-list.test.ts` and `__tests__/lib/archive-handout-card-dom.test.ts`.
-- [ ] 1.3 Archiving a card does not remove the `hidden` attribute from `[data-handout-list="archived"]`.
+- [x] 1.1 `groupHandoutsByStatus` returns separate `draft`, `published`, and `archived` arrays, each ordered by `created_at` descending.
+- [x] 1.2 `npm test -- --project unit` passes `__tests__/lib/handout-list.test.ts` and `__tests__/lib/archive-handout-card-dom.test.ts`.
+- [x] 1.3 Archiving a card does not remove the `hidden` attribute from `[data-handout-list="archived"]`.
 
 #### Manual
 

@@ -5,28 +5,42 @@ import type { HandoutListItem } from '@/lib/handout-list';
 interface Props {
   heading: string;
   handouts: HandoutListItem[];
-  listKind: 'active' | 'archived';
+  listKind: 'draft' | 'published' | 'archived';
 }
 
 const { heading, handouts, listKind } = Astro.props;
+const isHidden = listKind !== 'draft';
 ---
 
-<section
-  class:list={['mt-8 w-full min-w-0', listKind === 'archived' && handouts.length === 0 && 'hidden']}
-  data-handout-list={listKind}
->
+<section class="mt-8 w-full min-w-0" data-handout-list={listKind} hidden={isHidden}>
   <h2 class="text-foreground mb-4 text-xl font-semibold">{heading}</h2>
-  {
-    handouts.length > 0 ? (
-      <div class="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-handout-grid={listKind}>
-        {handouts.map((handout) => (
-          <HandoutCard handout={handout} />
-        ))}
-      </div>
-    ) : listKind === 'archived' ? (
-      <div class="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-handout-grid={listKind} />
-    ) : (
-      <slot />
-    )
-  }
+  <div class="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-handout-grid={listKind}>
+    {handouts.map((handout) => <HandoutCard handout={handout} />)}
+  </div>
+  <div data-handout-empty>
+    {
+      listKind === 'draft' ? (
+        <>
+          <p class="text-muted-foreground">No drafts.</p>
+          <a
+            href="/handouts/new"
+            data-slot="button"
+            class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
+          >
+            Create your first handout
+          </a>
+        </>
+      ) : listKind === 'published' ? (
+        <p class="text-muted-foreground">No published handouts.</p>
+      ) : (
+        <p class="text-muted-foreground">No archived handouts.</p>
+      )
+    }
+  </div>
 </section>
+
+<style>
+  [data-handout-grid]:not(:empty) + [data-handout-empty] {
+    display: none;
+  }
+</style>

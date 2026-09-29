@@ -4,7 +4,7 @@ import Layout from '@/layouts/Layout.astro';
 import HandoutList from '@/components/organisms/HandoutList.astro';
 import { Card, CardContent } from '@/components/atoms/card';
 import { createClient } from '@/lib/supabase';
-import { partitionHandouts, type HandoutListItem } from '@/lib/handout-list';
+import { groupHandoutsByStatus, type HandoutListItem } from '@/lib/handout-list';
 
 const { user } = Astro.locals;
 
@@ -12,7 +12,8 @@ const supabase = createClient(Astro.request.headers, Astro.cookies);
 
 let isConfigured = true;
 let hasLoadError = false;
-let activeHandouts: HandoutListItem[] = [];
+let draftHandouts: HandoutListItem[] = [];
+let publishedHandouts: HandoutListItem[] = [];
 let archivedHandouts: HandoutListItem[] = [];
 
 if (!supabase) {
@@ -29,25 +30,28 @@ if (!supabase) {
     hasLoadError = true;
   } else {
     const handouts = data as HandoutListItem[];
-    const { active, archived } = partitionHandouts(handouts);
-    activeHandouts = active;
-    archivedHandouts = archived;
+    const groupedHandouts = groupHandoutsByStatus(handouts);
+    draftHandouts = groupedHandouts.draft;
+    publishedHandouts = groupedHandouts.published;
+    archivedHandouts = groupedHandouts.archived;
   }
 }
 ---
 
 <Layout title="Dashboard" loadChromeFont>
   <div class="moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8">
-    <div class="mx-auto w-full max-w-6xl">
-      {
-        !isConfigured ? (
+    {
+      !isConfigured ? (
+        <div class="mx-auto w-full max-w-6xl">
           <Card className="border-border bg-card text-foreground gap-0 border py-0 text-center shadow-sm">
             <CardContent className="p-8">
               <h1 class="mb-3 text-2xl font-bold">Dashboard temporarily unavailable</h1>
               <p class="text-muted-foreground text-sm">Please try again later.</p>
             </CardContent>
           </Card>
-        ) : hasLoadError ? (
+        </div>
+      ) : hasLoadError ? (
+        <div class="mx-auto w-full max-w-6xl">
           <Card className="border-border bg-card text-foreground gap-0 border py-0 text-center shadow-sm">
             <CardContent className="p-8">
               <h1 class="mb-3 text-2xl font-bold">Could not load handouts</h1>
@@ -56,8 +60,10 @@ if (!supabase) {
               </p>
             </CardContent>
           </Card>
-        ) : (
-          <>
+        </div>
+      ) : (
+        <div data-dashboard data-status-filter="draft">
+          <div class="mx-auto w-full max-w-6xl">
             <Card className="border-border bg-card text-foreground gap-0 border py-0 shadow-sm">
               <CardContent className="p-6">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -89,25 +95,12 @@ if (!supabase) {
               </CardContent>
             </Card>
 
-            <HandoutList heading="Your handouts" handouts={activeHandouts} listKind="active">
-              <Card className="border-border bg-card text-foreground gap-0 border border-dashed py-0 text-center shadow-sm">
-                <CardContent className="p-8">
-                  <p class="text-muted-foreground">You have not created any handouts yet.</p>
-                  <a
-                    href="/handouts/new"
-                    data-slot="button"
-                    class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
-                  >
-                    Create your first handout
-                  </a>
-                </CardContent>
-              </Card>
-            </HandoutList>
-
+            <HandoutList heading="Drafts" handouts={draftHandouts} listKind="draft" />
+            <HandoutList heading="Published" handouts={publishedHandouts} listKind="published" />
             <HandoutList heading="Archived" handouts={archivedHandouts} listKind="archived" />
-          </>
-        )
-      }
-    </div>
+          </div>
+        </div>
+      )
+    }
   </div>
 </Layout>
