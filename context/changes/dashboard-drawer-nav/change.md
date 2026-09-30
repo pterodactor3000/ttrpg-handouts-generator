@@ -1,9 +1,9 @@
 ---
 change_id: dashboard-drawer-nav
 title: Filter dashboard handouts from a left drawer
-status: implemented
+status: impl_reviewed
 created: 2026-09-29
-updated: 2026-09-29
+updated: 2026-09-30
 archived_at: null
 roadmap_id: S-12
 ---

@@ -216,7 +216,7 @@ function DashboardDrawer() {
               type="button"
               aria-label="Close sidebar"
               data-state={overlayState}
-              className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fixed inset-0 z-40 bg-black/40 duration-200 motion-reduce:animate-none"
+              className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fixed inset-0 z-40 bg-black/40 duration-200 data-[state=closed]:pointer-events-none motion-reduce:animate-none"
               onClick={closeOverlay}
             />
             <div
@@ -225,7 +225,7 @@ function DashboardDrawer() {
               data-state={overlayState}
               className={cn(
                 'bg-card text-card-foreground border-border fixed top-0 left-0 z-50 flex h-dvh w-64 flex-col gap-1 border-r p-3 shadow-xl',
-                'data-[state=open]:animate-in data-[state=open]:slide-in-from-left data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left duration-200 motion-reduce:animate-none',
+                'data-[state=open]:animate-in data-[state=open]:slide-in-from-left data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left duration-200 data-[state=closed]:pointer-events-none motion-reduce:animate-none',
               )}
             >
               {statusButtons}

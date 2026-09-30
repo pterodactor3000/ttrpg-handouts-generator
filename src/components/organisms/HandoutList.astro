@@ -40,7 +40,7 @@ const isHidden = listKind !== 'draft';
 </section>
 
 <style>
-  [data-handout-grid]:not(:empty) + [data-handout-empty] {
+  [data-handout-grid]:has(article) + [data-handout-empty] {
     display: none;
   }
 </style>
