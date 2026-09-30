@@ -20,4 +20,15 @@ const BACKGROUND_CONFIGS: Record<BackgroundCategory, { label: string; cssBackgro
 
 const BACKGROUND_CATEGORY_OPTIONS: BackgroundCategory[] = ['fantasy', 'horror', 'scifi'];
 
-export { BACKGROUND_CATEGORY_OPTIONS, BACKGROUND_CONFIGS };
+function getHandoutStripImageUrl(category: BackgroundCategory): string {
+  switch (category) {
+    case 'fantasy':
+      return '/borders/fantasy-border.png';
+    case 'horror':
+      return '/borders/horror-border.png';
+    case 'scifi':
+      return '/borders/scifi-border.png';
+  }
+}
+
+export { BACKGROUND_CATEGORY_OPTIONS, BACKGROUND_CONFIGS, getHandoutStripImageUrl };
