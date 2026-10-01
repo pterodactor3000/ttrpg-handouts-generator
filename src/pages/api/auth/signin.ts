@@ -62,4 +62,6 @@ const POST: APIRoute = async (context) => {
   return context.redirect('/');
 };
 
+export const prerender = false;
+
 export { POST };
