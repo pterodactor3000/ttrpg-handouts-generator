@@ -271,16 +271,16 @@ No data migration. Revert the branch to restore the gradient strip and the wrapp
 
 #### Automated
 
-- [x] 3.1 `fitTagChips` shows every chip and no overflow control when the chips fit.
-- [x] 3.2 `fitTagChips` reserves room for the overflow control and returns the hidden count when they do not fit.
-- [x] 3.3 `fitTagChips` returns a visible count of 0 and a hidden count of every chip when the overflow control is the only thing that fits.
-- [x] 3.4 `npm test -- --project unit` passes `__tests__/lib/fit-tag-chips.test.ts` and `__tests__/lib/backgrounds.test.ts`, and `npm run lint` passes.
-- [x] 3.10 `fitTagChips` returns visible count 0, hidden count 0, and `showOverflow` false when `chipWidths` is empty.
+- [x] 3.1 `fitTagChips` shows every chip and no overflow control when the chips fit. cd63484
+- [x] 3.2 `fitTagChips` reserves room for the overflow control and returns the hidden count when they do not fit. cd63484
+- [x] 3.3 `fitTagChips` returns a visible count of 0 and a hidden count of every chip when the overflow control is the only thing that fits. cd63484
+- [x] 3.4 `npm test -- --project unit` passes `__tests__/lib/fit-tag-chips.test.ts` and `__tests__/lib/backgrounds.test.ts`, and `npm run lint` passes. cd63484
+- [x] 3.10 `fitTagChips` returns visible count 0, hidden count 0, and `showOverflow` false when `chipWidths` is empty. cd63484
 
 #### Manual
 
-- [x] 3.5 A card whose tags fit on one row has no `+N` control.
-- [x] 3.6 A card whose tags do not fit shows `+N`. Activating it opens a dialog that lists every tag on that handout.
-- [x] 3.7 Escape or the dialog close control dismisses the dialog.
-- [x] 3.8 Opening the dashboard drawer, or resizing across the one-column, two-column, and three-column widths, updates `+N` and leaves the card height unchanged.
-- [x] 3.9 A handout with no tags has no tag row and the same card height as a tagged handout.
+- [x] 3.5 A card whose tags fit on one row has no `+N` control. cd63484
+- [x] 3.6 A card whose tags do not fit shows `+N`. Activating it opens a dialog that lists every tag on that handout. cd63484
+- [x] 3.7 Escape or the dialog close control dismisses the dialog. cd63484
+- [x] 3.8 Opening the dashboard drawer, or resizing across the one-column, two-column, and three-column widths, updates `+N` and leaves the card height unchanged. cd63484
+- [x] 3.9 A handout with no tags has no tag row and the same card height as a tagged handout. cd63484
