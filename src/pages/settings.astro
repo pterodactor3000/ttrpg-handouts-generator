@@ -1,0 +1,37 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { BackToDashboardButton } from '@/components/molecules/BackToDashboardButton';
+import { ChangePasswordForm } from '@/components/organisms/ChangePasswordForm';
+import { DeleteAccountDialog } from '@/components/organisms/DeleteAccountDialog';
+
+const email = Astro.locals.user?.email ?? '';
+---
+
+<Layout title="Settings" loadChromeFont>
+  <div class="moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8">
+    <div class="mx-auto flex w-full max-w-lg flex-col gap-8">
+      <div>
+        <BackToDashboardButton client:load />
+        <h1 class="text-foreground text-3xl font-bold tracking-tight">Settings</h1>
+        <p class="text-muted-foreground mt-1">
+          Signed in as <span class="text-foreground font-semibold">{email}</span>
+        </p>
+      </div>
+
+      <section class="border-border bg-card flex flex-col gap-4 rounded-[0.5rem] border p-6">
+        <h2 class="text-foreground text-xl font-semibold">Change password</h2>
+        <ChangePasswordForm client:load />
+      </section>
+
+      <section
+        class="border-destructive bg-card shadow-destructive/30 flex flex-col gap-4 rounded-[0.5rem] border p-6 shadow-md"
+      >
+        <h2 class="text-foreground text-xl font-semibold">Delete account</h2>
+        <p class="text-muted-foreground text-sm">
+          Closing the account signs you out. Shared handouts stay available for 30 days.
+        </p>
+        <DeleteAccountDialog client:load />
+      </section>
+    </div>
+  </div>
+</Layout>

@@ -7,9 +7,10 @@ import { ServerError } from '@/components/atoms/ServerError';
 
 interface Props {
   serverError?: string | null;
+  deletionAt?: string | null;
 }
 
-export default function SignInForm({ serverError }: Props) {
+export default function SignInForm({ serverError, deletionAt }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -77,7 +78,13 @@ export default function SignInForm({ serverError }: Props) {
         }
       />
 
-      <ServerError message={serverError} />
+      {deletionAt ? (
+        <p className="text-foreground text-sm" data-signin-deletion-instant={deletionAt}>
+          The account is closed and scheduled for deletion by <time id="signin-deletion-date" />.
+        </p>
+      ) : (
+        <ServerError message={serverError} />
+      )}
 
       <SubmitButton pendingText="Signing in..." icon={<LogIn className="size-4" />}>
         Sign in

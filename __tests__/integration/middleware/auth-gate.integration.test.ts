@@ -77,6 +77,16 @@ describe('auth gate middleware (integration)', () => {
       expect(context.next).not.toHaveBeenCalled();
       expect(context.locals.user).toBeNull();
     });
+
+    it('GET /settings redirects to sign-in', async () => {
+      const context = makeMiddlewareContext({ pathname: '/settings' });
+      const response: Response = await onRequest(context, context.next);
+
+      expect(response.status).toBe(302);
+      expect(response.headers.get('Location')).toBe('/auth/signin');
+      expect(context.next).not.toHaveBeenCalled();
+      expect(context.locals.user).toBeNull();
+    });
   });
 
   describe('anonymous access to public routes', () => {
@@ -95,6 +105,15 @@ describe('auth gate middleware (integration)', () => {
 
     it('GET /share/some-uuid passes through without redirect', async () => {
       const context = makeMiddlewareContext({ pathname: '/share/some-uuid' });
+      const response = await onRequest(context, context.next);
+
+      expect(context.next).toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(context.locals.user).toBeNull();
+    });
+
+    it('GET /account-closed passes through without redirect', async () => {
+      const context = makeMiddlewareContext({ pathname: '/account-closed' });
       const response = await onRequest(context, context.next);
 
       expect(context.next).toHaveBeenCalled();
@@ -122,6 +141,17 @@ describe('auth gate middleware (integration)', () => {
       const response = await onRequest(context, context.next);
 
       expect(createAppSupabaseClient).toHaveBeenCalledWith(context.request.headers, context.cookies);
+      expect(context.next).toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(context.locals.user).not.toBeNull();
+      expect(context.locals.user?.id).toBe(testUserId);
+      expect(context.locals.user?.email).toBe(testUserEmail);
+    });
+
+    it('GET /settings passes through and populates locals.user', async () => {
+      const context = makeMiddlewareContext({ pathname: '/settings' });
+      const response = await onRequest(context, context.next);
+
       expect(context.next).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(context.locals.user).not.toBeNull();
