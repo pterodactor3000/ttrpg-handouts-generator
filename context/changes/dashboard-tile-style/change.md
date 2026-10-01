@@ -3,7 +3,7 @@ change_id: dashboard-tile-style
 title: Uniform dashboard tiles with a themed strip
 status: implementing
 created: 2026-09-30
-updated: 2026-09-30
+updated: 2026-10-01
 archived_at: null
 roadmap_id: S-11
 ---

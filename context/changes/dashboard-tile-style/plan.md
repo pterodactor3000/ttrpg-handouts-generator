@@ -257,15 +257,15 @@ No data migration. Revert the branch to restore the gradient strip and the wrapp
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes.
+- [x] 2.1 `npm run lint` passes. 09b3dca
 
 #### Manual
 
-- [x] 2.2 Drafts, Published, and Archived cards share one height, including a card with no tags next to a card with tags.
-- [x] 2.3 Fantasy, horror, and grimdark strips each show that category's border-image slice. Horror shows the ornament, not the cream margin at the top of the file. Confirm this at phone width and in the three-column grid.
-- [x] 2.4 A long title is one line, ends with an ellipsis, and exposes the full title through the `title` attribute.
-- [x] 2.5 The footer sits on the bottom edge. Edit, archive, delete, and copy still follow the handout status.
-- [x] 2.6 At a phone width the single column uses that same card height.
+- [x] 2.2 Drafts, Published, and Archived cards share one height, including a card with no tags next to a card with tags. 09b3dca
+- [x] 2.3 Fantasy, horror, and grimdark strips each show that category's border-image slice. Horror shows the ornament, not the cream margin at the top of the file. Confirm this at phone width and in the three-column grid. 09b3dca
+- [x] 2.4 A long title is one line, ends with an ellipsis, and exposes the full title through the `title` attribute. 09b3dca
+- [x] 2.5 The footer sits on the bottom edge. Edit, archive, delete, and copy still follow the handout status. 09b3dca
+- [x] 2.6 At a phone width the single column uses that same card height. 09b3dca
 
 ### Phase 3: Tag overflow
 
