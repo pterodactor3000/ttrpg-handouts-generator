@@ -23,7 +23,9 @@ const email = Astro.locals.user?.email ?? '';
         <ChangePasswordForm client:load />
       </section>
 
-      <section class="border-destructive bg-card shadow-destructive/30 flex flex-col gap-4 rounded-[0.5rem] border p-6 shadow-md">
+      <section
+        class="border-destructive bg-card shadow-destructive/30 flex flex-col gap-4 rounded-[0.5rem] border p-6 shadow-md"
+      >
         <h2 class="text-foreground text-xl font-semibold">Delete account</h2>
         <p class="text-muted-foreground text-sm">
           Closing the account signs you out. Shared handouts stay available for 30 days.

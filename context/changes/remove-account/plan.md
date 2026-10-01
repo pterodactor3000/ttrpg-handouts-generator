@@ -366,23 +366,23 @@ Existing handouts gain a null `scheduled_deletion_at`. No backfill. GMs who have
 
 #### Manual
 
-- [x] 3.1 A shared handout whose GM is scheduled shows `Scheduled for deletion by {date}` above the content, and the handout body is still there.
-- [x] 3.2 The date on that page matches the goodbye page's date in the same browser.
-- [x] 3.3 A handout with no scheduled instant has no sentence.
-- [x] 3.4 Signing in during the 30 days shows the closed-account sentence with the local date, and does not show the raw Supabase error.
-- [x] 3.5 After the phrase is visible, reloading the share page still shows it.
+- [x] 3.1 A shared handout whose GM is scheduled shows `Scheduled for deletion by {date}` above the content, and the handout body is still there. a02f972
+- [x] 3.2 The date on that page matches the goodbye page's date in the same browser. a02f972
+- [x] 3.3 A handout with no scheduled instant has no sentence. a02f972
+- [x] 3.4 Signing in during the 30 days shows the closed-account sentence with the local date, and does not show the raw Supabase error. a02f972
+- [x] 3.5 After the phrase is visible, reloading the share page still shows it. a02f972
 
 ### Phase 4: Cron purge
 
 #### Automated
 
-- [ ] 4.1 `purgeScheduledAccounts` with `now` before `scheduled_at` deletes no user and leaves the handout.
-- [ ] 4.2 `purgeScheduledAccounts` with `now` after `scheduled_at` deletes the auth user, the handouts, and the `account_deletions` row.
-- [ ] 4.3 A second call after that deletion completes without throwing.
-- [ ] 4.4 A share-token read after the purge returns no row.
-- [ ] 4.5 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
-- [ ] 4.6 `npm test -- --project integration` confirms a past instant removes that GM's share link.
+- [x] 4.1 `purgeScheduledAccounts` with `now` before `scheduled_at` deletes no user and leaves the handout.
+- [x] 4.2 `purgeScheduledAccounts` with `now` after `scheduled_at` deletes the auth user, the handouts, and the `account_deletions` row.
+- [x] 4.3 A second call after that deletion completes without throwing.
+- [x] 4.4 A share-token read after the purge returns no row.
+- [x] 4.5 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
+- [x] 4.6 `npm test -- --project integration` confirms a past instant removes that GM's share link.
 
 #### Manual
 
-- [ ] 4.7 `wrangler.jsonc` lists the daily cron, and the Worker export includes `scheduled`.
+- [x] 4.7 `wrangler.jsonc` lists the daily cron, and the Worker export includes `scheduled`.

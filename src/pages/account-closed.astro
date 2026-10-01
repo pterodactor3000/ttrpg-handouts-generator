@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { buttonVariants } from '@/components/atoms/button';
+import { BackToDashboardButton } from '@/components/molecules/BackToDashboardButton';
 
 const scheduledAt = Astro.url.searchParams.get('at');
 ---
@@ -11,7 +11,7 @@ const scheduledAt = Astro.url.searchParams.get('at');
       <p class="text-center text-lg" data-deletion-instant={scheduledAt}>
         The account is closed, and handouts are scheduled for deletion by <time id="account-closed-date"></time>.
       </p>
-      <a href="/" class={buttonVariants({ variant: 'link' })}>Back to home</a>
+      <BackToDashboardButton client:load href="/" label="Back to home" className="mb-0 ml-0" />
     </div>
   </div>
 </Layout>
