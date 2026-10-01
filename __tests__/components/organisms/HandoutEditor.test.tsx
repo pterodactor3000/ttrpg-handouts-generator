@@ -106,6 +106,32 @@ describe('HandoutEditor — edit mode (initialHandout prop)', () => {
     expect(screen.getByRole('button', { name: /save changes/i })).toBeEnabled();
   });
 
+  it('calls publish when a draft still has a share token', async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockClear();
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ shareToken: '22222222-2222-4222-8222-222222222222' }),
+    } as Response);
+
+    render(
+      <HandoutEditor
+        initialHandout={{
+          ...draftInitialHandout,
+          shareToken: '22222222-2222-4222-8222-222222222222',
+        }}
+      />,
+    );
+
+    expect(screen.getByText(/click Share to publish/i)).toBeInTheDocument();
+    expect(screen.queryByText(/^Published/)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /^share$/i }));
+
+    expect(fetchMock).toHaveBeenCalledWith(`/api/handouts/${draftInitialHandout.id}/publish`, { method: 'POST' });
+  });
+
   it('opens share dialog without calling fetch when initialHandout.shareToken is set', async () => {
     const user = userEvent.setup();
     const fetchMock = vi.mocked(fetch);

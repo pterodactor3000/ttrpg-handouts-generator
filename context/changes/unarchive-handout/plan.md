@@ -235,8 +235,8 @@ Apply `20261001190000_gm_restore_archived.sql` before the route tests. Existing 
 
 #### Automated
 
-- [x] 2.1 The mover tests in `__tests__/lib/archive-handout-card-dom.test.ts` pass.
-- [x] 2.2 `npm test -- --project unit` passes, and `npm run lint` passes.
+- [x] 2.1 The mover tests in `__tests__/lib/archive-handout-card-dom.test.ts` pass. cd1e98a
+- [x] 2.2 `npm test -- --project unit` passes, and `npm run lint` passes. cd1e98a
 
 #### Manual
 

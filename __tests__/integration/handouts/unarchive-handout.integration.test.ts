@@ -248,6 +248,53 @@ describe('unarchive handout (integration)', () => {
     expect(row.archived_at).toBe(archivedRow.archived_at);
   });
 
+  it('lets the service role stamp scheduled_deletion_at on an archived handout', async () => {
+    const archiveResponse = await archiveHandout(makeContext({ params: { id: handoutId } }));
+    expect(archiveResponse.status).toBe(200);
+
+    const scheduledAt = '2026-11-01T12:00:00.000Z';
+    const { error } = await adminClient
+      .from('handouts')
+      .update({ scheduled_deletion_at: scheduledAt })
+      .eq('id', handoutId);
+
+    expect(error).toBeNull();
+
+    const { data, error: readError } = await adminClient
+      .from('handouts')
+      .select('status, scheduled_deletion_at')
+      .eq('id', handoutId)
+      .single<{ status: string; scheduled_deletion_at: string | null }>();
+
+    expect(readError).toBeNull();
+    expect(data?.status).toBe('archived');
+    expect(new Date(String(data?.scheduled_deletion_at)).toISOString()).toBe(scheduledAt);
+  });
+
+  it('keeps the existing token when publish runs after a draft restore', async () => {
+    const publishResponse = await publishHandout(makeContext({ params: { id: handoutId } }));
+    expect(publishResponse.status).toBe(200);
+    const firstPublishBody = (await publishResponse.json()) as { shareToken: string };
+
+    const archiveResponse = await archiveHandout(makeContext({ params: { id: handoutId } }));
+    expect(archiveResponse.status).toBe(200);
+
+    const restoreResponse = await unarchiveHandout(
+      makeContext({ params: { id: handoutId }, body: { target: 'draft' } }),
+    );
+    expect(restoreResponse.status).toBe(200);
+
+    const republishResponse = await publishHandout(makeContext({ params: { id: handoutId } }));
+    expect(republishResponse.status).toBe(200);
+    const republishBody = (await republishResponse.json()) as { shareToken: string };
+    expect(republishBody.shareToken).toBe(firstPublishBody.shareToken);
+
+    const row = await readHandoutRow(handoutId);
+    expect(row.status).toBe('published');
+    expect(row.share_token).toBe(firstPublishBody.shareToken);
+    expect(row.archived_at).toBeNull();
+  });
+
   it('returns 401 when unauthenticated', async () => {
     vi.mocked(createAppSupabaseClient).mockReturnValue(unauthenticatedClient);
 
