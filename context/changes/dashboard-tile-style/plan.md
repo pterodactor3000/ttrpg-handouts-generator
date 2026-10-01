@@ -54,7 +54,7 @@ Tag overflow cannot be known on the server. Column width changes at the `sm` and
 
 The article height is a fixed height, shared by every card. A minimum height would let a long tag list grow the card. The column is: strip, then title, category label, and tag row at the top, then the footer on the bottom edge. Leftover space sits between the tag row and the footer. A handout with no tags omits the tag row and keeps that same outer height.
 
-The strip keeps `h-12` and `overflow-hidden`. Set `background-image` to the helper URL and `background-repeat: no-repeat`. Show the same border-image slice the handout frame uses, not file row 0. Fantasy and horror use the 80px slice from `global.css`. Scifi uses the 60px slice. Scale the image so that slice height maps onto the 48px strip, and align the slice to the strip. `background-position: top center` with `background-size: 100% auto` is the wrong crop: `horror-border.png` rows 0-36 are a cream margin, so a wide card paints cream and misses the ornament. `background-size: cover` would center the empty middle of the file and hide the frame.
+The strip keeps `h-12` and `overflow-hidden`. The article itself stays transparent and unbordered, because `.moon-chrome article` would paint `var(--card)` and a border behind the strip. The block under the strip is the solid `bg-card` tile, with the card border on its sides and bottom only. Set `background-image` to the helper URL and `background-repeat: no-repeat`. A linear gradient from transparent to `var(--card)`, plus an inset shadow in `var(--card)`, covers the bottom of the strip so the art fades into that solid block. Show the same border-image slice the handout frame uses, not file row 0. Fantasy and horror use the 80px slice from `global.css`. Scifi uses the 60px slice. Scale the image so that slice height maps onto the 48px strip, and align the slice to the strip. `background-position: top center` with `background-size: 100% auto` is the wrong crop: `horror-border.png` rows 0-36 are a cream margin, so a wide card paints cream and misses the ornament. `background-size: cover` would center the empty middle of the file and hide the frame.
 
 Check the strip at phone width and in the three-column grid. The category label under the title still names the style.
 
@@ -250,22 +250,22 @@ No data migration. Revert the branch to restore the gradient strip and the wrapp
 
 #### Automated
 
-- [x] 1.1 `getHandoutStripImageUrl` returns `/borders/fantasy-border.png`, `/borders/horror-border.png`, and `/borders/scifi-border.png` for those categories.
-- [x] 1.2 `npm test -- --project unit` passes `__tests__/lib/backgrounds.test.ts`.
+- [x] 1.1 `getHandoutStripImageUrl` returns `/borders/fantasy-border.png`, `/borders/horror-border.png`, and `/borders/scifi-border.png` for those categories. ba4fd05
+- [x] 1.2 `npm test -- --project unit` passes `__tests__/lib/backgrounds.test.ts`. ba4fd05
 
 ### Phase 2: Card frame
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes.
+- [x] 2.1 `npm run lint` passes.
 
 #### Manual
 
-- [ ] 2.2 Drafts, Published, and Archived cards share one height, including a card with no tags next to a card with tags.
-- [ ] 2.3 Fantasy, horror, and grimdark strips each show that category's border-image slice. Horror shows the ornament, not the cream margin at the top of the file. Confirm this at phone width and in the three-column grid.
-- [ ] 2.4 A long title is one line, ends with an ellipsis, and exposes the full title through the `title` attribute.
-- [ ] 2.5 The footer sits on the bottom edge. Edit, archive, delete, and copy still follow the handout status.
-- [ ] 2.6 At a phone width the single column uses that same card height.
+- [x] 2.2 Drafts, Published, and Archived cards share one height, including a card with no tags next to a card with tags.
+- [x] 2.3 Fantasy, horror, and grimdark strips each show that category's border-image slice. Horror shows the ornament, not the cream margin at the top of the file. Confirm this at phone width and in the three-column grid.
+- [x] 2.4 A long title is one line, ends with an ellipsis, and exposes the full title through the `title` attribute.
+- [x] 2.5 The footer sits on the bottom edge. Edit, archive, delete, and copy still follow the handout status.
+- [x] 2.6 At a phone width the single column uses that same card height.
 
 ### Phase 3: Tag overflow
 
