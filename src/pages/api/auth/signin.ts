@@ -17,7 +17,7 @@ async function readScheduledDeletion(email: string): Promise<string | null> {
   const result = (await adminClient
     .from('account_deletions')
     .select('scheduled_at')
-    .eq('email', email)
+    .eq('email', email.toLowerCase())
     .maybeSingle()) as AccountDeletionLookup;
 
   if (result.error) {
