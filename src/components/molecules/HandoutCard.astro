@@ -1,5 +1,6 @@
 ---
 import StatusBadge from '@/components/atoms/StatusBadge.astro';
+import { HandoutTagRow } from '@/components/molecules/HandoutTagRow';
 import ArchiveButton from '@/components/atoms/ArchiveButton';
 import CopyLinkButton from '@/components/atoms/CopyLinkButton';
 import DeleteHandoutButton from '@/components/atoms/DeleteHandoutButton';
@@ -73,17 +74,7 @@ const stripStyle = [
       <StatusBadge status={handout.status} />
     </div>
     <p class="text-muted-foreground mb-3 shrink-0 text-xs">{backgroundConfig.label}</p>
-    {
-      handout.tags.length > 0 && (
-        <div class="mb-3 flex h-8 shrink-0 flex-nowrap items-center gap-2 overflow-hidden">
-          {handout.tags.map((tag) => (
-            <span data-moon-chip class="shrink-0 px-3 py-1 whitespace-nowrap">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )
-    }
+    {handout.tags.length > 0 && <HandoutTagRow client:idle tags={handout.tags} handoutTitle={handout.title} />}
     <div
       class="border-border mt-auto flex shrink-0 items-center justify-between gap-2 border-t pt-3"
       data-handout-card-footer
