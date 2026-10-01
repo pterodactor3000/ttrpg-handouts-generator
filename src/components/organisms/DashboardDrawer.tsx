@@ -13,7 +13,7 @@ const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
   { value: 'archived', label: 'Archived' },
 ];
 
-const WIDE_VIEWPORT_QUERY = '(min-width: 768px)';
+const WIDE_VIEWPORT_QUERY = '(min-width: 1024px)';
 const PANEL_MOTION_MS = 200;
 
 function isStatusFilter(value: string | null): value is StatusFilter {
@@ -241,7 +241,7 @@ function DashboardDrawer() {
         type="button"
         size="icon"
         variant="ghost"
-        className="md:hidden [&_svg]:size-5"
+        className="lg:hidden [&_svg]:size-5"
         aria-expanded={isOverlayShown}
         aria-label={isOverlayShown ? 'Close sidebar' : 'Open sidebar'}
         onClick={handleOpenClick}

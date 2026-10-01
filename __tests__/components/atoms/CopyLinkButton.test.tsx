@@ -46,7 +46,7 @@ describe('CopyLinkButton', () => {
     });
   });
 
-  it('shows Copied! after a successful clipboard write', async () => {
+  it('shows a checkmark after a successful clipboard write', async () => {
     const user = userEvent.setup();
     render(<CopyLinkButton shareToken="share-token-123" />);
     installClipboardMock();
@@ -54,7 +54,8 @@ describe('CopyLinkButton', () => {
     await user.click(screen.getByRole('button', { name: /copy link/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /copied!/i })).toBeInTheDocument();
+      const copiedButton = screen.getByRole('button', { name: 'Copied' });
+      expect(copiedButton.querySelector('svg')).toBeInTheDocument();
     });
   });
 
