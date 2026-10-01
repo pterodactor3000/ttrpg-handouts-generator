@@ -85,12 +85,15 @@ function useFittedTagChips(tags: string[], overflowButtonClassName: string): Use
   const rowRef = useRef<HTMLDivElement>(null);
   const chipWidthsRef = useRef<number[]>([]);
   const [fitted, setFitted] = useState<FitTagChipsResult | null>(null);
+  const [measureGeneration, setMeasureGeneration] = useState(0);
 
   useLayoutEffect(() => {
     const row = rowRef.current;
     if (!row) {
       return;
     }
+
+    let isCancelled = false;
 
     const fitRow = () => {
       const chipNodes = row.querySelectorAll<HTMLElement>('[data-tag-chip]');
@@ -119,10 +122,27 @@ function useFittedTagChips(tags: string[], overflowButtonClassName: string): Use
     });
     observer.observe(row);
 
+    const fontSet = document.fonts;
+    if (fontSet.status !== 'loaded') {
+      fontSet.ready
+        .then(() => {
+          if (isCancelled) {
+            return;
+          }
+          chipWidthsRef.current = [];
+          setFitted(null);
+          setMeasureGeneration((currentGeneration) => currentGeneration + 1);
+        })
+        .catch((error: unknown) => {
+          console.error('Failed to remeasure tag chips after document fonts loaded', error);
+        });
+    }
+
     return () => {
+      isCancelled = true;
       observer.disconnect();
     };
-  }, [overflowButtonClassName, tags]);
+  }, [measureGeneration, overflowButtonClassName, tags]);
 
   return { rowRef, fitted };
 }
