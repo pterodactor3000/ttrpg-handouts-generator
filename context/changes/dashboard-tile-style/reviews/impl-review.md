@@ -3,25 +3,21 @@
 # Implementation Review: Dashboard Tile Style
 
 - **Plan**: context/changes/dashboard-tile-style/plan.md
-- **Scope**: completed phases 1 and 2
+- **Scope**: completed phases 1, 2, and 3
 - **Date**: 2026-10-01
 - **Verdict**: APPROVED
-- **Findings**: none
+- **Findings**: F1 ACCEPTED
 
 ## Grounding
 
-Commits ba4fd05 and 09b3dca against origin/main 588ec26. Read plan.md, plan-brief.md, change.md, lessons.md, backgrounds.ts, backgrounds.test.ts, HandoutCard.astro, and the border-image rules in global.css. `npm test -- --project unit __tests__/lib/backgrounds.test.ts` passed 12 tests. `npm run lint` exited 0 with 12 existing warnings.
-
-Phase 3 is still open and was outside this review.
-
-The three unplanned paths are `.gitignore`, `.npmrc.example`, and `.github/workflows/ci.yml` from dc58721. That chore stops tracking local npm auth. It does not touch the tile.
+Commits c4813c7 through 3274734 against 588ec26. Read plan.md, plan-brief.md, change.md, lessons.md, backgrounds.ts, fit-tag-chips.ts, useFittedTagChips.ts, HandoutTagRow.tsx, HandoutCard.astro, both unit tests, and dialog.tsx. `npm test -- --project unit` passed 18 tests in the strip and fit files. `npm run lint` exited 0 with 12 existing warnings.
 
 ## Verdicts
 
 | Dimension           | Verdict |
 | ------------------- | ------- |
 | Plan Adherence      | PASS    |
-| Scope Discipline    | PASS    |
+| Scope Discipline    | WARNING |
 | Safety and Quality  | PASS    |
 | Architecture        | PASS    |
 | Pattern Consistency | PASS    |
@@ -29,16 +25,26 @@ The three unplanned paths are `.gitignore`, `.npmrc.example`, and `.github/workf
 
 ## Findings
 
-None.
+### F1: Drawer breakpoint crosses an explicit exclusion
 
-`getHandoutStripImageUrl` returns the three border PNG paths and is exported at the end of `backgrounds.ts`. The unit test locks those paths and asserts they are distinct and not gradients. `cssBackground` is unchanged and still used by the editor, the share page, and the background picker.
+- **Severity:** WARNING
+- **Impact:** LOW
+- **Dimension:** Scope Discipline
+- **Location:** src/components/organisms/DashboardDrawer.tsx:16 and src/pages/dashboard.astro:69
+- **Detail:** The plan lists drawer behavior as out of scope. Commit 808aa1f moves the sidebar from `min-width: 768px` to `min-width: 1024px`, hides the menu control with `lg:hidden`, and widens the slot with `lg:w-64`. From 768px through 1023px the drawer is now an overlay. The tile contract itself matches the plan.
+- **Fix:** Restore the 768px query, `md:hidden`, and `md:w-64`.
+- **Alternative:** Keep 1024px. Strength: it matches the later request and the checked dashboard. Tradeoff: S-12's wide sidebar no longer starts at 768px, and the written S-12 plan still says 768px. Confidence: high. Blind spot: viewports between 768px and 1023px were checked once in this session, not across Drafts, Published, and Archived.
+- **Decision:** ACCEPTED. Keep the 1024px breakpoint.
 
-`HandoutCard` stays an `article` with `h-64`. The strip is `h-12`, uses the helper URL, and crops the 80px fantasy slice, the horror ornament at source rows 36-80, and the 60px scifi slice. The article is transparent and unbordered. The block under the strip is `bg-card`, with a side and bottom border and a fade from the strip into `var(--card)`. The title uses `truncate` and the `title` attribute. The tag row is one non-wrapping line. The footer uses `mt-auto` and the same status conditions as before.
+The other unplanned paths do not change the tile contract. `dc58721` stops tracking local npm auth. `808aa1f` also turns the copy control into a share icon with a checkmark after copy, and sets a pointer cursor on enabled buttons.
 
-Manual rows 2.2 through 2.6 are checked. The card code matches each one, and the manual pass was confirmed on the dashboard.
+Planned work matches. `getHandoutStripImageUrl` returns the three border paths and is exported at the end of `backgrounds.ts`. `cssBackground` is unchanged. `HandoutCard` stays an `article` at `h-64`. The strip crops the fantasy 80px slice, horror source rows 36-80, and the scifi 60px slice, then fades into the solid body. The title uses `truncate` and the `title` attribute. Tags mount `HandoutTagRow` only when the list is non-empty. The first render shows every chip and no `+N`. `fitTagChips` covers the empty, fit, overflow, and zero-visible cases, including a container width of 0. The dialog title is Tags, the description is the handout title, and the body lists every tag. Manual rows 2.2-2.6 and 3.5-3.9 are checked after confirmation in this thread.
 
 ## Triage
 
-No findings. Nothing to fix, skip, accept, or dismiss.
+- Fixed: 0
+- Skipped: 0
+- Accepted: 1
+- Dismissed: 0
 
-Change status stays `implementing`. Progress is 8/18, and phase 3 is still open.
+F1: ACCEPTED. The 1024px drawer breakpoint stays.
