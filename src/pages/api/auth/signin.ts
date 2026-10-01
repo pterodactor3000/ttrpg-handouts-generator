@@ -49,7 +49,7 @@ const POST: APIRoute = async (context) => {
       Sentry.captureException(error);
     }
 
-    if (email.length > 0) {
+    if (email.length > 0 && error.code === 'user_banned') {
       const scheduledAt = await readScheduledDeletion(email);
       if (scheduledAt) {
         return context.redirect(`/auth/signin?deletionAt=${encodeURIComponent(scheduledAt)}`);
