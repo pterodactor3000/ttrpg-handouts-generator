@@ -14,6 +14,7 @@ interface SharedHandoutRow {
   title: string;
   markdown_content: string;
   background_category: BackgroundCategory;
+  scheduled_deletion_at: string | null;
 }
 
 const { token } = Astro.params;
@@ -28,7 +29,7 @@ if (!supabase) {
 } else if (token) {
   const { data, error } = await supabase
     .from('handouts')
-    .select('title, markdown_content, background_category')
+    .select('title, markdown_content, background_category, scheduled_deletion_at')
     .eq('share_token', token)
     .in('status', ['published', 'archived'])
     .single();
@@ -61,8 +62,18 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
         class="flex min-h-screen w-full flex-col items-center px-4 py-8 md:py-12"
         style={`background: ${pageBackground}; background-size: cover; background-position: center;`}
       >
+        {handout.scheduled_deletion_at ? (
+          <p
+            class="bg-card text-foreground border-border mb-4 w-full max-w-2xl rounded-[0.5rem] border px-4 py-3 text-center text-sm"
+            data-share-deletion-instant={handout.scheduled_deletion_at}
+          >
+            Scheduled for deletion by <time id="share-deletion-date" />
+          </p>
+        ) : null}
         <HandoutArticle title={handout.title} html={renderedHtml} category={handout.background_category} />
-        <footer class="text-muted-foreground mt-8 text-center text-xs">TTRPG Handouts Generator</footer>
+        <footer class="text-muted-foreground mt-8 text-center text-xs">
+          <a href="/" class="hover:text-foreground hover:underline">TTRPG Handouts Generator</a>
+        </footer>
       </main>
     </Layout>
   ) : (
@@ -95,3 +106,21 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
     </Layout>
   )
 }
+
+<script>
+  import { formatDeletionInstant } from '@/lib/format-deletion-instant';
+
+  const message = document.querySelector('[data-share-deletion-instant]');
+  const dateElement = document.getElementById('share-deletion-date');
+  const instantValue = message?.getAttribute('data-share-deletion-instant');
+
+  if (dateElement && instantValue) {
+    const instant = new Date(instantValue);
+    if (!Number.isNaN(instant.getTime())) {
+      const resolvedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const timeZone = resolvedTimeZone.length > 0 ? resolvedTimeZone : 'UTC';
+      const locale = navigator.language.length > 0 ? navigator.language : 'en-US';
+      dateElement.textContent = formatDeletionInstant(instant, locale, timeZone);
+    }
+  }
+</script>

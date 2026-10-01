@@ -86,6 +86,7 @@ function ChangePasswordForm() {
         type={showCurrentPassword ? 'text' : 'password'}
         value={currentPassword}
         onChange={setCurrentPassword}
+        placeholder="Your current password"
         autoComplete="current-password"
         icon={<Lock className="size-4" />}
         endContent={
@@ -103,6 +104,7 @@ function ChangePasswordForm() {
         type={showNewPassword ? 'text' : 'password'}
         value={newPassword}
         onChange={setNewPassword}
+        placeholder="Min. 6 characters"
         autoComplete="new-password"
         icon={<Lock className="size-4" />}
         endContent={
@@ -120,6 +122,7 @@ function ChangePasswordForm() {
         type={showConfirmPassword ? 'text' : 'password'}
         value={confirmPassword}
         onChange={setConfirmPassword}
+        placeholder="Re-enter your password"
         autoComplete="new-password"
         error={fieldError}
         icon={<Lock className="size-4" />}

@@ -8,14 +8,16 @@ describe('formatDeletionInstant', () => {
   it('returns the previous local day in America/Los_Angeles for an instant just after midnight UTC', () => {
     const formatted = formatDeletionInstant(JUST_AFTER_MIDNIGHT_UTC, LOCALE, 'America/Los_Angeles');
 
-    expect(formatted).toContain('January 14');
-    expect(formatted).toContain('4:30');
+    expect(formatted).toContain('14 January');
+    expect(formatted).toContain('16:30');
+    expect(formatted).not.toMatch(/AM|PM/);
   });
 
   it('returns that same UTC day when the zone is UTC', () => {
     const formatted = formatDeletionInstant(JUST_AFTER_MIDNIGHT_UTC, LOCALE, 'UTC');
 
-    expect(formatted).toContain('January 15');
-    expect(formatted).toContain('12:30');
+    expect(formatted).toContain('15 January');
+    expect(formatted).toContain('00:30');
+    expect(formatted).not.toMatch(/AM|PM/);
   });
 });

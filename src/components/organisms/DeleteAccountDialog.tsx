@@ -123,6 +123,7 @@ function DeleteAccountDialog() {
             type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={setPassword}
+            placeholder="Your current password"
             autoComplete="current-password"
             icon={<Lock className="size-4" />}
             endContent={

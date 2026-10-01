@@ -1,14 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { buttonVariants } from '@/components/atoms/button';
 
 const scheduledAt = Astro.url.searchParams.get('at');
 ---
 
 <Layout title="Account closed" loadChromeFont>
   <div class="moon-chrome bg-background text-foreground flex min-h-screen items-center justify-center p-4">
-    <p class="max-w-lg text-center text-lg" data-deletion-instant={scheduledAt}>
-      The account is closed, and handouts are scheduled for deletion by <time id="account-closed-date"></time>.
-    </p>
+    <div class="flex max-w-lg flex-col items-center gap-4">
+      <p class="text-center text-lg" data-deletion-instant={scheduledAt}>
+        The account is closed, and handouts are scheduled for deletion by <time id="account-closed-date"></time>.
+      </p>
+      <a href="/" class={buttonVariants({ variant: 'link' })}>Back to home</a>
+    </div>
   </div>
 </Layout>
 

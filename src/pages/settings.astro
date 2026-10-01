@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { BackToDashboardButton } from '@/components/molecules/BackToDashboardButton';
 import { ChangePasswordForm } from '@/components/organisms/ChangePasswordForm';
 import { DeleteAccountDialog } from '@/components/organisms/DeleteAccountDialog';
 
@@ -10,8 +11,8 @@ const email = Astro.locals.user?.email ?? '';
   <div class="moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8">
     <div class="mx-auto flex w-full max-w-lg flex-col gap-8">
       <div>
-        <a href="/dashboard" class="text-primary text-sm hover:underline">Back to dashboard</a>
-        <h1 class="text-foreground mt-3 text-3xl font-bold tracking-tight">Settings</h1>
+        <BackToDashboardButton client:load />
+        <h1 class="text-foreground text-3xl font-bold tracking-tight">Settings</h1>
         <p class="text-muted-foreground mt-1">
           Signed in as <span class="text-foreground font-semibold">{email}</span>
         </p>
@@ -22,7 +23,7 @@ const email = Astro.locals.user?.email ?? '';
         <ChangePasswordForm client:load />
       </section>
 
-      <section class="border-border bg-card flex flex-col gap-4 rounded-[0.5rem] border p-6">
+      <section class="border-destructive bg-card shadow-destructive/30 flex flex-col gap-4 rounded-[0.5rem] border p-6 shadow-md">
         <h2 class="text-foreground text-xl font-semibold">Delete account</h2>
         <p class="text-muted-foreground text-sm">
           Closing the account signs you out. Shared handouts stay available for 30 days.

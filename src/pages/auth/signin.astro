@@ -4,6 +4,7 @@ import SignInForm from '@/components/organisms/SignInForm';
 import { Card, CardContent } from '@/components/atoms/card';
 
 const error = Astro.url.searchParams.get('error');
+const deletionAt = Astro.url.searchParams.get('deletionAt');
 ---
 
 <Layout title="Sign in" loadChromeFont>
@@ -15,7 +16,7 @@ const error = Astro.url.searchParams.get('error');
     <Card client:load className="border-border bg-card text-card-foreground w-full max-w-sm gap-0 py-0 shadow-sm">
       <CardContent className="p-8">
         <h1 class="text-foreground mb-6 text-center text-2xl font-bold">Sign in</h1>
-        <SignInForm serverError={error} />
+        <SignInForm serverError={error} deletionAt={deletionAt} />
         <p class="text-muted-foreground mt-4 text-center text-sm">
           Don't have an account? <a href="/auth/signup" class="text-primary hover:underline">Sign up</a>
         </p>
@@ -23,3 +24,30 @@ const error = Astro.url.searchParams.get('error');
     </Card>
   </div>
 </Layout>
+
+<script>
+  import { formatDeletionInstant } from '@/lib/format-deletion-instant';
+
+  function fillSignInDeletionDate(): void {
+    const message = document.querySelector('[data-signin-deletion-instant]');
+    const dateElement = document.getElementById('signin-deletion-date');
+    const instantValue = message?.getAttribute('data-signin-deletion-instant');
+
+    if (!dateElement || !instantValue) {
+      return;
+    }
+
+    const instant = new Date(instantValue);
+    if (Number.isNaN(instant.getTime())) {
+      return;
+    }
+
+    const resolvedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeZone = resolvedTimeZone.length > 0 ? resolvedTimeZone : 'UTC';
+    const locale = navigator.language.length > 0 ? navigator.language : 'en-US';
+    dateElement.textContent = formatDeletionInstant(instant, locale, timeZone);
+  }
+
+  fillSignInDeletionDate();
+  document.addEventListener('astro:page-load', fillSignInDeletionDate);
+</script>

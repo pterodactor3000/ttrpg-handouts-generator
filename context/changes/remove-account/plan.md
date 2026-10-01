@@ -348,29 +348,29 @@ Existing handouts gain a null `scheduled_deletion_at`. No backfill. GMs who have
 
 #### Automated
 
-- [x] 2.1 A password change with a wrong current password returns `401` and the old password still signs in.
-- [x] 2.2 A password change with mismatched confirmation is rejected and does not call `updateUser`.
-- [x] 2.3 A password change with the right current password lets the new password sign in.
-- [x] 2.4 `formatDeletionInstant` returns the previous local day for an instant just after midnight UTC when the zone is `America/Los_Angeles`.
-- [x] 2.5 `npm test -- --project unit` passes `__tests__/lib/format-deletion-instant.test.ts`, and `npm run lint` passes.
+- [x] 2.1 A password change with a wrong current password returns `401` and the old password still signs in. bf76260
+- [x] 2.2 A password change with mismatched confirmation is rejected and does not call `updateUser`. bf76260
+- [x] 2.3 A password change with the right current password lets the new password sign in. bf76260
+- [x] 2.4 `formatDeletionInstant` returns the previous local day for an instant just after midnight UTC when the zone is `America/Los_Angeles`. bf76260
+- [x] 2.5 `npm test -- --project unit` passes `__tests__/lib/format-deletion-instant.test.ts`, and `npm run lint` passes. bf76260
 
 #### Manual
 
-- [x] 2.6 The dashboard header opens `/settings`, and the page shows the signed-in email.
-- [x] 2.7 A wrong current password on the change form shows an error and leaves the GM signed in.
-- [x] 2.8 A matching new password signs in afterward, and the old password does not.
-- [x] 2.9 Delete with a wrong password keeps the dialog open and leaves the GM on `/settings`.
-- [x] 2.10 Delete with the right password lands on the goodbye page, signed out, with the local date and time in the sentence.
+- [x] 2.6 The dashboard header opens `/settings`, and the page shows the signed-in email. bf76260
+- [x] 2.7 A wrong current password on the change form shows an error and leaves the GM signed in. bf76260
+- [x] 2.8 A matching new password signs in afterward, and the old password does not. bf76260
+- [x] 2.9 Delete with a wrong password keeps the dialog open and leaves the GM on `/settings`. bf76260
+- [x] 2.10 Delete with the right password lands on the goodbye page, signed out, with the local date and time in the sentence. bf76260
 
 ### Phase 3: Visible dates
 
 #### Manual
 
-- [ ] 3.1 A shared handout whose GM is scheduled shows `Scheduled for deletion by {date}` above the content, and the handout body is still there.
-- [ ] 3.2 The date on that page matches the goodbye page's date in the same browser.
-- [ ] 3.3 A handout with no scheduled instant has no sentence.
-- [ ] 3.4 Signing in during the 30 days shows the closed-account sentence with the local date, and does not show the raw Supabase error.
-- [ ] 3.5 After the phrase is visible, reloading the share page still shows it.
+- [x] 3.1 A shared handout whose GM is scheduled shows `Scheduled for deletion by {date}` above the content, and the handout body is still there.
+- [x] 3.2 The date on that page matches the goodbye page's date in the same browser.
+- [x] 3.3 A handout with no scheduled instant has no sentence.
+- [x] 3.4 Signing in during the 30 days shows the closed-account sentence with the local date, and does not show the raw Supabase error.
+- [x] 3.5 After the phrase is visible, reloading the share page still shows it.
 
 ### Phase 4: Cron purge
 
