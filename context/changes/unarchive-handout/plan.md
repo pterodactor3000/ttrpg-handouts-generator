@@ -222,21 +222,21 @@ Apply `20261001190000_gm_restore_archived.sql` before the route tests. Existing 
 
 #### Automated
 
-- [x] 1.1 The migration applies, and `gm_restore_archived` lets the owner update an archived row to draft or published.
-- [x] 1.2 Draft restore sets `status` to `draft`, sets `archived_at` to null, and leaves `share_token` and `published_at` unchanged.
-- [x] 1.3 Published restore of a row that already has `share_token` keeps that token, sets `status` to `published`, and sets `archived_at` to null.
-- [x] 1.4 Published restore of a valid archived draft with a null token writes a token and sets `published_at`.
-- [x] 1.5 Published restore of an archived row with an empty title returns `422`, and the row stays archived with the same `archived_at`.
-- [x] 1.6 Another GM receives `404`, and the owner's row stays archived.
-- [x] 1.8 A direct owner update that leaves `status` as `archived` fails, and the row stays unchanged.
-- [x] 1.7 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
+- [x] 1.1 The migration applies, and `gm_restore_archived` lets the owner update an archived row to draft or published. d18c49b
+- [x] 1.2 Draft restore sets `status` to `draft`, sets `archived_at` to null, and leaves `share_token` and `published_at` unchanged. d18c49b
+- [x] 1.3 Published restore of a row that already has `share_token` keeps that token, sets `status` to `published`, and sets `archived_at` to null. d18c49b
+- [x] 1.4 Published restore of a valid archived draft with a null token writes a token and sets `published_at`. d18c49b
+- [x] 1.5 Published restore of an archived row with an empty title returns `422`, and the row stays archived with the same `archived_at`. d18c49b
+- [x] 1.6 Another GM receives `404`, and the owner's row stays archived. d18c49b
+- [x] 1.8 A direct owner update that leaves `status` as `archived` fails, and the row stays unchanged. d18c49b
+- [x] 1.7 `npm test -- --project integration` covers the cases above, and `npm run lint` passes. d18c49b
 
 ### Phase 2: Restore control
 
 #### Automated
 
-- [ ] 2.1 The mover tests in `__tests__/lib/archive-handout-card-dom.test.ts` pass.
-- [ ] 2.2 `npm test -- --project unit` passes, and `npm run lint` passes.
+- [x] 2.1 The mover tests in `__tests__/lib/archive-handout-card-dom.test.ts` pass.
+- [x] 2.2 `npm test -- --project unit` passes, and `npm run lint` passes.
 
 #### Manual
 
