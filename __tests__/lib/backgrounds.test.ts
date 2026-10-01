@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BACKGROUND_CONFIGS, BACKGROUND_CATEGORY_OPTIONS } from '@/lib/backgrounds';
+import { BACKGROUND_CONFIGS, BACKGROUND_CATEGORY_OPTIONS, getHandoutStripImageUrl } from '@/lib/backgrounds';
 import type { BackgroundCategory } from '@/types';
 
 const ALL_CATEGORIES: BackgroundCategory[] = ['fantasy', 'scifi', 'horror'];
@@ -23,4 +23,24 @@ describe('BACKGROUND_CONFIGS', () => {
       expect(BACKGROUND_CONFIGS[category].label.trim()).not.toBe('');
     });
   }
+});
+
+const EXPECTED_STRIP_IMAGE_URLS: Record<BackgroundCategory, string> = {
+  fantasy: '/borders/fantasy-border.png',
+  horror: '/borders/horror-border.png',
+  scifi: '/borders/scifi-border.png',
+};
+
+describe('getHandoutStripImageUrl', () => {
+  for (const category of ALL_CATEGORIES) {
+    it(`returns the border PNG for ${category}`, () => {
+      expect(getHandoutStripImageUrl(category)).toBe(EXPECTED_STRIP_IMAGE_URLS[category]);
+      expect(getHandoutStripImageUrl(category)).not.toContain('gradient');
+    });
+  }
+
+  it('returns a distinct URL for each category', () => {
+    const stripImageUrls = ALL_CATEGORIES.map((category) => getHandoutStripImageUrl(category));
+    expect(new Set(stripImageUrls).size).toBe(ALL_CATEGORIES.length);
+  });
 });

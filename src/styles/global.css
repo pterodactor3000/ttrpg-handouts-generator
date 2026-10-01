@@ -147,6 +147,17 @@
   color: var(--foreground);
 }
 
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+a[data-slot='button'] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
 /* Control geometry from the Moon Button, Text input, Chip, and Modal boards.
    Scoped so .handout-article and pages outside .moon-chrome stay on the warm palette. */
 .moon-chrome [data-slot='button'] {

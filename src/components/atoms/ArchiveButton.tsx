@@ -56,7 +56,7 @@ const ArchiveButton = ({ handoutId, handoutTitle }: ArchiveButtonProps) => {
           setConfirmOpen(true);
         }}
         className={cn(
-          'border-border bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground',
+          'border-border bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer',
         )}
       >
         Archive

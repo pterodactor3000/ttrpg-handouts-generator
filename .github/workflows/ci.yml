@@ -17,6 +17,9 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Configure GitHub Packages auth
+        run: cp .npmrc.example .npmrc
+
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

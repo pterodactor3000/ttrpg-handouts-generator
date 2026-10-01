@@ -82,6 +82,7 @@ describe('DashboardDrawer', () => {
     stubMatchMedia(true);
     renderDrawerFixture();
 
+    expect(window.matchMedia).toHaveBeenCalledWith('(min-width: 1024px)');
     expect(screen.getByRole('button', { name: 'Published' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Pin sidebar' })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Published' }));

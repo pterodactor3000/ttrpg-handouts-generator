@@ -20,6 +20,9 @@ pnpm-debug.log*
 .env.production
 .env.test
 
+# local npm auth; the registry lines live in .npmrc.example
+.npmrc
+
 # cloudflare
 .dev.vars
 .wrangler/
