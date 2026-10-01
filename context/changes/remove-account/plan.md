@@ -337,12 +337,12 @@ Existing handouts gain a null `scheduled_deletion_at`. No backfill. GMs who have
 
 #### Automated
 
-- [ ] 1.1 The migration applies, `account_deletions` exists with deny policies for `anon` and `authenticated` on `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, and `handouts.scheduled_deletion_at` is nullable.
-- [ ] 1.2 A wrong password returns `401` and inserts no `account_deletions` row.
-- [ ] 1.3 A correct password inserts one row that stores that GM's email, stamps draft, published, and archived handouts for that GM, and leaves the auth user in place.
-- [ ] 1.4 After a successful request, `signInWithPassword` for that user fails, and a share-token read of a published handout still returns the row, including `scheduled_deletion_at`.
-- [ ] 1.5 A second successful request keeps the original `scheduled_at`.
-- [ ] 1.6 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
+- [x] 1.1 The migration applies, `account_deletions` exists with deny policies for `anon` and `authenticated` on `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, and `handouts.scheduled_deletion_at` is nullable.
+- [x] 1.2 A wrong password returns `401` and inserts no `account_deletions` row.
+- [x] 1.3 A correct password inserts one row that stores that GM's email, stamps draft, published, and archived handouts for that GM, and leaves the auth user in place.
+- [x] 1.4 After a successful request, `signInWithPassword` for that user fails, and a share-token read of a published handout still returns the row, including `scheduled_deletion_at`.
+- [x] 1.5 A second successful request keeps the original `scheduled_at`.
+- [x] 1.6 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
 
 ### Phase 2: Settings
 
