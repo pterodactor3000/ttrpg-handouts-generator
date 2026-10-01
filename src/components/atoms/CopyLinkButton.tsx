@@ -44,6 +44,10 @@ const CopyLinkButton = ({ shareToken }: CopyLinkButtonProps) => {
   const handleCopyLink = async () => {
     const shareUrl = `${window.location.origin}/share/${shareToken}`;
 
+    if (resetTimeoutRef.current !== null) {
+      clearTimeout(resetTimeoutRef.current);
+      resetTimeoutRef.current = null;
+    }
     setCopyButtonState('copying');
     try {
       await navigator.clipboard.writeText(shareUrl);
