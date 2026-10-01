@@ -337,30 +337,30 @@ Existing handouts gain a null `scheduled_deletion_at`. No backfill. GMs who have
 
 #### Automated
 
-- [x] 1.1 The migration applies, `account_deletions` exists with deny policies for `anon` and `authenticated` on `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, and `handouts.scheduled_deletion_at` is nullable.
-- [x] 1.2 A wrong password returns `401` and inserts no `account_deletions` row.
-- [x] 1.3 A correct password inserts one row that stores that GM's email, stamps draft, published, and archived handouts for that GM, and leaves the auth user in place.
-- [x] 1.4 After a successful request, `signInWithPassword` for that user fails, and a share-token read of a published handout still returns the row, including `scheduled_deletion_at`.
-- [x] 1.5 A second successful request keeps the original `scheduled_at`.
-- [x] 1.6 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
+- [x] 1.1 The migration applies, `account_deletions` exists with deny policies for `anon` and `authenticated` on `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, and `handouts.scheduled_deletion_at` is nullable. 8aea0c9
+- [x] 1.2 A wrong password returns `401` and inserts no `account_deletions` row. 8aea0c9
+- [x] 1.3 A correct password inserts one row that stores that GM's email, stamps draft, published, and archived handouts for that GM, and leaves the auth user in place. 8aea0c9
+- [x] 1.4 After a successful request, `signInWithPassword` for that user fails, and a share-token read of a published handout still returns the row, including `scheduled_deletion_at`. 8aea0c9
+- [x] 1.5 A second successful request keeps the original `scheduled_at`. 8aea0c9
+- [x] 1.6 `npm test -- --project integration` covers the cases above, and `npm run lint` passes. 8aea0c9
 
 ### Phase 2: Settings
 
 #### Automated
 
-- [ ] 2.1 A password change with a wrong current password returns `401` and the old password still signs in.
-- [ ] 2.2 A password change with mismatched confirmation is rejected and does not call `updateUser`.
-- [ ] 2.3 A password change with the right current password lets the new password sign in.
-- [ ] 2.4 `formatDeletionInstant` returns the previous local day for an instant just after midnight UTC when the zone is `America/Los_Angeles`.
-- [ ] 2.5 `npm test -- --project unit` passes `__tests__/lib/format-deletion-instant.test.ts`, and `npm run lint` passes.
+- [x] 2.1 A password change with a wrong current password returns `401` and the old password still signs in.
+- [x] 2.2 A password change with mismatched confirmation is rejected and does not call `updateUser`.
+- [x] 2.3 A password change with the right current password lets the new password sign in.
+- [x] 2.4 `formatDeletionInstant` returns the previous local day for an instant just after midnight UTC when the zone is `America/Los_Angeles`.
+- [x] 2.5 `npm test -- --project unit` passes `__tests__/lib/format-deletion-instant.test.ts`, and `npm run lint` passes.
 
 #### Manual
 
-- [ ] 2.6 The dashboard header opens `/settings`, and the page shows the signed-in email.
-- [ ] 2.7 A wrong current password on the change form shows an error and leaves the GM signed in.
-- [ ] 2.8 A matching new password signs in afterward, and the old password does not.
-- [ ] 2.9 Delete with a wrong password keeps the dialog open and leaves the GM on `/settings`.
-- [ ] 2.10 Delete with the right password lands on the goodbye page, signed out, with the local date and time in the sentence.
+- [x] 2.6 The dashboard header opens `/settings`, and the page shows the signed-in email.
+- [x] 2.7 A wrong current password on the change form shows an error and leaves the GM signed in.
+- [x] 2.8 A matching new password signs in afterward, and the old password does not.
+- [x] 2.9 Delete with a wrong password keeps the dialog open and leaves the GM on `/settings`.
+- [x] 2.10 Delete with the right password lands on the goodbye page, signed out, with the local date and time in the sentence.
 
 ### Phase 3: Visible dates
 

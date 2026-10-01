@@ -3,9 +3,9 @@ import * as Sentry from '@sentry/cloudflare';
 import { createClient } from '@/lib/supabase';
 
 // All /handouts/* routes require authentication.
-// The public share view lives at /share/[token] — outside this prefix intentionally.
-// Add new protected prefixes here; the middleware does a startsWith check.
-const PROTECTED_ROUTES = ['/dashboard', '/handouts'];
+// The public share view lives at /share/[token], outside this prefix intentionally.
+// Add new protected prefixes here. The middleware does a startsWith check.
+const PROTECTED_ROUTES = ['/dashboard', '/handouts', '/settings'];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = createClient(context.request.headers, context.cookies);

@@ -1,0 +1,31 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const scheduledAt = Astro.url.searchParams.get('at');
+---
+
+<Layout title="Account closed" loadChromeFont>
+  <div class="moon-chrome bg-background text-foreground flex min-h-screen items-center justify-center p-4">
+    <p class="max-w-lg text-center text-lg" data-deletion-instant={scheduledAt}>
+      The account is closed, and handouts are scheduled for deletion by <time id="account-closed-date"></time>.
+    </p>
+  </div>
+</Layout>
+
+<script>
+  import { formatDeletionInstant } from '@/lib/format-deletion-instant';
+
+  const message = document.querySelector('[data-deletion-instant]');
+  const dateElement = document.getElementById('account-closed-date');
+  const instantValue = message?.getAttribute('data-deletion-instant');
+
+  if (dateElement && instantValue) {
+    const instant = new Date(instantValue);
+    if (!Number.isNaN(instant.getTime())) {
+      const resolvedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const timeZone = resolvedTimeZone.length > 0 ? resolvedTimeZone : 'UTC';
+      const locale = navigator.language.length > 0 ? navigator.language : 'en-US';
+      dateElement.textContent = formatDeletionInstant(instant, locale, timeZone);
+    }
+  }
+</script>
