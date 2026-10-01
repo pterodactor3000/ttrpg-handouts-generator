@@ -1,7 +1,7 @@
 ---
 change_id: remove-account
 title: Close an account and purge it after 30 days
-status: implementing
+status: implemented
 created: 2026-10-01
 updated: 2026-10-01
 archived_at: null

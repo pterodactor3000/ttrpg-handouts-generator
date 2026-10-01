@@ -376,13 +376,13 @@ Existing handouts gain a null `scheduled_deletion_at`. No backfill. GMs who have
 
 #### Automated
 
-- [x] 4.1 `purgeScheduledAccounts` with `now` before `scheduled_at` deletes no user and leaves the handout.
-- [x] 4.2 `purgeScheduledAccounts` with `now` after `scheduled_at` deletes the auth user, the handouts, and the `account_deletions` row.
-- [x] 4.3 A second call after that deletion completes without throwing.
-- [x] 4.4 A share-token read after the purge returns no row.
-- [x] 4.5 `npm test -- --project integration` covers the cases above, and `npm run lint` passes.
-- [x] 4.6 `npm test -- --project integration` confirms a past instant removes that GM's share link.
+- [x] 4.1 `purgeScheduledAccounts` with `now` before `scheduled_at` deletes no user and leaves the handout. a90063c
+- [x] 4.2 `purgeScheduledAccounts` with `now` after `scheduled_at` deletes the auth user, the handouts, and the `account_deletions` row. a90063c
+- [x] 4.3 A second call after that deletion completes without throwing. a90063c
+- [x] 4.4 A share-token read after the purge returns no row. a90063c
+- [x] 4.5 `npm test -- --project integration` covers the cases above, and `npm run lint` passes. a90063c
+- [x] 4.6 `npm test -- --project integration` confirms a past instant removes that GM's share link. a90063c
 
 #### Manual
 
-- [x] 4.7 `wrangler.jsonc` lists the daily cron, and the Worker export includes `scheduled`.
+- [x] 4.7 `wrangler.jsonc` lists the daily cron, and the Worker export includes `scheduled`. a90063c
