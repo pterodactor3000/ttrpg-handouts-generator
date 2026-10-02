@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import * as Sentry from '@sentry/astro';
-import type { BackgroundCategory, InitialHandout } from '@/types';
+import type { BackgroundCategory, HandoutStatus, InitialHandout } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
@@ -50,6 +50,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [shareToken, setShareToken] = useState<string | null>(initialHandout?.shareToken ?? null);
+  const [handoutStatus, setHandoutStatus] = useState<HandoutStatus>(initialHandout?.status ?? 'draft');
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [confirmBackOpen, setConfirmBackOpen] = useState(false);
   const [savedSnapshot, setSavedSnapshot] = useState(() =>
@@ -128,7 +129,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
   const handleShare = async () => {
     if (!handoutId || isDirty) return;
 
-    if (shareToken) {
+    if (shareToken && handoutStatus === 'published') {
       setShareDialogOpen(true);
       return;
     }
@@ -148,6 +149,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
 
       if ('shareToken' in responseData) {
         setShareToken(responseData.shareToken);
+        setHandoutStatus('published');
         setShareDialogOpen(true);
       }
     } catch (error) {
@@ -259,10 +261,10 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
               </Button>
             </div>
 
-            {handoutId && !shareToken && (
+            {handoutId && handoutStatus !== 'published' && (
               <p className="text-muted-foreground text-xs">Draft saved — click Share to publish.</p>
             )}
-            {shareToken && (
+            {handoutStatus === 'published' && shareToken && (
               <p className="text-primary text-xs">
                 Published —{' '}
                 <button

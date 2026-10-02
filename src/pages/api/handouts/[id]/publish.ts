@@ -9,6 +9,8 @@ interface HandoutPublishRow {
   title: string;
   markdown_content: string;
   background_category: string | null;
+  share_token: string | null;
+  published_at: string | null;
 }
 
 interface HandoutFetchResult {
@@ -46,7 +48,7 @@ export const POST: APIRoute = async (context) => {
 
   const { data: existingHandout, error: fetchError } = (await supabase
     .from('handouts')
-    .select('title, markdown_content, background_category')
+    .select('title, markdown_content, background_category, share_token, published_at')
     .eq('id', handoutId)
     .eq('gm_id', user.id)
     .eq('status', 'draft')
@@ -76,8 +78,8 @@ export const POST: APIRoute = async (context) => {
     return new Response(JSON.stringify({ error: validationErrors.join(' ') }), { status: 422 });
   }
 
-  const shareToken = crypto.randomUUID();
-  const publishedAt = new Date().toISOString();
+  const shareToken = existingHandout.share_token ?? crypto.randomUUID();
+  const publishedAt = existingHandout.published_at ?? new Date().toISOString();
 
   const { data: updatedHandout, error: updateError } = (await supabase
     .from('handouts')

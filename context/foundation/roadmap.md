@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-09-29
+updated: 2026-10-02
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
@@ -44,7 +44,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-08 | `landing-page`                       | see the app name on the landing page and a clear call-to-action to start the login flow (no auth required to view the page)                                                                                   | —             | FR-015, FR-001                                                 | done     |
 | S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                    | S-01, S-07    | FR-005, FR-009, FR-011                                         | done     |
 | S-10 | `square-ui-containers`               | see all UI containers (cards, modals, inputs, buttons) with squared corners — reduced border-radius consistently site-wide                                                                                    | S-05          | FR-012                                                         | done     |
-| S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | ready    |
+| S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | done     |
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | ready    |
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | ready    |
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | proposed |
@@ -260,7 +260,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Uses three static background assets already shipped in S-09; no new data fetch. Main risk: uniform sizing may clip long titles — ellipsis truncation required. Fixed-height top strip as `background-image` CSS; verify mobile dashboard layout.
-- **Status:** ready
+- **Status:** done
 
 ### S-12: Dashboard drawer navigation
 
@@ -350,3 +350,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-09: GM (and players on the shared read-only view) see each of the three style categories rendered over a new, themed pre-loaded background image: old paper texture for high fantasy, green-tinted CRT display for grimdark, and newspaper print for postapo — in both the GM preview and the shared player view.** — Archived 2026-06-19 → `context/archive/2026-06-17-retheme-backgrounds/`. Lesson: —.
 - **S-10: GM (and players on the shared read-only page) see all UI containers — cards, modals, inputs, buttons, dialogs, dropdowns, and toasts — rendered with a squared, angular aesthetic (significantly reduced border-radius) consistently across every screen (dashboard, new-handout, preview, shared view).** — Archived 2026-07-19 → `context/archive/2026-07-19-square-ui-containers/`. Lesson: —.
 - **S-03: GM can open an existing handout from the dashboard, modify markdown text, background category, or tags, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link per Business Logic).** — Archived 2026-09-29 → `context/archive/2026-06-21-s-03/`. Lesson: —.
+- **S-11: GM sees dashboard handout tiles with uniform width and height across all cards, each tile topped by a decorative strip showing the handout's themed background texture (same assets as preview/shared view) in place of the current color bar — replacing the colored status bar with the handout border/style treatment.** — Archived 2026-10-02 → `context/archive/2026-09-30-dashboard-tile-style/`. Lesson: —.

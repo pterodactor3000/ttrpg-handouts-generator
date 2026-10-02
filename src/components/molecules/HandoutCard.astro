@@ -4,6 +4,7 @@ import { HandoutTagRow } from '@/components/molecules/HandoutTagRow';
 import ArchiveButton from '@/components/atoms/ArchiveButton';
 import CopyLinkButton from '@/components/atoms/CopyLinkButton';
 import DeleteHandoutButton from '@/components/atoms/DeleteHandoutButton';
+import RestoreHandoutButton from '@/components/atoms/RestoreHandoutButton';
 import { BACKGROUND_CONFIGS, getHandoutStripImageUrl } from '@/lib/backgrounds';
 import type { HandoutListItem } from '@/lib/handout-list';
 import type { BackgroundCategory } from '@/types';
@@ -61,12 +62,17 @@ const stripStyle = [
             href={`/share/${handout.share_token}`}
             target="_blank"
             title={handout.title}
+            data-handout-title
             class="text-foreground hover:text-primary min-w-0 flex-1 truncate text-lg font-semibold transition-colors"
           >
             {handout.title}
           </a>
         ) : (
-          <h3 class="text-foreground min-w-0 flex-1 truncate text-lg font-semibold" title={handout.title}>
+          <h3
+            class="text-foreground min-w-0 flex-1 truncate text-lg font-semibold"
+            title={handout.title}
+            data-handout-title
+          >
             {handout.title}
           </h3>
         )
@@ -80,19 +86,15 @@ const stripStyle = [
       data-handout-card-footer
     >
       <div class="flex items-center gap-2">
-        {
-          handout.status !== 'archived' && (
-            <span data-handout-edit-action>
-              <a
-                href={`/handouts/${handout.id}/edit`}
-                class="border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground inline-flex items-center rounded-[0.5rem] border px-3 py-1.5 text-sm transition-colors"
-                data-slot="button"
-              >
-                Edit
-              </a>
-            </span>
-          )
-        }
+        <span data-handout-edit-action class:list={[handout.status === 'archived' && 'hidden']}>
+          <a
+            href={`/handouts/${handout.id}/edit`}
+            class="border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground inline-flex items-center rounded-[0.5rem] border px-3 py-1.5 text-sm transition-colors"
+            data-slot="button"
+          >
+            Edit
+          </a>
+        </span>
         <span data-handout-archive-action class:list={[handout.status === 'archived' && 'hidden']}>
           <ArchiveButton handoutId={handout.id} handoutTitle={handout.title} client:idle />
         </span>
@@ -104,8 +106,17 @@ const stripStyle = [
             client:idle
           />
         </span>
+        <span data-handout-restore-action class:list={[handout.status !== 'archived' && 'hidden']}>
+          <RestoreHandoutButton handoutId={handout.id} handoutTitle={handout.title} client:idle />
+        </span>
       </div>
-      {handout.share_token && <CopyLinkButton shareToken={handout.share_token} client:idle />}
+      {
+        handout.share_token && handout.status !== 'draft' && (
+          <span data-handout-copy-action>
+            <CopyLinkButton shareToken={handout.share_token} client:idle />
+          </span>
+        )
+      }
     </div>
   </div>
 </article>
