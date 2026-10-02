@@ -198,9 +198,9 @@ Settings gets the toggle. Choosing a theme stores it, updates the current page, 
 
 #### Manual
 
-- [x] 1.8 With `localStorage` cleared, a light system theme shows Tower of Light on `/dashboard` and `/auth/signin`. A dark system theme shows Darkest of Mines on those two pages.
-- [x] 1.9 After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` and `/` are both Darkest of Mines, and controls keep their corner radius.
-- [x] 1.10 An existing shared handout at `/share/<token>` matches its look from before this phase, including category background and font.
+- [x] 1.8 With `localStorage` cleared, a light system theme shows Tower of Light on `/dashboard` and `/auth/signin`. A dark system theme shows Darkest of Mines on those two pages. a3cc754
+- [x] 1.9 After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` and `/` are both Darkest of Mines, and controls keep their corner radius. a3cc754
+- [x] 1.10 An existing shared handout at `/share/<token>` matches its look from before this phase, including category background and font. a3cc754
 
 ### Phase 2: Theme switch
 
@@ -211,7 +211,7 @@ Settings gets the toggle. Choosing a theme stores it, updates the current page, 
 
 #### Manual
 
-- [ ] 2.3 On `/settings`, the toggle shows the active theme name. `/dashboard`, `/handouts/new`, and an edit URL do not show it.
-- [ ] 2.4 Choosing the other theme updates the chrome without a navigation. A new tab and a later visit open `/dashboard` on that same theme.
-- [ ] 2.5 After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` use that same theme.
-- [ ] 2.6 The editor preview keeps the selected category background and font. A shared handout is unchanged.
+- [x] 2.3 On `/settings`, the toggle shows the active theme name. `/dashboard`, `/handouts/new`, and an edit URL do not show it.
+- [x] 2.4 Choosing the other theme updates the chrome without a navigation. A new tab and a later visit open `/dashboard` on that same theme.
+- [x] 2.5 After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` use that same theme.
+- [x] 2.6 The editor preview keeps the selected category background and font. A shared handout is unchanged.
