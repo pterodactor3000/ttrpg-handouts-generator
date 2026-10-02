@@ -45,9 +45,9 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-09 | `retheme-backgrounds`                | see new pre-loaded background images per style category — old paper for high fantasy, green-tinted CRT for grimdark, newspaper for postapo — in both the preview and shared read-only view                    | S-01, S-07    | FR-005, FR-009, FR-011                                         | done     |
 | S-10 | `square-ui-containers`               | see all UI containers (cards, modals, inputs, buttons) with squared corners — reduced border-radius consistently site-wide                                                                                    | S-05          | FR-012                                                         | done     |
 | S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | done     |
-| S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | ready    |
-| S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | ready    |
-| S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | proposed |
+| S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | done     |
+| S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
+| S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
 
 ## Streams
 
@@ -273,7 +273,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Should the Archived tab be read-only (no edit affordance shown) or show an unarchive action? — Owner: user. Block: no (S-14 adds the action when it lands).
 - **Risk:** Status filter queries the existing `status` column from F-01 — no schema change. Main risk: pin/persist state (session in-memory vs. localStorage); in-memory is simplest for v1. Drawer overlay on mobile must not break existing tile grid layout.
-- **Status:** ready
+- **Status:** done
 
 ### S-13: Remove account
 
@@ -286,7 +286,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Purge mechanism: pg_cron on Supabase vs. Cloudflare CRON Worker vs. deferred manual cleanup? — Owner: user. Block: no.
 - **Risk:** Touches Supabase `auth.users` deletion — must use service-role admin API server-side only. Soft-delete flag must be handled in RLS so deactivated GMs cannot read their own data during the 30-day window while shared links (anon token path) still work until purge. Scheduled purge is the biggest open decision for `/10x-plan`.
-- **Status:** ready
+- **Status:** done
 
 ### S-14: Unarchive handout
 
@@ -298,7 +298,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** PRD Business Logic states archived handouts are "read-only for the GM — no further edits allowed"; this slice deliberately extends the state machine to allow archived → draft/published transition. `/10x-plan` must update RLS write policies if F-01 currently blocks GM writes on archived rows. Restoring to Published without a new token preserves bookmarked player links — desirable per user confirmation.
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -351,3 +351,6 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-10: GM (and players on the shared read-only page) see all UI containers — cards, modals, inputs, buttons, dialogs, dropdowns, and toasts — rendered with a squared, angular aesthetic (significantly reduced border-radius) consistently across every screen (dashboard, new-handout, preview, shared view).** — Archived 2026-07-19 → `context/archive/2026-07-19-square-ui-containers/`. Lesson: —.
 - **S-03: GM can open an existing handout from the dashboard, modify markdown text, background category, or tags, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link per Business Logic).** — Archived 2026-09-29 → `context/archive/2026-06-21-s-03/`. Lesson: —.
 - **S-11: GM sees dashboard handout tiles with uniform width and height across all cards, each tile topped by a decorative strip showing the handout's themed background texture (same assets as preview/shared view) in place of the current color bar — replacing the colored status bar with the handout border/style treatment.** — Archived 2026-10-02 → `context/archive/2026-09-30-dashboard-tile-style/`. Lesson: —.
+- **S-12: GM can open a left-side slide-in navigation drawer from the dashboard (triggered by a toggle button) with three filter options — Drafts, Published, Archived — to view only handouts in that state; a pin button makes the drawer persist as a fixed sidebar for the session.** — Archived 2026-10-02 → `context/archive/2026-09-29-dashboard-drawer-nav/`. Lesson: —.
+- **S-13: GM can request account deletion from account settings; the account is immediately deactivated (sign-in blocked), all data is retained for 30 days and then permanently purged (handouts + auth record), and shared links go dead after the purge window. No reactivation flow in scope.** — Archived 2026-10-02 → `context/archive/2026-10-01-remove-account/`. Lesson: —.
+- **S-14: GM can select an archived handout from the Archived tab (introduced by S-12) and restore it to either Draft or Published state via a choice prompt; restoring to Published re-activates the existing share link immediately (same `share_token`, not regenerated).** — Archived 2026-10-02 → `context/archive/2026-10-01-unarchive-handout/`. Lesson: —.
