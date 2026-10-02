@@ -2,7 +2,7 @@
 
 ## Overview
 
-S-15 lets a signed-in GM switch the dashboard, the new-handout page, the edit page, and Settings between Tower of Light and Darkest of Mines. The browser remembers that choice until the GM changes it. Until they choose, those pages follow the system theme. Landing, sign-in, sign-up, and confirm-email follow the system theme and ignore the stored choice. This covers FR-016, with FR-012 and FR-015 as the cited visual and landing requirements.
+S-15 lets a signed-in GM switch between Tower of Light and Darkest of Mines. The browser remembers that choice until the GM changes it, and every view uses it. Until they choose, pages follow the system theme. The control is one toggle on Settings. Darkest of Mines is darker than the warm `#333333` chrome, and both themes keep the same corner radius. This covers FR-016, with FR-012 and FR-015 as the cited visual and landing requirements.
 
 ## Current State Analysis
 
@@ -23,26 +23,25 @@ Nothing reads `prefers-color-scheme` or stores a theme. `next-themes` is only im
 
 ## Desired End State
 
-A GM with no stored choice sees Tower of Light when the system theme is light and Darkest of Mines when it is dark, on the landing page, the auth pages, and the four signed-in screens. After they pick a theme on one of those four screens, the browser keeps it. The other three screens, a new tab, and a later visit show that choice. Landing and auth keep following the system theme. The page paints the resolved theme before the first content paint. The shared handout and the category preview art do not change. The account-closed page stays on the current light chrome.
+A GM with no stored choice sees Tower of Light when the system theme is light and Darkest of Mines when it is dark. After they flip the toggle, every view uses that choice, including landing, auth, account-closed, and a later visit. The page paints the resolved theme before the first content paint. Darkest of Mines is near-black chrome, darker than `#333333`, and buttons, inputs, cards, and dialogs keep the same radius as Tower of Light. Handout category backgrounds, borders, and fonts do not change.
 
 ## What We're NOT Doing
 
-- Restyling `/share/<token>`, including the not-found state.
 - Changing High Fantasy, Eldritch, or Grimdark backgrounds, borders, or fonts.
 - Adding a third theme.
-- Putting the control on the landing page, the auth pages, or the account-closed page.
+- Putting the toggle on the dashboard, the new-handout page, the edit page, landing, auth, or account-closed.
 - Storing the choice on the server or on the GM account.
 - Following a live operating-system theme change without a new page load when no choice is stored. The next load reads the system theme.
 
 ## Implementation Approach
 
-Keep `moon-chrome` on the existing shells and portaled dialogs. Scope those rules so they apply unless `<html data-chrome-theme="darkest-of-mines">` is set. Tower of Light is that Moon chrome. Darkest of Mines is the unscoped `:root` palette. A blocking inline script in `Layout` sets the attribute before the body is parsed. `choice` mode may use the stored value. `system` mode ignores it. The switch writes `localStorage` and the same attribute, so the CSS updates without a navigation.
+Keep `moon-chrome` on the existing shells and portaled dialogs. Tower of Light tokens sit on `html:not([data-chrome-theme="darkest-of-mines"])`. Darkest of Mines tokens sit on `html[data-chrome-theme="darkest-of-mines"]` and are darker than `#333333`. Corner radius, control size, and the other geometry rules stay on `.moon-chrome` in both themes. A blocking inline script in `Layout` always sets the attribute before the body is parsed. A stored id wins. Otherwise the script uses the system theme. The toggle writes `localStorage` and the same attribute, so the CSS updates without a navigation.
 
 ## Critical Implementation Details
 
 The boot script has to be an inline classic script in `<head>`, not a bundled module. A module is deferred, and the body would paint before the attribute exists. With the script in the head, the attribute is already on `<html>` when the shell is parsed, so a dark choice does not flash the light chrome.
 
-Account-closed has `moon-chrome` and must stay light. It does not receive the boot script, so it has no `data-chrome-theme`. The Moon rules therefore use `html:not([data-chrome-theme="darkest-of-mines"]) .moon-chrome`, not a rule that requires `tower-of-light`. An absent attribute keeps today's light chrome.
+Every page that uses `Layout` runs the boot script, so a stored choice reaches landing, auth, account-closed, and share chrome. An absent attribute still matches `html:not([data-chrome-theme="darkest-of-mines"])`, which keeps Tower of Light until the script sets the attribute. Geometry rules are not inside that selector, so Darkest of Mines keeps the radius.
 
 The inline script cannot import `resolveChromeTheme`. It repeats those branches. The storage key and both theme ids in `Layout.astro` must be the same strings the module exports. The unit test reads the layout source and fails if they drift.
 
@@ -52,7 +51,7 @@ Do not change `--palette-*` or `.handout-article` rules. Category art reads thos
 
 ### Overview
 
-Landing, auth, and the four signed-in screens resolve Tower of Light or Darkest of Mines before first paint. A stored choice overrides the system theme only when the layout is in `choice` mode.
+Every view resolves Tower of Light or Darkest of Mines before first paint. A stored choice overrides the system theme on all of them.
 
 ### Changes Required
 
@@ -68,19 +67,17 @@ Landing, auth, and the four signed-in screens resolve Tower of Light or Darkest 
 
 **File:** `src/layouts/Layout.astro`
 
-**Intent:** Set the theme attribute before the shell paints, and only on pages that asked for it.
+**Intent:** Set the theme attribute before the shell paints, on every page that uses this layout.
 
-**Contract:** Add optional prop `chromeThemeMode` with values `choice` or `system`. When it is set, render `<html data-chrome-theme-mode={chromeThemeMode}>` and a blocking `is:inline` script as the first head child. The script reads `localStorage` key `handouts-chrome-theme`, reads `matchMedia("(prefers-color-scheme: dark)")`, and sets `document.documentElement.dataset.chromeTheme` using the same branches as `resolveChromeTheme`. `system` ignores a stored value. `choice` uses a stored id and otherwise uses the system result. A storage exception leaves the system result. When the prop is omitted, do not render the script and do not set the mode attribute.
-
-Pass `chromeThemeMode="choice"` from `src/pages/dashboard.astro`, `src/pages/settings.astro`, `src/pages/handouts/new.astro`, and `src/pages/handouts/[id]/edit.astro`. Pass `chromeThemeMode="system"` from `src/pages/index.astro`, `src/pages/auth/signin.astro`, `src/pages/auth/signup.astro`, and `src/pages/auth/confirm-email.astro`. Leave `src/pages/share/[token].astro` and `src/pages/account-closed.astro` unchanged.
+**Contract:** Render a blocking `is:inline` script as the first head child. The script reads `localStorage` key `handouts-chrome-theme`, reads `matchMedia("(prefers-color-scheme: dark)")`, and sets `document.documentElement.dataset.chromeTheme`. A stored id wins. Otherwise the script uses the system result. A storage exception leaves the system result. Do not add a mode prop. Share and account-closed use this layout, so they receive the same script.
 
 #### 3. `src/styles/global.css`
 
 **File:** `src/styles/global.css`
 
-**Intent:** Make Darkest of Mines the warm-dark `:root` palette, and keep Tower of Light on the Moon rules.
+**Intent:** Keep Tower of Light on the Moon tokens, make Darkest of Mines darker than `#333333`, and keep corner radius in both themes.
 
-**Contract:** Prefix every `.moon-chrome` selector, including the token block at line 124 and the control, card, input, chip, and loader rules that follow, with `html:not([data-chrome-theme="darkest-of-mines"]) `. Do not change the declarations inside those rules. Do not change `:root`, `.dark`, `--palette-*`, or `.handout-article`.
+**Contract:** Tower of Light tokens stay on `html:not([data-chrome-theme="darkest-of-mines"])`. Add Darkest of Mines tokens on `html[data-chrome-theme="darkest-of-mines"]` with `--background` darker than `#333333`. Leave `.moon-chrome` geometry rules, including `border-radius`, active in both themes. Do not change `--palette-*` or `.handout-article`.
 
 ### Success Criteria
 
@@ -91,13 +88,13 @@ Pass `chromeThemeMode="choice"` from `src/pages/dashboard.astro`, `src/pages/set
 - `resolveChromeTheme` returns the stored id for `mode: "choice"` when `storedTheme` is `tower-of-light` or `darkest-of-mines`.
 - `resolveChromeTheme` returns the system theme for `mode: "choice"` when `storedTheme` is `null` or any other string.
 - `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and that file asserts `src/layouts/Layout.astro` contains `handouts-chrome-theme`, `tower-of-light`, and `darkest-of-mines`.
-- The same test asserts every `.moon-chrome` rule in `src/styles/global.css` is prefixed with `html:not([data-chrome-theme="darkest-of-mines"])`.
+- The same test asserts `.moon-chrome` geometry rules are not gated by `html:not([data-chrome-theme="darkest-of-mines"])`, and that `html[data-chrome-theme="darkest-of-mines"]` sets `--background` darker than `#333333`.
 - `npm run lint` passes.
 
 #### Manual Verification
 
 - With `localStorage` cleared, a light system theme shows Tower of Light on `/dashboard` and `/auth/signin`. A dark system theme shows Darkest of Mines on those two pages.
-- After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` is Darkest of Mines while `/` still follows the system theme.
+- After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` and `/` are both Darkest of Mines, and controls keep their corner radius.
 - An existing shared handout at `/share/<token>` matches its look from before this phase, including category background and font.
 
 ---
@@ -106,7 +103,7 @@ Pass `chromeThemeMode="choice"` from `src/pages/dashboard.astro`, `src/pages/set
 
 ### Overview
 
-The four signed-in headers get one control. Choosing a theme stores it, updates the current page, and leaves that choice for a later visit.
+Settings gets the toggle. Choosing a theme stores it, updates the current page, and leaves that choice for every other view.
 
 ### Changes Required
 
@@ -122,17 +119,17 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 **File:** `src/components/molecules/ThemeSwitch.tsx`
 
-**Intent:** The named control for the four headers.
+**Intent:** The named control for Settings.
 
-**Contract:** A named export `ThemeSwitch`, exported at the end of the file. It renders two buttons labeled `Tower of Light` and `Darkest of Mines`. Do not read `document` during render. Read `data-chrome-theme` in `useEffect` after mount. Server HTML renders both buttons with `aria-pressed="false"`. After mount, the button for `document.documentElement.dataset.chromeTheme` has `aria-pressed="true"` and the other has `aria-pressed="false"`. Activating a theme calls `selectChromeTheme`. Activating the already active theme does not write again. Use `cn()` for class names. Import the lib through `@/lib/chrome-theme`.
+**Contract:** A named export `ThemeSwitch`, exported at the end of the file. It renders one `role="switch"` control. The visible label and `aria-label` are the active theme name, `Tower of Light` or `Darkest of Mines`. `aria-checked` is true for Darkest of Mines. Do not read `document` during server render. Read the theme with `useSyncExternalStore`. Activating the switch calls `selectChromeTheme` with the other theme. Use `cn()` for class names. Import the lib through `@/lib/chrome-theme`.
 
-#### 3. The four headers
+#### 3. Settings
 
-**File:** `src/pages/dashboard.astro`, `src/components/organisms/HandoutEditor.tsx`, `src/pages/settings.astro`
+**File:** `src/pages/settings.astro`
 
-**Intent:** Put that control in the header the GM already sees.
+**Intent:** Put that control on Settings only.
 
-**Contract:** Mount `<ThemeSwitch client:load />` in the dashboard action row at `dashboard.astro` lines 85-109, before the New handout link. Mount it beside the title in `HandoutEditor.tsx` lines 174-176, which covers new and edit. Mount it beside the Settings title at `settings.astro` lines 13-18. Do not mount it on landing, auth, share, or account-closed.
+**Contract:** Mount `<ThemeSwitch client:load />` in a Theme section on `src/pages/settings.astro`. Do not mount it on the dashboard, the new-handout page, the edit page, landing, auth, share, or account-closed.
 
 ### Success Criteria
 
@@ -143,9 +140,9 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 #### Manual Verification
 
-- On `/dashboard`, `/handouts/new`, an edit URL, and `/settings`, both theme names are visible and the active theme's button is pressed.
+- On `/settings`, the toggle shows the active theme name. `/dashboard`, `/handouts/new`, and an edit URL do not show it.
 - Choosing the other theme updates the chrome without a navigation. A new tab and a later visit open `/dashboard` on that same theme.
-- After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` still follow the system theme.
+- After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` use that same theme.
 - The editor preview keeps the selected category background and font. A shared handout is unchanged.
 
 ---
@@ -155,7 +152,7 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 ### Unit Tests
 
 - `__tests__/lib/chrome-theme.test.ts` covers `resolveChromeTheme` for system mode, a valid stored choice, and an invalid stored value.
-- The same file reads `src/layouts/Layout.astro` and `src/styles/global.css` and asserts the storage key, both theme ids, and the `html:not([data-chrome-theme="darkest-of-mines"])` prefix. Follow the source-read style in `__tests__/lib/fonts-css-sync.test.ts`.
+- The same file reads `src/layouts/Layout.astro` and `src/styles/global.css` and asserts the storage key, both theme ids, ungated `.moon-chrome` geometry, and a Darkest of Mines `--background` darker than `#333333`. Follow the source-read style in `__tests__/lib/fonts-css-sync.test.ts`.
 - The same file covers `selectChromeTheme` against `localStorage` and `document.documentElement` in jsdom.
 
 ### Integration Tests
@@ -166,8 +163,8 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 1. Clear `localStorage` key `handouts-chrome-theme`. Set the operating system to light. Open `/dashboard` and `/auth/signin`. Both are Tower of Light.
 2. Set the operating system to dark and reload both pages. Both are Darkest of Mines.
-3. On `/dashboard`, choose Tower of Light while the system theme is dark. The dashboard becomes light. Reload `/dashboard`. It stays light. Open `/` . It stays dark.
-4. Open `/settings`, `/handouts/new`, and an edit page. Each shows Tower of Light pressed. Choose Darkest of Mines on Settings. Open a new tab to `/dashboard`. It is dark, and Darkest of Mines is pressed.
+3. On `/dashboard`, choose Tower of Light while the system theme is dark. The dashboard becomes light. Reload `/dashboard`. It stays light. Open `/`. It stays light.
+4. Open `/settings`. The toggle shows Tower of Light. `/dashboard` and `/handouts/new` have no toggle. Choose Darkest of Mines on Settings. Open a new tab to `/dashboard`. It is dark, buttons and cards stay rounded, and the dark background is darker than `#333333`.
 5. Open a shared handout and compare the category frame and font with the editor preview. They match each other and do not pick up the chrome theme.
 
 ## References
@@ -196,13 +193,13 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 - [x] 1.3 `resolveChromeTheme` returns the stored id for `mode: "choice"` when `storedTheme` is `tower-of-light` or `darkest-of-mines`. 860614b
 - [x] 1.4 `resolveChromeTheme` returns the system theme for `mode: "choice"` when `storedTheme` is `null` or any other string. 860614b
 - [x] 1.5 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and that file asserts `src/layouts/Layout.astro` contains `handouts-chrome-theme`, `tower-of-light`, and `darkest-of-mines`. 860614b
-- [x] 1.6 The same test asserts every `.moon-chrome` rule in `src/styles/global.css` is prefixed with `html:not([data-chrome-theme="darkest-of-mines"])`. 860614b
+- [x] 1.6 The same test asserts `.moon-chrome` geometry rules are not gated by `html:not([data-chrome-theme="darkest-of-mines"])`, and that `html[data-chrome-theme="darkest-of-mines"]` sets `--background` darker than `#333333`. 860614b
 - [x] 1.7 `npm run lint` passes. 860614b
 
 #### Manual
 
 - [ ] 1.8 With `localStorage` cleared, a light system theme shows Tower of Light on `/dashboard` and `/auth/signin`. A dark system theme shows Darkest of Mines on those two pages.
-- [ ] 1.9 After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` is Darkest of Mines while `/` still follows the system theme.
+- [ ] 1.9 After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` and `/` are both Darkest of Mines, and controls keep their corner radius.
 - [ ] 1.10 An existing shared handout at `/share/<token>` matches its look from before this phase, including category background and font.
 
 ### Phase 2: Theme switch
@@ -214,7 +211,7 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 #### Manual
 
-- [ ] 2.3 On `/dashboard`, `/handouts/new`, an edit URL, and `/settings`, both theme names are visible and the active theme's button is pressed.
+- [ ] 2.3 On `/settings`, the toggle shows the active theme name. `/dashboard`, `/handouts/new`, and an edit URL do not show it.
 - [ ] 2.4 Choosing the other theme updates the chrome without a navigation. A new tab and a later visit open `/dashboard` on that same theme.
-- [ ] 2.5 After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` still follow the system theme.
+- [ ] 2.5 After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` use that same theme.
 - [ ] 2.6 The editor preview keeps the selected category background and font. A shared handout is unchanged.

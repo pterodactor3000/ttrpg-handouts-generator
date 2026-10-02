@@ -7,7 +7,7 @@ const error = Astro.url.searchParams.get('error');
 const deletionAt = Astro.url.searchParams.get('deletionAt');
 ---
 
-<Layout title="Sign in" loadChromeFont chromeThemeMode="system">
+<Layout title="Sign in" loadChromeFont>
   <div class="moon-chrome bg-background text-foreground flex min-h-screen items-center justify-center p-4">
     <!--
       Card is the client island parent. Nesting SignInForm (previously client:load)

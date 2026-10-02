@@ -1,44 +1,13 @@
 import { useSyncExternalStore } from 'react';
-import { Button } from '@/components/atoms/button';
-import { CHROME_THEME_DARKEST_OF_MINES, CHROME_THEME_TOWER_OF_LIGHT, selectChromeTheme } from '@/lib/chrome-theme';
+import {
+  CHROME_THEME_DARKEST_OF_MINES,
+  CHROME_THEME_TOWER_OF_LIGHT,
+  getChromeThemeSnapshot,
+  getServerChromeThemeSnapshot,
+  selectChromeTheme,
+  subscribeToChromeTheme,
+} from '@/lib/chrome-theme';
 import { cn } from '@/lib/utils';
-
-const CHROME_THEME_OPTIONS = [
-  { id: CHROME_THEME_TOWER_OF_LIGHT, label: 'Tower of Light' },
-  { id: CHROME_THEME_DARKEST_OF_MINES, label: 'Darkest of Mines' },
-] as const;
-
-type ChromeThemeOptionId = (typeof CHROME_THEME_OPTIONS)[number]['id'];
-
-const chromeThemeListeners = new Set<() => void>();
-
-function subscribeToChromeTheme(listener: () => void): () => void {
-  chromeThemeListeners.add(listener);
-
-  return () => {
-    chromeThemeListeners.delete(listener);
-  };
-}
-
-function notifyChromeThemeListeners(): void {
-  for (const listener of chromeThemeListeners) {
-    listener();
-  }
-}
-
-function getChromeThemeSnapshot(): ChromeThemeOptionId | null {
-  const chromeTheme = document.documentElement.dataset.chromeTheme;
-
-  if (chromeTheme === CHROME_THEME_TOWER_OF_LIGHT || chromeTheme === CHROME_THEME_DARKEST_OF_MINES) {
-    return chromeTheme;
-  }
-
-  return null;
-}
-
-function getServerChromeThemeSnapshot(): null {
-  return null;
-}
 
 function ThemeSwitch() {
   const activeTheme = useSyncExternalStore(
@@ -46,37 +15,41 @@ function ThemeSwitch() {
     getChromeThemeSnapshot,
     getServerChromeThemeSnapshot,
   );
+  const isDarkest = activeTheme === CHROME_THEME_DARKEST_OF_MINES;
+  const themeLabel = isDarkest ? 'Darkest of Mines' : 'Tower of Light';
 
-  function handleSelect(theme: ChromeThemeOptionId) {
-    if (document.documentElement.dataset.chromeTheme === theme) {
-      return;
-    }
+  function handleToggle() {
+    const currentTheme = document.documentElement.dataset.chromeTheme;
+    const nextTheme =
+      currentTheme === CHROME_THEME_DARKEST_OF_MINES ? CHROME_THEME_TOWER_OF_LIGHT : CHROME_THEME_DARKEST_OF_MINES;
 
-    selectChromeTheme(theme);
-    notifyChromeThemeListeners();
+    selectChromeTheme(nextTheme);
   }
 
   return (
-    <div className={cn('flex flex-col gap-2 sm:flex-row')}>
-      {CHROME_THEME_OPTIONS.map((option) => {
-        const isActive = activeTheme === option.id;
-
-        return (
-          <Button
-            key={option.id}
-            type="button"
-            variant={isActive ? 'default' : 'outline'}
-            aria-pressed={isActive}
-            className={cn('w-full sm:w-auto')}
-            onClick={() => {
-              handleSelect(option.id);
-            }}
-          >
-            {option.label}
-          </Button>
-        );
-      })}
-    </div>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isDarkest}
+      aria-label={themeLabel}
+      onClick={handleToggle}
+      className={cn(
+        'text-foreground flex w-full items-center justify-between gap-6 py-1 text-sm font-semibold',
+      )}
+    >
+      <span>{themeLabel}</span>
+      <span
+        className={cn('relative h-6 w-11 shrink-0 rounded-full', isDarkest ? 'bg-primary' : 'bg-muted')}
+        aria-hidden="true"
+      >
+        <span
+          className={cn(
+            'absolute top-0.5 size-5 rounded-full bg-white transition-all',
+            isDarkest ? 'left-5' : 'left-0.5',
+          )}
+        />
+      </span>
+    </button>
   );
 }
 

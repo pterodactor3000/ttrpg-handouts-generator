@@ -9,7 +9,6 @@ import { TagsInput } from '@/components/molecules/TagsInput';
 import { ShareDialog } from '@/components/organisms/ShareDialog';
 import { Button } from '@/components/atoms/button';
 import { BackToDashboardButton } from '@/components/molecules/BackToDashboardButton';
-import { ThemeSwitch } from '@/components/molecules/ThemeSwitch';
 import {
   Dialog,
   DialogContent,
@@ -172,12 +171,9 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
     <div className={cn('moon-chrome bg-background text-foreground min-h-screen p-4 md:p-8')}>
       <div className="mx-auto max-w-6xl">
         <BackToDashboardButton onClick={handleBackClick} />
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-foreground text-2xl font-bold tracking-tight">
-            {initialHandout ? 'Edit Handout' : 'New Handout'}
-          </h1>
-          <ThemeSwitch />
-        </div>
+        <h1 className="text-foreground mb-6 text-2xl font-bold tracking-tight">
+          {initialHandout ? 'Edit Handout' : 'New Handout'}
+        </h1>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Form column */}

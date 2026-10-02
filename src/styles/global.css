@@ -121,7 +121,7 @@
    Do not set --radius here. :root keeps 0rem, and @theme derives rounded-sm/md/lg/xl
    from it. 8px controls set 0.5rem on the slot rules below, or rounded-[0.5rem]
    on anchors (Welcome, dashboard, edit). Cards and dialogs set 0.75rem below. */
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome {
+html:not([data-chrome-theme='darkest-of-mines']) {
   --background: #f6f7f9;
   --foreground: #000000;
   --card: #ffffff;
@@ -147,6 +147,39 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome {
   color: var(--foreground);
 }
 
+html[data-chrome-theme='darkest-of-mines'] {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --card: #18181b;
+  --card-foreground: #f4f4f5;
+  --popover: #18181b;
+  --popover-foreground: #f4f4f5;
+  --primary: #c47870;
+  --primary-foreground: #09090b;
+  --secondary: #27272a;
+  --secondary-foreground: #f4f4f5;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #f4f4f5;
+  --destructive: #e06a5c;
+  --destructive-foreground: #09090b;
+  --border: #3f3f46;
+  --input: #18181b;
+  --ring: #c47870;
+  --sidebar: #09090b;
+  --sidebar-foreground: #f4f4f5;
+  --sidebar-primary: #c47870;
+  --sidebar-primary-foreground: #09090b;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #f4f4f5;
+  --sidebar-border: #3f3f46;
+  --sidebar-ring: #c47870;
+  font-family: 'DM Sans', ui-sans-serif, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 button:not(:disabled),
 [role='button']:not([aria-disabled='true']),
 a[data-slot='button'] {
@@ -159,24 +192,24 @@ button:disabled,
 }
 
 /* Control geometry from the Moon Button, Text input, Chip, and Modal boards.
-   Scoped so .handout-article and pages outside .moon-chrome stay on the warm palette. */
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'] {
+   Applies in both chrome themes so Darkest of Mines keeps the same radius. */
+.moon-chrome [data-slot='button'] {
   border-radius: 0.5rem;
   font-weight: 600;
 }
 
 /* Flat at rest. Focus draws the ring here so anchors that share data-slot="button"
    get the same keyboard ring as the Button atom (its utility ring is a box-shadow). */
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button']:not(:focus-visible) {
+.moon-chrome [data-slot='button']:not(:focus-visible) {
   box-shadow: none;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button']:focus-visible {
+.moon-chrome [data-slot='button']:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].h-8 {
+.moon-chrome [data-slot='button'].h-8 {
   height: auto;
   min-height: 2rem;
   padding: 0.25rem 0.75rem;
@@ -184,7 +217,7 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button
   line-height: 1.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].h-9 {
+.moon-chrome [data-slot='button'].h-9 {
   height: auto;
   min-height: 2.5rem;
   padding: 0.5rem 1rem;
@@ -192,7 +225,7 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button
   line-height: 1.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].h-10 {
+.moon-chrome [data-slot='button'].h-10 {
   height: auto;
   min-height: 3rem;
   padding: 0.75rem 1rem;
@@ -200,14 +233,14 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button
   line-height: 1.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].size-9 {
+.moon-chrome [data-slot='button'].size-9 {
   width: 2.5rem;
   height: 2.5rem;
   padding: 0.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'],
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textarea'] {
+.moon-chrome [data-slot='input'],
+.moon-chrome [data-slot='textarea'] {
   border: 0;
   border-radius: 0.5rem;
   background-color: var(--input);
@@ -215,56 +248,46 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textar
   box-shadow: inset 0 0 0 1px var(--border);
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'] {
+.moon-chrome [data-slot='input'] {
   height: 2.5rem;
   padding: 0 1rem;
   font-size: 1rem;
   line-height: 1.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'].pl-10 {
+.moon-chrome [data-slot='input'].pl-10 {
   padding-left: 2.5rem;
 }
 
 /* The padding shorthand above beats a utility. Fields with an end icon opt in with pr-10. */
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'].pr-10 {
+.moon-chrome [data-slot='input'].pr-10 {
   padding-right: 2.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textarea'] {
+.moon-chrome [data-slot='textarea'] {
   padding: 0.75rem 1rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines'])
-  .moon-chrome
-  [data-slot='input']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']),
-html:not([data-chrome-theme='darkest-of-mines'])
-  .moon-chrome
-  [data-slot='textarea']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']) {
+.moon-chrome [data-slot='input']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']),
+.moon-chrome [data-slot='textarea']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']) {
   box-shadow: inset 0 0 0 2px var(--border);
 }
 
-html:not([data-chrome-theme='darkest-of-mines'])
-  .moon-chrome
-  [data-slot='input']:focus-visible:not([aria-invalid='true']),
-html:not([data-chrome-theme='darkest-of-mines'])
-  .moon-chrome
-  [data-slot='textarea']:focus-visible:not([aria-invalid='true']) {
+.moon-chrome [data-slot='input']:focus-visible:not([aria-invalid='true']),
+.moon-chrome [data-slot='textarea']:focus-visible:not([aria-invalid='true']) {
   box-shadow: inset 0 0 0 2px var(--ring);
   outline: none;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'][aria-invalid='true'],
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'][aria-invalid='true']:focus-visible,
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textarea'][aria-invalid='true'],
-html:not([data-chrome-theme='darkest-of-mines'])
-  .moon-chrome
-  [data-slot='textarea'][aria-invalid='true']:focus-visible {
+.moon-chrome [data-slot='input'][aria-invalid='true'],
+.moon-chrome [data-slot='input'][aria-invalid='true']:focus-visible,
+.moon-chrome [data-slot='textarea'][aria-invalid='true'],
+.moon-chrome [data-slot='textarea'][aria-invalid='true']:focus-visible {
   box-shadow: inset 0 0 0 2px var(--destructive);
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='card'],
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome article:not(.handout-article) {
+.moon-chrome [data-slot='card'],
+.moon-chrome article:not(.handout-article) {
   border-radius: 0.75rem;
   background-color: var(--card);
   border-color: var(--border);
@@ -273,7 +296,7 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome article:not(.hando
     0 0 1px rgb(0 0 0 / 0.4);
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome[data-slot='dialog-content'] {
+.moon-chrome[data-slot='dialog-content'] {
   border-radius: 0.75rem;
   background-color: var(--popover);
   border-color: var(--border);
@@ -283,11 +306,11 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome[data-slot='dialog-
 }
 
 /* Geometry only. Status colors stay on StatusBadge so draft, published, and archived can differ. */
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-status-badge] {
+.moon-chrome [data-status-badge] {
   border-radius: 0.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-moon-chip] {
+.moon-chrome [data-moon-chip] {
   border-radius: 0.5rem;
   border-color: transparent;
   background-color: var(--muted);
@@ -297,7 +320,7 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-moon-chip] {
   line-height: 1.5rem;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader {
+.moon-chrome .loader {
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
@@ -310,12 +333,12 @@ html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader {
   animation: loader-spin 0.8s linear infinite;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader::before {
+.moon-chrome .loader::before {
   content: none;
   animation: none;
 }
 
-html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader-sm {
+.moon-chrome .loader-sm {
   width: 1rem;
   height: 1rem;
   padding: 0;

@@ -112,12 +112,17 @@ describe('chrome theme source sync', () => {
     expect(CHROME_THEME_DARKEST_OF_MINES).toBe('darkest-of-mines');
   });
 
-  it('prefixes every .moon-chrome rule in global.css', () => {
+  it('keeps moon-chrome geometry in both themes and darkens Darkest of Mines past #333333', () => {
     const globalCss = normalizeCss(readFileSync(GLOBAL_CSS_PATH, 'utf-8'));
-    const prefixedSelector = `${MOON_CHROME_PREFIX} .moon-chrome`;
-    const cssWithoutPrefixedSelectors = globalCss.split(prefixedSelector).join('');
+    const gatedSelector = `${MOON_CHROME_PREFIX} .moon-chrome`;
+    const darkThemeBlock = /html\[data-chrome-theme='darkest-of-mines'\] \{([^}]+)\}/.exec(globalCss)?.[1] ?? '';
+    const darkBackground = /--background:\s*(#[0-9a-fA-F]{6})/.exec(darkThemeBlock)?.[1] ?? '';
 
-    expect(globalCss).toContain(prefixedSelector);
-    expect(cssWithoutPrefixedSelectors).not.toContain('.moon-chrome');
+    expect(globalCss).toContain('.moon-chrome');
+    expect(globalCss).not.toContain(gatedSelector);
+    expect(darkBackground).not.toBe('');
+    expect(Number.parseInt(darkBackground.slice(1, 3), 16)).toBeLessThan(0x33);
+    expect(Number.parseInt(darkBackground.slice(3, 5), 16)).toBeLessThan(0x33);
+    expect(Number.parseInt(darkBackground.slice(5, 7), 16)).toBeLessThan(0x33);
   });
 });

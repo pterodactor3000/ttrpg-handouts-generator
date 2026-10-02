@@ -22,6 +22,36 @@ function isKnownChromeTheme(storedTheme: string | null): storedTheme is ChromeTh
   return storedTheme === CHROME_THEME_TOWER_OF_LIGHT || storedTheme === CHROME_THEME_DARKEST_OF_MINES;
 }
 
+const chromeThemeListeners = new Set<() => void>();
+
+function subscribeToChromeTheme(listener: () => void): () => void {
+  chromeThemeListeners.add(listener);
+
+  return () => {
+    chromeThemeListeners.delete(listener);
+  };
+}
+
+function notifyChromeThemeListeners(): void {
+  for (const listener of chromeThemeListeners) {
+    listener();
+  }
+}
+
+function getChromeThemeSnapshot(): ChromeThemeId | null {
+  const chromeTheme = document.documentElement.dataset.chromeTheme ?? null;
+
+  if (isKnownChromeTheme(chromeTheme)) {
+    return chromeTheme;
+  }
+
+  return null;
+}
+
+function getServerChromeThemeSnapshot(): null {
+  return null;
+}
+
 function selectChromeTheme(theme: string): void {
   if (!isKnownChromeTheme(theme)) {
     throw new Error(`selectChromeTheme rejected theme "${theme}"`);
@@ -35,6 +65,7 @@ function selectChromeTheme(theme: string): void {
   }
 
   document.documentElement.dataset.chromeTheme = theme;
+  notifyChromeThemeListeners();
 }
 
 function resolveChromeTheme(input: ResolveChromeThemeInput): ChromeThemeId {
@@ -55,6 +86,9 @@ export {
   CHROME_THEME_DARKEST_OF_MINES,
   CHROME_THEME_STORAGE_KEY,
   CHROME_THEME_TOWER_OF_LIGHT,
+  getChromeThemeSnapshot,
+  getServerChromeThemeSnapshot,
   resolveChromeTheme,
   selectChromeTheme,
+  subscribeToChromeTheme,
 };

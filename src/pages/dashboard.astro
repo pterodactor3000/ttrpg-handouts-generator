@@ -3,7 +3,6 @@ import * as Sentry from '@sentry/cloudflare';
 import Layout from '@/layouts/Layout.astro';
 import HandoutList from '@/components/organisms/HandoutList.astro';
 import DashboardDrawer from '@/components/organisms/DashboardDrawer';
-import { ThemeSwitch } from '@/components/molecules/ThemeSwitch';
 import { Card, CardContent } from '@/components/atoms/card';
 import { createClient } from '@/lib/supabase';
 import { groupHandoutsByStatus, type HandoutListItem } from '@/lib/handout-list';
@@ -40,7 +39,7 @@ if (!supabase) {
 }
 ---
 
-<Layout title="Dashboard" loadChromeFont chromeThemeMode="choice">
+<Layout title="Dashboard" loadChromeFont>
   <div class="moon-chrome bg-background text-foreground flex min-h-screen flex-col">
     {
       !isConfigured ? (
@@ -84,7 +83,6 @@ if (!supabase) {
                       </p>
                     </div>
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <ThemeSwitch client:load />
                       <a
                         href="/handouts/new"
                         data-slot="button"
