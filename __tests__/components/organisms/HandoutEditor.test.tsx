@@ -198,9 +198,17 @@ describe('HandoutEditor markdown help', () => {
     await user.click(screen.getByRole('button', { name: 'Markdown help' }));
 
     const dialog = screen.getByRole('dialog', { name: /markdown tips/i });
+    expect(dialog.className).toContain('sm:max-w-4xl');
+    expect(dialog.querySelector('ul')).toHaveClass('divide-y');
     for (const example of MARKDOWN_GUIDE_EXAMPLES) {
       expect(dialog).toHaveTextContent(example.label);
-      expect(dialog.innerHTML).toContain(RENDERED_FRAGMENT_BY_ID[example.id]);
+      const tip = dialog.querySelector(`[data-markdown-tip="${example.id}"]`);
+      expect(tip).toBeInstanceOf(HTMLElement);
+      expect(tip?.querySelector('.grid')).toHaveClass('sm:grid-cols-2');
+      expect(tip?.querySelector('[data-markdown-source]')?.textContent).toBe(example.markdown);
+      const preview = tip?.querySelector('[data-markdown-preview]');
+      expect(preview).toHaveClass('prose');
+      expect(preview?.innerHTML).toContain(RENDERED_FRAGMENT_BY_ID[example.id]);
     }
   });
 
