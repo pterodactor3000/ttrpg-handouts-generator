@@ -1,7 +1,7 @@
 ---
 change_id: markdown-tips
 title: Markdown tips for writing a handout
-status: new
+status: implementing
 created: 2026-10-02
 updated: 2026-10-02
 archived_at: null
