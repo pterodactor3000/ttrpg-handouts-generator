@@ -123,6 +123,10 @@ Added 2026-05-31. These refine the shipped MVP surface (S-01); none introduce ne
 - FR-014: Each handout style category (grimdark / high fantasy / postapo) renders with its own preset font and font color, in both preview and shared view. Priority: nice-to-have. Change: modified (supersedes the "single default font" MVP scope decision; fonts are preset per style, not user-selected).
 - FR-015: Visitor sees the app name on the landing page and a clear entry point to start the login flow. Priority: nice-to-have. Change: new.
 
+Added 2026-10-02 for S-16. FR-016 is reserved for the theme-switch slice, which is not on main yet.
+
+- FR-017: A GM writing a new or existing handout can open a help icon next to the markdown field. The icon opens a modal with a short markdown guide and examples of syntax the preview already renders. Raw HTML is out of the guide. Priority: nice-to-have. Change: new.
+
 ## Non-Functional Requirements
 
 - **Response time**: Handout generation completes in less than 5 seconds as perceived by the user (from clicking "generate" to seeing the preview).
