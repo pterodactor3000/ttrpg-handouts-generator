@@ -209,8 +209,8 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 #### Automated
 
-- [x] 2.1 `selectChromeTheme("darkest-of-mines")` sets `localStorage` `handouts-chrome-theme` to `darkest-of-mines` and sets `document.documentElement.dataset.chromeTheme` to that id. `selectChromeTheme("tower-of-light")` does the same for Tower of Light.
-- [x] 2.2 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and `npm run lint` passes.
+- [x] 2.1 `selectChromeTheme("darkest-of-mines")` sets `localStorage` `handouts-chrome-theme` to `darkest-of-mines` and sets `document.documentElement.dataset.chromeTheme` to that id. `selectChromeTheme("tower-of-light")` does the same for Tower of Light. 259878a
+- [x] 2.2 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and `npm run lint` passes. 259878a
 
 #### Manual
 
