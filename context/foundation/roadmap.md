@@ -49,7 +49,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | done     |
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
-| S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | ready    |
+| S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | done     |
 
 ## Streams
 
@@ -314,7 +314,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Does the GM's choice have to survive a reload? Owner: user. Block: no.
 - **Risk:** The change is presentational. It covers the signed-in app screens plus landing and auth, and it leaves the shared handout and the three handout styles alone. The system theme is the default until the GM chooses. The choice has to survive navigation between the four signed-in pages. A wrong default would show the other theme on first paint.
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -371,3 +371,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-12: GM can open a left-side slide-in navigation drawer from the dashboard (triggered by a toggle button) with three filter options — Drafts, Published, Archived — to view only handouts in that state; a pin button makes the drawer persist as a fixed sidebar for the session.** — Archived 2026-10-02 → `context/archive/2026-09-29-dashboard-drawer-nav/`. Lesson: —.
 - **S-13: GM can request account deletion from account settings; the account is immediately deactivated (sign-in blocked), all data is retained for 30 days and then permanently purged (handouts + auth record), and shared links go dead after the purge window. No reactivation flow in scope.** — Archived 2026-10-02 → `context/archive/2026-10-01-remove-account/`. Lesson: —.
 - **S-14: GM can select an archived handout from the Archived tab (introduced by S-12) and restore it to either Draft or Published state via a choice prompt; restoring to Published re-activates the existing share link immediately (same `share_token`, not regenerated).** — Archived 2026-10-02 → `context/archive/2026-10-01-unarchive-handout/`. Lesson: —.
+- **S-15: A signed-in GM can switch the dashboard, the new-handout page, the edit page, and Settings between Tower of Light and Darkest of Mines, and that choice stays while they move between those pages. Until they choose, those pages follow the system theme. Landing, sign-in, and sign-up follow the system theme and ignore a saved choice. The shared handout stays as it is.** — Archived 2026-10-02 → `context/archive/2026-10-02-theme-switch/`. Lesson: —.
