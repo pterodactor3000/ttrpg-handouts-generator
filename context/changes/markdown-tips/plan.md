@@ -175,10 +175,10 @@ The markdown label gains a help icon. The icon opens a dialog that shows the gui
 
 #### Automated
 
-- [x] 2.1 A fresh `HandoutEditor` and one rendered with `initialHandout` both show a button named "Markdown help" beside "Content (Markdown)".
-- [x] 2.2 Activating that button shows a dialog titled "Markdown tips" that includes every guide label and one rendered fragment per example.
-- [x] 2.3 After typing in the markdown textarea, opening the dialog and closing it leaves the textarea value unchanged.
-- [x] 2.4 `npm test -- --project unit` passes `__tests__/components/organisms/HandoutEditor.test.tsx`, and `npm run lint` passes.
+- [x] 2.1 A fresh `HandoutEditor` and one rendered with `initialHandout` both show a button named "Markdown help" beside "Content (Markdown)". d58312c
+- [x] 2.2 Activating that button shows a dialog titled "Markdown tips" that includes every guide label and one rendered fragment per example. d58312c
+- [x] 2.3 After typing in the markdown textarea, opening the dialog and closing it leaves the textarea value unchanged. d58312c
+- [x] 2.4 `npm test -- --project unit` passes `__tests__/components/organisms/HandoutEditor.test.tsx`, and `npm run lint` passes. d58312c
 
 #### Manual
 
