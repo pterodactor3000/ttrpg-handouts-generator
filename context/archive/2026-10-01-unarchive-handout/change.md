@@ -1,10 +1,10 @@
 ---
 change_id: unarchive-handout
 title: Restore an archived handout to draft or published
-status: implemented
+status: archived
 created: 2026-10-01
 updated: 2026-10-02
-archived_at: null
+archived_at: 2026-10-02T07:50:35Z
 roadmap_id: S-14
 ---
 

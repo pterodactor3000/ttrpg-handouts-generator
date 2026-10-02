@@ -47,7 +47,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | done     |
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | done     |
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
-| S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | proposed |
+| S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
 
 ## Streams
 
@@ -298,7 +298,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** PRD Business Logic states archived handouts are "read-only for the GM — no further edits allowed"; this slice deliberately extends the state machine to allow archived → draft/published transition. `/10x-plan` must update RLS write policies if F-01 currently blocks GM writes on archived rows. Restoring to Published without a new token preserves bookmarked player links — desirable per user confirmation.
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -353,3 +353,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-11: GM sees dashboard handout tiles with uniform width and height across all cards, each tile topped by a decorative strip showing the handout's themed background texture (same assets as preview/shared view) in place of the current color bar — replacing the colored status bar with the handout border/style treatment.** — Archived 2026-10-02 → `context/archive/2026-09-30-dashboard-tile-style/`. Lesson: —.
 - **S-12: GM can open a left-side slide-in navigation drawer from the dashboard (triggered by a toggle button) with three filter options — Drafts, Published, Archived — to view only handouts in that state; a pin button makes the drawer persist as a fixed sidebar for the session.** — Archived 2026-10-02 → `context/archive/2026-09-29-dashboard-drawer-nav/`. Lesson: —.
 - **S-13: GM can request account deletion from account settings; the account is immediately deactivated (sign-in blocked), all data is retained for 30 days and then permanently purged (handouts + auth record), and shared links go dead after the purge window. No reactivation flow in scope.** — Archived 2026-10-02 → `context/archive/2026-10-01-remove-account/`. Lesson: —.
+- **S-14: GM can select an archived handout from the Archived tab (introduced by S-12) and restore it to either Draft or Published state via a choice prompt; restoring to Published re-activates the existing share link immediately (same `share_token`, not regenerated).** — Archived 2026-10-02 → `context/archive/2026-10-01-unarchive-handout/`. Lesson: —.
