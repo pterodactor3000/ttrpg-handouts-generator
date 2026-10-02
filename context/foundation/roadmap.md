@@ -46,7 +46,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-10 | `square-ui-containers`               | see all UI containers (cards, modals, inputs, buttons) with squared corners — reduced border-radius consistently site-wide                                                                                    | S-05          | FR-012                                                         | done     |
 | S-11 | `dashboard-tile-style`               | see dashboard handout tiles with uniform size and a themed top border strip matching each handout's style category background                                                                                 | S-02, S-09    | FR-002                                                         | done     |
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | done     |
-| S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | ready    |
+| S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | proposed |
 
 ## Streams
@@ -286,7 +286,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Purge mechanism: pg_cron on Supabase vs. Cloudflare CRON Worker vs. deferred manual cleanup? — Owner: user. Block: no.
 - **Risk:** Touches Supabase `auth.users` deletion — must use service-role admin API server-side only. Soft-delete flag must be handled in RLS so deactivated GMs cannot read their own data during the 30-day window while shared links (anon token path) still work until purge. Scheduled purge is the biggest open decision for `/10x-plan`.
-- **Status:** ready
+- **Status:** done
 
 ### S-14: Unarchive handout
 
@@ -352,3 +352,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-03: GM can open an existing handout from the dashboard, modify markdown text, background category, or tags, regenerate the preview, and save (edits on published handouts propagate immediately to the live shared link per Business Logic).** — Archived 2026-09-29 → `context/archive/2026-06-21-s-03/`. Lesson: —.
 - **S-11: GM sees dashboard handout tiles with uniform width and height across all cards, each tile topped by a decorative strip showing the handout's themed background texture (same assets as preview/shared view) in place of the current color bar — replacing the colored status bar with the handout border/style treatment.** — Archived 2026-10-02 → `context/archive/2026-09-30-dashboard-tile-style/`. Lesson: —.
 - **S-12: GM can open a left-side slide-in navigation drawer from the dashboard (triggered by a toggle button) with three filter options — Drafts, Published, Archived — to view only handouts in that state; a pin button makes the drawer persist as a fixed sidebar for the session.** — Archived 2026-10-02 → `context/archive/2026-09-29-dashboard-drawer-nav/`. Lesson: —.
+- **S-13: GM can request account deletion from account settings; the account is immediately deactivated (sign-in blocked), all data is retained for 30 days and then permanently purged (handouts + auth record), and shared links go dead after the purge window. No reactivation flow in scope.** — Archived 2026-10-02 → `context/archive/2026-10-01-remove-account/`. Lesson: —.

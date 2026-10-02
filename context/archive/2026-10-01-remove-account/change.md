@@ -1,10 +1,10 @@
 ---
 change_id: remove-account
 title: Close an account and purge it after 30 days
-status: implemented
+status: archived
 created: 2026-10-01
-updated: 2026-10-01
-archived_at: null
+updated: 2026-10-02
+archived_at: 2026-10-02T07:43:24Z
 roadmap_id: S-13
 ---
 
