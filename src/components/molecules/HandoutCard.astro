@@ -46,7 +46,11 @@ const stripStyle = [
 <!--
   Keep a semantic article so archive and delete helpers can use .closest('article').
 -->
-<article class="flex h-64 w-full min-w-0 flex-col overflow-hidden" data-handout-card>
+<article
+  class="flex h-64 w-full min-w-0 flex-col overflow-hidden"
+  data-handout-card
+  data-background-category={handout.background_category}
+>
   <div
     class="h-12 w-full shrink-0 overflow-hidden"
     style={stripStyle}
@@ -122,6 +126,11 @@ const stripStyle = [
 </article>
 
 <style>
+  /* data-type-hidden is set from script, so it is not in this template. */
+  article[data-handout-card]:global([data-type-hidden]) {
+    display: none;
+  }
+
   /* Moon chrome paints and outlines every article. Keep that fill and border on the block under the strip only. */
   :global(.moon-chrome) article[data-handout-card] {
     background-color: transparent;

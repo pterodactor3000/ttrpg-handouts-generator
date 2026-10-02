@@ -37,10 +37,23 @@ const isHidden = listKind !== 'draft';
       )
     }
   </div>
+  <p class="text-muted-foreground" data-handout-type-empty>No handouts of this type.</p>
 </section>
 
 <style>
   [data-handout-grid]:has(article) + [data-handout-empty] {
     display: none;
+  }
+
+  [data-handout-type-empty] {
+    display: none;
+  }
+
+  /* :has() targets HandoutCard articles, which this template does not contain. */
+  [data-handout-grid]:global(
+      :has([data-handout-card][data-type-hidden]):not(:has([data-handout-card]:not([data-type-hidden])))
+    )
+    ~ [data-handout-type-empty] {
+    display: block;
   }
 </style>
