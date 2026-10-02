@@ -1,13 +1,24 @@
+import { useSyncExternalStore } from 'react';
 import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import {
+  CHROME_THEME_DARKEST_OF_MINES,
+  getChromeThemeSnapshot,
+  getServerChromeThemeSnapshot,
+  subscribeToChromeTheme,
+} from '@/lib/chrome-theme';
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = 'system' } = useTheme();
+  const chromeTheme = useSyncExternalStore(
+    subscribeToChromeTheme,
+    getChromeThemeSnapshot,
+    getServerChromeThemeSnapshot,
+  );
+  const theme = chromeTheme === CHROME_THEME_DARKEST_OF_MINES ? 'dark' : 'light';
 
   return (
     <Sonner
-      theme={theme as ToasterProps['theme']}
+      theme={theme}
       className="toaster group moon-chrome"
       icons={{
         success: <CircleCheckIcon className="size-4" />,

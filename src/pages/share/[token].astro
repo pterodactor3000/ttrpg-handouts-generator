@@ -80,8 +80,8 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
     </Layout>
   ) : (
     <Layout title={isConfigured ? 'Handout not found' : 'Sharing unavailable'}>
-      <main class="bg-cosmic flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
-        <Card className="border-surface bg-surface text-foreground mx-auto w-full max-w-md gap-0 border py-0 shadow-none backdrop-blur-xl">
+      <main class="bg-background text-foreground flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
+        <Card className="border-border bg-card text-foreground mx-auto w-full max-w-md gap-0 border py-0 shadow-none">
           <CardContent className="p-8">
             {isConfigured ? (
               <>
@@ -98,7 +98,7 @@ const pageBackground = handout ? BACKGROUND_CONFIGS[handout.background_category]
             )}
             <a
               href="/"
-              class="border-surface bg-surface text-foreground hover:bg-accent mt-6 inline-block rounded-lg border px-4 py-2 text-sm transition-colors"
+              class="border-border bg-card text-foreground hover:bg-accent mt-6 inline-block rounded-lg border px-4 py-2 text-sm transition-colors"
             >
               Back to home
             </a>

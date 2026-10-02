@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { BackToDashboardButton } from '@/components/molecules/BackToDashboardButton';
+import { ThemeSwitch } from '@/components/molecules/ThemeSwitch';
 import { ChangePasswordForm } from '@/components/organisms/ChangePasswordForm';
 import { DeleteAccountDialog } from '@/components/organisms/DeleteAccountDialog';
 
@@ -17,6 +18,11 @@ const email = Astro.locals.user?.email ?? '';
           Signed in as <span class="text-foreground font-semibold">{email}</span>
         </p>
       </div>
+
+      <section class="border-border bg-card flex flex-col gap-4 rounded-[0.5rem] border p-6">
+        <h2 class="text-foreground text-xl font-semibold">Theme</h2>
+        <ThemeSwitch client:load />
+      </section>
 
       <section class="border-border bg-card flex flex-col gap-4 rounded-[0.5rem] border p-6">
         <h2 class="text-foreground text-xl font-semibold">Change password</h2>
