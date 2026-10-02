@@ -211,7 +211,7 @@ Settings gets the toggle. Choosing a theme stores it, updates the current page, 
 
 #### Manual
 
-- [x] 2.3 On `/settings`, the toggle shows the active theme name. `/dashboard`, `/handouts/new`, and an edit URL do not show it.
-- [x] 2.4 Choosing the other theme updates the chrome without a navigation. A new tab and a later visit open `/dashboard` on that same theme.
-- [x] 2.5 After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` use that same theme.
-- [x] 2.6 The editor preview keeps the selected category background and font. A shared handout is unchanged.
+- [x] 2.3 On `/settings`, the toggle shows the active theme name. `/dashboard`, `/handouts/new`, and an edit URL do not show it. c52a023
+- [x] 2.4 Choosing the other theme updates the chrome without a navigation. A new tab and a later visit open `/dashboard` on that same theme. c52a023
+- [x] 2.5 After a stored choice exists, `/`, `/auth/signin`, and `/auth/signup` use that same theme. c52a023
+- [x] 2.6 The editor preview keeps the selected category background and font. A shared handout is unchanged. c52a023
