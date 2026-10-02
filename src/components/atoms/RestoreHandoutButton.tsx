@@ -122,6 +122,9 @@ const RestoreHandoutButton = ({ handoutId, handoutTitle }: RestoreHandoutButtonP
       <Dialog
         open={confirmOpen}
         onOpenChange={(isOpen) => {
+          if (!isOpen && isLoading) {
+            return;
+          }
           setConfirmOpen(isOpen);
           if (!isOpen) {
             setValidationMessage(null);
