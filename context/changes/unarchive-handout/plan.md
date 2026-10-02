@@ -240,8 +240,8 @@ Apply `20261001190000_gm_restore_archived.sql` before the route tests. Existing 
 
 #### Manual
 
-- [ ] 2.3 Archived cards show Restore. The dialog offers draft and published and describes the share link.
-- [ ] 2.4 A published restore that fails the checks stays in the dialog, shows the missing-field message, and the card remains under Archived.
-- [ ] 2.5 A draft restore removes the card from Archived. Drafts shows it with Edit and Archive, and without a copy control.
-- [ ] 2.6 A published restore of a handout that already has a token shows that same link and a copy control.
-- [ ] 2.7 A published restore of a handout that never had a token stays on the page, moves the card into Published, and that card shows a title link and a copy control.
+- [x] 2.3 Archived cards show Restore. The dialog offers draft and published and describes the share link. cd1e98a
+- [x] 2.4 A published restore that fails the checks stays in the dialog, shows the missing-field message, and the card remains under Archived. cd1e98a
+- [x] 2.5 A draft restore removes the card from Archived. Drafts shows it with Edit and Archive, and without a copy control. cd1e98a
+- [x] 2.6 A published restore of a handout that already has a token shows that same link and a copy control. cd1e98a
+- [x] 2.7 A published restore of a handout that never had a token stays on the page, moves the card into Published, and that card shows a title link and a copy control. cd1e98a
