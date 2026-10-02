@@ -19,13 +19,15 @@ const MarkdownTipsDialog = ({ open, onClose }: MarkdownTipsDialogProps) => {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         showCloseButton
-        className={cn('moon-chrome bg-popover text-popover-foreground border-border overflow-visible sm:max-w-4xl')}
+        className={cn(
+          'moon-chrome bg-popover text-popover-foreground border-border flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden sm:max-w-4xl',
+        )}
       >
-        <DialogHeader>
+        <DialogHeader className="shrink-0">
           <DialogTitle>Markdown tips</DialogTitle>
           <DialogDescription>Syntax the handout preview already renders.</DialogDescription>
         </DialogHeader>
-        <div className="max-h-[70vh] overflow-y-auto">
+        <div className="min-h-0 flex-auto overflow-y-auto">
           <ul className="divide-border divide-y">
             {MARKDOWN_GUIDE_EXAMPLES.map((example) => (
               <li key={example.id} data-markdown-tip={example.id} className="flex flex-col gap-3 py-4">
