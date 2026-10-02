@@ -61,7 +61,6 @@ function selectChromeTheme(theme: string): void {
     window.localStorage.setItem(CHROME_THEME_STORAGE_KEY, theme);
   } catch (storageError) {
     console.error(`Failed to store chrome theme "${theme}" in localStorage`, storageError);
-    throw storageError;
   }
 
   document.documentElement.dataset.chromeTheme = theme;
