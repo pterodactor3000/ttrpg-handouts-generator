@@ -22,6 +22,21 @@ function isKnownChromeTheme(storedTheme: string | null): storedTheme is ChromeTh
   return storedTheme === CHROME_THEME_TOWER_OF_LIGHT || storedTheme === CHROME_THEME_DARKEST_OF_MINES;
 }
 
+function selectChromeTheme(theme: string): void {
+  if (!isKnownChromeTheme(theme)) {
+    throw new Error(`selectChromeTheme rejected theme "${theme}"`);
+  }
+
+  try {
+    window.localStorage.setItem(CHROME_THEME_STORAGE_KEY, theme);
+  } catch (storageError) {
+    console.error(`Failed to store chrome theme "${theme}" in localStorage`, storageError);
+    throw storageError;
+  }
+
+  document.documentElement.dataset.chromeTheme = theme;
+}
+
 function resolveChromeTheme(input: ResolveChromeThemeInput): ChromeThemeId {
   const systemChromeTheme = getSystemChromeTheme(input.isSystemDark);
 
@@ -36,4 +51,10 @@ function resolveChromeTheme(input: ResolveChromeThemeInput): ChromeThemeId {
   return systemChromeTheme;
 }
 
-export { CHROME_THEME_DARKEST_OF_MINES, CHROME_THEME_STORAGE_KEY, CHROME_THEME_TOWER_OF_LIGHT, resolveChromeTheme };
+export {
+  CHROME_THEME_DARKEST_OF_MINES,
+  CHROME_THEME_STORAGE_KEY,
+  CHROME_THEME_TOWER_OF_LIGHT,
+  resolveChromeTheme,
+  selectChromeTheme,
+};

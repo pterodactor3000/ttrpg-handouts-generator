@@ -191,13 +191,13 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 #### Automated
 
-- [x] 1.1 `resolveChromeTheme` returns `darkest-of-mines` for `mode: "system"` when `isSystemDark` is true, even if `storedTheme` is `tower-of-light`.
-- [x] 1.2 `resolveChromeTheme` returns `tower-of-light` for `mode: "system"` when `isSystemDark` is false, even if `storedTheme` is `darkest-of-mines`.
-- [x] 1.3 `resolveChromeTheme` returns the stored id for `mode: "choice"` when `storedTheme` is `tower-of-light` or `darkest-of-mines`.
-- [x] 1.4 `resolveChromeTheme` returns the system theme for `mode: "choice"` when `storedTheme` is `null` or any other string.
-- [x] 1.5 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and that file asserts `src/layouts/Layout.astro` contains `handouts-chrome-theme`, `tower-of-light`, and `darkest-of-mines`.
-- [x] 1.6 The same test asserts every `.moon-chrome` rule in `src/styles/global.css` is prefixed with `html:not([data-chrome-theme="darkest-of-mines"])`.
-- [x] 1.7 `npm run lint` passes.
+- [x] 1.1 `resolveChromeTheme` returns `darkest-of-mines` for `mode: "system"` when `isSystemDark` is true, even if `storedTheme` is `tower-of-light`. 860614b
+- [x] 1.2 `resolveChromeTheme` returns `tower-of-light` for `mode: "system"` when `isSystemDark` is false, even if `storedTheme` is `darkest-of-mines`. 860614b
+- [x] 1.3 `resolveChromeTheme` returns the stored id for `mode: "choice"` when `storedTheme` is `tower-of-light` or `darkest-of-mines`. 860614b
+- [x] 1.4 `resolveChromeTheme` returns the system theme for `mode: "choice"` when `storedTheme` is `null` or any other string. 860614b
+- [x] 1.5 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and that file asserts `src/layouts/Layout.astro` contains `handouts-chrome-theme`, `tower-of-light`, and `darkest-of-mines`. 860614b
+- [x] 1.6 The same test asserts every `.moon-chrome` rule in `src/styles/global.css` is prefixed with `html:not([data-chrome-theme="darkest-of-mines"])`. 860614b
+- [x] 1.7 `npm run lint` passes. 860614b
 
 #### Manual
 
@@ -209,8 +209,8 @@ The four signed-in headers get one control. Choosing a theme stores it, updates 
 
 #### Automated
 
-- [ ] 2.1 `selectChromeTheme("darkest-of-mines")` sets `localStorage` `handouts-chrome-theme` to `darkest-of-mines` and sets `document.documentElement.dataset.chromeTheme` to that id. `selectChromeTheme("tower-of-light")` does the same for Tower of Light.
-- [ ] 2.2 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and `npm run lint` passes.
+- [x] 2.1 `selectChromeTheme("darkest-of-mines")` sets `localStorage` `handouts-chrome-theme` to `darkest-of-mines` and sets `document.documentElement.dataset.chromeTheme` to that id. `selectChromeTheme("tower-of-light")` does the same for Tower of Light.
+- [x] 2.2 `npm test -- --project unit` passes `__tests__/lib/chrome-theme.test.ts`, and `npm run lint` passes.
 
 #### Manual
 

@@ -1,11 +1,14 @@
+// @vitest-environment jsdom
+
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   CHROME_THEME_DARKEST_OF_MINES,
   CHROME_THEME_STORAGE_KEY,
   CHROME_THEME_TOWER_OF_LIGHT,
   resolveChromeTheme,
+  selectChromeTheme,
 } from '@/lib/chrome-theme';
 
 const LAYOUT_PATH = resolve(process.cwd(), 'src/layouts/Layout.astro');
@@ -73,6 +76,27 @@ describe('resolveChromeTheme', () => {
         isSystemDark: false,
       }),
     ).toBe(CHROME_THEME_TOWER_OF_LIGHT);
+  });
+});
+
+describe('selectChromeTheme', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    delete document.documentElement.dataset.chromeTheme;
+  });
+
+  it('stores darkest-of-mines and sets the document attribute', () => {
+    selectChromeTheme(CHROME_THEME_DARKEST_OF_MINES);
+
+    expect(localStorage.getItem(CHROME_THEME_STORAGE_KEY)).toBe(CHROME_THEME_DARKEST_OF_MINES);
+    expect(document.documentElement.dataset.chromeTheme).toBe(CHROME_THEME_DARKEST_OF_MINES);
+  });
+
+  it('stores tower-of-light and sets the document attribute', () => {
+    selectChromeTheme(CHROME_THEME_TOWER_OF_LIGHT);
+
+    expect(localStorage.getItem(CHROME_THEME_STORAGE_KEY)).toBe(CHROME_THEME_TOWER_OF_LIGHT);
+    expect(document.documentElement.dataset.chromeTheme).toBe(CHROME_THEME_TOWER_OF_LIGHT);
   });
 });
 
