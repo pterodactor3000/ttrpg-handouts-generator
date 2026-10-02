@@ -71,6 +71,35 @@ describe('moveHandoutCardToArchivedSection', () => {
     expect(archivedSection?.classList.contains('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-grid="archived"]')?.firstElementChild?.tagName).toBe('ARTICLE');
   });
+
+  it('reveals Restore and leaves an existing copy control visible', () => {
+    document.body.innerHTML = `
+      <section data-handout-list="archived" class="hidden">
+        <div data-handout-grid="archived"></div>
+      </section>
+      <article>
+        <span data-status-badge data-status="published">Published</span>
+        <div data-handout-card-footer>
+          <span data-handout-edit-action></span>
+          <span data-handout-archive-action><span id="archive-root"></span></span>
+          <span data-handout-delete-action class="hidden"></span>
+          <span data-handout-restore-action class="hidden"></span>
+          <span data-handout-copy-action></span>
+        </div>
+      </article>
+    `;
+
+    const archiveRoot = document.getElementById('archive-root');
+    expect(archiveRoot).toBeInstanceOf(HTMLElement);
+    if (!(archiveRoot instanceof HTMLElement)) {
+      return;
+    }
+
+    moveHandoutCardToArchivedSection(archiveRoot);
+
+    expect(document.querySelector('[data-handout-restore-action]')?.classList.contains('hidden')).toBe(false);
+    expect(document.querySelector('[data-handout-copy-action]')?.classList.contains('hidden')).toBe(false);
+  });
 });
 
 describe('moveRestoredHandoutCard', () => {

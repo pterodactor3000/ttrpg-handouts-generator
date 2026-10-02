@@ -169,6 +169,9 @@ function moveHandoutCardToArchivedSection(archiveButtonContainer: HTMLElement): 
   const deleteAction = handoutCard.querySelector('[data-handout-delete-action]');
   deleteAction?.classList.remove('hidden');
 
+  const restoreAction = handoutCard.querySelector('[data-handout-restore-action]');
+  restoreAction?.classList.remove('hidden');
+
   const cardFooter = handoutCard.querySelector('[data-handout-card-footer]');
   if (cardFooter instanceof HTMLElement) {
     cardFooter.classList.remove('justify-end');

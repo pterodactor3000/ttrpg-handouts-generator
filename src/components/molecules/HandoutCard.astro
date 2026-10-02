@@ -106,13 +106,9 @@ const stripStyle = [
             client:idle
           />
         </span>
-        {
-          handout.status === 'archived' && (
-            <span data-handout-restore-action>
-              <RestoreHandoutButton handoutId={handout.id} handoutTitle={handout.title} client:idle />
-            </span>
-          )
-        }
+        <span data-handout-restore-action class:list={[handout.status !== 'archived' && 'hidden']}>
+          <RestoreHandoutButton handoutId={handout.id} handoutTitle={handout.title} client:idle />
+        </span>
       </div>
       {
         handout.share_token && handout.status !== 'draft' && (

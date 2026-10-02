@@ -229,6 +229,91 @@ describe('unarchive handout (integration)', () => {
     expect(row.archived_at).toBe(archivedRow.archived_at);
   });
 
+  it('rejects a direct published restore that has no share token', async () => {
+    const archiveResponse = await archiveHandout(makeContext({ params: { id: handoutId } }));
+    expect(archiveResponse.status).toBe(200);
+    const archivedRow = await readHandoutRow(handoutId);
+
+    const { error } = await ownerAuthenticatedClient
+      .from('handouts')
+      .update({ status: 'published' })
+      .eq('id', handoutId)
+      .eq('gm_id', ownerUserId);
+
+    expect(error).not.toBeNull();
+
+    const row = await readHandoutRow(handoutId);
+    expect(row.status).toBe('archived');
+    expect(row.share_token).toBeNull();
+    expect(row.archived_at).toBe(archivedRow.archived_at);
+  });
+
+  it('rejects a direct published restore when the title is blank and still allows draft', async () => {
+    const archiveResponse = await archiveHandout(makeContext({ params: { id: handoutId } }));
+    expect(archiveResponse.status).toBe(200);
+
+    const { error: titleError } = await adminClient.from('handouts').update({ title: '   ' }).eq('id', handoutId);
+    expect(titleError).toBeNull();
+    const archivedRow = await readHandoutRow(handoutId);
+
+    const { error } = await ownerAuthenticatedClient
+      .from('handouts')
+      .update({ status: 'published', share_token: crypto.randomUUID() })
+      .eq('id', handoutId)
+      .eq('gm_id', ownerUserId);
+
+    expect(error).not.toBeNull();
+
+    const stillArchived = await readHandoutRow(handoutId);
+    expect(stillArchived.status).toBe('archived');
+    expect(stillArchived.title).toBe('   ');
+    expect(stillArchived.share_token).toBeNull();
+    expect(stillArchived.archived_at).toBe(archivedRow.archived_at);
+
+    const { error: draftError } = await ownerAuthenticatedClient
+      .from('handouts')
+      .update({ status: 'draft', archived_at: null })
+      .eq('id', handoutId)
+      .eq('gm_id', ownerUserId);
+
+    expect(draftError).toBeNull();
+
+    const draftRow = await readHandoutRow(handoutId);
+    expect(draftRow.status).toBe('draft');
+    expect(draftRow.title).toBe('   ');
+    expect(draftRow.archived_at).toBeNull();
+  });
+
+  it('rejects a direct published restore when the content is blank', async () => {
+    const archiveResponse = await archiveHandout(makeContext({ params: { id: handoutId } }));
+    expect(archiveResponse.status).toBe(200);
+
+    const { error: contentError } = await adminClient
+      .from('handouts')
+      .update({ markdown_content: '   ' })
+      .eq('id', handoutId);
+    expect(contentError).toBeNull();
+
+    const { error } = await ownerAuthenticatedClient
+      .from('handouts')
+      .update({ status: 'published', share_token: crypto.randomUUID() })
+      .eq('id', handoutId)
+      .eq('gm_id', ownerUserId);
+
+    expect(error).not.toBeNull();
+
+    const { data, error: readError } = await adminClient
+      .from('handouts')
+      .select('status, share_token, markdown_content')
+      .eq('id', handoutId)
+      .single<{ status: string; share_token: string | null; markdown_content: string }>();
+
+    expect(readError).toBeNull();
+    expect(data?.status).toBe('archived');
+    expect(data?.share_token).toBeNull();
+    expect(data?.markdown_content).toBe('   ');
+  });
+
   it('rejects a direct owner update that leaves the handout archived', async () => {
     const archiveResponse = await archiveHandout(makeContext({ params: { id: handoutId } }));
     expect(archiveResponse.status).toBe(200);
