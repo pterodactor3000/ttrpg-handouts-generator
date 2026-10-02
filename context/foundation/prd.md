@@ -123,6 +123,10 @@ Added 2026-05-31. These refine the shipped MVP surface (S-01); none introduce ne
 - FR-014: Each handout style category (grimdark / high fantasy / postapo) renders with its own preset font and font color, in both preview and shared view. Priority: nice-to-have. Change: modified (supersedes the "single default font" MVP scope decision; fonts are preset per style, not user-selected).
 - FR-015: Visitor sees the app name on the landing page and a clear entry point to start the login flow. Priority: nice-to-have. Change: new.
 
+Added 2026-10-02 for S-15.
+
+- FR-016: A signed-in GM can switch the dashboard, the new-handout page, the edit page, and Settings between Tower of Light and Darkest of Mines. The choice stays while they move between those pages. Until they choose, those pages follow the system theme. Landing, sign-in, and sign-up follow the system theme and ignore a saved choice. The shared handout does not change, and a handout's category style does not change. Priority: nice-to-have. Change: new.
+
 ## Non-Functional Requirements
 
 - **Response time**: Handout generation completes in less than 5 seconds as perceived by the user (from clicking "generate" to seeing the preview).

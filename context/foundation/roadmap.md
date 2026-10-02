@@ -8,6 +8,7 @@ updated: 2026-10-02
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
 # 2026-06-21: S-10 square-ui-containers, S-11 dashboard-tile-style, S-12 dashboard-drawer-nav, S-13 remove-account, S-14 unarchive-handout — dashboard polish, account lifecycle, state-machine extension
+# 2026-10-02: S-15 theme-switch, signed-in switch between Tower of Light and Darkest of Mines
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -48,6 +49,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | done     |
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
+| S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | ready    |
 
 ## Streams
 
@@ -60,6 +62,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | C      | Polish & theming   | `S-05` / `S-06` / `S-07` → `S-09` / `S-10` / `S-11` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-10 and S-11 are parallel dashboard/UI polish after S-05 and S-09. |
 | D      | Entry & discovery  | `S-08`                            | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow.     |
 | E      | Account lifecycle  | `S-13`                            | Standalone account-deletion slice; joins Stream A at S-01. Soft-delete with 30-day retention before permanent purge.                            |
+| F      | Theme switch       | `S-15`                            | No prerequisite. Landing and auth follow the system theme. The signed-in choice applies on the dashboard, new-handout, edit, and settings screens. |
 
 ## Baseline
 
@@ -300,6 +303,19 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** PRD Business Logic states archived handouts are "read-only for the GM — no further edits allowed"; this slice deliberately extends the state machine to allow archived → draft/published transition. `/10x-plan` must update RLS write policies if F-01 currently blocks GM writes on archived rows. Restoring to Published without a new token preserves bookmarked player links — desirable per user confirmation.
 - **Status:** done
 
+### S-15: Theme switch
+
+- **Outcome:** A signed-in GM can switch the dashboard, the new-handout page, the edit page, and Settings between Tower of Light and Darkest of Mines, and that choice stays while they move between those pages. Until they choose, those pages follow the system theme. Landing, sign-in, and sign-up follow the system theme and ignore a saved choice. The shared handout stays as it is.
+- **Change ID:** `theme-switch`
+- **PRD refs:** FR-012, FR-015, FR-016
+- **Prerequisites:** none
+- **Parallel with:** none
+- **Blockers:** none
+- **Unknowns:**
+  - Does the GM's choice have to survive a reload? Owner: user. Block: no.
+- **Risk:** The change is presentational. It covers the signed-in app screens plus landing and auth, and it leaves the shared handout and the three handout styles alone. The system theme is the default until the GM chooses. The choice has to survive navigation between the four signed-in pages. A wrong default would show the other theme on first paint.
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
@@ -319,6 +335,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-12       | `dashboard-drawer-nav`               | Left drawer navigation with status filters           | yes                   | S-02, S-04 done; run `/10x-plan dashboard-drawer-nav`                                   |
 | S-13       | `remove-account`                     | Soft-delete account removal with 30-day retention    | yes                   | S-01 done; run `/10x-plan remove-account`                                              |
 | S-14       | `unarchive-handout`                  | Restore archived handout to draft or published       | no                    | Depends on S-12; run `/10x-plan unarchive-handout` after S-12 is done                  |
+| S-15       | `theme-switch`                       | Switch between Tower of Light and Darkest of Mines   | yes                   | No prerequisites; run `/10x-plan theme-switch`                                         |
 
 ## Open Roadmap Questions
 
