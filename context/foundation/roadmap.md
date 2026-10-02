@@ -9,6 +9,7 @@ updated: 2026-10-02
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
 # 2026-06-21: S-10 square-ui-containers, S-11 dashboard-tile-style, S-12 dashboard-drawer-nav, S-13 remove-account, S-14 unarchive-handout — dashboard polish, account lifecycle, state-machine extension
 # 2026-10-02: S-15 theme-switch, signed-in switch between Tower of Light and Darkest of Mines
+# 2026-10-02: S-16 markdown-tips, help modal with markdown examples on the handout editor
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -50,6 +51,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
 | S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | ready    |
+| S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | ready    |
 
 ## Streams
 
@@ -59,7 +61,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | ------ | ------------------ | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | A      | Core value proof   | `F-01` → `S-01`                   | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline.                                                        |
 | B      | Handout management | `S-02` → `S-03` / `S-04` → `S-12` → `S-14` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; S-12 adds status filtering; S-14 extends the archive state machine after S-12. |
-| C      | Polish & theming   | `S-05` / `S-06` / `S-07` → `S-09` / `S-10` / `S-11` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-10 and S-11 are parallel dashboard/UI polish after S-05 and S-09. |
+| C      | Polish & theming   | `S-05` / `S-06` / `S-07` / `S-16` → `S-09` / `S-10` / `S-11` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-10 and S-11 are parallel dashboard/UI polish after S-05 and S-09. S-16 adds markdown help on the handout editor. |
 | D      | Entry & discovery  | `S-08`                            | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow.     |
 | E      | Account lifecycle  | `S-13`                            | Standalone account-deletion slice; joins Stream A at S-01. Soft-delete with 30-day retention before permanent purge.                            |
 | F      | Theme switch       | `S-15`                            | No prerequisite. Landing and auth follow the system theme. The signed-in choice applies on the dashboard, new-handout, edit, and settings screens. |
@@ -316,6 +318,19 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** The change is presentational. It covers the signed-in app screens plus landing and auth, and it leaves the shared handout and the three handout styles alone. The system theme is the default until the GM chooses. The choice has to survive navigation between the four signed-in pages. A wrong default would show the other theme on first paint.
 - **Status:** ready
 
+### S-16: Markdown tips
+
+- **Outcome:** A GM writing a new or existing handout can open a help icon next to the markdown field. The icon opens a modal with a short markdown guide and examples of syntax the preview already renders.
+- **Change ID:** `markdown-tips`
+- **PRD refs:** FR-004, FR-017
+- **Prerequisites:** S-01, S-03
+- **Parallel with:** none
+- **Blockers:** none
+- **Unknowns:**
+  - Which examples belong in the modal? Owner: plan. Block: no.
+- **Risk:** The guide can teach syntax the preview drops. Examples stay limited to syntax the preview already renders. Raw HTML stays out, because the renderer rejects it.
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
@@ -336,6 +351,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-13       | `remove-account`                     | Soft-delete account removal with 30-day retention    | yes                   | S-01 done; run `/10x-plan remove-account`                                              |
 | S-14       | `unarchive-handout`                  | Restore archived handout to draft or published       | no                    | Depends on S-12; run `/10x-plan unarchive-handout` after S-12 is done                  |
 | S-15       | `theme-switch`                       | Switch between Tower of Light and Darkest of Mines   | yes                   | No prerequisites; run `/10x-plan theme-switch`                                         |
+| S-16       | `markdown-tips`                      | Markdown help modal on the handout editor            | yes                   | S-01 and S-03 done; run `/10x-plan markdown-tips`                                      |
 
 ## Open Roadmap Questions
 

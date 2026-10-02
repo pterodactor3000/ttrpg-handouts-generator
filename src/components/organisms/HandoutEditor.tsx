@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { CircleQuestionMark } from 'lucide-react';
 import * as Sentry from '@sentry/astro';
 import type { BackgroundCategory, HandoutStatus, InitialHandout } from '@/types';
 import { renderHandoutHtml } from '@/lib/handout-renderer';
@@ -6,6 +7,7 @@ import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import { BackgroundPicker } from '@/components/molecules/BackgroundPicker';
 import { HandoutArticle } from '@/components/molecules/HandoutArticle';
 import { TagsInput } from '@/components/molecules/TagsInput';
+import { MarkdownTipsDialog } from '@/components/organisms/MarkdownTipsDialog';
 import { ShareDialog } from '@/components/organisms/ShareDialog';
 import { Button } from '@/components/atoms/button';
 import { BackToDashboardButton } from '@/components/molecules/BackToDashboardButton';
@@ -52,6 +54,7 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
   const [shareToken, setShareToken] = useState<string | null>(initialHandout?.shareToken ?? null);
   const [handoutStatus, setHandoutStatus] = useState<HandoutStatus>(initialHandout?.status ?? 'draft');
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [markdownTipsOpen, setMarkdownTipsOpen] = useState(false);
   const [confirmBackOpen, setConfirmBackOpen] = useState(false);
   const [savedSnapshot, setSavedSnapshot] = useState(() =>
     initialHandout
@@ -200,9 +203,22 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="handout-markdown" className="text-foreground text-base">
-                Content (Markdown)
-              </label>
+              <div className="flex items-center justify-between gap-2">
+                <label htmlFor="handout-markdown" className="text-foreground text-base">
+                  Content (Markdown)
+                </label>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Markdown help"
+                  onClick={() => {
+                    setMarkdownTipsOpen(true);
+                  }}
+                >
+                  <CircleQuestionMark />
+                </Button>
+              </div>
               <Textarea
                 id="handout-markdown"
                 value={markdownContent}
@@ -317,6 +333,13 @@ const HandoutEditor = ({ initialHandout }: { initialHandout?: InitialHandout }) 
           setShareDialogOpen(false);
         }}
         shareUrl={shareUrl}
+      />
+
+      <MarkdownTipsDialog
+        open={markdownTipsOpen}
+        onClose={() => {
+          setMarkdownTipsOpen(false);
+        }}
       />
 
       <Dialog open={confirmBackOpen} onOpenChange={setConfirmBackOpen}>

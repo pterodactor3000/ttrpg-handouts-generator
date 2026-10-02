@@ -127,6 +127,10 @@ Added 2026-10-02 for S-15.
 
 - FR-016: A signed-in GM can switch the dashboard, the new-handout page, the edit page, and Settings between Tower of Light and Darkest of Mines. The choice stays while they move between those pages. Until they choose, those pages follow the system theme. Landing, sign-in, and sign-up follow the system theme and ignore a saved choice. The shared handout does not change, and a handout's category style does not change. Priority: nice-to-have. Change: new.
 
+Added 2026-10-02 for S-16.
+
+- FR-017: A GM writing a new or existing handout can open a help icon next to the markdown field. The icon opens a modal with a short markdown guide and examples of syntax the preview already renders. Raw HTML is out of the guide. Priority: nice-to-have. Change: new.
+
 ## Non-Functional Requirements
 
 - **Response time**: Handout generation completes in less than 5 seconds as perceived by the user (from clicking "generate" to seeing the preview).
