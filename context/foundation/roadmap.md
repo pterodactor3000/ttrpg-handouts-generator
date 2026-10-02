@@ -10,6 +10,7 @@ updated: 2026-10-02
 # 2026-06-21: S-10 square-ui-containers, S-11 dashboard-tile-style, S-12 dashboard-drawer-nav, S-13 remove-account, S-14 unarchive-handout — dashboard polish, account lifecycle, state-machine extension
 # 2026-10-02: S-15 theme-switch, signed-in switch between Tower of Light and Darkest of Mines
 # 2026-10-02: S-16 markdown-tips, help modal with markdown examples on the handout editor
+# 2026-10-02: S-18 drawer-type-filters, S-17 handout-search. Type filters in the drawer, then search across draft, published, and archived
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -52,6 +53,8 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
 | S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | ready    |
 | S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | ready    |
+| S-18 | `drawer-type-filters`                | filter the dashboard by one handout type at a time from the left drawer, with a separator between the state filters and the type controls                                                                     | S-12          | FR-002, FR-005, TBD - add FR in separate PRD edit              | ready    |
+| S-17 | `handout-search`                     | search handouts by title, tags, and type after 2 characters and see matches in one view split into draft, published, and archived                                                                             | S-18          | FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit      | proposed |
 
 ## Streams
 
@@ -60,7 +63,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | Stream | Theme              | Chain                             | Note                                                                                                                                            |
 | ------ | ------------------ | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | A      | Core value proof   | `F-01` → `S-01`                   | Schema unlocks the north star; shipping S-01 validates the full create → share pipeline.                                                        |
-| B      | Handout management | `S-02` → `S-03` / `S-04` → `S-12` → `S-14` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; S-12 adds status filtering; S-14 extends the archive state machine after S-12. |
+| B      | Handout management | `S-02` → `S-03` / `S-04` → `S-12` → `S-14` / `S-18` → `S-17` | Follows after S-01 (joins Stream A at S-01). S-03 and S-04 are parallel; S-12 adds status filtering; S-14 extends the archive state machine after S-12. S-18 adds type filters on that drawer; S-17 search follows S-18. |
 | C      | Polish & theming   | `S-05` / `S-06` / `S-07` / `S-16` → `S-09` / `S-10` / `S-11` | Post-MVP enhancements over the shipped S-01 surface (joins Stream A at S-01). S-10 and S-11 are parallel dashboard/UI polish after S-05 and S-09. S-16 adds markdown help on the handout editor. |
 | D      | Entry & discovery  | `S-08`                            | Standalone; no foundation or slice prerequisite. Gives unauthenticated visitors a meaningful first impression and entry into the auth flow.     |
 | E      | Account lifecycle  | `S-13`                            | Standalone account-deletion slice; joins Stream A at S-01. Soft-delete with 30-day retention before permanent purge.                            |
@@ -331,6 +334,30 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** The guide can teach syntax the preview drops. Examples stay limited to syntax the preview already renders. Raw HTML stays out, because the renderer rejects it.
 - **Status:** ready
 
+### S-18: Drawer type filters
+
+- **Outcome:** A GM can filter the dashboard from the left drawer by one handout type at a time (grimdark, high fantasy, or postapo), or choose All. A separator sits between the state filters and the type controls. The type controls use the same styles as the category buttons on handout creation. The editor category control stays as it is. With search off, the chosen type combines with the selected state. With search on, the chosen type narrows all three result groups.
+- **Change ID:** `drawer-type-filters`
+- **PRD refs:** FR-002, FR-005, TBD - add FR in separate PRD edit
+- **Prerequisites:** S-12
+- **Parallel with:** none
+- **Blockers:** none
+- **Unknowns:** none
+- **Risk:** The drawer already filters by state. This slice adds a second filter group without changing those state controls or the category control on the handout editor. All must clear the type filter, or a single type can hide every handout in the selected state. The control look is copied from handout creation, so a style drift would make the two surfaces disagree.
+- **Status:** ready
+
+### S-17: Handout search
+
+- **Outcome:** A GM can search their handouts by title, tags, and type. Search runs only after 2 characters. Matches appear in one view, always split into Draft, Published, and Archived. The drawer state filter does not hide a group while search is active. The chosen type still narrows all three groups. The markdown body is not searched, and the search text does not survive a reload.
+- **Change ID:** `handout-search`
+- **PRD refs:** FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit
+- **Prerequisites:** S-18
+- **Parallel with:** none
+- **Blockers:** none
+- **Unknowns:** none
+- **Risk:** Search replaces the state-filtered list with one grouped view once the query reaches 2 characters. The state filter must not hide a group during that view, while the type filter from S-18 still narrows all three groups. Matching title, tags, and type only keeps the markdown body out of results. A query that matches nothing should still show the three groups rather than fall back to the unfiltered list.
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
@@ -352,6 +379,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-14       | `unarchive-handout`                  | Restore archived handout to draft or published       | no                    | Depends on S-12; run `/10x-plan unarchive-handout` after S-12 is done                  |
 | S-15       | `theme-switch`                       | Switch between Tower of Light and Darkest of Mines   | yes                   | No prerequisites; run `/10x-plan theme-switch`                                         |
 | S-16       | `markdown-tips`                      | Markdown help modal on the handout editor            | yes                   | S-01 and S-03 done; run `/10x-plan markdown-tips`                                      |
+| S-18       | `drawer-type-filters`                | Type filters in the dashboard drawer                 | yes                   | S-12 done; run `/10x-plan drawer-type-filters`                                         |
+| S-17       | `handout-search`                     | Search handouts by title, tags, and type             | no                    | Depends on S-18; run `/10x-plan handout-search` after S-18 is done                     |
 
 ## Open Roadmap Questions
 

@@ -63,7 +63,12 @@ if (!supabase) {
           </Card>
         </div>
       ) : (
-        <div data-dashboard data-status-filter="draft" class="flex min-h-screen w-full items-stretch">
+        <div
+          data-dashboard
+          data-status-filter="draft"
+          data-type-filter="all"
+          class="flex min-h-screen w-full items-stretch"
+        >
           <div
             data-dashboard-drawer-slot
             class="w-0 shrink-0 transition-[width] duration-300 ease-out motion-reduce:transition-none lg:w-64"

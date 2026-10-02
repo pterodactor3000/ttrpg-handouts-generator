@@ -2,7 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
+import { DrawerTypeFilters } from '@/components/molecules/DrawerTypeFilters';
 import { getDrawerPresentation } from '@/lib/dashboard-drawer';
+import {
+  applyDashboardTypeFilter,
+  readDashboardTypeFilter,
+  type DashboardTypeFilter,
+} from '@/lib/dashboard-type-filter';
 import { cn } from '@/lib/utils';
 
 type StatusFilter = 'draft' | 'published' | 'archived';
@@ -33,6 +39,19 @@ function readStatusFilter(): StatusFilter {
   return 'draft';
 }
 
+function readInitialTypeFilter(): DashboardTypeFilter {
+  if (typeof document === 'undefined') {
+    return 'all';
+  }
+
+  const dashboard = document.querySelector('[data-dashboard]');
+  if (!(dashboard instanceof HTMLElement)) {
+    return 'all';
+  }
+
+  return readDashboardTypeFilter(dashboard);
+}
+
 function readIsWide(): boolean {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     return false;
@@ -54,6 +73,7 @@ function DashboardDrawer() {
   const [isOverlayShown, setIsOverlayShown] = useState(false);
   const [isWide, setIsWide] = useState(readIsWide);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(readStatusFilter);
+  const [typeFilter, setTypeFilter] = useState<DashboardTypeFilter>(readInitialTypeFilter);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const presentation = getDrawerPresentation({ isWide });
   const isSidebar = presentation === 'sidebar';
@@ -159,6 +179,23 @@ function DashboardDrawer() {
       }
     }
 
+    applyDashboardTypeFilter(dashboard);
+
+    if (!isSidebar) {
+      closeOverlay();
+    }
+  }
+
+  function applyTypeFilter(nextFilter: DashboardTypeFilter) {
+    const dashboard = document.querySelector('[data-dashboard]');
+    if (!(dashboard instanceof HTMLElement)) {
+      return;
+    }
+
+    dashboard.setAttribute('data-type-filter', nextFilter);
+    setTypeFilter(nextFilter);
+    applyDashboardTypeFilter(dashboard);
+
     if (!isSidebar) {
       closeOverlay();
     }
@@ -194,6 +231,14 @@ function DashboardDrawer() {
     </Button>
   ));
 
+  const filterStack = (
+    <>
+      {statusButtons}
+      <div role="separator" className="border-border my-2 border-t" />
+      <DrawerTypeFilters typeFilter={typeFilter} onTypeFilterChange={applyTypeFilter} />
+    </>
+  );
+
   const sidebarPanel =
     isSidebar && slotElement instanceof HTMLElement
       ? createPortal(
@@ -202,7 +247,7 @@ function DashboardDrawer() {
             data-drawer-presentation="sidebar"
             className="bg-card text-card-foreground border-border animate-in fade-in-0 slide-in-from-left flex h-full w-full flex-col gap-1 border-r p-3 duration-300 motion-reduce:animate-none"
           >
-            {statusButtons}
+            {filterStack}
           </div>,
           slotElement,
         )
@@ -228,7 +273,7 @@ function DashboardDrawer() {
                 'data-[state=open]:animate-in data-[state=open]:slide-in-from-left data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left duration-200 data-[state=closed]:pointer-events-none motion-reduce:animate-none',
               )}
             >
-              {statusButtons}
+              {filterStack}
             </div>
           </>,
           dashboardElement,
