@@ -1,35 +1,36 @@
 # TTRPG Handouts Generator
 
-A focused tool for game masters to create, manage, and share handouts for tabletop RPG sessions.
-
-## Problem
-
-Physical TTRPG handouts get lost after distribution. Players rely on incomplete notes, and GMs lose access to handouts they created. This tool provides a permanent source of truth for session handouts.
+Handouts Scriptorium is a tool for game masters. A GM writes a handout in markdown, previews it over a themed background, and shares a permanent link. Players open that link on any device without an account.
 
 ## Features
 
-- **Create handouts**: Write markdown text over themed background images
-- **Instant preview**: See rendered handouts before sharing
-- **Share via link**: Generate permanent read-only links for players (no login required)
-- **Organize**: Tag handouts for easy reference across sessions
-- **Manage**: Edit or delete handouts from your personal library
+- Create, edit, and preview a handout before it is shared.
+- Pick one of three themes: High Fantasy, Eldritch, or Grimdark. Each theme has its own background, border, font, and font color.
+- Tag handouts. A crowded tag row shows `+N` and lists every tag in a dialog.
+- Publish a permanent read-only link at `/share/<token>`.
+- Filter the dashboard by Drafts, Published, or Archived.
+- Archive a published handout without taking down its player link. Restore an archived handout to draft or published. A published restore keeps the existing token.
+- Change the account password from Settings.
+- Close an account. Sign-in stops immediately. Shared handouts stay available for 30 days, then a daily job deletes the account and its handouts.
 
-## Tech Stack
+Out of scope: custom background uploads, PDF or image export, and sign-in providers other than email and password.
 
-- **Astro** v6 - Modern web framework with server-first rendering
-- **React** v19 - UI library for interactive components
-- **TypeScript** v5 - Type-safe JavaScript
-- **Tailwind CSS** v4 - Utility-first CSS framework
-- **Supabase** - Authentication and PostgreSQL database
-- **Cloudflare Workers** - Edge deployment runtime
+## Tech stack
+
+- Astro 6, server-rendered, deployed to Cloudflare Workers
+- React 19 for interactive islands
+- TypeScript 5
+- Tailwind CSS 4
+- Supabase Auth and Postgres
+- Sentry for error reporting
 
 ## Prerequisites
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
-- Docker (for local Supabase development)
+- Node.js v22.14.0 (see `.nvmrc`)
+- npm
+- Docker, for the local Supabase stack
 
-## Getting Started
+## Getting started
 
 1. Install dependencies:
 
@@ -37,149 +38,117 @@ Physical TTRPG handouts get lost after distribution. Players rely on incomplete 
 npm install
 ```
 
-2. Set up Supabase and configure environment variables (see [Supabase Configuration](#supabase-configuration) below)
-
-3. Create a `.dev.vars` file for local Cloudflare dev secrets:
-
-```bash
-cp .env.example .dev.vars
-```
-
-4. Run the development server:
-
-```bash
-npm run dev
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server (Cloudflare workerd runtime)
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint with type-checked rules
-- `npm run lint:fix` - Auto-fix ESLint issues
-- `npm run format` - Run Prettier
-
-## Project Structure
-
-```md
-.
-├── context/foundation/ # Product requirements and architecture decisions
-├── src/
-│ ├── layouts/ # Astro layouts
-│ ├── pages/ # Astro pages
-│ │ └── api/ # API endpoints
-│ ├── components/ # UI components (Astro & React)
-│ └── assets/ # Static assets
-├── public/ # Public assets
-├── .github/workflows/ # CI/CD pipeline
-└── wrangler.jsonc # Cloudflare Workers config
-```
-
-## Supabase Configuration
-
-This project uses [Supabase](https://supabase.com/) for authentication and database. Environment variables are declared via Astro's `astro:env` schema and are treated as **server-only secrets** — they are never exposed to the client.
-
-### First-time setup (local development)
-
-Requires [Docker](https://www.docker.com/) and ~7 GB RAM.
-
-1. Create your `.env` file:
+2. Copy the env files:
 
 ```bash
 cp .env.example .env
+cp .env.example .dev.vars
 ```
 
-2. Initialize the local Supabase project (creates a `supabase/` config folder):
-
-```bash
-npx supabase init
-```
-
-3. Start the local stack (downloads Docker images on first run):
+3. Start local Supabase. `supabase/config.toml` is already in the repo.
 
 ```bash
 npx supabase start
 ```
 
-4. Copy the credentials printed by the CLI into your `.env` and `.dev.vars`:
+4. Fill `.env` and `.dev.vars` from `npx supabase status -o env`:
 
-```
-SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_KEY=<anon key from CLI output>
-```
+| App variable                | Status output      |
+| --------------------------- | ------------------ |
+| `SUPABASE_URL`              | `API_URL`          |
+| `SUPABASE_KEY`              | `ANON_KEY`         |
+| `SUPABASE_SERVICE_ROLE_KEY` | `SERVICE_ROLE_KEY` |
 
-5. To stop the stack when done:
+5. Start the dev server:
 
 ```bash
-npx supabase stop
+npm run dev
 ```
 
-The local Studio UI is available at `http://localhost:54323`.
+Local Studio is at `http://localhost:54323`. Stop the stack with `npx supabase stop`.
 
-### Using a cloud Supabase project instead
+Local auth does not require email confirmation (`enable_confirmations` is false in `supabase/config.toml`). On a hosted Supabase project, turn off **Authentication, Email, Confirm email** if you want the same behavior.
 
-If you prefer to use a hosted Supabase project, add these variables to your `.env` and `.dev.vars` files:
+## Scripts
 
-| Variable       | Description                                                |
-| -------------- | ---------------------------------------------------------- |
-| `SUPABASE_URL` | Project URL from Supabase dashboard → Settings → API       |
-| `SUPABASE_KEY` | `anon` public key from Supabase dashboard → Settings → API |
+- `npm run dev` starts the Cloudflare workerd dev server
+- `npm run build` builds the production Worker
+- `npm run preview` serves the production build
+- `npm run lint` runs type-checked ESLint
+- `npm run lint:fix` applies ESLint fixes
+- `npm run format` runs Prettier
+- `npm test` runs unit and integration tests
+- `npm run test:e2e` runs Playwright
 
+## Tests
+
+Unit tests need no services:
+
+```bash
+npm test -- --project unit
 ```
-SUPABASE_URL=https://<project-ref>.supabase.co
-SUPABASE_KEY=<anon-key>
+
+Integration tests need the local stack. Copy `.env.test.example` to `.env.test` and fill it from `npx supabase status -o env` (`SUPABASE_URL` from `API_URL`, `SUPABASE_ANON_KEY` from `ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` from `SERVICE_ROLE_KEY`). Then:
+
+```bash
+npm test -- --project integration
 ```
 
-### Email confirmation in local development
+GitHub Actions runs lint, unit tests, integration tests, and `e2e/player-share-link.spec.ts` on every push and pull request to `main`.
 
-By default Supabase requires email confirmation before a user can sign in. To skip this during local development:
+## Project structure
 
-1. Open the Supabase dashboard for your project
-2. Go to **Authentication → Email → Confirm email**
-3. Toggle it **off**
+```text
+src/pages/          Astro routes and API endpoints
+src/components/     atoms, molecules, and organisms
+src/layouts/        page shells
+src/lib/            services and helpers
+src/middleware.ts   auth gate for protected routes
+supabase/migrations SQL migrations
+__tests__/          Vitest unit and integration tests
+e2e/                Playwright
+context/foundation/ product requirements and roadmap
+wrangler.jsonc      Cloudflare Workers config
+```
 
-Users can then sign in immediately after sign-up without clicking a confirmation link.
+## Environment
 
-### Auth routes
+`SUPABASE_URL` and `SUPABASE_KEY` are server-only. The anon key is not sent to the browser.
 
-| Route                 | Description                                                             |
-| --------------------- | ----------------------------------------------------------------------- |
-| `/auth/signin`        | Email/password sign-in form                                             |
-| `/auth/signup`        | Email/password sign-up form                                             |
-| `/auth/confirm-email` | Post-signup "check your inbox" page                                     |
-| `/dashboard`          | Example protected page (redirects to `/auth/signin` if unauthenticated) |
+| Variable                    | Required | Use                                                               |
+| --------------------------- | -------- | ----------------------------------------------------------------- |
+| `SUPABASE_URL`              | yes      | Supabase project URL                                              |
+| `SUPABASE_KEY`              | yes      | Anon key for the SSR auth client                                  |
+| `SUPABASE_SERVICE_ROLE_KEY` | yes      | Account deletion, closed-account sign-in check, and the purge job |
+| `PUBLIC_SENTRY_DSN`         | no       | Browser and server error reporting                                |
+| `SENTRY_ORG`                | no       | Source map upload at build time                                   |
+| `SENTRY_PROJECT`            | no       | Source map upload at build time                                   |
+| `SENTRY_AUTH_TOKEN`         | no       | Source map upload at build time                                   |
 
-Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication.
+## Routes
 
-## MVP Scope
+| Route                 | Who can open it                                      |
+| --------------------- | ---------------------------------------------------- |
+| `/`                   | Anyone. Landing page.                                |
+| `/auth/signin`        | Anyone. Email and password sign-in.                  |
+| `/auth/signup`        | Anyone. Email and password sign-up.                  |
+| `/auth/confirm-email` | Anyone. Shown after sign-up when confirmation is on. |
+| `/dashboard`          | Signed-in GM.                                        |
+| `/handouts/new`       | Signed-in GM.                                        |
+| `/handouts/<id>/edit` | Signed-in GM who owns the handout.                   |
+| `/settings`           | Signed-in GM. Password change and account deletion.  |
+| `/account-closed`     | Anyone. Shown after a successful deletion.           |
+| `/share/<token>`      | Anyone with the token. Read-only.                    |
 
-- 3 pre-loaded category backgrounds (grimdark, high fantasy, postapo)
-- Markdown-based handout editing
-- Link-only sharing (no PDF export in v1)
-- Single default font
-- Auth via email/password (using Supabase Auth routes above)
+`src/middleware.ts` protects `/dashboard`, `/handouts`, and `/settings`. A missing session redirects to `/auth/signin`.
 
 ## Deployment
 
-This project deploys to [Cloudflare Workers](https://workers.cloudflare.com/).
-
-1. Build the project:
+The app deploys to Cloudflare Workers.
 
 ```bash
 npm run build
-```
-
-2. Deploy with Wrangler:
-
-```bash
 npx wrangler deploy
 ```
 
-Set `SUPABASE_URL` and `SUPABASE_KEY` as secrets in your Cloudflare dashboard or via `npx wrangler secret put`.
-
-GitHub Actions runs lint, unit tests, and integration tests (with local Supabase) on every push and PR to `main`. Cloudflare Pages handles build/deploy separately.
-
----
-
-**Timeline**: 3-week MVP | **Status**: In development | **MVP**: Delivered
+Set `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` with `npx wrangler secret put` or in the Cloudflare dashboard. `wrangler.jsonc` schedules the purge job daily at 03:00 UTC. Cloudflare Pages builds and deploys on merge. GitHub Actions only runs the test workflow.
