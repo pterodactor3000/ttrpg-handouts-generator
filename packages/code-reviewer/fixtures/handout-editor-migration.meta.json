@@ -1,0 +1,73 @@
+{
+  "id": "handout-editor-migration",
+  "description": "Stub PR migrating a React class HandoutPreviewPanel to hooks and adding a duplicate-handout API. Planted defects span all five review criteria for multi-model evals.",
+  "prTitle": "// [S-03]::[edit-handout] // feat: migrate preview panel to hooks and add duplicate route",
+  "prDescription": "## Summary\n\nMigrates HandoutPreviewPanel from a class component to React 19 hooks and adds an API route to duplicate handouts.\n\n## Test plan\n\n- [ ] Manual preview in editor\n- [ ] Duplicate handout from dashboard",
+  "diffFile": "handout-editor-migration.diff",
+  "expectedFile": "handout-editor-migration.expected.json",
+  "plantedDefects": [
+    {
+      "id": "stale-effect-empty-deps",
+      "criterion": "correctness",
+      "severity": "bug",
+      "summary": "useEffect uses [] deps; preview never updates when markdownContent or backgroundCategory changes"
+    },
+    {
+      "id": "swallowed-render-error",
+      "criterion": "correctness",
+      "severity": "risk",
+      "summary": "Empty .catch() on renderHandoutHtml hides failures"
+    },
+    {
+      "id": "hardcoded-service-role-key",
+      "criterion": "security",
+      "severity": "bug",
+      "summary": "SERVICE_ROLE_KEY literal in source; bypasses user-scoped auth"
+    },
+    {
+      "id": "missing-auth-check",
+      "criterion": "security",
+      "severity": "bug",
+      "summary": "Duplicate route has no getUser() / 401 gate"
+    },
+    {
+      "id": "unvalidated-request-body",
+      "criterion": "security",
+      "severity": "bug",
+      "summary": "body.gmId accepted from client without zod; enables cross-user duplication"
+    },
+    {
+      "id": "leaked-stack-trace",
+      "criterion": "security",
+      "severity": "bug",
+      "summary": "404 response includes stack trace"
+    },
+    {
+      "id": "missing-prerender-false",
+      "criterion": "repo_idioms",
+      "severity": "risk",
+      "acceptanceCriterion": "A2",
+      "summary": "New API route missing export const prerender = false"
+    },
+    {
+      "id": "drive-by-dashboard-layout",
+      "criterion": "minimal_scope",
+      "severity": "nit",
+      "acceptanceCriterion": "A3",
+      "summary": "dashboard.astro max-w-6xl change unrelated to preview migration"
+    },
+    {
+      "id": "migration-without-rls",
+      "criterion": "security",
+      "severity": "bug",
+      "acceptanceCriterion": "A2",
+      "summary": "handout_duplicates_log table created without RLS policies"
+    },
+    {
+      "id": "no-duplicate-route-tests",
+      "criterion": "test_coverage",
+      "severity": "risk",
+      "summary": "New duplicate API and migration ship without tests"
+    }
+  ]
+}

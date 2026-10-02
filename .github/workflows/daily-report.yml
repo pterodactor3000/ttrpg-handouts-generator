@@ -1,0 +1,122 @@
+name: Daily report
+
+on:
+  schedule:
+    # 10:00 UTC daily
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Fetch and print summary only; do not write or commit
+        type: boolean
+        default: false
+      skip_retention:
+        description: Skip deleting stale report files
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: daily-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required secrets
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          REPORT_FROM_EMAIL: ${{ secrets.REPORT_FROM_EMAIL }}
+          REPORT_RECIPIENT_EMAIL: ${{ secrets.REPORT_RECIPIENT_EMAIL }}
+        run: |
+          missing=0
+          if [ -z "$LINEAR_API_KEY" ]; then
+            echo "::error::Missing repository secret LINEAR_API_KEY"
+            missing=1
+          fi
+          if [ -z "$RESEND_API_KEY" ]; then
+            echo "::error::Missing repository secret RESEND_API_KEY"
+            missing=1
+          fi
+          if [ -z "$REPORT_FROM_EMAIL" ]; then
+            echo "::error::Missing repository secret REPORT_FROM_EMAIL"
+            missing=1
+          fi
+          if [ -z "$REPORT_RECIPIENT_EMAIL" ]; then
+            echo "::error::Missing repository secret REPORT_RECIPIENT_EMAIL"
+            missing=1
+          fi
+          exit "$missing"
+
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix packages/daily-report
+
+      - name: Run daily-report unit tests
+        run: npm test -- --project unit packages/daily-report
+
+      - name: Generate daily report
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          REPORT_FROM_EMAIL: ${{ secrets.REPORT_FROM_EMAIL }}
+          REPORT_RECIPIENT_EMAIL: ${{ secrets.REPORT_RECIPIENT_EMAIL }}
+        run: |
+          ARGS=()
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS+=(--dry-run)
+          else
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.skip_retention }}" = "true" ]; then
+              ARGS+=(--skip-retention)
+            fi
+          fi
+          npm run report:generate -- "${ARGS[@]}"
+
+      - name: Commit report changes
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/reports/ttrpg-handouts-generator-*.md
+          if git diff --cached --quiet; then
+            echo "No report changes to commit"
+            exit 0
+          fi
+          git commit -m "$(cat <<'EOF'
+chore(reports): daily Linear backlog report
+
+Automated by .github/workflows/daily-report.yml
+EOF
+)"
+          git push
+
+      - name: Job summary
+        if: always()
+        run: |
+          REPORT=$(ls docs/reports/ttrpg-handouts-generator-*.md 2>/dev/null | sort | tail -1 || true)
+          {
+            echo "## Daily report"
+            echo
+            if [ -n "$REPORT" ]; then
+              echo "- Latest file: \`$REPORT\`"
+            else
+              echo "- No dated report file found"
+            fi
+            echo "- Workflow: \`${{ github.workflow }}\` run \`${{ github.run_id }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

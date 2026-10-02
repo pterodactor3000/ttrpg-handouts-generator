@@ -25,7 +25,7 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'node',
-          include: ['__tests__/**/*.test.{ts,tsx}'],
+          include: ['__tests__/**/*.test.{ts,tsx}', 'packages/daily-report/__tests__/**/*.test.ts'],
           exclude: ['__tests__/integration/**'],
         },
       },

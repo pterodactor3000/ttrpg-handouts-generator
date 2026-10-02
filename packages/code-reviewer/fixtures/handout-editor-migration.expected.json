@@ -1,0 +1,133 @@
+{
+  "state": "fail",
+  "summary": "The preview panel migration leaves a stale useEffect and swallows render errors. The new duplicate API hardcodes a service-role key, skips auth, trusts client gmId, leaks stack traces, and omits prerender=false. A migration adds a table without RLS. Dashboard layout change is out of scope. No tests for the new route.",
+  "acceptanceCriteria": [
+    {
+      "id": "A1",
+      "status": "not_assessed",
+      "note": "CI status cannot be verified from the diff alone."
+    },
+    {
+      "id": "A2",
+      "status": "not_met",
+      "note": "Missing prerender=false on duplicate route; migration lacks RLS."
+    },
+    {
+      "id": "A3",
+      "status": "not_met",
+      "note": "dashboard.astro layout tweak unrelated to stated change."
+    },
+    {
+      "id": "A4",
+      "status": "met"
+    },
+    {
+      "id": "A5",
+      "status": "met"
+    },
+    {
+      "id": "A6",
+      "status": "not_assessed",
+      "note": "E2E is not a merge gate yet."
+    }
+  ],
+  "findings": [
+    {
+      "id": "stale-effect-empty-deps",
+      "severity": "bug",
+      "criterion": "correctness",
+      "title": "Preview effect never re-runs when content changes",
+      "description": "useEffect calls renderHandoutHtml with markdownContent and backgroundCategory but depends on []. The preview stays stale after edits.",
+      "filePath": "src/components/organisms/HandoutPreviewPanel.tsx",
+      "lineHint": "useEffect(..., [])",
+      "suggestion": "Add markdownContent and backgroundCategory to the dependency array."
+    },
+    {
+      "id": "swallowed-render-error",
+      "severity": "risk",
+      "criterion": "correctness",
+      "title": "Render failures are silently swallowed",
+      "description": "The promise chain ends with .catch(() => {}), hiding renderHandoutHtml errors from users and observability.",
+      "filePath": "src/components/organisms/HandoutPreviewPanel.tsx",
+      "lineHint": ".catch(() => {})",
+      "suggestion": "Log or surface the error; set an error state or call Sentry.captureException."
+    },
+    {
+      "id": "hardcoded-service-role-key",
+      "severity": "bug",
+      "criterion": "security",
+      "title": "Service role key hardcoded in API route",
+      "description": "SERVICE_ROLE_KEY is a literal in source and passed to createClient, bypassing user-scoped RLS and cookie auth.",
+      "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+      "lineHint": "SERVICE_ROLE_KEY",
+      "suggestion": "Remove the literal; use the SSR anon key from astro:env/server and enforce gm_id from the authenticated user."
+    },
+    {
+      "id": "missing-auth-check",
+      "severity": "bug",
+      "criterion": "security",
+      "title": "Duplicate route has no authentication gate",
+      "description": "POST handler never calls supabase.auth.getUser() or returns 401 for anonymous callers.",
+      "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+      "suggestion": "Mirror other handout routes: resolve user, return 401 when absent."
+    },
+    {
+      "id": "unvalidated-request-body",
+      "severity": "bug",
+      "criterion": "security",
+      "title": "Client-supplied gmId trusted for insert",
+      "description": "insert uses body.gmId from unvalidated JSON, allowing duplication under another user's account when combined with service role.",
+      "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+      "lineHint": "gm_id: body.gmId",
+      "suggestion": "Validate body with zod if needed; always set gm_id from authenticated user.id."
+    },
+    {
+      "id": "leaked-stack-trace",
+      "severity": "bug",
+      "criterion": "security",
+      "title": "404 response exposes stack trace",
+      "description": "Error payload includes stack: new Error().stack, leaking internal paths to clients.",
+      "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+      "suggestion": "Return a generic not-found message without stack or internal details."
+    },
+    {
+      "id": "missing-prerender-false",
+      "severity": "risk",
+      "criterion": "repo_idioms",
+      "acceptanceCriterion": "A2",
+      "title": "API route missing prerender = false",
+      "description": "New duplicate.ts does not export const prerender = false, breaking Astro SSR API route convention.",
+      "filePath": "src/pages/api/handouts/[id]/duplicate.ts",
+      "suggestion": "Add export const prerender = false after imports."
+    },
+    {
+      "id": "drive-by-dashboard-layout",
+      "severity": "nit",
+      "criterion": "minimal_scope",
+      "acceptanceCriterion": "A3",
+      "title": "Dashboard layout change is out of scope",
+      "description": "Adding max-w-6xl to dashboard.astro is unrelated to preview migration or duplicate API.",
+      "filePath": "src/pages/dashboard.astro",
+      "suggestion": "Revert dashboard change or move to a separate PR."
+    },
+    {
+      "id": "migration-without-rls",
+      "severity": "bug",
+      "criterion": "security",
+      "acceptanceCriterion": "A2",
+      "title": "New table created without RLS",
+      "description": "handout_duplicates_log has no enable row level security or policies.",
+      "filePath": "supabase/migrations/20260629120000_handout_duplicates.sql",
+      "suggestion": "Enable RLS and add per-operation policies scoped to handout ownership."
+    },
+    {
+      "id": "no-duplicate-route-tests",
+      "severity": "risk",
+      "criterion": "test_coverage",
+      "title": "No tests for duplicate API or migration",
+      "description": "New API route and audit table ship without unit or integration coverage for auth, validation, or RLS.",
+      "suggestion": "Add integration tests for duplicate POST (401, 404, success) and migration RLS behavior."
+    }
+  ],
+  "documentedExceptions": []
+}
