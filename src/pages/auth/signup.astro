@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/atoms/card';
 const error = Astro.url.searchParams.get('error');
 ---
 
-<Layout title="Sign up" loadChromeFont>
+<Layout title="Sign up" loadChromeFont chromeThemeMode="system">
   <div class="moon-chrome bg-background text-foreground flex min-h-screen items-center justify-center p-4">
     <!--
       Card is the client island parent. Nesting SignUpForm (previously client:load)

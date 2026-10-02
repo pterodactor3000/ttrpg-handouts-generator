@@ -121,7 +121,7 @@
    Do not set --radius here. :root keeps 0rem, and @theme derives rounded-sm/md/lg/xl
    from it. 8px controls set 0.5rem on the slot rules below, or rounded-[0.5rem]
    on anchors (Welcome, dashboard, edit). Cards and dialogs set 0.75rem below. */
-.moon-chrome {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome {
   --background: #f6f7f9;
   --foreground: #000000;
   --card: #ffffff;
@@ -160,23 +160,23 @@ button:disabled,
 
 /* Control geometry from the Moon Button, Text input, Chip, and Modal boards.
    Scoped so .handout-article and pages outside .moon-chrome stay on the warm palette. */
-.moon-chrome [data-slot='button'] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'] {
   border-radius: 0.5rem;
   font-weight: 600;
 }
 
 /* Flat at rest. Focus draws the ring here so anchors that share data-slot="button"
    get the same keyboard ring as the Button atom (its utility ring is a box-shadow). */
-.moon-chrome [data-slot='button']:not(:focus-visible) {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button']:not(:focus-visible) {
   box-shadow: none;
 }
 
-.moon-chrome [data-slot='button']:focus-visible {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button']:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
 }
 
-.moon-chrome [data-slot='button'].h-8 {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].h-8 {
   height: auto;
   min-height: 2rem;
   padding: 0.25rem 0.75rem;
@@ -184,7 +184,7 @@ button:disabled,
   line-height: 1.5rem;
 }
 
-.moon-chrome [data-slot='button'].h-9 {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].h-9 {
   height: auto;
   min-height: 2.5rem;
   padding: 0.5rem 1rem;
@@ -192,7 +192,7 @@ button:disabled,
   line-height: 1.5rem;
 }
 
-.moon-chrome [data-slot='button'].h-10 {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].h-10 {
   height: auto;
   min-height: 3rem;
   padding: 0.75rem 1rem;
@@ -200,14 +200,14 @@ button:disabled,
   line-height: 1.5rem;
 }
 
-.moon-chrome [data-slot='button'].size-9 {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='button'].size-9 {
   width: 2.5rem;
   height: 2.5rem;
   padding: 0.5rem;
 }
 
-.moon-chrome [data-slot='input'],
-.moon-chrome [data-slot='textarea'] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'],
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textarea'] {
   border: 0;
   border-radius: 0.5rem;
   background-color: var(--input);
@@ -215,46 +215,56 @@ button:disabled,
   box-shadow: inset 0 0 0 1px var(--border);
 }
 
-.moon-chrome [data-slot='input'] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'] {
   height: 2.5rem;
   padding: 0 1rem;
   font-size: 1rem;
   line-height: 1.5rem;
 }
 
-.moon-chrome [data-slot='input'].pl-10 {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'].pl-10 {
   padding-left: 2.5rem;
 }
 
 /* The padding shorthand above beats a utility. Fields with an end icon opt in with pr-10. */
-.moon-chrome [data-slot='input'].pr-10 {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'].pr-10 {
   padding-right: 2.5rem;
 }
 
-.moon-chrome [data-slot='textarea'] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textarea'] {
   padding: 0.75rem 1rem;
 }
 
-.moon-chrome [data-slot='input']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']),
-.moon-chrome [data-slot='textarea']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']) {
+html:not([data-chrome-theme='darkest-of-mines'])
+  .moon-chrome
+  [data-slot='input']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']),
+html:not([data-chrome-theme='darkest-of-mines'])
+  .moon-chrome
+  [data-slot='textarea']:hover:not(:focus-visible):not(:disabled):not([aria-invalid='true']) {
   box-shadow: inset 0 0 0 2px var(--border);
 }
 
-.moon-chrome [data-slot='input']:focus-visible:not([aria-invalid='true']),
-.moon-chrome [data-slot='textarea']:focus-visible:not([aria-invalid='true']) {
+html:not([data-chrome-theme='darkest-of-mines'])
+  .moon-chrome
+  [data-slot='input']:focus-visible:not([aria-invalid='true']),
+html:not([data-chrome-theme='darkest-of-mines'])
+  .moon-chrome
+  [data-slot='textarea']:focus-visible:not([aria-invalid='true']) {
   box-shadow: inset 0 0 0 2px var(--ring);
   outline: none;
 }
 
-.moon-chrome [data-slot='input'][aria-invalid='true'],
-.moon-chrome [data-slot='input'][aria-invalid='true']:focus-visible,
-.moon-chrome [data-slot='textarea'][aria-invalid='true'],
-.moon-chrome [data-slot='textarea'][aria-invalid='true']:focus-visible {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'][aria-invalid='true'],
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='input'][aria-invalid='true']:focus-visible,
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='textarea'][aria-invalid='true'],
+html:not([data-chrome-theme='darkest-of-mines'])
+  .moon-chrome
+  [data-slot='textarea'][aria-invalid='true']:focus-visible {
   box-shadow: inset 0 0 0 2px var(--destructive);
 }
 
-.moon-chrome [data-slot='card'],
-.moon-chrome article:not(.handout-article) {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-slot='card'],
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome article:not(.handout-article) {
   border-radius: 0.75rem;
   background-color: var(--card);
   border-color: var(--border);
@@ -263,7 +273,7 @@ button:disabled,
     0 0 1px rgb(0 0 0 / 0.4);
 }
 
-.moon-chrome[data-slot='dialog-content'] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome[data-slot='dialog-content'] {
   border-radius: 0.75rem;
   background-color: var(--popover);
   border-color: var(--border);
@@ -273,11 +283,11 @@ button:disabled,
 }
 
 /* Geometry only. Status colors stay on StatusBadge so draft, published, and archived can differ. */
-.moon-chrome [data-status-badge] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-status-badge] {
   border-radius: 0.5rem;
 }
 
-.moon-chrome [data-moon-chip] {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome [data-moon-chip] {
   border-radius: 0.5rem;
   border-color: transparent;
   background-color: var(--muted);
@@ -287,7 +297,7 @@ button:disabled,
   line-height: 1.5rem;
 }
 
-.moon-chrome .loader {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader {
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
@@ -300,12 +310,12 @@ button:disabled,
   animation: loader-spin 0.8s linear infinite;
 }
 
-.moon-chrome .loader::before {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader::before {
   content: none;
   animation: none;
 }
 
-.moon-chrome .loader-sm {
+html:not([data-chrome-theme='darkest-of-mines']) .moon-chrome .loader-sm {
   width: 1rem;
   height: 1rem;
   padding: 0;

@@ -7,14 +7,46 @@ import { missingConfigs } from '@/lib/config-status';
 interface Props {
   title?: string;
   loadChromeFont?: boolean;
+  chromeThemeMode?: 'choice' | 'system';
 }
 
-const { title = 'Handouts Scriptorium', loadChromeFont = false } = Astro.props;
+const { title = 'Handouts Scriptorium', loadChromeFont = false, chromeThemeMode } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-chrome-theme-mode={chromeThemeMode}>
   <head>
+    {
+      chromeThemeMode && (
+        <script is:inline>
+          {`(function () {
+  var storageKey = 'handouts-chrome-theme';
+  var towerOfLight = 'tower-of-light';
+  var darkestOfMines = 'darkest-of-mines';
+  var mode = document.documentElement.getAttribute('data-chrome-theme-mode');
+  var isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var systemTheme = isSystemDark ? darkestOfMines : towerOfLight;
+  var resolvedTheme = systemTheme;
+  var storedTheme = null;
+
+  if (mode === 'choice') {
+    try {
+      storedTheme = window.localStorage.getItem(storageKey);
+    } catch (storageError) {
+      console.error('Failed to read chrome theme from localStorage', storageError);
+      storedTheme = null;
+    }
+
+    if (storedTheme === towerOfLight || storedTheme === darkestOfMines) {
+      resolvedTheme = storedTheme;
+    }
+  }
+
+  document.documentElement.dataset.chromeTheme = resolvedTheme;
+})();`}
+        </script>
+      )
+    }
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
