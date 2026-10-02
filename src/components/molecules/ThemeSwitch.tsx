@@ -33,9 +33,7 @@ function ThemeSwitch() {
       aria-checked={isDarkest}
       aria-label={themeLabel}
       onClick={handleToggle}
-      className={cn(
-        'text-foreground flex w-full items-center justify-between gap-6 py-1 text-sm font-semibold',
-      )}
+      className={cn('text-foreground flex w-full items-center justify-between gap-6 py-1 text-sm font-semibold')}
     >
       <span>{themeLabel}</span>
       <span

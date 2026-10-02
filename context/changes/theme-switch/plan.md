@@ -198,9 +198,9 @@ Settings gets the toggle. Choosing a theme stores it, updates the current page, 
 
 #### Manual
 
-- [ ] 1.8 With `localStorage` cleared, a light system theme shows Tower of Light on `/dashboard` and `/auth/signin`. A dark system theme shows Darkest of Mines on those two pages.
-- [ ] 1.9 After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` and `/` are both Darkest of Mines, and controls keep their corner radius.
-- [ ] 1.10 An existing shared handout at `/share/<token>` matches its look from before this phase, including category background and font.
+- [x] 1.8 With `localStorage` cleared, a light system theme shows Tower of Light on `/dashboard` and `/auth/signin`. A dark system theme shows Darkest of Mines on those two pages.
+- [x] 1.9 After `handouts-chrome-theme` is `darkest-of-mines`, `/dashboard` and `/` are both Darkest of Mines, and controls keep their corner radius.
+- [x] 1.10 An existing shared handout at `/share/<token>` matches its look from before this phase, including category background and font.
 
 ### Phase 2: Theme switch
 
