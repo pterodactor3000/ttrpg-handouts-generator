@@ -4,6 +4,8 @@ import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import HandoutEditor from '@/components/organisms/HandoutEditor';
+import { MARKDOWN_GUIDE_EXAMPLES } from '@/lib/markdown-guide';
+import type { MarkdownGuideExample } from '@/lib/markdown-guide';
 import type { InitialHandout } from '@/types';
 
 const publishedInitialHandout: InitialHandout = {
@@ -162,5 +164,58 @@ describe('HandoutEditor — edit mode (initialHandout prop)', () => {
     await user.type(screen.getByLabelText(/title/i), ' updated');
 
     expect(screen.getByRole('button', { name: /^share$/i })).toBeDisabled();
+  });
+});
+
+const RENDERED_FRAGMENT_BY_ID: Record<MarkdownGuideExample['id'], string> = {
+  heading: '<h1>',
+  emphasis: '<strong>',
+  'unordered-list': '<ul>',
+  'ordered-list': '<ol>',
+  blockquote: '<blockquote>',
+  'inline-code': '<code>const</code>',
+  'fenced-code': '<pre',
+  table: '<table>',
+  link: 'href="https://example.com"',
+};
+
+describe('HandoutEditor markdown help', () => {
+  it('shows Markdown help beside Content (Markdown) on a fresh editor and an existing handout', () => {
+    const { unmount } = render(<HandoutEditor />);
+    const freshLabel = screen.getByText('Content (Markdown)');
+    expect(freshLabel.parentElement).toContainElement(screen.getByRole('button', { name: 'Markdown help' }));
+    unmount();
+
+    render(<HandoutEditor initialHandout={draftInitialHandout} />);
+    const editLabel = screen.getByText('Content (Markdown)');
+    expect(editLabel.parentElement).toContainElement(screen.getByRole('button', { name: 'Markdown help' }));
+  });
+
+  it('shows every guide label and one rendered fragment per example', async () => {
+    const user = userEvent.setup();
+    render(<HandoutEditor />);
+
+    await user.click(screen.getByRole('button', { name: 'Markdown help' }));
+
+    const dialog = screen.getByRole('dialog', { name: /markdown tips/i });
+    for (const example of MARKDOWN_GUIDE_EXAMPLES) {
+      expect(dialog).toHaveTextContent(example.label);
+      expect(dialog.innerHTML).toContain(RENDERED_FRAGMENT_BY_ID[example.id]);
+    }
+  });
+
+  it('leaves the textarea value unchanged after the dialog closes', async () => {
+    const user = userEvent.setup();
+    render(<HandoutEditor />);
+
+    const textarea = screen.getByLabelText(/content \(markdown\)/i);
+    await user.type(textarea, 'Keep this line');
+    await user.click(screen.getByRole('button', { name: 'Markdown help' }));
+    await user.click(screen.getByRole('button', { name: /^close$/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: /markdown tips/i })).not.toBeInTheDocument();
+    });
+    expect(textarea).toHaveValue('Keep this line');
   });
 });

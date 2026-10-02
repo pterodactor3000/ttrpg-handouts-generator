@@ -162,10 +162,10 @@ The markdown label gains a help icon. The icon opens a dialog that shows the gui
 
 #### Automated
 
-- [x] 1.1 `MARKDOWN_GUIDE_EXAMPLES` has one entry for each of the nine ids.
-- [x] 1.2 Each entry renders to the fragment paired with its id in the test contract.
-- [x] 1.3 No example `markdown` string contains a raw HTML tag.
-- [x] 1.4 `npm test -- --project unit` passes `__tests__/lib/markdown-guide.test.ts`, and `npm run lint` passes.
+- [x] 1.1 `MARKDOWN_GUIDE_EXAMPLES` has one entry for each of the nine ids. c5e07f0
+- [x] 1.2 Each entry renders to the fragment paired with its id in the test contract. c5e07f0
+- [x] 1.3 No example `markdown` string contains a raw HTML tag. c5e07f0
+- [x] 1.4 `npm test -- --project unit` passes `__tests__/lib/markdown-guide.test.ts`, and `npm run lint` passes. c5e07f0
 
 #### Manual
 
@@ -175,10 +175,10 @@ The markdown label gains a help icon. The icon opens a dialog that shows the gui
 
 #### Automated
 
-- [ ] 2.1 A fresh `HandoutEditor` and one rendered with `initialHandout` both show a button named "Markdown help" beside "Content (Markdown)".
-- [ ] 2.2 Activating that button shows a dialog titled "Markdown tips" that includes every guide label and one rendered fragment per example.
-- [ ] 2.3 After typing in the markdown textarea, opening the dialog and closing it leaves the textarea value unchanged.
-- [ ] 2.4 `npm test -- --project unit` passes `__tests__/components/organisms/HandoutEditor.test.tsx`, and `npm run lint` passes.
+- [x] 2.1 A fresh `HandoutEditor` and one rendered with `initialHandout` both show a button named "Markdown help" beside "Content (Markdown)".
+- [x] 2.2 Activating that button shows a dialog titled "Markdown tips" that includes every guide label and one rendered fragment per example.
+- [x] 2.3 After typing in the markdown textarea, opening the dialog and closing it leaves the textarea value unchanged.
+- [x] 2.4 `npm test -- --project unit` passes `__tests__/components/organisms/HandoutEditor.test.tsx`, and `npm run lint` passes.
 
 #### Manual
 
