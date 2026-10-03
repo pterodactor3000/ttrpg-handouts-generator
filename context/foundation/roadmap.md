@@ -54,7 +54,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | ready    |
 | S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | ready    |
 | S-18 | `drawer-type-filters`                | filter the dashboard by one handout type at a time from the left drawer, with a separator between the state filters and the type controls                                                                     | S-12          | FR-002, FR-005, TBD - add FR in separate PRD edit              | done     |
-| S-17 | `handout-search`                     | search handouts by title, tags, and type after 2 characters and see matches in one view split into draft, published, and archived                                                                             | S-18          | FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit      | proposed |
+| S-17 | `handout-search`                     | search handouts by title, tags, and type after 2 characters and see matches in one view split into draft, published, and archived                                                                             | S-18          | FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit      | done     |
 
 ## Streams
 
@@ -356,7 +356,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** none
 - **Unknowns:** none
 - **Risk:** Search replaces the state-filtered list with one grouped view once the query reaches 2 characters. The state filter must not hide a group during that view, while the type filter from S-18 still narrows all three groups. Matching title, tags, and type only keeps the markdown body out of results. A query that matches nothing should still show the three groups rather than fall back to the unfiltered list.
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -417,3 +417,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-13: GM can request account deletion from account settings; the account is immediately deactivated (sign-in blocked), all data is retained for 30 days and then permanently purged (handouts + auth record), and shared links go dead after the purge window. No reactivation flow in scope.** — Archived 2026-10-02 → `context/archive/2026-10-01-remove-account/`. Lesson: —.
 - **S-14: GM can select an archived handout from the Archived tab (introduced by S-12) and restore it to either Draft or Published state via a choice prompt; restoring to Published re-activates the existing share link immediately (same `share_token`, not regenerated).** — Archived 2026-10-02 → `context/archive/2026-10-01-unarchive-handout/`. Lesson: —.
 - **S-18: A GM can filter the dashboard from the left drawer by one handout type at a time (grimdark, high fantasy, or postapo), or choose All. A separator sits between the state filters and the type controls. The type controls use the same styles as the category buttons on handout creation. The editor category control stays as it is. With search off, the chosen type combines with the selected state. With search on, the chosen type narrows all three result groups.** — Archived 2026-10-03 → `context/archive/2026-10-02-drawer-type-filters/`. Lesson: —.
+- **S-17: A GM can search their handouts by title, tags, and type. Search runs only after 2 characters. Matches appear in one view, always split into Draft, Published, and Archived. The drawer state filter does not hide a group while search is active. The chosen type still narrows all three groups. The markdown body is not searched, and the search text does not survive a reload.** — Archived 2026-10-03 → `context/archive/2026-10-02-handout-search/`. Lesson: —.
