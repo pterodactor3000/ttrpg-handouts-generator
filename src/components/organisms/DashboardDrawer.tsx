@@ -4,6 +4,7 @@ import { PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import { DrawerTypeFilters } from '@/components/molecules/DrawerTypeFilters';
 import { getDrawerPresentation } from '@/lib/dashboard-drawer';
+import { applyDashboardListVisibility } from '@/lib/dashboard-search';
 import {
   applyDashboardTypeFilter,
   readDashboardTypeFilter,
@@ -166,19 +167,7 @@ function DashboardDrawer() {
 
     dashboard.setAttribute('data-status-filter', nextFilter);
     setStatusFilter(nextFilter);
-
-    const lists = document.querySelectorAll('[data-handout-list]');
-    for (const list of lists) {
-      if (!(list instanceof HTMLElement)) {
-        continue;
-      }
-      if (list.getAttribute('data-handout-list') === nextFilter) {
-        list.removeAttribute('hidden');
-      } else {
-        list.setAttribute('hidden', '');
-      }
-    }
-
+    applyDashboardListVisibility(dashboard);
     applyDashboardTypeFilter(dashboard);
 
     if (!isSidebar) {

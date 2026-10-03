@@ -38,6 +38,7 @@ const isHidden = listKind !== 'draft';
     }
   </div>
   <p class="text-muted-foreground" data-handout-type-empty>No handouts of this type.</p>
+  <p class="text-muted-foreground" data-handout-search-empty>No handouts match this search.</p>
 </section>
 
 <style>
@@ -54,6 +55,19 @@ const isHidden = listKind !== 'draft';
       :has([data-handout-card][data-type-hidden]):not(:has([data-handout-card]:not([data-type-hidden])))
     )
     ~ [data-handout-type-empty] {
+    display: block;
+  }
+
+  [data-handout-search-empty] {
+    display: none;
+  }
+
+  [data-handout-grid]:global(
+      :has([data-handout-card][data-search-hidden]:not([data-type-hidden])):not(
+        :has([data-handout-card]:not([data-type-hidden]):not([data-search-hidden]))
+      )
+    )
+    ~ [data-handout-search-empty] {
     display: block;
   }
 </style>

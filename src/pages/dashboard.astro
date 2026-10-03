@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/cloudflare';
 import Layout from '@/layouts/Layout.astro';
 import HandoutList from '@/components/organisms/HandoutList.astro';
 import DashboardDrawer from '@/components/organisms/DashboardDrawer';
+import { DashboardSearch } from '@/components/molecules/DashboardSearch';
 import { Card, CardContent } from '@/components/atoms/card';
 import { createClient } from '@/lib/supabase';
 import { groupHandoutsByStatus, type HandoutListItem } from '@/lib/handout-list';
@@ -113,6 +114,7 @@ if (!supabase) {
                       </form>
                     </div>
                   </div>
+                  <DashboardSearch client:load />
                 </CardContent>
               </Card>
 

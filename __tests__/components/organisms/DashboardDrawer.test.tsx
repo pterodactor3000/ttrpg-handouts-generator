@@ -200,6 +200,24 @@ describe('DashboardDrawer', () => {
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
   });
 
+  it('keeps every list visible when Published is chosen during search', async () => {
+    const user = userEvent.setup();
+    renderDrawerFixture();
+    document.querySelector('[data-dashboard]')?.setAttribute('data-search-active', '');
+
+    await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
+    await user.click(screen.getByRole('button', { name: 'Published' }));
+
+    const dashboard = document.querySelector('[data-dashboard]');
+    expect(dashboard?.getAttribute('data-status-filter')).toBe('published');
+    const lists = document.querySelectorAll('[data-handout-list]');
+    expect(lists).toHaveLength(3);
+    for (const list of lists) {
+      expect(list.hasAttribute('hidden')).toBe(false);
+    }
+    expect(dashboard?.hasAttribute('data-search-active')).toBe(true);
+  });
+
   it('keeps the sidebar open when Eldritch is chosen on a wide viewport', async () => {
     const user = userEvent.setup();
     stubMatchMedia(true);
