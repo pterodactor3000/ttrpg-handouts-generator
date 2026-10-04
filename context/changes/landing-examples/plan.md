@@ -178,11 +178,11 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 - [x] 1.8 `npm run lint` passes. — a2a1408
 - [x] 1.14 `src/components/molecules/HandoutArticle.astro` applies `max-w-2xl` only when `class` is omitted. — a2a1408
 - [x] 1.15 `src/components/organisms/Welcome.astro` places `data-landing-examples` outside the hero `max-w-4xl` column. — a2a1408
-- [x] 1.16 Each sample has a non-empty description and each card copies the category label as `heading`.
-- [x] 1.17 `src/components/molecules/LandingExample.astro` contains `data-landing-showcase`, `landing-showcase-enter`, and `animation-timeline: view()`.
-- [x] 1.18 `src/components/organisms/Welcome.astro` contains a closing CTA band and does not use `md:grid-cols-3`.
-- [x] 1.19 `npm test -- --project unit` passes `__tests__/lib/landing-examples.test.ts` after the showcase revision.
-- [x] 1.20 `npm run lint` passes after the showcase revision.
+- [x] 1.16 Each sample has a non-empty description and each card copies the category label as `heading`. — d6c1d8f
+- [x] 1.17 `src/components/molecules/LandingExample.astro` contains `data-landing-showcase`, `landing-showcase-enter`, and `animation-timeline: view()`. — d6c1d8f
+- [x] 1.18 `src/components/organisms/Welcome.astro` contains a closing CTA band and does not use `md:grid-cols-3`. — d6c1d8f
+- [x] 1.19 `npm test -- --project unit` passes `__tests__/lib/landing-examples.test.ts` after the showcase revision. — d6c1d8f
+- [x] 1.20 `npm run lint` passes after the showcase revision. — d6c1d8f
 
 #### Manual
 
@@ -191,7 +191,7 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 - [x] 1.11 The examples are not links. They use the category background, font, and border, and they float a little on a desktop width. — a2a1408
 - [x] 1.12 With `prefers-reduced-motion: reduce`, the examples stay still. — a2a1408
 - [x] 1.13 On a narrow viewport the three cards stack and stay readable. Auth buttons stay usable. — a2a1408
-- [x] 1.21 Logged-out `/` is a scrollable showcase. Each style has a description and a large sample.
-- [x] 1.22 Desktop rows alternate copy and sample. Mobile stacks copy above the sample.
-- [x] 1.23 Scrolling plays the enter keyframe. Reduced motion keeps every section still.
-- [x] 1.24 The closing band still opens `/auth/signin` and `/auth/signup`.
+- [x] 1.21 Logged-out `/` is a scrollable showcase. Each style has a description and a large sample. — d6c1d8f
+- [x] 1.22 Desktop rows alternate copy and sample. Mobile stacks copy above the sample. — d6c1d8f
+- [x] 1.23 Scrolling plays the enter keyframe. Reduced motion keeps every section still. — d6c1d8f
+- [x] 1.24 The closing band still opens `/auth/signin` and `/auth/signup`. — d6c1d8f
