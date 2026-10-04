@@ -168,21 +168,21 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 
 #### Automated
 
-- [x] 1.1 `getLandingExamples()` returns three items whose categories are `fantasy`, `horror`, and `scifi` in that order.
-- [x] 1.2 Each sample has a non-empty title and non-empty markdown.
-- [x] 1.3 `getLandingExampleCards()` returns the same categories and a non-empty `html` and `cssBackground` for each card.
-- [x] 1.4 `src/components/organisms/Welcome.astro` still contains `Handouts Scriptorium`, `href="/auth/signin"`, and `href="/auth/signup"`, and also contains `data-landing-examples`.
-- [x] 1.5 `src/components/molecules/LandingExample.astro` contains `data-landing-example` and `prefers-reduced-motion`. It does not contain `href`.
-- [x] 1.6 `src/lib/landing-examples.ts` does not import `@/lib/supabase`.
-- [x] 1.7 `npm test -- --project unit` passes `__tests__/lib/landing-examples.test.ts`.
-- [x] 1.8 `npm run lint` passes.
-- [x] 1.14 `src/components/molecules/HandoutArticle.astro` applies `max-w-2xl` only when `class` is omitted.
-- [x] 1.15 `src/components/organisms/Welcome.astro` places `data-landing-examples` outside the hero `max-w-4xl` column.
+- [x] 1.1 `getLandingExamples()` returns three items whose categories are `fantasy`, `horror`, and `scifi` in that order. — a2a1408
+- [x] 1.2 Each sample has a non-empty title and non-empty markdown. — a2a1408
+- [x] 1.3 `getLandingExampleCards()` returns the same categories and a non-empty `html` and `cssBackground` for each card. — a2a1408
+- [x] 1.4 `src/components/organisms/Welcome.astro` still contains `Handouts Scriptorium`, `href="/auth/signin"`, and `href="/auth/signup"`, and also contains `data-landing-examples`. — a2a1408
+- [x] 1.5 `src/components/molecules/LandingExample.astro` contains `data-landing-example` and `prefers-reduced-motion`. It does not contain `href`. — a2a1408
+- [x] 1.6 `src/lib/landing-examples.ts` does not import `@/lib/supabase`. — a2a1408
+- [x] 1.7 `npm test -- --project unit` passes `__tests__/lib/landing-examples.test.ts`. — a2a1408
+- [x] 1.8 `npm run lint` passes. — a2a1408
+- [x] 1.14 `src/components/molecules/HandoutArticle.astro` applies `max-w-2xl` only when `class` is omitted. — a2a1408
+- [x] 1.15 `src/components/organisms/Welcome.astro` places `data-landing-examples` outside the hero `max-w-4xl` column. — a2a1408
 
 #### Manual
 
-- [x] 1.9 Logged out `/` shows the app name, Sign In, Sign Up, and three example handouts, one High Fantasy, one Eldritch, one Grimdark.
-- [x] 1.10 The examples sit under the CTAs. Sign In still goes to `/auth/signin`. Sign Up still goes to `/auth/signup`.
-- [x] 1.11 The examples are not links. They use the category background, font, and border, and they float a little on a desktop width.
-- [x] 1.12 With `prefers-reduced-motion: reduce`, the examples stay still.
-- [x] 1.13 On a narrow viewport the three cards stack and stay readable. Auth buttons stay usable.
+- [x] 1.9 Logged out `/` shows the app name, Sign In, Sign Up, and three example handouts, one High Fantasy, one Eldritch, one Grimdark. — a2a1408
+- [x] 1.10 The examples sit under the CTAs. Sign In still goes to `/auth/signin`. Sign Up still goes to `/auth/signup`. — a2a1408
+- [x] 1.11 The examples are not links. They use the category background, font, and border, and they float a little on a desktop width. — a2a1408
+- [x] 1.12 With `prefers-reduced-motion: reduce`, the examples stay still. — a2a1408
+- [x] 1.13 On a narrow viewport the three cards stack and stay readable. Auth buttons stay usable. — a2a1408
