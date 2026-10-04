@@ -3,7 +3,7 @@ project: TTRPG Handouts Generator
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-10-03
+updated: 2026-10-04
 # 2026-05-31: surgically added S-05 ui-restyle, S-06 new-handout-back-button, S-07 per-style-fonts (post-MVP polish stream)
 # 2026-06-03: S-05 ui-restyle — added shared CSS loading animation to scope
 # 2026-06-09: S-09 retheme-backgrounds — replace pre-loaded background images per style category
@@ -11,6 +11,7 @@ updated: 2026-10-03
 # 2026-10-02: S-15 theme-switch, signed-in switch between Tower of Light and Darkest of Mines
 # 2026-10-02: S-16 markdown-tips, help modal with markdown examples on the handout editor
 # 2026-10-02: S-18 drawer-type-filters, S-17 handout-search. Type filters in the drawer, then search across draft, published, and archived
+# 2026-10-04: S-19 drawer-all-status, S-20 landing-examples, S-21 scifi-category-label, S-22 page-version-footer
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -55,6 +56,10 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | ready    |
 | S-18 | `drawer-type-filters`                | filter the dashboard by one handout type at a time from the left drawer, with a separator between the state filters and the type controls                                                                     | S-12          | FR-002, FR-005, TBD - add FR in separate PRD edit              | done     |
 | S-17 | `handout-search`                     | search handouts by title, tags, and type after 2 characters and see matches in one view split into draft, published, and archived                                                                             | S-18          | FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit      | done     |
+| S-19 | `drawer-all-status`                  | choose All in the drawer state filters and see draft, published, and archived handouts together, each group under a collapsible heading                                                                       | S-12, S-17    | FR-002, FR-008, TBD - add FR in separate PRD edit              | ready    |
+| S-20 | `landing-examples`                   | see three static example handouts, one per style, with light motion on the landing page, and still start sign-in without logging in                                                                          | S-08          | FR-015, TBD - add FR in separate PRD edit                      | ready    |
+| S-21 | `scifi-category-label`               | see the scifi category labeled Sci-fi on the picker, the drawer, cards, the preview, and the shared view, with the stored category and green CRT look unchanged                                              | S-09, S-18    | FR-005, FR-014, TBD - add FR in separate PRD edit              | ready    |
+| S-22 | `page-version-footer`                | see a footer on every page, including the shared handout, showing the package version as v1.2.0, while the shared handout keeps its home link                                                                | none          | FR-012, TBD - add FR in separate PRD edit                      | ready    |
 
 ## Streams
 
@@ -358,6 +363,54 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Search replaces the state-filtered list with one grouped view once the query reaches 2 characters. The state filter must not hide a group during that view, while the type filter from S-18 still narrows all three groups. Matching title, tags, and type only keeps the markdown body out of results. A query that matches nothing should still show the three groups rather than fall back to the unfiltered list.
 - **Status:** done
 
+### S-19: All status filter
+
+- **Outcome:** A GM can choose All in the drawer state filters and see draft, published, and archived handouts together, each group under a collapsible heading.
+- **Change ID:** `drawer-all-status`
+- **PRD refs:** FR-002, FR-008, TBD - add FR in separate PRD edit
+- **Prerequisites:** S-12, S-17
+- **Parallel with:** S-20, S-21
+- **Blockers:** none
+- **Unknowns:** none
+- **Risk:** Search already shows all three groups. All must show those groups under collapsible headings when search is off, and must not hide a group while search is on.
+- **Status:** ready
+
+### S-20: Landing page examples
+
+- **Outcome:** A visitor can see three static example handouts, one per style, with light motion on the landing page, and can still start sign-in without logging in to view the page.
+- **Change ID:** `landing-examples`
+- **PRD refs:** FR-015, TBD - add FR in separate PRD edit
+- **Prerequisites:** S-08
+- **Parallel with:** S-19, S-21
+- **Blockers:** none
+- **Unknowns:** none
+- **Risk:** Motion on the first screen can distract from the sign-in action or ignore reduced motion. Examples stay static samples, so no handout data is required.
+- **Status:** ready
+
+### S-21: Sci-fi category label
+
+- **Outcome:** A GM and a player see the scifi category labeled Sci-fi on the picker, the drawer, cards, the preview, and the shared view, while the stored category and the green CRT look stay the same.
+- **Change ID:** `scifi-category-label`
+- **PRD refs:** FR-005, FR-014, TBD - add FR in separate PRD edit
+- **Prerequisites:** S-09, S-18
+- **Parallel with:** S-19, S-20
+- **Blockers:** none
+- **Unknowns:** none
+- **Risk:** The visible label is shared through BACKGROUND_CONFIGS. A partial rename would leave Grimdark on one surface. Stored rows stay scifi, so no migration is required.
+- **Status:** ready
+
+### S-22: Page version footer
+
+- **Outcome:** A visitor can see a footer on every page that uses Layout, including the shared handout, showing the package.json version as v1.2.0. The shared handout keeps its existing home link.
+- **Change ID:** `page-version-footer`
+- **PRD refs:** FR-012, TBD - add FR in separate PRD edit
+- **Prerequisites:** none
+- **Parallel with:** S-15, S-16, S-19, S-20, S-21
+- **Blockers:** none
+- **Unknowns:** none
+- **Risk:** The footer sits in Layout, so it appears on the shared handout as well as the app screens. The share page already has its own home link. The version line must not cover the handout or the toaster.
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                            | Suggested issue title                                | Ready for `/10x-plan` | Notes                                                                                  |
@@ -381,6 +434,10 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-16       | `markdown-tips`                      | Markdown help modal on the handout editor            | yes                   | S-01 and S-03 done; run `/10x-plan markdown-tips`                                      |
 | S-18       | `drawer-type-filters`                | Type filters in the dashboard drawer                 | yes                   | S-12 done; run `/10x-plan drawer-type-filters`                                         |
 | S-17       | `handout-search`                     | Search handouts by title, tags, and type             | no                    | Depends on S-18; run `/10x-plan handout-search` after S-18 is done                     |
+| S-19       | `drawer-all-status`                  | All status filter in the drawer                      | yes                   | S-12 and S-17 done; run `/10x-plan drawer-all-status`                                  |
+| S-20       | `landing-examples`                   | Example handouts on the landing page                 | yes                   | S-08 done; run `/10x-plan landing-examples`                                            |
+| S-21       | `scifi-category-label`               | Rename Grimdark label to Sci-fi                      | yes                   | S-09 and S-18 done; run `/10x-plan scifi-category-label`                               |
+| S-22       | `page-version-footer`                | Page footer with package version                     | yes                   | No prerequisites; run `/10x-plan page-version-footer`                                  |
 
 ## Open Roadmap Questions
 
