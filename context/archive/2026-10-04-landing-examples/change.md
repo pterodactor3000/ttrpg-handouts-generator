@@ -1,10 +1,10 @@
 ---
 change_id: landing-examples
 title: Example handouts on the landing page
-status: impl_reviewed
+status: archived
 created: 2026-10-04
 updated: 2026-10-04
-archived_at: null
+archived_at: 2026-10-04T11:47:21Z
 roadmap_id: S-20
 ---
 

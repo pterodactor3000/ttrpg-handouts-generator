@@ -1,10 +1,10 @@
 ---
 change_id: markdown-tips
 title: Markdown tips for writing a handout
-status: implemented
+status: archived
 created: 2026-10-02
-updated: 2026-10-02
-archived_at: null
+updated: 2026-10-04
+archived_at: 2026-10-04T11:47:21Z
 ---
 
 ## Notes

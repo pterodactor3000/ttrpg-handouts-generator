@@ -1,10 +1,10 @@
 ---
 change_id: page-version-footer
 title: Page footer with package version
-status: impl_reviewed
+status: archived
 created: 2026-10-04
 updated: 2026-10-04
-archived_at: null
+archived_at: 2026-10-04T11:47:21Z
 roadmap_id: S-22
 ---
 

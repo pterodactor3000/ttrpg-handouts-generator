@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import DashboardDrawer from '@/components/organisms/DashboardDrawer';
@@ -13,9 +13,18 @@ function renderDrawerFixture() {
   document.body.innerHTML = `
     <div data-dashboard data-status-filter="draft" data-type-filter="all">
       <div data-dashboard-drawer-slot></div>
-      <section data-handout-list="draft">${BACKGROUND_CATEGORY_CARDS}</section>
-      <section data-handout-list="published" hidden>${BACKGROUND_CATEGORY_CARDS}</section>
-      <section data-handout-list="archived" hidden>${BACKGROUND_CATEGORY_CARDS}</section>
+      <section data-handout-list="draft">
+        <button type="button" data-handout-list-toggle aria-expanded="true">Drafts</button>
+        <div data-handout-list-body>${BACKGROUND_CATEGORY_CARDS}</div>
+      </section>
+      <section data-handout-list="published" hidden>
+        <button type="button" data-handout-list-toggle aria-expanded="true">Published</button>
+        <div data-handout-list-body>${BACKGROUND_CATEGORY_CARDS}</div>
+      </section>
+      <section data-handout-list="archived" hidden>
+        <button type="button" data-handout-list-toggle aria-expanded="true">Archived</button>
+        <div data-handout-list-body>${BACKGROUND_CATEGORY_CARDS}</div>
+      </section>
       <div id="drawer-root"></div>
     </div>
   `;
@@ -26,6 +35,14 @@ function renderDrawerFixture() {
   }
 
   return render(<DashboardDrawer />, { container: drawerRoot });
+}
+
+function getStatusButton(name: string): HTMLElement {
+  return within(screen.getByRole('group', { name: 'Handout status' })).getByRole('button', { name });
+}
+
+function getTypeButton(name: string): HTMLElement {
+  return within(screen.getByRole('group', { name: 'Handout type' })).getByRole('button', { name });
 }
 
 function stubMatchMedia(isWide: boolean) {
@@ -56,7 +73,7 @@ describe('DashboardDrawer', () => {
     await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
     expect(screen.queryByRole('button', { name: 'Pin sidebar' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Unpin sidebar' })).not.toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Published' }));
+    await user.click(getStatusButton('Published'));
 
     const dashboard = document.querySelector('[data-dashboard]');
     expect(dashboard?.getAttribute('data-status-filter')).toBe('published');
@@ -64,7 +81,7 @@ describe('DashboardDrawer', () => {
     expect(document.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+      expect(document.querySelector('[data-dashboard-drawer-panel]')).not.toBeInTheDocument();
     });
   });
 
@@ -77,7 +94,7 @@ describe('DashboardDrawer', () => {
 
     expect(document.querySelector('[data-dashboard]')?.getAttribute('data-status-filter')).toBe('draft');
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+      expect(document.querySelector('[data-dashboard-drawer-panel]')).not.toBeInTheDocument();
     });
   });
 
@@ -87,11 +104,11 @@ describe('DashboardDrawer', () => {
     renderDrawerFixture();
 
     expect(window.matchMedia).toHaveBeenCalledWith('(min-width: 1024px)');
-    expect(screen.getByRole('button', { name: 'Published' })).toBeInTheDocument();
+    expect(getStatusButton('Published')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Pin sidebar' })).not.toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Published' }));
+    await user.click(getStatusButton('Published'));
 
-    expect(screen.getByRole('button', { name: 'Published' })).toBeInTheDocument();
+    expect(getStatusButton('Published')).toBeInTheDocument();
     expect(document.querySelector('[data-dashboard-drawer-panel]')?.getAttribute('data-drawer-presentation')).toBe(
       'sidebar',
     );
@@ -110,11 +127,11 @@ describe('DashboardDrawer', () => {
     }
 
     const separator = panel.querySelector('[role="separator"]');
-    const archivedButton = screen.getByRole('button', { name: 'Archived' });
-    const allButton = screen.getByRole('button', { name: 'All' });
-    const highFantasyButton = screen.getByRole('button', { name: 'High Fantasy' });
-    const eldritchButton = screen.getByRole('button', { name: 'Eldritch' });
-    const grimdarkButton = screen.getByRole('button', { name: 'Grimdark' });
+    const archivedButton = getStatusButton('Archived');
+    const allButton = getTypeButton('All');
+    const highFantasyButton = getTypeButton('High Fantasy');
+    const eldritchButton = getTypeButton('Eldritch');
+    const grimdarkButton = getTypeButton('Grimdark');
 
     expect(separator).toBeInstanceOf(HTMLElement);
     if (!(separator instanceof HTMLElement)) {
@@ -171,7 +188,7 @@ describe('DashboardDrawer', () => {
     });
 
     await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
-    await user.click(screen.getByRole('button', { name: 'All' }));
+    await user.click(getTypeButton('All'));
 
     expect(document.querySelector('[data-dashboard]')?.getAttribute('data-type-filter')).toBe('all');
     const cards = document.querySelectorAll('[data-handout-card]');
@@ -188,11 +205,11 @@ describe('DashboardDrawer', () => {
     await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
     await user.click(screen.getByRole('button', { name: 'Grimdark' }));
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Published' })).not.toBeInTheDocument();
+      expect(document.querySelector('[data-dashboard-drawer-panel]')).not.toBeInTheDocument();
     });
 
     await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
-    await user.click(screen.getByRole('button', { name: 'Published' }));
+    await user.click(getStatusButton('Published'));
 
     expect(document.querySelector('[data-dashboard]')?.getAttribute('data-type-filter')).toBe('scifi');
     expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
@@ -206,7 +223,7 @@ describe('DashboardDrawer', () => {
     document.querySelector('[data-dashboard]')?.setAttribute('data-search-active', '');
 
     await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
-    await user.click(screen.getByRole('button', { name: 'Published' }));
+    await user.click(getStatusButton('Published'));
 
     const dashboard = document.querySelector('[data-dashboard]');
     expect(dashboard?.getAttribute('data-status-filter')).toBe('published');
@@ -223,14 +240,69 @@ describe('DashboardDrawer', () => {
     stubMatchMedia(true);
     renderDrawerFixture();
 
-    await user.click(screen.getByRole('button', { name: 'Eldritch' }));
+    await user.click(getTypeButton('Eldritch'));
 
-    expect(screen.getByRole('button', { name: 'Eldritch' })).toBeInTheDocument();
+    expect(getTypeButton('Eldritch')).toBeInTheDocument();
     expect(document.querySelector('[data-dashboard-drawer-panel]')?.getAttribute('data-drawer-presentation')).toBe(
       'sidebar',
     );
     expect(document.querySelector('[data-dashboard]')?.getAttribute('data-type-filter')).toBe('horror');
     expect(screen.queryByRole('button', { name: 'Pin sidebar' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Unpin sidebar' })).not.toBeInTheDocument();
+  });
+
+  it('shows every list when status All is chosen and returns to Published', async () => {
+    const user = userEvent.setup();
+    renderDrawerFixture();
+
+    await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
+    await user.click(getStatusButton('All'));
+
+    expect(document.querySelector('[data-dashboard]')?.getAttribute('data-status-filter')).toBe('all');
+    expect(document.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
+    expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+    await waitFor(() => {
+      expect(document.querySelector('[data-dashboard-drawer-panel]')).not.toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
+    await user.click(getStatusButton('Published'));
+
+    expect(document.querySelector('[data-dashboard]')?.getAttribute('data-status-filter')).toBe('published');
+    expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(document.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
+    expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
+  });
+
+  it('collapses only the draft body when the Drafts heading is clicked during status All', async () => {
+    const user = userEvent.setup();
+    renderDrawerFixture();
+
+    await user.click(screen.getByRole('button', { name: 'Open sidebar' }));
+    await user.click(getStatusButton('All'));
+    await waitFor(() => {
+      expect(document.querySelector('[data-dashboard-drawer-panel]')).not.toBeInTheDocument();
+    });
+
+    const draftList = document.querySelector('[data-handout-list="draft"]');
+    const draftToggle = draftList?.querySelector('[data-handout-list-toggle]');
+    expect(draftToggle).toBeInstanceOf(HTMLButtonElement);
+    if (!(draftToggle instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    await user.click(draftToggle);
+
+    expect(draftList?.hasAttribute('data-list-collapsed')).toBe(true);
+    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(true);
+    expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('data-list-collapsed')).toBe(false);
+    expect(
+      document.querySelector('[data-handout-list="published"] [data-handout-list-body]')?.hasAttribute('hidden'),
+    ).toBe(false);
+    expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('data-list-collapsed')).toBe(false);
+    expect(
+      document.querySelector('[data-handout-list="archived"] [data-handout-list-body]')?.hasAttribute('hidden'),
+    ).toBe(false);
   });
 });

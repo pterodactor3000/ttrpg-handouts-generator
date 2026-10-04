@@ -4,7 +4,11 @@ import { PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import { DrawerTypeFilters } from '@/components/molecules/DrawerTypeFilters';
 import { getDrawerPresentation } from '@/lib/dashboard-drawer';
-import { applyDashboardListVisibility } from '@/lib/dashboard-search';
+import {
+  applyDashboardListVisibility,
+  expandDashboardListBodies,
+  toggleDashboardListCollapse,
+} from '@/lib/dashboard-search';
 import {
   applyDashboardTypeFilter,
   readDashboardTypeFilter,
@@ -12,9 +16,10 @@ import {
 } from '@/lib/dashboard-type-filter';
 import { cn } from '@/lib/utils';
 
-type StatusFilter = 'draft' | 'published' | 'archived';
+type StatusFilter = 'all' | 'draft' | 'published' | 'archived';
 
 const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
+  { value: 'all', label: 'All' },
   { value: 'draft', label: 'Drafts' },
   { value: 'published', label: 'Published' },
   { value: 'archived', label: 'Archived' },
@@ -24,7 +29,7 @@ const WIDE_VIEWPORT_QUERY = '(min-width: 1024px)';
 const PANEL_MOTION_MS = 200;
 
 function isStatusFilter(value: string | null): value is StatusFilter {
-  return value === 'draft' || value === 'published' || value === 'archived';
+  return value === 'all' || value === 'draft' || value === 'published' || value === 'archived';
 }
 
 function readStatusFilter(): StatusFilter {
@@ -145,6 +150,33 @@ function DashboardDrawer() {
     };
   }, [closeOverlay, isOverlayShown, isSidebar]);
 
+  useEffect(() => {
+    function handleListToggle(event: MouseEvent) {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const toggle = target.closest('[data-handout-list-toggle]');
+      if (!(toggle instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const dashboard = toggle.closest('[data-dashboard]');
+      const list = toggle.closest('[data-handout-list]');
+      if (!(dashboard instanceof HTMLElement) || !(list instanceof HTMLElement)) {
+        return;
+      }
+
+      toggleDashboardListCollapse(dashboard, list);
+    }
+
+    document.addEventListener('click', handleListToggle);
+    return () => {
+      document.removeEventListener('click', handleListToggle);
+    };
+  }, []);
+
   function clearCloseTimer() {
     if (closeTimerRef.current === null) {
       return;
@@ -166,6 +198,7 @@ function DashboardDrawer() {
     }
 
     dashboard.setAttribute('data-status-filter', nextFilter);
+    expandDashboardListBodies(dashboard);
     setStatusFilter(nextFilter);
     applyDashboardListVisibility(dashboard);
     applyDashboardTypeFilter(dashboard);
@@ -222,7 +255,9 @@ function DashboardDrawer() {
 
   const filterStack = (
     <>
-      {statusButtons}
+      <div role="group" aria-label="Handout status" className="flex flex-col gap-1">
+        {statusButtons}
+      </div>
       <div role="separator" className="border-border my-2 border-t" />
       <DrawerTypeFilters typeFilter={typeFilter} onTypeFilterChange={applyTypeFilter} />
     </>

@@ -1,7 +1,7 @@
 import { BACKGROUND_CONFIGS } from '@/lib/backgrounds';
 import type { BackgroundCategory } from '@/types';
 
-type DashboardStatusFilter = 'draft' | 'published' | 'archived';
+type DashboardStatusFilter = 'all' | 'draft' | 'published' | 'archived';
 
 interface HandoutSearchFields {
   title: string;
@@ -10,7 +10,7 @@ interface HandoutSearchFields {
 }
 
 function isDashboardStatusFilter(value: string | null): value is DashboardStatusFilter {
-  return value === 'draft' || value === 'published' || value === 'archived';
+  return value === 'all' || value === 'draft' || value === 'published' || value === 'archived';
 }
 
 function isBackgroundCategory(value: string): value is BackgroundCategory {
@@ -92,6 +92,19 @@ function readCardSearchFields(card: Element): HandoutSearchFields {
   };
 }
 
+function expandDashboardListBodies(dashboard: Element): void {
+  const lists = dashboard.querySelectorAll('[data-handout-list]');
+
+  for (const list of lists) {
+    list.removeAttribute('data-list-collapsed');
+    const toggle = list.querySelector('[data-handout-list-toggle]');
+    if (toggle instanceof HTMLElement) {
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+    list.querySelector('[data-handout-list-body]')?.removeAttribute('hidden');
+  }
+}
+
 function applyDashboardListVisibility(dashboard: Element): void {
   const lists = dashboard.querySelectorAll('[data-handout-list]');
 
@@ -99,10 +112,19 @@ function applyDashboardListVisibility(dashboard: Element): void {
     for (const list of lists) {
       list.removeAttribute('hidden');
     }
+    expandDashboardListBodies(dashboard);
     return;
   }
 
   const statusFilter = readDashboardStatusFilter(dashboard);
+  if (statusFilter === 'all') {
+    for (const list of lists) {
+      list.removeAttribute('hidden');
+    }
+    return;
+  }
+
+  expandDashboardListBodies(dashboard);
   for (const list of lists) {
     if (list.getAttribute('data-handout-list') === statusFilter) {
       list.removeAttribute('hidden');
@@ -111,6 +133,31 @@ function applyDashboardListVisibility(dashboard: Element): void {
 
     list.setAttribute('hidden', '');
   }
+}
+
+function toggleDashboardListCollapse(dashboard: Element, list: Element): void {
+  if (dashboard.hasAttribute('data-search-active') || readDashboardStatusFilter(dashboard) !== 'all') {
+    return;
+  }
+
+  const toggle = list.querySelector('[data-handout-list-toggle]');
+  const body = list.querySelector('[data-handout-list-body]');
+  const isCollapsed = list.hasAttribute('data-list-collapsed');
+
+  if (isCollapsed) {
+    list.removeAttribute('data-list-collapsed');
+    if (toggle instanceof HTMLElement) {
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+    body?.removeAttribute('hidden');
+    return;
+  }
+
+  list.setAttribute('data-list-collapsed', '');
+  if (toggle instanceof HTMLElement) {
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  body?.setAttribute('hidden', '');
 }
 
 function applyDashboardSearch(dashboard: Element, query: string): void {
@@ -136,5 +183,12 @@ function applyDashboardSearch(dashboard: Element, query: string): void {
   applyDashboardListVisibility(dashboard);
 }
 
-export { applyDashboardListVisibility, applyDashboardSearch, handoutMatchesSearchQuery, isDashboardSearchActive };
+export {
+  applyDashboardListVisibility,
+  applyDashboardSearch,
+  expandDashboardListBodies,
+  handoutMatchesSearchQuery,
+  isDashboardSearchActive,
+  toggleDashboardListCollapse,
+};
 export type { HandoutSearchFields };
