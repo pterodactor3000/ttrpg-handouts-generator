@@ -1,0 +1,49 @@
+---
+import HandoutArticle from '@/components/molecules/HandoutArticle.astro';
+import type { BackgroundCategory } from '@/types';
+
+interface Props {
+  title: string;
+  html: string;
+  category: BackgroundCategory;
+  cssBackground: string;
+  motionDelay: string;
+}
+
+const { title, html, category, cssBackground, motionDelay } = Astro.props;
+---
+
+<div
+  class:list={['motion-reduce:animate-none']}
+  data-landing-example={category}
+  style={`animation-delay: ${motionDelay};`}
+>
+  <div
+    class="max-h-80 overflow-hidden"
+    style={`background: ${cssBackground}; background-size: cover; background-position: center;`}
+  >
+    <HandoutArticle title={title} html={html} category={category} class="max-w-none" />
+  </div>
+</div>
+
+<style>
+  @keyframes landing-example-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.5rem);
+    }
+  }
+
+  [data-landing-example] {
+    animation: landing-example-float 6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-landing-example] {
+      animation: none;
+    }
+  }
+</style>

@@ -1,5 +1,10 @@
 ---
+import LandingExample from '@/components/molecules/LandingExample.astro';
 import Topbar from '@/components/molecules/Topbar.astro';
+import { getLandingExampleCards } from '@/lib/landing-examples';
+
+const landingExamples = getLandingExampleCards();
+const motionDelays = ['0s', '0.4s', '0.8s'] as const;
 ---
 
 <div class="moon-chrome bg-background text-foreground min-h-screen w-full">
@@ -29,5 +34,22 @@ import Topbar from '@/components/molecules/Topbar.astro';
         </a>
       </div>
     </div>
+
+    <section
+      class="mx-auto mt-8 grid max-w-6xl grid-cols-1 gap-6 px-4 pb-16 md:grid-cols-3 md:gap-8"
+      data-landing-examples
+    >
+      {
+        landingExamples.map((example, exampleIndex) => (
+          <LandingExample
+            title={example.title}
+            html={example.html}
+            category={example.category}
+            cssBackground={example.cssBackground}
+            motionDelay={motionDelays[exampleIndex] ?? '0s'}
+          />
+        ))
+      }
+    </section>
   </div>
 </div>
