@@ -56,7 +56,7 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | done     |
 | S-18 | `drawer-type-filters`                | filter the dashboard by one handout type at a time from the left drawer, with a separator between the state filters and the type controls                                                                     | S-12          | FR-002, FR-005, TBD - add FR in separate PRD edit              | done     |
 | S-17 | `handout-search`                     | search handouts by title, tags, and type after 2 characters and see matches in one view split into draft, published, and archived                                                                             | S-18          | FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit      | done     |
-| S-19 | `drawer-all-status`                  | choose All in the drawer state filters and see draft, published, and archived handouts together, each group under a collapsible heading                                                                       | S-12, S-17    | FR-002, FR-008, TBD - add FR in separate PRD edit              | ready    |
+| S-19 | `drawer-all-status`                  | choose All in the drawer state filters and see draft, published, and archived handouts together, each group under a collapsible heading                                                                       | S-12, S-17    | FR-002, FR-008, TBD - add FR in separate PRD edit              | done     |
 | S-20 | `landing-examples`                   | see three static example handouts, one per style, with light motion on the landing page, and still start sign-in without logging in                                                                          | S-08          | FR-015, TBD - add FR in separate PRD edit                      | done     |
 | S-21 | `scifi-category-label`               | see the scifi category labeled Sci-fi on the picker, the drawer, cards, the preview, and the shared view, with the stored category and green CRT look unchanged                                              | S-09, S-18    | FR-005, FR-014, TBD - add FR in separate PRD edit              | ready    |
 | S-22 | `page-version-footer`                | see a footer on every page, including the shared handout, showing the package version as v1.2.0, while the shared handout keeps its home link                                                                | none          | FR-012, TBD - add FR in separate PRD edit                      | done     |
@@ -373,7 +373,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** none
 - **Unknowns:** none
 - **Risk:** Search already shows all three groups. All must show those groups under collapsible headings when search is off, and must not hide a group while search is on.
-- **Status:** ready
+- **Status:** done
 
 ### S-20: Landing page examples
 
@@ -479,3 +479,4 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-16: A GM writing a new or existing handout can open a help icon next to the markdown field. The icon opens a modal with a short markdown guide and examples of syntax the preview already renders.** - Archived 2026-10-04 to `context/archive/2026-10-02-markdown-tips/`. Lesson: -.
 - **S-20: A visitor can see three static example handouts, one per style, with light motion on the landing page, and can still start sign-in without logging in to view the page.** - Archived 2026-10-04 to `context/archive/2026-10-04-landing-examples/`. Lesson: -.
 - **S-22: A visitor can see a footer on every page that uses Layout, including the shared handout, showing the package.json version as v1.2.0. The shared handout keeps its existing home link.** - Archived 2026-10-04 to `context/archive/2026-10-04-page-version-footer/`. Lesson: -.
+- **S-19: A GM can choose All in the drawer state filters and see draft, published, and archived handouts together, each group under a collapsible heading.** - Archived 2026-10-04 to `context/archive/2026-10-04-drawer-all-status/`. Lesson: -.

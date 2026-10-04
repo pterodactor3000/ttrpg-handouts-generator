@@ -1,10 +1,10 @@
 ---
 change_id: drawer-all-status
 title: All status filter
-status: implementing
+status: archived
 created: 2026-10-04
 updated: 2026-10-04
-archived_at: null
+archived_at: 2026-10-04T12:30:51Z
 roadmap_id: S-19
 ---
 
