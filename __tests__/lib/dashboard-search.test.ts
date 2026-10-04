@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
 import {
+  applyDashboardListVisibility,
   applyDashboardSearch,
   handoutMatchesSearchQuery,
   isDashboardSearchActive,
+  toggleDashboardListCollapse,
   type HandoutSearchFields,
 } from '@/lib/dashboard-search';
 
@@ -235,5 +237,166 @@ describe('applyDashboardSearch', () => {
     expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.getAttribute('data-type-filter')).toBe('all');
     expect(dashboard.getAttribute('data-status-filter')).toBe('draft');
+  });
+
+  it('shows every list when the status is all and search is off', () => {
+    const dashboard = createSearchDashboard();
+    dashboard.setAttribute('data-status-filter', 'all');
+
+    applyDashboardListVisibility(dashboard);
+
+    expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+  });
+
+  it('still hides draft and archived when the status is published and search is off', () => {
+    const dashboard = createSearchDashboard();
+    dashboard.setAttribute('data-status-filter', 'published');
+
+    applyDashboardListVisibility(dashboard);
+
+    expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
+    expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
+  });
+
+  it('keeps every list visible when search starts and ends on all', () => {
+    const dashboard = createSearchDashboard();
+    dashboard.setAttribute('data-status-filter', 'all');
+
+    applyDashboardSearch(dashboard, 'ma');
+    expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+
+    applyDashboardSearch(dashboard, 'm');
+    expect(dashboard.hasAttribute('data-search-active')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+  });
+});
+
+function createCollapsibleDashboard(): HTMLElement {
+  const dashboard = document.createElement('div');
+  dashboard.setAttribute('data-dashboard', '');
+  dashboard.setAttribute('data-status-filter', 'all');
+
+  for (const listKind of ['draft', 'published', 'archived']) {
+    const list = document.createElement('section');
+    list.setAttribute('data-handout-list', listKind);
+
+    const toggle = document.createElement('button');
+    toggle.setAttribute('type', 'button');
+    toggle.setAttribute('data-handout-list-toggle', '');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.textContent = listKind;
+
+    const body = document.createElement('div');
+    body.setAttribute('data-handout-list-body', '');
+    body.textContent = listKind;
+
+    list.append(toggle, body);
+    dashboard.append(list);
+  }
+
+  return dashboard;
+}
+
+describe('toggleDashboardListCollapse', () => {
+  it('collapses only the draft body while all is selected and search is off', () => {
+    const dashboard = createCollapsibleDashboard();
+    const draftList = dashboard.querySelector('[data-handout-list="draft"]');
+    expect(draftList).toBeInstanceOf(HTMLElement);
+    if (!(draftList instanceof HTMLElement)) {
+      return;
+    }
+
+    toggleDashboardListCollapse(dashboard, draftList);
+
+    expect(draftList.hasAttribute('data-list-collapsed')).toBe(true);
+    expect(draftList.querySelector('[data-handout-list-toggle]')?.getAttribute('aria-expanded')).toBe('false');
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(true);
+
+    for (const listKind of ['published', 'archived']) {
+      const list = dashboard.querySelector(`[data-handout-list="${listKind}"]`);
+      expect(list?.hasAttribute('data-list-collapsed')).toBe(false);
+      expect(list?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
+    }
+  });
+
+  it('expands the draft body on the second toggle', () => {
+    const dashboard = createCollapsibleDashboard();
+    const draftList = dashboard.querySelector('[data-handout-list="draft"]');
+    expect(draftList).toBeInstanceOf(HTMLElement);
+    if (!(draftList instanceof HTMLElement)) {
+      return;
+    }
+
+    toggleDashboardListCollapse(dashboard, draftList);
+    toggleDashboardListCollapse(dashboard, draftList);
+
+    expect(draftList.hasAttribute('data-list-collapsed')).toBe(false);
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
+    expect(draftList.querySelector('[data-handout-list-toggle]')?.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('does nothing when the status is published or search is active', () => {
+    const publishedDashboard = createCollapsibleDashboard();
+    publishedDashboard.setAttribute('data-status-filter', 'published');
+    const publishedDraftList = publishedDashboard.querySelector('[data-handout-list="draft"]');
+    expect(publishedDraftList).toBeInstanceOf(HTMLElement);
+    if (!(publishedDraftList instanceof HTMLElement)) {
+      return;
+    }
+    toggleDashboardListCollapse(publishedDashboard, publishedDraftList);
+    expect(publishedDraftList.hasAttribute('data-list-collapsed')).toBe(false);
+
+    const searchDashboard = createCollapsibleDashboard();
+    searchDashboard.setAttribute('data-search-active', '');
+    const searchDraftList = searchDashboard.querySelector('[data-handout-list="draft"]');
+    expect(searchDraftList).toBeInstanceOf(HTMLElement);
+    if (!(searchDraftList instanceof HTMLElement)) {
+      return;
+    }
+    toggleDashboardListCollapse(searchDashboard, searchDraftList);
+    expect(searchDraftList.hasAttribute('data-list-collapsed')).toBe(false);
+  });
+
+  it('clears collapse on every list when search becomes active', () => {
+    const dashboard = createCollapsibleDashboard();
+    for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
+      list.setAttribute('data-list-collapsed', '');
+      list.querySelector('[data-handout-list-body]')?.setAttribute('hidden', '');
+    }
+
+    applyDashboardSearch(dashboard, 'draft');
+
+    for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
+      expect(list.hasAttribute('data-list-collapsed')).toBe(false);
+      expect(list.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
+    }
+  });
+
+  it('expands every body and hides draft and archived when the status becomes published', () => {
+    const dashboard = createCollapsibleDashboard();
+    const draftList = dashboard.querySelector('[data-handout-list="draft"]');
+    expect(draftList).toBeInstanceOf(HTMLElement);
+    if (!(draftList instanceof HTMLElement)) {
+      return;
+    }
+    toggleDashboardListCollapse(dashboard, draftList);
+    dashboard.setAttribute('data-status-filter', 'published');
+
+    applyDashboardListVisibility(dashboard);
+
+    for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
+      expect(list.hasAttribute('data-list-collapsed')).toBe(false);
+      expect(list.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
+    }
+    expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
+    expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
+    expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
   });
 });
