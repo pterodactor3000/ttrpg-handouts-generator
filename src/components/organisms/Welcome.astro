@@ -1,16 +1,63 @@
 ---
+import LandingExample from '@/components/molecules/LandingExample.astro';
 import Topbar from '@/components/molecules/Topbar.astro';
+import { getLandingExampleCards } from '@/lib/landing-examples';
+
+const landingExamples = getLandingExampleCards();
 ---
 
 <div class="moon-chrome bg-background text-foreground min-h-screen w-full">
   <div class="p-4 sm:p-8">
     <Topbar />
 
-    <div class="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:py-32 lg:py-40">
+    <div class="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-16 text-center sm:py-20 lg:py-24">
       <h1 class="mb-6 text-5xl leading-tight font-bold sm:text-6xl lg:text-7xl">Handouts Scriptorium</h1>
       <p class="text-muted-foreground mb-10 max-w-2xl text-lg sm:text-xl">
         Compose themed TTRPG handouts in markdown, preview them over evocative backgrounds, and share them with your
         players through a permanent link.
+      </p>
+      <div class="flex flex-col gap-4 sm:flex-row">
+        <a
+          href="/auth/signin"
+          data-slot="button"
+          class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-[0.5rem] px-4 py-3 text-base font-semibold transition-colors"
+        >
+          Sign In
+        </a>
+        <a
+          href="/auth/signup"
+          data-slot="button"
+          class="border-border bg-card text-foreground hover:bg-accent inline-flex items-center justify-center rounded-[0.5rem] border px-4 py-3 text-base font-semibold transition-colors"
+        >
+          Sign Up
+        </a>
+      </div>
+    </div>
+
+    <p class="text-muted-foreground mx-auto mb-4 max-w-2xl px-4 text-center text-base sm:text-lg">
+      Three looks. One markdown field. Scroll to see a sample of each.
+    </p>
+
+    <div class="mx-auto max-w-6xl px-4" data-landing-examples>
+      {
+        landingExamples.map((example, exampleIndex) => (
+          <LandingExample
+            title={example.title}
+            html={example.html}
+            category={example.category}
+            cssBackground={example.cssBackground}
+            heading={example.heading}
+            description={example.description}
+            isReversed={exampleIndex % 2 === 1}
+          />
+        ))
+      }
+    </div>
+
+    <div class="mx-auto flex max-w-2xl flex-col items-center px-4 py-16 text-center sm:py-20">
+      <h2 class="mb-4 text-3xl font-bold sm:text-4xl">Write the next one</h2>
+      <p class="text-muted-foreground mb-8 text-base sm:text-lg">
+        Sign in to compose a handout, pick a style, and send players a permanent link.
       </p>
       <div class="flex flex-col gap-4 sm:flex-row">
         <a

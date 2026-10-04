@@ -1,0 +1,84 @@
+---
+import HandoutArticle from '@/components/molecules/HandoutArticle.astro';
+import type { BackgroundCategory } from '@/types';
+
+interface Props {
+  title: string;
+  html: string;
+  category: BackgroundCategory;
+  cssBackground: string;
+  heading: string;
+  description: string;
+  isReversed: boolean;
+}
+
+const { title, html, category, cssBackground, heading, description, isReversed } = Astro.props;
+const headingId = `landing-showcase-${category}`;
+---
+
+<section
+  class="grid items-center gap-8 py-16 md:grid-cols-2 md:gap-12 md:py-24"
+  data-landing-showcase={category}
+  aria-labelledby={headingId}
+>
+  <div class:list={['max-w-xl', isReversed && 'md:order-2']}>
+    <p class="text-muted-foreground mb-3 text-sm font-semibold tracking-wide uppercase">{heading}</p>
+    <h2 id={headingId} class="mb-4 text-3xl leading-tight font-bold sm:text-4xl">{title}</h2>
+    <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">{description}</p>
+  </div>
+
+  <div class:list={['motion-reduce:animate-none', isReversed && 'md:order-1']} data-landing-example={category}>
+    <div
+      class="overflow-hidden px-5 py-10 md:px-10 md:py-14"
+      style={`background: ${cssBackground}; background-size: cover; background-position: center;`}
+    >
+      <HandoutArticle title={title} html={html} category={category} class="max-w-none" shouldShowTitle={false} />
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes landing-showcase-enter {
+    from {
+      opacity: 0;
+      transform: translateY(2.5rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes landing-example-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-0.6rem);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    [data-landing-showcase] {
+      animation: landing-showcase-enter 0.8s ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+  }
+
+  [data-landing-example] {
+    animation: landing-example-float 7s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-landing-showcase],
+    [data-landing-example] {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
