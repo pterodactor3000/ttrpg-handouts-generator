@@ -138,16 +138,16 @@ Layout grows a document-flow footer that prints `v` plus the package version. Un
 
 #### Automated
 
-- [x] 1.1 `formatAppVersion('1.2.0')` returns `v1.2.0`.
-- [x] 1.2 `APP_VERSION` equals `v` plus the live `package.json` `version`.
-- [x] 1.3 `src/layouts/Layout.astro` imports `APP_VERSION` and `PageVersionFooter`, renders `PageVersionFooter` after `<slot />`, and renders `<Toaster` after `PageVersionFooter`.
-- [x] 1.4 `src/components/atoms/PageVersionFooter.astro` contains `data-page-version-footer` and does not contain `fixed` or `sticky`.
-- [x] 1.5 `src/pages/share/[token].astro` still contains the `TTRPG Handouts Generator` home link.
-- [x] 1.6 `npm test -- --project unit` passes `__tests__/lib/app-version.test.ts`.
-- [x] 1.7 `npm run lint` passes.
+- [x] 1.1 `formatAppVersion('1.2.0')` returns `v1.2.0`. — 28032c6
+- [x] 1.2 `APP_VERSION` equals `v` plus the live `package.json` `version`. — 28032c6
+- [x] 1.3 `src/layouts/Layout.astro` imports `APP_VERSION` and `PageVersionFooter`, renders `PageVersionFooter` after `<slot />`, and renders `<Toaster` after `PageVersionFooter`. — 28032c6
+- [x] 1.4 `src/components/atoms/PageVersionFooter.astro` contains `data-page-version-footer` and does not contain `fixed` or `sticky`. — 28032c6
+- [x] 1.5 `src/pages/share/[token].astro` still contains the `TTRPG Handouts Generator` home link. — 28032c6
+- [x] 1.6 `npm test -- --project unit` passes `__tests__/lib/app-version.test.ts`. — 28032c6
+- [x] 1.7 `npm run lint` passes. — 28032c6
 
 #### Manual
 
-- [x] 1.8 `/`, `/auth/signin`, and `/dashboard` each show a footer whose text is `v1.2.0`.
-- [x] 1.9 A published share page still shows the `TTRPG Handouts Generator` home link and also shows `v1.2.0` below the handout, not over the article.
-- [x] 1.10 On `/dashboard`, the version footer sits below the `min-h-screen` shell. The toaster stays a viewport overlay. A failed archive or restore toast, if one appears, stays readable and is not covered by the footer.
+- [x] 1.8 `/`, `/auth/signin`, and `/dashboard` each show a footer whose text is `v1.2.0`. — 28032c6
+- [x] 1.9 A published share page still shows the `TTRPG Handouts Generator` home link and also shows `v1.2.0` below the handout, not over the article. — 28032c6
+- [x] 1.10 On `/dashboard`, the version footer sits below the `min-h-screen` shell. The toaster stays a viewport overlay. A failed archive or restore toast, if one appears, stays readable and is not covered by the footer. — 28032c6
