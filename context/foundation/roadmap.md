@@ -52,14 +52,14 @@ Physical TTRPG handouts get lost after distribution — players rely on incomple
 | S-12 | `dashboard-drawer-nav`               | filter dashboard handouts via a left slide-in drawer (Drafts / Published / Archived) with pin-to-persist sidebar option                                                                                       | S-02, S-04    | FR-002, FR-008                                                 | done     |
 | S-13 | `remove-account`                     | delete their account via settings — soft-deactivate for 30 days, then purge all data; shared links go dead after purge                                                                                        | S-01          | TBD — add FR in separate PRD edit                              | done     |
 | S-14 | `unarchive-handout`                  | restore an archived handout to draft or published state from the Archived tab (Published re-activates the existing share link)                                                                                | S-04, S-12    | FR-008, Business Logic                                         | done     |
-| S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | ready    |
-| S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | ready    |
+| S-15 | `theme-switch`                       | switch signed-in screens between Tower of Light and Darkest of Mines; landing and auth follow the system theme                                                                                                | none          | FR-012, FR-015, FR-016                                         | done     |
+| S-16 | `markdown-tips`                      | open a help icon next to the markdown field and read a modal with markdown syntax and examples                                                                                                                | S-01, S-03    | FR-004, FR-017                                                 | done     |
 | S-18 | `drawer-type-filters`                | filter the dashboard by one handout type at a time from the left drawer, with a separator between the state filters and the type controls                                                                     | S-12          | FR-002, FR-005, TBD - add FR in separate PRD edit              | done     |
 | S-17 | `handout-search`                     | search handouts by title, tags, and type after 2 characters and see matches in one view split into draft, published, and archived                                                                             | S-18          | FR-002, FR-005, FR-006, TBD - add FR in separate PRD edit      | done     |
 | S-19 | `drawer-all-status`                  | choose All in the drawer state filters and see draft, published, and archived handouts together, each group under a collapsible heading                                                                       | S-12, S-17    | FR-002, FR-008, TBD - add FR in separate PRD edit              | ready    |
-| S-20 | `landing-examples`                   | see three static example handouts, one per style, with light motion on the landing page, and still start sign-in without logging in                                                                          | S-08          | FR-015, TBD - add FR in separate PRD edit                      | ready    |
+| S-20 | `landing-examples`                   | see three static example handouts, one per style, with light motion on the landing page, and still start sign-in without logging in                                                                          | S-08          | FR-015, TBD - add FR in separate PRD edit                      | done     |
 | S-21 | `scifi-category-label`               | see the scifi category labeled Sci-fi on the picker, the drawer, cards, the preview, and the shared view, with the stored category and green CRT look unchanged                                              | S-09, S-18    | FR-005, FR-014, TBD - add FR in separate PRD edit              | ready    |
-| S-22 | `page-version-footer`                | see a footer on every page, including the shared handout, showing the package version as v1.2.0, while the shared handout keeps its home link                                                                | none          | FR-012, TBD - add FR in separate PRD edit                      | ready    |
+| S-22 | `page-version-footer`                | see a footer on every page, including the shared handout, showing the package version as v1.2.0, while the shared handout keeps its home link                                                                | none          | FR-012, TBD - add FR in separate PRD edit                      | done     |
 
 ## Streams
 
@@ -324,7 +324,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Does the GM's choice have to survive a reload? Owner: user. Block: no.
 - **Risk:** The change is presentational. It covers the signed-in app screens plus landing and auth, and it leaves the shared handout and the three handout styles alone. The system theme is the default until the GM chooses. The choice has to survive navigation between the four signed-in pages. A wrong default would show the other theme on first paint.
-- **Status:** ready
+- **Status:** done
 
 ### S-16: Markdown tips
 
@@ -337,7 +337,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Which examples belong in the modal? Owner: plan. Block: no.
 - **Risk:** The guide can teach syntax the preview drops. Examples stay limited to syntax the preview already renders. Raw HTML stays out, because the renderer rejects it.
-- **Status:** ready
+- **Status:** done
 
 ### S-18: Drawer type filters
 
@@ -385,7 +385,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** none
 - **Unknowns:** none
 - **Risk:** Motion on the first screen can distract from the sign-in action or ignore reduced motion. Examples stay static samples, so no handout data is required.
-- **Status:** ready
+- **Status:** done
 
 ### S-21: Sci-fi category label
 
@@ -409,7 +409,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** none
 - **Unknowns:** none
 - **Risk:** The footer sits in Layout, so it appears on the shared handout as well as the app screens. The share page already has its own home link. The version line must not cover the handout or the toaster.
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -475,3 +475,7 @@ None — all PRD open questions were resolved during shaping (`prd.md` states: "
 - **S-14: GM can select an archived handout from the Archived tab (introduced by S-12) and restore it to either Draft or Published state via a choice prompt; restoring to Published re-activates the existing share link immediately (same `share_token`, not regenerated).** — Archived 2026-10-02 → `context/archive/2026-10-01-unarchive-handout/`. Lesson: —.
 - **S-18: A GM can filter the dashboard from the left drawer by one handout type at a time (grimdark, high fantasy, or postapo), or choose All. A separator sits between the state filters and the type controls. The type controls use the same styles as the category buttons on handout creation. The editor category control stays as it is. With search off, the chosen type combines with the selected state. With search on, the chosen type narrows all three result groups.** — Archived 2026-10-03 → `context/archive/2026-10-02-drawer-type-filters/`. Lesson: —.
 - **S-17: A GM can search their handouts by title, tags, and type. Search runs only after 2 characters. Matches appear in one view, always split into Draft, Published, and Archived. The drawer state filter does not hide a group while search is active. The chosen type still narrows all three groups. The markdown body is not searched, and the search text does not survive a reload.** — Archived 2026-10-03 → `context/archive/2026-10-02-handout-search/`. Lesson: —.
+- **S-15: A signed-in GM can switch the dashboard, the new-handout page, the edit page, and Settings between Tower of Light and Darkest of Mines, and that choice stays while they move between those pages. Until they choose, those pages follow the system theme. Landing, sign-in, and sign-up follow the system theme and ignore a saved choice. The shared handout stays as it is.** - Archived 2026-10-04 to `context/archive/2026-10-02-theme-switch/`. Lesson: -.
+- **S-16: A GM writing a new or existing handout can open a help icon next to the markdown field. The icon opens a modal with a short markdown guide and examples of syntax the preview already renders.** - Archived 2026-10-04 to `context/archive/2026-10-02-markdown-tips/`. Lesson: -.
+- **S-20: A visitor can see three static example handouts, one per style, with light motion on the landing page, and can still start sign-in without logging in to view the page.** - Archived 2026-10-04 to `context/archive/2026-10-04-landing-examples/`. Lesson: -.
+- **S-22: A visitor can see a footer on every page that uses Layout, including the shared handout, showing the package.json version as v1.2.0. The shared handout keeps its existing home link.** - Archived 2026-10-04 to `context/archive/2026-10-04-page-version-footer/`. Lesson: -.
