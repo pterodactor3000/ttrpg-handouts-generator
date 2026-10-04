@@ -25,4 +25,8 @@ None.
 
 ## Notes
 
-Logged-out `/` shows the hero, both auth CTAs, and three static cards. Sign In opens `/auth/signin`. Sign Up opens `/auth/signup`. Cards are `div` nodes, not links. Desktop grid is three columns. Mobile stacks. The float keyframe is `landing-example-float` and the reduced-motion media rule sets `animation: none`. Markdown still goes through `renderHandoutHtml` before `set:html`.
+Logged-out `/` is a scrollable page. After the hero and CTAs, each style has a description and a large sample. Desktop rows alternate. Mobile stacks copy above the sample. A closing band repeats Sign In and Sign Up. Samples are not links and do not read the handouts table. Markdown still goes through `renderHandoutHtml` before `set:html`. Enter motion is `landing-showcase-enter` on the section, driven by `animation-timeline: view()`. Float is `landing-example-float` on `[data-landing-example]`. Reduced motion sets `animation: none` on both. The painted background sits on an inner `overflow-hidden` wrapper so the float transform does not sit on `.handout-article`. Unit tests: 8 passed. Lint: 0 errors.
+
+## Triage
+
+No findings. Nothing to apply, skip, or record as a lesson.
