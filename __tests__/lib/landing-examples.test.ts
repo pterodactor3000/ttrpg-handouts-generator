@@ -15,16 +15,17 @@ describe('getLandingExamples', () => {
     expect(BACKGROUND_CATEGORY_OPTIONS).toEqual(['fantasy', 'horror', 'scifi']);
   });
 
-  it('gives each sample a non-empty title and non-empty markdown', () => {
+  it('gives each sample a non-empty title, description, and markdown', () => {
     for (const example of getLandingExamples()) {
       expect(example.title.trim()).not.toBe('');
+      expect(example.description.trim()).not.toBe('');
       expect(example.markdown.trim()).not.toBe('');
     }
   });
 });
 
 describe('getLandingExampleCards', () => {
-  it('returns the same categories and a non-empty html and cssBackground for each card', () => {
+  it('returns the same categories and a non-empty html, heading, description, and cssBackground for each card', () => {
     const cards = getLandingExampleCards();
 
     expect(cards.map((card) => card.category)).toEqual(['fantasy', 'horror', 'scifi']);
@@ -32,6 +33,8 @@ describe('getLandingExampleCards', () => {
     for (const card of cards) {
       expect(card.html.trim()).not.toBe('');
       expect(card.html).not.toContain('<a');
+      expect(card.heading).toBe(BACKGROUND_CONFIGS[card.category].label);
+      expect(card.description.trim()).not.toBe('');
       expect(card.cssBackground).toBe(BACKGROUND_CONFIGS[card.category].cssBackground);
       expect(card.cssBackground.trim()).not.toBe('');
     }
@@ -46,6 +49,9 @@ describe('landing examples source sync', () => {
     expect(welcomeSource).toContain('href="/auth/signin"');
     expect(welcomeSource).toContain('href="/auth/signup"');
     expect(welcomeSource).toContain('data-landing-examples');
+    expect(welcomeSource).toContain('Three looks');
+    expect(welcomeSource).toContain('Write the next one');
+    expect(welcomeSource).not.toContain('md:grid-cols-3');
   });
 
   it('places the examples section outside the hero max-w-4xl column', () => {
@@ -59,10 +65,13 @@ describe('landing examples source sync', () => {
     expect(welcomeSource).toContain('max-w-6xl');
   });
 
-  it('marks the example card, honors reduced motion, and is not a link', () => {
+  it('marks the showcase, plays keyframes, honors reduced motion, and is not a link', () => {
     const cardSource = readFileSync(LANDING_EXAMPLE_PATH, 'utf-8');
 
     expect(cardSource).toContain('data-landing-example');
+    expect(cardSource).toContain('data-landing-showcase');
+    expect(cardSource).toContain('landing-showcase-enter');
+    expect(cardSource).toContain('animation-timeline: view()');
     expect(cardSource).toContain('prefers-reduced-motion');
     expect(cardSource).not.toContain('href');
   });

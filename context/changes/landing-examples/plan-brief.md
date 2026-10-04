@@ -14,7 +14,7 @@ S-20 shows three static example handouts on the landing page, one per style, wit
 
 ## Desired End State
 
-Logged-out `/` still starts with the hero and CTAs. Under them sit three static previews that look like real handouts. They float a little unless reduced motion is on. They are not links and they do not load handout rows.
+Logged-out `/` is a scrollable showcase. It starts with the hero and CTAs, then one described section per style with a large static sample. Scroll-driven keyframes play as a section enters. Reduced motion keeps the page still.
 
 ## Key Decisions Made
 
@@ -24,7 +24,7 @@ Logged-out `/` still starts with the hero and CTAs. Under them sit three static 
 | Look | Share-page stack, `HandoutArticle` plus `cssBackground` | Reuse the live handout look | Share page, fonts CSS |
 | Placement | Sibling section after the hero `max-w-4xl`, `max-w-6xl` | Three framed cards need more than 56rem | Plan review F2 |
 | Article width | `max-w-2xl` only when `HandoutArticle` has no `class` | `class:list` cannot cancel a hard-coded width | Plan review F1 |
-| Motion | CSS float on an outer wrapper, off when reduced | Drawer already uses `motion-reduce` | TEC-42, `DashboardDrawer` |
+| Motion | Scroll-driven enter keyframes plus a light float, off when reduced | Showcase page needs motion tied to scroll | User revision, TEC-42 |
 | Labels | Keep Grimdark, Eldritch, High Fantasy | S-21 owns the Sci-fi rename | Roadmap S-21 |
 
 ## Scope
@@ -39,7 +39,7 @@ Logged-out `/` still starts with the hero and CTAs. Under them sit three static 
 
 ## Approach
 
-`getLandingExampleCards()` renders three fixtures. `LandingExample.astro` paints each card. `Welcome.astro` mounts them after Sign In and Sign Up.
+`getLandingExampleCards()` renders three fixtures with descriptions. `LandingExample.astro` paints a two-column showcase row. `Welcome.astro` mounts the rows after the hero and ends with a second CTA band.
 
 ## Phases at a Glance
 
@@ -53,10 +53,10 @@ Logged-out `/` still starts with the hero and CTAs. Under them sit three static 
 ## Open Risks and Assumptions
 
 - Unsigned `/` is the only surface. Signed-in users never see the examples.
-- A shared max height plus `overflow-hidden` clips long sample markdown. Keep the copy short.
+- Browsers without `animation-timeline: view()` still get the float keyframe and the full scrollable page.
 
 ## Success Criteria
 
-- Logged-out `/` shows the app name, both CTAs, and three category examples.
-- Reduced motion keeps the cards still.
+- Logged-out `/` shows the app name, both CTAs, and three described showcase sections.
+- Reduced motion keeps the sections still.
 - Sign In still starts the existing login flow.

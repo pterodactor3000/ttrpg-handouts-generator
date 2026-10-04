@@ -28,7 +28,7 @@ Handout look already exists. `renderHandoutHtml` in `src/lib/handout-renderer.ts
 
 ## Desired End State
 
-An unsigned visitor on `/` sees the existing hero, Sign In, Sign Up, and three static example handouts, one per category. The examples look like real handouts. They use the category background, font, and border. They float a little unless the browser asks for reduced motion. They are not links and they do not read the handouts table.
+An unsigned visitor on `/` sees a scrollable showcase. The page starts with the existing hero and CTAs, then one full section per style. Each section has a short description and a large static example handout. Scroll-driven keyframes play as a section enters the viewport. A closing band repeats Sign In and Sign Up. The examples are not links and they do not read the handouts table.
 
 Verify on `/` logged out, at a desktop width and a narrow width, and with reduced motion on.
 
@@ -57,7 +57,7 @@ Do not put `transform` on `.handout-article`. Sci-fi scanlines use `position: re
 
 Keep the hero and both auth links. Examples are a new section after the CTA row.
 
-Clip tall cards with `overflow-hidden` and a shared max height so the three previews stay even. Change `HandoutArticle.astro` so `max-w-2xl` is the fallback only when `class` is omitted. Landing then passes `max-w-none` and the article fills the card. The share page does not pass `class`, so it keeps `max-w-2xl`.
+Do not clip the samples to a shared max height. Each section shows a full large sample. The background wrapper may use `overflow-hidden` only to keep sci-fi scanlines inside the painted frame. Change `HandoutArticle.astro` so `max-w-2xl` is the fallback only when `class` is omitted. Landing then passes `max-w-none` and the article fills the column. The share page does not pass `class`, so it keeps `max-w-2xl`.
 
 Do not nest the examples grid inside the hero `max-w-4xl` column. Mount `data-landing-examples` as a sibling after that column, still inside the padded moon-chrome shell, with `max-w-6xl`.
 
@@ -75,15 +75,15 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 
 **Intent:** One place owns the three static samples so Welcome and tests share the same category set and rendered HTML.
 
-**Contract:** `LandingExample` has `category`, `title`, and `markdown`. `getLandingExamples()` returns exactly three entries, one each for `fantasy`, `horror`, and `scifi`, in that order. Titles and markdown are non-empty. Markdown is short flavor text with no raw HTML and no markdown links. `getLandingExampleCards()` maps each sample to `{ category, title, html, cssBackground }` using `renderHandoutHtml` and `BACKGROUND_CONFIGS[category].cssBackground`. Export the type and both functions at the end of the file. Use `@/` for project imports.
+**Contract:** `LandingExample` has `category`, `title`, `markdown`, and `description`. `getLandingExamples()` returns exactly three entries, one each for `fantasy`, `horror`, and `scifi`, in that order. Titles, descriptions, and markdown are non-empty. Markdown is short flavor text with no raw HTML and no markdown links. `getLandingExampleCards()` maps each sample to `{ category, title, html, cssBackground, heading, description }` using `renderHandoutHtml`, `BACKGROUND_CONFIGS[category].cssBackground`, and `BACKGROUND_CONFIGS[category].label` as `heading`. Export the type and both functions at the end of the file. Use `@/` for project imports.
 
 #### 2. Example card molecule
 
 **File:** `src/components/molecules/LandingExample.astro`
 
-**Intent:** One presentational card so Welcome stays a page organism and the new UI unit follows atomic design.
+**Intent:** One showcase section so Welcome stays a page organism and each style gets a description plus a large sample.
 
-**Contract:** `interface Props { title: string; html: string; category: BackgroundCategory; cssBackground: string; motionDelay: string }`. Root node is a `div` with `data-landing-example={category}`. It is not an `a` and it has no `href`. The root owns the float animation. Inner panel uses `cssBackground` as `background`, `background-size: cover`, and `background-position: center`, matching the share page. Inner panel clips with `overflow-hidden` and a shared max height such as `max-h-80`. It mounts `HandoutArticle` with `title`, `html`, `category`, and `class="max-w-none"`. That class is the only max-width on the article because of the fallback change below. Use `class:list` if classes are conditional. Float is a slow `translateY` keyframe, about 6s, ease-in-out, infinite. `motionDelay` sets `animation-delay` on the root. Include `@media (prefers-reduced-motion: reduce)` that sets `animation: none` on `[data-landing-example]`. Also add `motion-reduce:animate-none` on the root class list so Tailwind matches `DashboardDrawer`. Do not put `transform` or the animation on `.handout-article`.
+**Contract:** `interface Props { title: string; html: string; category: BackgroundCategory; cssBackground: string; heading: string; description: string; isReversed: boolean }`. Root node is a `section` with `data-landing-showcase={category}`. It is not an `a` and it has no `href`. The section is a two-column row at `md`, stacked on small screens. Copy shows `heading`, `title`, and `description`. `isReversed` swaps column order at `md`. The sample lives on a child with `data-landing-example={category}`. That child uses `cssBackground` as `background`, `background-size: cover`, and `background-position: center`, matching the share page. It mounts `HandoutArticle` with `title`, `html`, `category`, and `class="max-w-none"`. Enter motion is the `landing-showcase-enter` keyframe on the section, driven by `animation-timeline: view()` inside `@supports`. Float is a slow `translateY` keyframe on `[data-landing-example]` only. Include `@media (prefers-reduced-motion: reduce)` that sets `animation: none` on both markers. Also add `motion-reduce:animate-none` on the sample wrapper. Do not put `transform` or the animation on `.handout-article`.
 
 #### 3. Article width fallback
 
@@ -99,17 +99,17 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 
 **Intent:** Unsigned visitors see the examples without losing the hero or the auth CTAs.
 
-**Contract:** Import `LandingExample` and `getLandingExampleCards`. Close the hero `max-w-4xl` column after the CTA row. Then, still inside the padded moon-chrome shell, render a `section` with `data-landing-examples` and `max-w-6xl`. Do not nest that section inside the hero column. The section is a three-column grid at `md` and stacks on small screens. Map the cards in helper order. Pass `motionDelay` as `0s`, `0.4s`, and `0.8s`. Keep the `h1` text, tagline, Sign In `href="/auth/signin"`, and Sign Up `href="/auth/signup"`. Do not wrap the section in a link. Do not query the database.
+**Contract:** Import `LandingExample` and `getLandingExampleCards`. Close the hero `max-w-4xl` column after the CTA row. Then, still inside the padded moon-chrome shell, render a lead line and a `div` with `data-landing-examples` and `max-w-6xl`. Do not nest that block inside the hero column. Do not use a three-column card grid. Map the samples in helper order. Pass `isReversed` on odd indexes. After the samples, render a closing band that repeats Sign In and Sign Up. Keep the `h1` text, tagline, Sign In `href="/auth/signin"`, and Sign Up `href="/auth/signup"`. Do not wrap the samples in a link. Do not query the database.
 
 ### Success Criteria
 
 #### Automated Verification
 
 - `getLandingExamples()` returns three items whose categories are `fantasy`, `horror`, and `scifi` in that order.
-- Each sample has a non-empty title and non-empty markdown.
-- `getLandingExampleCards()` returns the same categories and a non-empty `html` and `cssBackground` for each card.
+- Each sample has a non-empty title, description, and markdown.
+- `getLandingExampleCards()` returns the same categories and a non-empty `html`, `heading`, `description`, and `cssBackground` for each card.
 - `src/components/organisms/Welcome.astro` still contains `Handouts Scriptorium`, `href="/auth/signin"`, and `href="/auth/signup"`, and also contains `data-landing-examples`.
-- `src/components/molecules/LandingExample.astro` contains `data-landing-example` and `prefers-reduced-motion`. It does not contain `href`.
+- `src/components/molecules/LandingExample.astro` contains `data-landing-example`, `data-landing-showcase`, `landing-showcase-enter`, `animation-timeline: view()`, and `prefers-reduced-motion`. It does not contain `href`.
 - `src/lib/landing-examples.ts` does not import `@/lib/supabase`.
 - `src/components/molecules/HandoutArticle.astro` applies `max-w-2xl` only when `class` is omitted.
 - `src/components/organisms/Welcome.astro` places `data-landing-examples` outside the hero `max-w-4xl` column.
@@ -118,9 +118,9 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 
 #### Manual Verification
 
-- Logged out `/` shows the app name, Sign In, Sign Up, and three example handouts, one High Fantasy, one Eldritch, one Grimdark.
-- The examples sit under the CTAs. Sign In still goes to `/auth/signin`. Sign Up still goes to `/auth/signup`.
-- The examples are not links. They use the category background, font, and border, and they float a little on a desktop width.
+- Logged out `/` shows the app name, Sign In, Sign Up, and three showcase sections with descriptions, one High Fantasy, one Eldritch, one Grimdark.
+- The showcases sit under the CTAs. Sign In still goes to `/auth/signin`. Sign Up still goes to `/auth/signup`.
+- The examples are not links. Each section has a description and a large sample that uses the category background, font, and border.
 - With `prefers-reduced-motion: reduce`, the examples stay still.
 - On a narrow viewport the three cards stack and stay readable. Auth buttons stay usable.
 
@@ -178,6 +178,11 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 - [x] 1.8 `npm run lint` passes. — a2a1408
 - [x] 1.14 `src/components/molecules/HandoutArticle.astro` applies `max-w-2xl` only when `class` is omitted. — a2a1408
 - [x] 1.15 `src/components/organisms/Welcome.astro` places `data-landing-examples` outside the hero `max-w-4xl` column. — a2a1408
+- [x] 1.16 Each sample has a non-empty description and each card copies the category label as `heading`.
+- [x] 1.17 `src/components/molecules/LandingExample.astro` contains `data-landing-showcase`, `landing-showcase-enter`, and `animation-timeline: view()`.
+- [x] 1.18 `src/components/organisms/Welcome.astro` contains a closing CTA band and does not use `md:grid-cols-3`.
+- [x] 1.19 `npm test -- --project unit` passes `__tests__/lib/landing-examples.test.ts` after the showcase revision.
+- [x] 1.20 `npm run lint` passes after the showcase revision.
 
 #### Manual
 
@@ -186,3 +191,7 @@ Landing grows three static styled previews under the existing CTAs. Unit tests c
 - [x] 1.11 The examples are not links. They use the category background, font, and border, and they float a little on a desktop width. — a2a1408
 - [x] 1.12 With `prefers-reduced-motion: reduce`, the examples stay still. — a2a1408
 - [x] 1.13 On a narrow viewport the three cards stack and stay readable. Auth buttons stay usable. — a2a1408
+- [x] 1.21 Logged-out `/` is a scrollable showcase. Each style has a description and a large sample.
+- [x] 1.22 Desktop rows alternate copy and sample. Mobile stacks copy above the sample.
+- [x] 1.23 Scrolling plays the enter keyframe. Reduced motion keeps every section still.
+- [x] 1.24 The closing band still opens `/auth/signin` and `/auth/signup`.
