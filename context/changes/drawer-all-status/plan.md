@@ -176,14 +176,14 @@ No schema or stored status value. Revert the three source files and the two test
 
 #### Automated
 
-- [ ] 1.1 `applyDashboardListVisibility` with `data-status-filter="all"` and no `data-search-active` leaves draft, published, and archived lists without `hidden`.
-- [ ] 1.2 `applyDashboardListVisibility` with `data-status-filter="published"` and no search still hides draft and archived.
-- [ ] 1.3 `applyDashboardSearch` with a query of two or more characters still shows every list when the status is `all`, and clearing that query keeps every list visible.
-- [ ] 1.4 Choosing the status All button sets `data-status-filter` to `all`, shows all three lists, and closes the overlay on a narrow viewport.
-- [ ] 1.5 Choosing Published after that sets `data-status-filter` to `published` and hides draft and archived.
-- [ ] 1.6 The existing type All test still sets `data-type-filter` to `all` and clears `data-type-hidden`.
-- [ ] 1.7 `npm test -- --project unit` passes `__tests__/lib/dashboard-search.test.ts` and `__tests__/components/organisms/DashboardDrawer.test.tsx`.
-- [ ] 1.8 `npm run lint` passes.
+- [x] 1.1 `applyDashboardListVisibility` with `data-status-filter="all"` and no `data-search-active` leaves draft, published, and archived lists without `hidden`. - 0ffdb8a
+- [x] 1.2 `applyDashboardListVisibility` with `data-status-filter="published"` and no search still hides draft and archived. - 0ffdb8a
+- [x] 1.3 `applyDashboardSearch` with a query of two or more characters still shows every list when the status is `all`, and clearing that query keeps every list visible. - 0ffdb8a
+- [x] 1.4 Choosing the status All button sets `data-status-filter` to `all`, shows all three lists, and closes the overlay on a narrow viewport. - 0ffdb8a
+- [x] 1.5 Choosing Published after that sets `data-status-filter` to `published` and hides draft and archived. - 0ffdb8a
+- [x] 1.6 The existing type All test still sets `data-type-filter` to `all` and clears `data-type-hidden`. - 0ffdb8a
+- [x] 1.7 `npm test -- --project unit` passes `__tests__/lib/dashboard-search.test.ts` and `__tests__/components/organisms/DashboardDrawer.test.tsx`. - 0ffdb8a
+- [x] 1.8 `npm run lint` passes. - 0ffdb8a
 
 #### Manual
 
@@ -193,14 +193,14 @@ No schema or stored status value. Revert the three source files and the two test
 
 #### Automated
 
-- [ ] 2.1 With `data-status-filter="all"` and search off, toggling the draft list sets `data-list-collapsed` on that section, `aria-expanded="false"` on its toggle, and `hidden` on its body. The published and archived sections stay without `data-list-collapsed`, and their bodies stay without `hidden`.
-- [ ] 2.2 Toggling that draft list again removes `data-list-collapsed` and the body `hidden`, and sets `aria-expanded="true"`.
-- [ ] 2.3 `toggleDashboardListCollapse` does nothing when the status is `published` or when `data-search-active` is set.
-- [ ] 2.4 `applyDashboardSearch` with an active query removes `data-list-collapsed` and body `hidden` from every list.
-- [ ] 2.5 `applyDashboardListVisibility` after setting the status to `published` expands every body and hides the draft and archived sections.
-- [ ] 2.6 A drawer click on the Drafts heading, while status All is selected, collapses only the draft body.
-- [ ] 2.7 `npm test -- --project unit` passes `__tests__/lib/dashboard-search.test.ts` and `__tests__/components/organisms/DashboardDrawer.test.tsx`.
-- [ ] 2.8 `npm run lint` passes.
+- [x] 2.1 With `data-status-filter="all"` and search off, toggling the draft list sets `data-list-collapsed` on that section, `aria-expanded="false"` on its toggle, and `hidden` on its body. The published and archived sections stay without `data-list-collapsed`, and their bodies stay without `hidden`. - 0ffdb8a
+- [x] 2.2 Toggling that draft list again removes `data-list-collapsed` and the body `hidden`, and sets `aria-expanded="true"`. - 0ffdb8a
+- [x] 2.3 `toggleDashboardListCollapse` does nothing when the status is `published` or when `data-search-active` is set. - 0ffdb8a
+- [x] 2.4 `applyDashboardSearch` with an active query removes `data-list-collapsed` and body `hidden` from every list. - 0ffdb8a
+- [x] 2.5 `applyDashboardListVisibility` after setting the status to `published` expands every body and hides the draft and archived sections. - 0ffdb8a
+- [x] 2.6 A drawer click on the Drafts heading, while status All is selected, collapses only the draft body. - 0ffdb8a
+- [x] 2.7 `npm test -- --project unit` passes `__tests__/lib/dashboard-search.test.ts` and `__tests__/components/organisms/DashboardDrawer.test.tsx`. - 0ffdb8a
+- [x] 2.8 `npm run lint` passes. - 0ffdb8a
 
 #### Manual
 
