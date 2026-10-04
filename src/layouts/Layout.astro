@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
 import Banner from '@/components/atoms/Banner.astro';
+import PageVersionFooter from '@/components/atoms/PageVersionFooter.astro';
 import { Toaster } from '@/components/atoms/sonner';
+import { APP_VERSION } from '@/lib/app-version';
 import { missingConfigs } from '@/lib/config-status';
 
 interface Props {
@@ -73,6 +75,7 @@ const { title = 'Handouts Scriptorium', loadChromeFont = false } = Astro.props;
       ))
     }
     <slot />
+    <PageVersionFooter version={APP_VERSION} />
     <Toaster client:load />
   </body>
 </html>
