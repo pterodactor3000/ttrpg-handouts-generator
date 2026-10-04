@@ -1,10 +1,10 @@
 ---
 change_id: theme-switch
 title: Switch between Tower of Light and Darkest of Mines
-status: impl_reviewed
+status: archived
 created: 2026-10-02
-updated: 2026-10-02
-archived_at: null
+updated: 2026-10-04
+archived_at: 2026-10-04T11:47:21Z
 roadmap_id: S-15
 ---
 
