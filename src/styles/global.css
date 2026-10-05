@@ -672,13 +672,19 @@ button:disabled,
 }
 
 [data-handout-list-body] {
+  display: grid;
+  grid-template-rows: 1fr;
   overflow: hidden;
-  max-height: 200rem;
-  transition: max-height 200ms ease-out;
+  transition: grid-template-rows 200ms ease-out;
 }
 
 [data-handout-list][data-list-collapsed] [data-handout-list-body] {
-  max-height: 0;
+  grid-template-rows: 0fr;
+}
+
+[data-handout-list-body-inner] {
+  min-height: 0;
+  overflow: hidden;
 }
 
 [data-handout-list-chevron] {
