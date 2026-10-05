@@ -74,11 +74,42 @@ function createSearchDashboard(): HTMLElement {
     editAction.textContent = 'Edit';
 
     card.append(title, body, editAction);
+    appendListHeading(list, cardSpec.listKind, false);
     list.append(card);
     dashboard.append(list);
   }
 
   return dashboard;
+}
+
+function appendListHeading(list: HTMLElement, listKind: string, isToggleEnabled: boolean): void {
+  const heading = document.createElement('h2');
+
+  const staticHeading = document.createElement('span');
+  staticHeading.setAttribute('data-handout-list-static-heading', '');
+  staticHeading.textContent = listKind;
+  if (isToggleEnabled) {
+    staticHeading.setAttribute('hidden', '');
+  }
+
+  const toggle = document.createElement('button');
+  toggle.setAttribute('type', 'button');
+  toggle.setAttribute('data-handout-list-toggle', '');
+  toggle.setAttribute('aria-expanded', 'true');
+  toggle.textContent = listKind;
+  if (!isToggleEnabled) {
+    toggle.setAttribute('hidden', '');
+  }
+
+  heading.append(staticHeading, toggle);
+  list.append(heading);
+}
+
+function expectListToggleMode(dashboard: Element, isToggleEnabled: boolean): void {
+  for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
+    expect(list.querySelector('[data-handout-list-toggle]')?.hasAttribute('hidden')).toBe(!isToggleEnabled);
+    expect(list.querySelector('[data-handout-list-static-heading]')?.hasAttribute('hidden')).toBe(isToggleEnabled);
+  }
 }
 
 function getCard(dashboard: Element, title: string): Element {
@@ -248,6 +279,7 @@ describe('applyDashboardSearch', () => {
     expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+    expectListToggleMode(dashboard, true);
   });
 
   it('still hides draft and archived when the status is published and search is off', () => {
@@ -259,6 +291,7 @@ describe('applyDashboardSearch', () => {
     expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
     expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
+    expectListToggleMode(dashboard, false);
   });
 
   it('keeps every list visible when search starts and ends on all', () => {
@@ -269,12 +302,14 @@ describe('applyDashboardSearch', () => {
     expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+    expectListToggleMode(dashboard, false);
 
     applyDashboardSearch(dashboard, 'm');
     expect(dashboard.hasAttribute('data-search-active')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+    expectListToggleMode(dashboard, true);
   });
 });
 
@@ -287,17 +322,13 @@ function createCollapsibleDashboard(): HTMLElement {
     const list = document.createElement('section');
     list.setAttribute('data-handout-list', listKind);
 
-    const toggle = document.createElement('button');
-    toggle.setAttribute('type', 'button');
-    toggle.setAttribute('data-handout-list-toggle', '');
-    toggle.setAttribute('aria-expanded', 'true');
-    toggle.textContent = listKind;
+    appendListHeading(list, listKind, true);
 
     const body = document.createElement('div');
     body.setAttribute('data-handout-list-body', '');
     body.textContent = listKind;
 
-    list.append(toggle, body);
+    list.append(body);
     dashboard.append(list);
   }
 
@@ -418,5 +449,6 @@ describe('toggleDashboardListCollapse', () => {
     expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(dashboard.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
     expect(dashboard.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
+    expectListToggleMode(dashboard, false);
   });
 });

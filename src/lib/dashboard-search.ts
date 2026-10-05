@@ -127,7 +127,37 @@ function expandDashboardListBodies(dashboard: Element): void {
   }
 }
 
+function isDashboardListToggleEnabled(dashboard: Element): boolean {
+  return !dashboard.hasAttribute('data-search-active') && readDashboardStatusFilter(dashboard) === 'all';
+}
+
+function applyDashboardListToggleMode(dashboard: Element): void {
+  const isToggleEnabled = isDashboardListToggleEnabled(dashboard);
+
+  for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
+    const toggle = list.querySelector('[data-handout-list-toggle]');
+    const staticHeading = list.querySelector('[data-handout-list-static-heading]');
+
+    if (toggle instanceof HTMLElement) {
+      if (isToggleEnabled) {
+        toggle.removeAttribute('hidden');
+      } else {
+        toggle.setAttribute('hidden', '');
+      }
+    }
+
+    if (staticHeading instanceof HTMLElement) {
+      if (isToggleEnabled) {
+        staticHeading.setAttribute('hidden', '');
+      } else {
+        staticHeading.removeAttribute('hidden');
+      }
+    }
+  }
+}
+
 function applyDashboardListVisibility(dashboard: Element): void {
+  applyDashboardListToggleMode(dashboard);
   const lists = dashboard.querySelectorAll('[data-handout-list]');
 
   if (dashboard.hasAttribute('data-search-active')) {

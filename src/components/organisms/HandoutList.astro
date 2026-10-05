@@ -14,6 +14,7 @@ const isHidden = listKind !== 'draft';
 
 <section class="mt-8 w-full min-w-0" data-handout-list={listKind} hidden={isHidden}>
   <h2 class="mb-4">
+    <span data-handout-list-static-heading class="text-foreground text-xl font-semibold">{heading}</span>
     <button
       type="button"
       class:list={[
@@ -22,6 +23,7 @@ const isHidden = listKind !== 'draft';
       data-handout-list-toggle
       aria-expanded="true"
       aria-controls={`handout-list-body-${listKind}`}
+      hidden
     >
       <span>{heading}</span>
       <svg
