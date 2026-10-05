@@ -16,40 +16,60 @@ const isHidden = listKind !== 'draft';
   <h2 class="mb-4">
     <button
       type="button"
-      class="text-foreground w-full cursor-pointer text-left text-xl font-semibold"
+      class:list={[
+        'text-foreground flex w-full cursor-pointer items-center justify-between text-left text-xl font-semibold',
+      ]}
       data-handout-list-toggle
       aria-expanded="true"
       aria-controls={`handout-list-body-${listKind}`}
     >
-      {heading}
+      <span>{heading}</span>
+      <svg
+        data-handout-list-chevron
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="shrink-0"
+        aria-hidden="true"
+      >
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
     </button>
   </h2>
   <div id={`handout-list-body-${listKind}`} data-handout-list-body>
-    <div class="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-handout-grid={listKind}>
-      {handouts.map((handout) => <HandoutCard handout={handout} />)}
+    <div data-handout-list-body-inner class="min-h-0 overflow-hidden">
+      <div class="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-handout-grid={listKind}>
+        {handouts.map((handout) => <HandoutCard handout={handout} />)}
+      </div>
+      <div data-handout-empty>
+        {
+          listKind === 'draft' ? (
+            <>
+              <p class="text-muted-foreground">No drafts.</p>
+              <a
+                href="/handouts/new"
+                data-slot="button"
+                class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
+              >
+                Create your first handout
+              </a>
+            </>
+          ) : listKind === 'published' ? (
+            <p class="text-muted-foreground">No published handouts.</p>
+          ) : (
+            <p class="text-muted-foreground">No archived handouts.</p>
+          )
+        }
+      </div>
+      <p class="text-muted-foreground" data-handout-type-empty>No handouts of this type.</p>
+      <p class="text-muted-foreground" data-handout-search-empty>No handouts match this search.</p>
     </div>
-    <div data-handout-empty>
-      {
-        listKind === 'draft' ? (
-          <>
-            <p class="text-muted-foreground">No drafts.</p>
-            <a
-              href="/handouts/new"
-              data-slot="button"
-              class="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-block rounded-[0.5rem] px-4 py-2 text-center text-sm font-semibold transition-colors"
-            >
-              Create your first handout
-            </a>
-          </>
-        ) : listKind === 'published' ? (
-          <p class="text-muted-foreground">No published handouts.</p>
-        ) : (
-          <p class="text-muted-foreground">No archived handouts.</p>
-        )
-      }
-    </div>
-    <p class="text-muted-foreground" data-handout-type-empty>No handouts of this type.</p>
-    <p class="text-muted-foreground" data-handout-search-empty>No handouts match this search.</p>
   </div>
 </section>
 

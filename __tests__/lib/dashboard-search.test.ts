@@ -317,11 +317,13 @@ describe('toggleDashboardListCollapse', () => {
 
     expect(draftList.hasAttribute('data-list-collapsed')).toBe(true);
     expect(draftList.querySelector('[data-handout-list-toggle]')?.getAttribute('aria-expanded')).toBe('false');
-    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(true);
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(true);
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
 
     for (const listKind of ['published', 'archived']) {
       const list = dashboard.querySelector(`[data-handout-list="${listKind}"]`);
       expect(list?.hasAttribute('data-list-collapsed')).toBe(false);
+      expect(list?.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(false);
       expect(list?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
     }
   });
@@ -338,8 +340,24 @@ describe('toggleDashboardListCollapse', () => {
     toggleDashboardListCollapse(dashboard, draftList);
 
     expect(draftList.hasAttribute('data-list-collapsed')).toBe(false);
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(false);
     expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
     expect(draftList.querySelector('[data-handout-list-toggle]')?.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('clears leftover hidden on the body when collapsing', () => {
+    const dashboard = createCollapsibleDashboard();
+    const draftList = dashboard.querySelector('[data-handout-list="draft"]');
+    expect(draftList).toBeInstanceOf(HTMLElement);
+    if (!(draftList instanceof HTMLElement)) {
+      return;
+    }
+    draftList.querySelector('[data-handout-list-body]')?.setAttribute('hidden', '');
+
+    toggleDashboardListCollapse(dashboard, draftList);
+
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
+    expect(draftList.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(true);
   });
 
   it('does nothing when the status is published or search is active', () => {
@@ -368,13 +386,14 @@ describe('toggleDashboardListCollapse', () => {
     const dashboard = createCollapsibleDashboard();
     for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
       list.setAttribute('data-list-collapsed', '');
-      list.querySelector('[data-handout-list-body]')?.setAttribute('hidden', '');
+      list.querySelector('[data-handout-list-body]')?.setAttribute('inert', '');
     }
 
     applyDashboardSearch(dashboard, 'draft');
 
     for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
       expect(list.hasAttribute('data-list-collapsed')).toBe(false);
+      expect(list.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(false);
       expect(list.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
     }
   });
@@ -393,6 +412,7 @@ describe('toggleDashboardListCollapse', () => {
 
     for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
       expect(list.hasAttribute('data-list-collapsed')).toBe(false);
+      expect(list.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(false);
       expect(list.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
     }
     expect(dashboard.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);

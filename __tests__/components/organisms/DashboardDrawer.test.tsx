@@ -295,14 +295,15 @@ describe('DashboardDrawer', () => {
     await user.click(draftToggle);
 
     expect(draftList?.hasAttribute('data-list-collapsed')).toBe(true);
-    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(true);
+    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(true);
+    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('data-list-collapsed')).toBe(false);
     expect(
-      document.querySelector('[data-handout-list="published"] [data-handout-list-body]')?.hasAttribute('hidden'),
+      document.querySelector('[data-handout-list="published"] [data-handout-list-body]')?.hasAttribute('inert'),
     ).toBe(false);
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('data-list-collapsed')).toBe(false);
     expect(
-      document.querySelector('[data-handout-list="archived"] [data-handout-list-body]')?.hasAttribute('hidden'),
+      document.querySelector('[data-handout-list="archived"] [data-handout-list-body]')?.hasAttribute('inert'),
     ).toBe(false);
   });
 });

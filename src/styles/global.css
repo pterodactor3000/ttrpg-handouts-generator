@@ -670,3 +670,29 @@ button:disabled,
     @apply bg-background text-foreground;
   }
 }
+
+[data-handout-list-body] {
+  overflow: hidden;
+  max-height: 200rem;
+  transition: max-height 200ms ease-out;
+}
+
+[data-handout-list][data-list-collapsed] [data-handout-list-body] {
+  max-height: 0;
+}
+
+[data-handout-list-chevron] {
+  rotate: 0deg;
+  transition: rotate 200ms ease-out;
+}
+
+[data-handout-list-toggle][aria-expanded='true'] [data-handout-list-chevron] {
+  rotate: 180deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-handout-list-body],
+  [data-handout-list-chevron] {
+    transition: none;
+  }
+}
