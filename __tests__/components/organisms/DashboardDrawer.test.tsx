@@ -14,15 +14,24 @@ function renderDrawerFixture() {
     <div data-dashboard data-status-filter="draft" data-type-filter="all">
       <div data-dashboard-drawer-slot></div>
       <section data-handout-list="draft">
-        <button type="button" data-handout-list-toggle aria-expanded="true">Drafts</button>
+        <h2>
+          <span data-handout-list-static-heading>Drafts</span>
+          <button type="button" data-handout-list-toggle aria-expanded="true" hidden>Drafts</button>
+        </h2>
         <div data-handout-list-body>${BACKGROUND_CATEGORY_CARDS}</div>
       </section>
       <section data-handout-list="published" hidden>
-        <button type="button" data-handout-list-toggle aria-expanded="true">Published</button>
+        <h2>
+          <span data-handout-list-static-heading>Published</span>
+          <button type="button" data-handout-list-toggle aria-expanded="true" hidden>Published</button>
+        </h2>
         <div data-handout-list-body>${BACKGROUND_CATEGORY_CARDS}</div>
       </section>
       <section data-handout-list="archived" hidden>
-        <button type="button" data-handout-list-toggle aria-expanded="true">Archived</button>
+        <h2>
+          <span data-handout-list-static-heading>Archived</span>
+          <button type="button" data-handout-list-toggle aria-expanded="true" hidden>Archived</button>
+        </h2>
         <div data-handout-list-body>${BACKGROUND_CATEGORY_CARDS}</div>
       </section>
       <div id="drawer-root"></div>
@@ -262,6 +271,12 @@ describe('DashboardDrawer', () => {
     expect(document.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(false);
+    expect(
+      document.querySelector('[data-handout-list="draft"] [data-handout-list-toggle]')?.hasAttribute('hidden'),
+    ).toBe(false);
+    expect(
+      document.querySelector('[data-handout-list="draft"] [data-handout-list-static-heading]')?.hasAttribute('hidden'),
+    ).toBe(true);
     await waitFor(() => {
       expect(document.querySelector('[data-dashboard-drawer-panel]')).not.toBeInTheDocument();
     });
@@ -273,6 +288,14 @@ describe('DashboardDrawer', () => {
     expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-list="draft"]')?.hasAttribute('hidden')).toBe(true);
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('hidden')).toBe(true);
+    expect(
+      document.querySelector('[data-handout-list="published"] [data-handout-list-toggle]')?.hasAttribute('hidden'),
+    ).toBe(true);
+    expect(
+      document
+        .querySelector('[data-handout-list="published"] [data-handout-list-static-heading]')
+        ?.hasAttribute('hidden'),
+    ).toBe(false);
   });
 
   it('collapses only the draft body when the Drafts heading is clicked during status All', async () => {
@@ -295,14 +318,15 @@ describe('DashboardDrawer', () => {
     await user.click(draftToggle);
 
     expect(draftList?.hasAttribute('data-list-collapsed')).toBe(true);
-    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(true);
+    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('inert')).toBe(true);
+    expect(draftList?.querySelector('[data-handout-list-body]')?.hasAttribute('hidden')).toBe(false);
     expect(document.querySelector('[data-handout-list="published"]')?.hasAttribute('data-list-collapsed')).toBe(false);
     expect(
-      document.querySelector('[data-handout-list="published"] [data-handout-list-body]')?.hasAttribute('hidden'),
+      document.querySelector('[data-handout-list="published"] [data-handout-list-body]')?.hasAttribute('inert'),
     ).toBe(false);
     expect(document.querySelector('[data-handout-list="archived"]')?.hasAttribute('data-list-collapsed')).toBe(false);
     expect(
-      document.querySelector('[data-handout-list="archived"] [data-handout-list-body]')?.hasAttribute('hidden'),
+      document.querySelector('[data-handout-list="archived"] [data-handout-list-body]')?.hasAttribute('inert'),
     ).toBe(false);
   });
 });

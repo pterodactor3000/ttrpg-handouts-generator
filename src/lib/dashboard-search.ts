@@ -92,20 +92,72 @@ function readCardSearchFields(card: Element): HandoutSearchFields {
   };
 }
 
+function setDashboardListBodyCollapsed(list: Element, isCollapsed: boolean): void {
+  const toggle = list.querySelector('[data-handout-list-toggle]');
+  const body = list.querySelector('[data-handout-list-body]');
+
+  if (isCollapsed) {
+    list.setAttribute('data-list-collapsed', '');
+  } else {
+    list.removeAttribute('data-list-collapsed');
+  }
+
+  if (toggle instanceof HTMLElement) {
+    toggle.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+  }
+
+  if (!(body instanceof HTMLElement)) {
+    return;
+  }
+
+  body.removeAttribute('hidden');
+  if (isCollapsed) {
+    body.setAttribute('inert', '');
+    return;
+  }
+
+  body.removeAttribute('inert');
+}
+
 function expandDashboardListBodies(dashboard: Element): void {
   const lists = dashboard.querySelectorAll('[data-handout-list]');
 
   for (const list of lists) {
-    list.removeAttribute('data-list-collapsed');
+    setDashboardListBodyCollapsed(list, false);
+  }
+}
+
+function isDashboardListToggleEnabled(dashboard: Element): boolean {
+  return !dashboard.hasAttribute('data-search-active') && readDashboardStatusFilter(dashboard) === 'all';
+}
+
+function applyDashboardListToggleMode(dashboard: Element): void {
+  const isToggleEnabled = isDashboardListToggleEnabled(dashboard);
+
+  for (const list of dashboard.querySelectorAll('[data-handout-list]')) {
     const toggle = list.querySelector('[data-handout-list-toggle]');
+    const staticHeading = list.querySelector('[data-handout-list-static-heading]');
+
     if (toggle instanceof HTMLElement) {
-      toggle.setAttribute('aria-expanded', 'true');
+      if (isToggleEnabled) {
+        toggle.removeAttribute('hidden');
+      } else {
+        toggle.setAttribute('hidden', '');
+      }
     }
-    list.querySelector('[data-handout-list-body]')?.removeAttribute('hidden');
+
+    if (staticHeading instanceof HTMLElement) {
+      if (isToggleEnabled) {
+        staticHeading.setAttribute('hidden', '');
+      } else {
+        staticHeading.removeAttribute('hidden');
+      }
+    }
   }
 }
 
 function applyDashboardListVisibility(dashboard: Element): void {
+  applyDashboardListToggleMode(dashboard);
   const lists = dashboard.querySelectorAll('[data-handout-list]');
 
   if (dashboard.hasAttribute('data-search-active')) {
@@ -140,24 +192,7 @@ function toggleDashboardListCollapse(dashboard: Element, list: Element): void {
     return;
   }
 
-  const toggle = list.querySelector('[data-handout-list-toggle]');
-  const body = list.querySelector('[data-handout-list-body]');
-  const isCollapsed = list.hasAttribute('data-list-collapsed');
-
-  if (isCollapsed) {
-    list.removeAttribute('data-list-collapsed');
-    if (toggle instanceof HTMLElement) {
-      toggle.setAttribute('aria-expanded', 'true');
-    }
-    body?.removeAttribute('hidden');
-    return;
-  }
-
-  list.setAttribute('data-list-collapsed', '');
-  if (toggle instanceof HTMLElement) {
-    toggle.setAttribute('aria-expanded', 'false');
-  }
-  body?.setAttribute('hidden', '');
+  setDashboardListBodyCollapsed(list, !list.hasAttribute('data-list-collapsed'));
 }
 
 function applyDashboardSearch(dashboard: Element, query: string): void {
