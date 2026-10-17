@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "report:generate": "npm run generate --prefix packages/daily-report"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.44.0",
